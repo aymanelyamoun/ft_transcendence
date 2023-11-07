@@ -6,7 +6,7 @@ import Message from './chat.message'
 export default function ChatMessaging({messages}:{messages: messageType[]})
 {
     return(
-        <div>
+        <div className='bg-zinc-500 w-3/4 '>
             {(messages.map((msg:messageType)=>(
                 <Message message={msg}/>
             )))}

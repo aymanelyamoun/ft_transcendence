@@ -5,19 +5,19 @@ import ChatInfo from "./chat.message.info";
 const messages:messageType[] = [
     {
         id:4,
-        message:"hi from",
+        message:"hi from (this is a long message)",
         timeSent:"some time",
         senderId:9,
     },
     {
         id:4,
-        message:"hi from",
+        message:"hi from (this is a loooooong message)",
         timeSent:"some time",
         senderId:9,
     },
     {
         id:4,
-        message:"hi from",
+        message:"hi from (this is a loooooong long message)",
         timeSent:"some time",
         senderId:9,
     },
@@ -43,9 +43,9 @@ export const fakeUser:userInfo = {
 export default function ChatMessagingContainers()
 {
     return(
-        <>
+        <div className="w-3/4 flex" >
             <ChatMessaging messages={messages}/>
             <ChatInfo user={fakeUser}/>
-        </>
+        </div>
     );
 }

@@ -3,11 +3,11 @@ import { userInfo } from "@/app/types";
 export default function MessageAssideItem({user}:{user:userInfo})
 {
     return(
-        <div>
-            <img src={user.imageUrl} alt="friend profile pic" className="w-2.5" />
+        <div className="flex items-center bg-slate-500 m-3 rounded-lg h-16 ">
+            <img className="w-12 h-12 rounded-full px-2 box-content" src={user.imageUrl} alt="friend profile pic" />
             <div>
-                <h3>{user.userName}</h3>
-                <p>{user.lastMessage}</p>
+                <h3 className="text-sm" >{user.userName}</h3>
+                <p className="text-xs">{user.lastMessage}</p>
             </div>
         </div>
     )

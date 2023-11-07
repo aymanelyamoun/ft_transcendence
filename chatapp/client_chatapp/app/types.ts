@@ -2,7 +2,7 @@ export type messageType = {
     id:number;
     message:string;
     timeSent:string;
-    senderId:number;
+    senderId:number; /* should be remove if the user is already known */
 }
 
 export type userInfo = {

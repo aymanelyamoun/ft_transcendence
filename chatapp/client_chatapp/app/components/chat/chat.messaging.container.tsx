@@ -43,7 +43,7 @@ export const fakeUser:userInfo = {
 export default function ChatMessagingContainers()
 {
     return(
-        <div className="w-3/4 flex" >
+        <div className="w-3/4 flex items-center mainBackground px-10 rounded-lg" >
             <ChatMessaging messages={messages}/>
             <ChatInfo user={fakeUser}/>
         </div>

@@ -13,7 +13,7 @@ const fakeUsers:userInfo[] = [
 
 export default function Chat() 
 {
-    return (<div className="flex flex-row flex-nowrap justify-between bg-indigo-500 w-4/5 h-full">
+    return (<div className="flex flex-row flex-nowrap justify-evenly w-4/5 h-full m-auto mt-20">
         <ChatSideBar userlist={fakeUsers}/>
         <ChatMessagingContainers/>
     </div>);

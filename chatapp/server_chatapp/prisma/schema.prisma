@@ -9,3 +9,33 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model user{
+  id String @unique @default(uuid())
+  creatorOf String[]
+  admineOf String[]
+  friends String[]
+  blockedUsers String[]
+  profilePic String
+  username String
+  title String
+
+  gameRecords gameRecord[]
+  messages message[]
+}
+
+model gameRecord{
+  id String @id @default(uuid())
+  userRecord user @relation(fields: [recordId], references: [id])
+  recordId String @unique
+}
+
+model message{
+  id String @id @default(uuid())
+  messageSender String
+  messages String[] //check about this part
+  timeSent String
+  messageReciever String
+  userMessage user @relation(fields: [msgId], references: [id])
+  msgId String @unique
+}

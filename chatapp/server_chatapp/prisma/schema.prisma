@@ -17,7 +17,7 @@ model User{
   friends String[]
   blockedUsers String[]
   profilePic String
-  username String
+  username String @unique
   title String
   userDMs Messages[]
   gameRecords GameRecord[]

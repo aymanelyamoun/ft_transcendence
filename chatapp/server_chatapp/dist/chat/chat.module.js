@@ -9,12 +9,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatModule = void 0;
 const common_1 = require("@nestjs/common");
 const chat_gateway_1 = require("./chat.gateway");
+const prisma_chat_service_1 = require("../prisma/chat/prisma.chat.service");
+const prisma_module_1 = require("../prisma/prisma.module");
 let ChatModule = class ChatModule {
 };
 exports.ChatModule = ChatModule;
 exports.ChatModule = ChatModule = __decorate([
     (0, common_1.Module)({
-        providers: [chat_gateway_1.ChatGateway]
+        imports: [prisma_module_1.PrismaModule],
+        providers: [chat_gateway_1.ChatGateway, prisma_chat_service_1.PrismaChatService]
     })
 ], ChatModule);
 //# sourceMappingURL=chat.module.js.map

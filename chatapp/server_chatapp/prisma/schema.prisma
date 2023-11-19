@@ -44,7 +44,7 @@ model Messages{
   messages Message[]
   
   userMessages User @relation(fields: [messagesId], references: [id])
-  messagesId String @unique() @default(uuid())
+  messagesId String
 }
 
 

@@ -7,7 +7,17 @@ export declare class TmpUserController {
         id: string;
         username: string;
     }): Promise<void>;
-    getAllUsers(): Promise<{
+    removeFriendship({ id, username }: {
+        id: string;
+        username: string;
+    }): Promise<void>;
+    getAllUsers(): Promise<({
+        userDMs: {
+            id: string;
+            toUserId: string;
+            messagesId: string;
+        }[];
+    } & {
         id: string;
         creatorOf: string[];
         admineOf: string[];
@@ -16,5 +26,5 @@ export declare class TmpUserController {
         profilePic: string;
         username: string;
         title: string;
-    }[]>;
+    })[]>;
 }

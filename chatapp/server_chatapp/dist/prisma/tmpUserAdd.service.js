@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TmpUserService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("./prisma.service");
+const websockets_1 = require("@nestjs/websockets");
 let TmpUserService = class TmpUserService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -24,34 +25,69 @@ let TmpUserService = class TmpUserService {
     }
     async makeFriendship(user1, user2) {
         const hasFriendship = await this.getTmpUser({ where: { id: user1.id, friends: { has: user2.id } } });
-        if (!hasFriendship) {
-            const [user1Friends, user2Friends] = await Promise.all([
-                (this.prisma.user.update({
-                    where: {
-                        id: user1.id,
-                    },
-                    data: {
-                        friends: {
-                            push: user2.id,
-                        }
+        if (hasFriendship)
+            throw new websockets_1.WsException('Friendship already exists');
+        const [user1Friends, user2Friends] = await Promise.all([
+            (this.prisma.user.update({
+                where: {
+                    id: user1.id,
+                },
+                data: {
+                    friends: {
+                        push: user2.id,
                     }
-                })),
-                this.prisma.user.update({
-                    where: {
-                        id: user2.id,
-                    },
-                    data: {
-                        friends: {
-                            push: user1.id,
-                        }
+                }
+            })),
+            this.prisma.user.update({
+                where: {
+                    id: user2.id,
+                },
+                data: {
+                    friends: {
+                        push: user1.id,
                     }
-                })
-            ]);
-            return [user1Friends, user2Friends];
-        }
+                }
+            })
+        ]);
+        return [user1Friends, user2Friends];
+    }
+    async deleteTmpUser(params) {
+        return (await this.prisma.user.delete(params));
+    }
+    async deleteAllTmpUsers() {
+        return (await this.prisma.user.deleteMany());
+    }
+    async removeFriendship(user1, user2) {
+        const hasFriendship = await this.getTmpUser({ where: { id: user1.id, friends: { has: user2.id } } });
+        console.log("user has friendship:", hasFriendship);
+        if (!hasFriendship)
+            throw new websockets_1.WsException('Friendship does not exist');
+        const [user1Friends, user2Friends] = await Promise.all([
+            (this.prisma.user.update({
+                where: {
+                    id: user1.id,
+                },
+                data: {
+                    friends: {
+                        set: user1.friends.filter((friend) => friend !== user2.id),
+                    }
+                }
+            })),
+            this.prisma.user.update({
+                where: {
+                    id: user2.id,
+                },
+                data: {
+                    friends: {
+                        set: user2.friends.filter((friend) => friend !== user1.id),
+                    }
+                }
+            })
+        ]);
+        return [user1Friends, user2Friends];
     }
     async getAllUsers() {
-        return (await this.prisma.user.findMany());
+        return (await this.prisma.user.findMany({ include: { userDMs: true } }));
     }
 };
 exports.TmpUserService = TmpUserService;

@@ -8,10 +8,11 @@ import { PrismaModule } from './prisma/prisma.module';
 import { TmpUserService } from './prisma/tmpUserAdd.service';
 import { PrismaService } from './prisma/prisma.service';
 import { TmpUserController } from './prisma/tmpUser.controller';
+import { PrismaChatService } from './prisma/chat/prisma.chat.service';
 
 @Module({
   imports: [ConfigModule.forRoot(), ChatModule, PrismaModule],
   controllers: [TmpUserController],
-  providers: [AppService, ChatGateway, TmpUserService, PrismaService],
+  providers: [AppService, TmpUserService, PrismaService, PrismaChatService],
 })
 export class AppModule {}

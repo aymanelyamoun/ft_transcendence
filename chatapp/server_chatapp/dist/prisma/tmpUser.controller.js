@@ -27,9 +27,22 @@ let TmpUserController = class TmpUserController {
     async makeFriendship({ id, username }) {
         const user1 = await this.tmpUserAddService.getTmpUser({ where: { username: username } });
         const user = await this.tmpUserAddService.getTmpUser({ where: { id: id } });
-        console.log(user1, user);
-        const [user1Friends, user2Friends] = await this.tmpUserAddService.makeFriendship(user, user1);
-        console.log(user1Friends, user2Friends);
+        try {
+            const [user1Friends, user2Friends] = await this.tmpUserAddService.makeFriendship(user, user1);
+        }
+        catch {
+            throw new common_1.HttpException("user have ths friend", common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    async removeFriendship({ id, username }) {
+        const user1 = await this.tmpUserAddService.getTmpUser({ where: { username: username } });
+        const user = await this.tmpUserAddService.getTmpUser({ where: { id: id } });
+        try {
+            const [user1Friends, user2Friends] = await this.tmpUserAddService.removeFriendship(user, user1);
+        }
+        catch {
+            throw new common_1.HttpException("user don't have ths friend", common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getAllUsers() {
         return (await this.tmpUserAddService.getAllUsers());
@@ -44,12 +57,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TmpUserController.prototype, "addUser", null);
 __decorate([
-    (0, common_1.Post)('makeFriendship'),
+    (0, common_1.Patch)('makeFriendship'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TmpUserController.prototype, "makeFriendship", null);
+__decorate([
+    (0, common_1.Patch)('removeFriendship'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], TmpUserController.prototype, "removeFriendship", null);
 __decorate([
     (0, common_1.Get)('getAllUsers'),
     __metadata("design:type", Function),

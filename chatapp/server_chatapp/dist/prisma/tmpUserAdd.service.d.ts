@@ -34,7 +34,18 @@ export declare class TmpUserService {
         username: string;
         title: string;
     }[]>;
-    getAllUsers(): Promise<{
+    deleteTmpUser(params: Prisma.UserDeleteArgs): Promise<{
+        id: string;
+        creatorOf: string[];
+        admineOf: string[];
+        friends: string[];
+        blockedUsers: string[];
+        profilePic: string;
+        username: string;
+        title: string;
+    }>;
+    deleteAllTmpUsers(): Promise<Prisma.BatchPayload>;
+    removeFriendship(user1: User, user2: User): Promise<{
         id: string;
         creatorOf: string[];
         admineOf: string[];
@@ -44,4 +55,20 @@ export declare class TmpUserService {
         username: string;
         title: string;
     }[]>;
+    getAllUsers(): Promise<({
+        userDMs: {
+            id: string;
+            toUserId: string;
+            messagesId: string;
+        }[];
+    } & {
+        id: string;
+        creatorOf: string[];
+        admineOf: string[];
+        friends: string[];
+        blockedUsers: string[];
+        profilePic: string;
+        username: string;
+        title: string;
+    })[]>;
 }

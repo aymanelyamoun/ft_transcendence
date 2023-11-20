@@ -18,7 +18,8 @@ export class PrismaChatService{
           });
 
           console.log("user exists: ", data);
-          if (!DMexists) {
+          console.log("dm:", DMexists);
+          if (!DMexists.length) {
             const new_DM = await this.prisma.messages.create({ data });
             console.log("new_DM", new_DM);
           }

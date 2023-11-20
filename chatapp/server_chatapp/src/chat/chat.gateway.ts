@@ -43,7 +43,7 @@ export class ChatGateway implements OnModuleInit{
     const user2 = await this.tmpUserAddService.getTmpUser({where: {username:msg.messageTo}});
 
     this.prismaChat.createNewDM(msg.messageFrom, {
-      sender:user1.id, receiver:msg.messageTo, 
+      sender:user1.id, receiver:user2.id, 
       usersMessages: {
         create: [
           { user: { connect: { id: user1.id } } },

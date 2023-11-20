@@ -32,7 +32,7 @@ model GameRecord{
 model Message{
   id String @id @default(uuid())
   messageSenderId String // here we have id insteade of username, for if the user changed his username
-  timeSent String
+  timeSent DateTime @default(now())
   messageRecieverId String // think this one will be removed
   userMessage Messages @relation(fields: [msgId], references: [id]) 
   msgId String

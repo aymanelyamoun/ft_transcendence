@@ -19,7 +19,7 @@ model User{
   profilePic String
   username String @unique
   title String
-  userDMs Messages[]
+  userDMs UserMessages[]
   gameRecords GameRecord[]
 }
 
@@ -31,20 +31,32 @@ model GameRecord{
 
 model Message{
   id String @id @default(uuid())
-  messageSenderId String
+  messageSenderId String // here we have id insteade of username, for if the user changed his username
   timeSent String
   messageRecieverId String // think this one will be removed
   userMessage Messages @relation(fields: [msgId], references: [id]) 
-  msgId String @unique
+  msgId String
+}
+
+model UserMessages{
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  messages Messages @relation(fields: [messagesId], references: [id])
+  messagesId String
+
+  @@id([userId, messagesId])
 }
 
 model Messages{
-  id String @id() @default(uuid())
-  toUserId String
-  messages Message[]
+  id	String @id() @default(uuid())
+  sender	String
+  receiver	String
+  messages	Message[]
   
-  userMessages User @relation(fields: [messagesId], references: [id])
-  messagesId String
+  // userMessages User @relation(fields: [messagesId], references: [id])
+  // messagesId String
+  usersMessages UserMessages[]
 }
 
 

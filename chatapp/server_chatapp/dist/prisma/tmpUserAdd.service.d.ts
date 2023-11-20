@@ -57,8 +57,7 @@ export declare class TmpUserService {
     }[]>;
     getAllUsers(): Promise<({
         userDMs: {
-            id: string;
-            toUserId: string;
+            userId: string;
             messagesId: string;
         }[];
     } & {

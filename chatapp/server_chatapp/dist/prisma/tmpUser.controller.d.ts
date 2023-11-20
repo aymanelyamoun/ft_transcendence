@@ -13,8 +13,7 @@ export declare class TmpUserController {
     }): Promise<void>;
     getAllUsers(): Promise<({
         userDMs: {
-            id: string;
-            toUserId: string;
+            userId: string;
             messagesId: string;
         }[];
     } & {

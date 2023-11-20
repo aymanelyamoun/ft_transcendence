@@ -17,7 +17,15 @@ let PrismaChatService = class PrismaChatService {
         this.prisma = prisma;
     }
     async createNewDM(userId, data) {
-        const DMexists = await this.prisma.messages.findMany({ where: { toUserId: data.toUserId } });
+        const DMexists = await this.prisma.messages.findMany({
+            where: {
+                usersMessages: {
+                    some: {
+                        userId: data.to
+                    }
+                }
+            }
+        });
         console.log("user exists: ", data);
         if (!DMexists) {
             const new_DM = await this.prisma.messages.create({ data });

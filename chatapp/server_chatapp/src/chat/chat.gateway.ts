@@ -6,6 +6,7 @@ import { ConnectedSocketInfo } from './types/connected_socket_info';
 import { Message } from './types/message';
 import { PrismaChatService } from 'src/prisma/chat/prisma.chat.service';
 import { TmpUserService } from 'src/prisma/tmpUserAdd.service';
+import { Messages, Prisma } from '@prisma/client';
 
 
 
@@ -28,7 +29,7 @@ export class ChatGateway implements OnModuleInit{
   @SubscribeMessage('userData')
   subscribeUserData(client: Socket, data: userDataDto) {
     console.log(data);
-    this.connectedSockets.add({socket: client, usernameId: data.usernameId, username: data.username,})
+    this.connectedSockets.add({socket: client, userId: data.userId})
   }
 
   @SubscribeMessage('messageTo')
@@ -40,9 +41,11 @@ export class ChatGateway implements OnModuleInit{
 
     const requestedSocket = this.getRequestedSocket(msg.messageTo);
     const user1 = await this.tmpUserAddService.getTmpUser({where: {id: msg.messageFrom}});
-    const user2 = await this.tmpUserAddService.getTmpUser({where: {username:msg.messageTo}});
+    const user2 = await this.tmpUserAddService.getTmpUser({where: {id:msg.messageTo}});
 
-    this.prismaChat.createNewDM(msg.messageFrom, {
+    console.log(user2);
+
+    const DM = await this.prismaChat.createNewDM(msg.messageFrom, {
       sender:user1.id, receiver:user2.id, 
       usersMessages: {
         create: [
@@ -51,14 +54,16 @@ export class ChatGateway implements OnModuleInit{
         ]
       }
     })
+
+    this.prismaChat.addMessageToDM({messageSenderId:user1.id, messageRecieverId:user2.id, message:msg.message, DmMessage:{connect:DM}});
     // this.prismaChat.createNewDM(msg.messageFrom, {toUserId:msg.messageTo});
     console.log("sending message to", msg.messageTo);
     requestedSocket.emit('onMessage', msg.message);
   }
 
-  private getRequestedSocket(username: string) {
+  private getRequestedSocket(userId: string) {
     for (const element of this.connectedSockets) {
-      if (element.username === username) {
+      if (element.userId === userId) {
         return element.socket;
       }
     }

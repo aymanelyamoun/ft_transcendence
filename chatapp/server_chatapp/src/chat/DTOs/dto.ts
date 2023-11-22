@@ -1,13 +1,13 @@
 import { IsString, IsNotEmpty } from 'class-validator';
 
 export class userDataDto {
-    @IsString()
-    @IsNotEmpty()
-    username: string;
+    // @IsString()
+    // @IsNotEmpty()
+    // username: string;
 
     @IsString()
     @IsNotEmpty()
-    usernameId: string;
+    userId: string;
 
     // @IsString()
     // @IsNotEmpty()
@@ -30,4 +30,25 @@ export class messageDto {
     @IsString()
     @IsNotEmpty()
     event?: string;
+}
+
+export class CreateChannelDto{
+    @IsNotEmpty()
+    @IsString()
+    channelName: string;
+    
+    @IsNotEmpty()
+    @IsString()
+    password: string;
+
+    @IsNotEmpty()
+    @IsString()
+    type: string;
+
+    @IsNotEmpty()
+    admines?: string[]
+
+    @IsNotEmpty()
+    @IsString()
+    creator: string
 }

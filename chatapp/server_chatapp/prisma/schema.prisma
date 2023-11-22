@@ -21,6 +21,20 @@ model User{
   title String
   userDMs UserMessages[]
   gameRecords GameRecord[]
+  // userId UserInterface? @relation(fields: [userInterface], references: [id])
+  userInterface String? @unique
+
+
+  channelAdmin Channel @relation("channelAdmin" , fields: [channelAdminId], references: [id])
+  channelAdminId String
+  
+  channelBaned Channel @relation("channelBaned" , fields: [channelBanedId], references: [id])
+  channelBanedId String
+
+  mutedUser Muted? @relation(fields: [mutedId], references: [id])
+  mutedId String? @unique
+  // channelMuted Channel @relation("channelMuted" , fields: [channelAdminId], references: [id])
+  // channelMutedId String
 }
 
 model GameRecord{
@@ -31,12 +45,18 @@ model GameRecord{
 
 model Message{
   id String @id @default(uuid())
+  message String
   messageSenderId String // here we have id insteade of username, for if the user changed his username
   timeSent DateTime @default(now())
   messageRecieverId String // think this one will be removed
-  userMessage Messages @relation(fields: [msgId], references: [id]) 
+  DmMessage Messages @relation(fields: [msgId], references: [id])
   msgId String
 }
+
+// model UserInterface{
+//   id String @id @default(uuid())
+//   user User?
+// }
 
 model UserMessages{
   user User @relation(fields: [userId], references: [id])
@@ -58,5 +78,55 @@ model Messages{
   // messagesId String
   usersMessages UserMessages[]
 }
+
+// channel modules
+
+model Channel{
+  id String @id() @default(uuid())
+  channelName String
+  creator String
+  channelType String @default("public")
+  hash String?
+  admins User[] @relation("channelAdmin")
+  banedUsers User[] @relation("channelBaned")
+  mutedUsers Muted[]
+}
+
+model Muted{
+  id String @id() @default(uuid())
+  timeToEnd DateTime
+  mutedUser User?
+
+  mutedChannel Channel @relation(fields: [mutedId], references: [id])
+  mutedId String
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

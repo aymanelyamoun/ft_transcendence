@@ -22,19 +22,22 @@ export class TmpUserService{
 
     async makeFriendship(user1:User, user2:User){
 
-        const hasFriendship = await this.getTmpUser({where:{id: user1.id, friends:{has:user2.id}}})
-        if (hasFriendship) throw new WsException('Friendship already exists')
+        // const hasFriendship = await this.getTmpUser({where:{id: user1.id, friends:{has:user2.id}}})
+        const user = await this.getTmpUser({where:{id: user1.id}, include:{friends:true}})
+        console.log("user: ", user)
+        // const hasFriendship = user.friends.;
+        // if (hasFriendship) throw new WsException('Friendship already exists')
 
         const [user1Friends, user2Friends] = await Promise.all([
 
             (this.prisma.user.update({
                 where: {
                     id: user1.id,
-                    },
-
+                },
                 data: {
                     friends: {
-                        push: user2.id, 
+                        create:{friend:{connect:{id:user2.id}}}
+                        // connect: { friend:{ id: user2.id} }
                     }
                 }
             })),
@@ -44,7 +47,7 @@ export class TmpUserService{
                 },
                 data:{
                     friends:{
-                        push: user1.id,
+                        create:{friend:{connect:{id:user1.id}}}
                     }
                 }
             })
@@ -62,11 +65,11 @@ export class TmpUserService{
 
     async removeFriendship(user1:User, user2:User){
 
-        const hasFriendship = await this.getTmpUser({where:{id: user1.id, friends:{has:user2.id}}})
+        // const hasFriendship = await this.getTmpUser({where:{id: user1.id, friends:{has:user2.id}}})
 
         // thorw exeption if friendship does not exist and set status code to 404
-        console.log("user has friendship:",hasFriendship);
-        if (!hasFriendship) throw new WsException('Friendship does not exist')
+        // console.log("user has friendship:",hasFriendship);
+        // if (!hasFriendship) throw new WsException('Friendship does not exist')
         const [user1Friends, user2Friends] = await Promise.all([
 
             (this.prisma.user.update({
@@ -76,7 +79,7 @@ export class TmpUserService{
 
                 data: {
                     friends: {
-                        set: user1.friends.filter((friend) => friend !== user2.id), 
+                        // set: user1.friends.filter((friend) => friend !== user2.id), 
                     }
                 }
             })),
@@ -86,7 +89,7 @@ export class TmpUserService{
                 },
                 data:{
                     friends:{
-                        set: user2.friends.filter((friend) => friend !== user1.id),
+                        // set: user2.friends.filter((friend) => friend !== user1.id),
                     }
                 }
             })

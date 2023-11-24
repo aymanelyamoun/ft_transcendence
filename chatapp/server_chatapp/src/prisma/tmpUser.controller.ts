@@ -1,7 +1,6 @@
 import { Body, ConsoleLogger, Controller, Get, HttpException, HttpStatus, Injectable, Patch, Post } from "@nestjs/common";
 import { TmpUserService } from "./tmpUserAdd.service";
 
-
 // @Injectable()
 @Controller('users')
 export class TmpUserController{
@@ -15,13 +14,14 @@ export class TmpUserController{
         const user = await this.tmpUserAddService.createTmpUser(data);
         console.log(user);
     }
+    
     @Patch('makeFriendship')
-    async makeFriendship(@Body() {id, username}: {id: string, username: string}){
-        const user1 = await this.tmpUserAddService.getTmpUser({where: {username: username}});
-        const user  = await this.tmpUserAddService.getTmpUser({where:{id: id}});
+    async makeFriendship(@Body() {userId1, userId2}: {userId1: string, userId2: string}){
+        const user1 = await this.tmpUserAddService.getTmpUser( {where:{id: userId1}});
+        const user2 = await this.tmpUserAddService.getTmpUser({where: {id: userId2}});
 
         try{
-            const [user1Friends, user2Friends] = await this.tmpUserAddService.makeFriendship(user, user1);
+            const [user1Friends, user2Friends] = await this.tmpUserAddService.makeFriendship(user1, user2);
         }
         catch{
             throw new HttpException("user have ths friend", HttpStatus.BAD_REQUEST);

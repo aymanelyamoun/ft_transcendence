@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty } from 'class-validator';
+import { User } from '../types/user';
 
 export class userDataDto {
     // @IsString()
@@ -39,7 +40,7 @@ export class CreateChannelDto{
     
     @IsNotEmpty()
     @IsString()
-    password: string;
+    password?: string;
 
     @IsNotEmpty()
     @IsString()
@@ -51,4 +52,30 @@ export class CreateChannelDto{
     @IsNotEmpty()
     @IsString()
     creator: string
+
+
+    @IsNotEmpty()
+    members?: User[]
 }
+
+export class JoinChannelDto{
+    @IsNotEmpty()
+    @IsString()
+    channelId: string;
+
+    @IsNotEmpty()
+    @IsString()
+    password?: string;
+
+    @IsNotEmpty()
+    @IsString()
+    userId:string;
+}
+
+
+
+
+
+
+
+

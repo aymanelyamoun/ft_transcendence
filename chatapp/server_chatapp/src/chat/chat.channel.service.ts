@@ -6,7 +6,9 @@ import { CreateChannelDto } from "./DTOs/dto";
 export class ChannelService{
     constructor(private readonly prismaChatService:PrismaChatService){}
 
-    async createService(createChannelDto:CreateChannelDto){
-        this.prismaChatService.createChannel(createChannelDto);
-    }
+    // async createService(createChannelDto:CreateChannelDto){
+    //     this.prismaChatService.createChannel(createChannelDto);
+    // }
+
+    // async joinChannel
 }

@@ -14,27 +14,35 @@ model User{
   id String @unique @default(uuid())
   creatorOf String[]
   admineOf String[]
-  friends String[]
+  friends Friends? @relation("friendsList")
   blockedUsers String[]
   profilePic String
   username String @unique
   title String
   userDMs UserMessages[]
   gameRecords GameRecord[]
-  // userId UserInterface? @relation(fields: [userInterface], references: [id])
-  userInterface String? @unique
+  channels UserChannel[]
 
-
-  channelAdmin Channel @relation("channelAdmin" , fields: [channelAdminId], references: [id])
-  channelAdminId String
+  channelAdmin Channel? @relation("channelAdmin" , fields: [channelAdminId], references: [id])
+  channelAdminId String?
   
-  channelBaned Channel @relation("channelBaned" , fields: [channelBanedId], references: [id])
-  channelBanedId String
+  channelBaned Channel? @relation("channelBaned" , fields: [channelBanedId], references: [id])
+  channelBanedId String?
 
   mutedUser Muted? @relation(fields: [mutedId], references: [id])
   mutedId String? @unique
-  // channelMuted Channel @relation("channelMuted" , fields: [channelAdminId], references: [id])
-  // channelMutedId String
+
+  FriendsUser Friends? @relation("friends",fields: [FriendsId], references: [id])
+  FriendsId Int? @unique
+}
+
+model Friends{
+  id Int @id() @default(autoincrement())
+
+  user User? @relation("friendsList", fields: [userId], references: [id])
+  userId String? @unique
+
+  friend User? @relation("friends")
 }
 
 model GameRecord{
@@ -87,9 +95,28 @@ model Channel{
   creator String
   channelType String @default("public")
   hash String?
+  members UserChannel[]
   admins User[] @relation("channelAdmin")
   banedUsers User[] @relation("channelBaned")
   mutedUsers Muted[]
+  // pendingUsers PendingUser[]
+
+  // userChannels 
+  // channelId String
+}
+
+
+
+model UserChannel{
+  // id Int @id @default(autoincrement())
+
+  users User @relation(fields: [userId], references: [id])
+  userId String
+
+  channels Channel @relation(fields: [channelId], references: [id])
+  channelId String
+
+  @@id([userId, channelId])
 }
 
 model Muted{
@@ -101,7 +128,14 @@ model Muted{
   mutedId String
 }
 
+// model PendingUser{
+//   id Int @id() @default(autoincrement())
+//   user User?
 
+//   channel Channel @relation(fields: [channelId], references: [id])
+//   channelId String
+
+// }
 
 
 

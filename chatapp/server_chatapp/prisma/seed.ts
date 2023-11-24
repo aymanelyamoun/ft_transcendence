@@ -16,7 +16,11 @@ const prisma = new PrismaClient();
 
 async function main() {
 
-    await prisma.user.createMany({data});
+    await prisma.user.createMany({data})
+        // username:faker.helpers.unique(faker.person.firstName),
+        // title: faker.person.lastName(),
+        // profilePic:"some/link",
+    // }, });
     // for (const user of data){
         // const new_UI =  await prisma.userInterface.create({data:{}});
         // const newUser = await prisma.user.create({

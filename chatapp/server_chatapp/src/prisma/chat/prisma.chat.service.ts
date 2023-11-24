@@ -38,30 +38,14 @@ export class PrismaChatService{
         // channel DB:
 
         async createChannel(data:CreateChannelDto){
-          // const channelData:Prisma.ChannelCreateInput;
-
-          // check if the user exists
-          // check if the default assigned users also exist
-
-          // add all usersto the channel
 
           console.log("getting to create the channel");
-         
-          this.IsFriend(data.creator, data.members);
-          // const creator = await this.getUser({where:{id:data.creator},
-          //   include:{
-          //     friends:true,
-          //     blockedUsers:true,
-          //     blockedByUsers:true,
-          //   }
-          // });
-
+        
+          // problem probably in makeFriendShip
+          data.members = await this.checkUsersToAdd(data.creator, data.members);
+          console.log("new members: ", data.members)
           // if (!creator) throw new ForbiddenException("user creator doesn't exit"); // this check is probably usless
 
-          // CheckForBlocked users
-          
-        //  creator.
-          
           if (data.members.length > 0){
             console.log("adding members...");
             const channel = await this.prisma.channel.create({
@@ -142,20 +126,66 @@ export class PrismaChatService{
           return (await this.prisma.user.findUnique(params))
         }
 
-        async IsFriend(userId:string, usersTocheck:user[]){
-          const user = await this.getUser({where:{id:userId},
-            include:{
+        async checkUsersToAdd(userId: string, usersTocheck: user[]) {
+          const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            include: {
               friends: true,
-                // include: {friend:true}
-              blockedUsers:true,
-              blockedByUsers:true,
-            }
+              blockedUsers: true,
+              blockedByUsers: true,
+            },
           });
-
-          // const friends = user.friends;
-          // const blockedByUsers = user.b
-          console.log(user);
+        
+          if (!user) {
+            console.log('User not found');
+            return;
+          }
+          console.log("userId: ", userId);
+          console.log("friends..:", user.friends);
+          const friends = user.friends.map(friend => friend.userId);
+          console.log("friends:", friends);
+          const blockedUsers = user.blockedUsers.map(blockedUser => blockedUser.userblockedId);
+          const blockedByUsers = user.blockedByUsers.map(blockedByUser => blockedByUser.userblockedById);
+        
+          // console.log("usersTocheck:", usersTocheck.map(user => user.userId));
+        
+          const newList = usersTocheck.filter(toCheck => {
+            console.log("Checking userId:", toCheck.userId);
+            return friends.includes(toCheck.userId) && 
+              !blockedUsers.includes(toCheck.userId) && 
+              !blockedByUsers.includes(toCheck.userId);
+          });
+        
+          console.log("New List: ", newList);
+          return newList;
         }
+        // async IsFriend(userId:string, usersTocheck:user[]){
+        //   // const {user} = await this.getUser({where:{id:userId},
+        //   const user = await this.prisma.user.findUnique({where:{id:userId},
+        //     include:{
+        //       friends: true,
+        //         // include: {friend:true}
+        //       blockedUsers:true,
+        //       blockedByUsers:true,
+        //     }
+        //   });
+
+        //   // const newUsers:user[] = [];
+        //   const newList = usersTocheck.map((toCheck)=>{
+        //     if (user.friends.some(friend => friend.userId === toCheck.userId))
+        //       return(toCheck);
+        //   }).map((toCheck)=>{
+        //     if (!user.blockedUsers.some(blockedUser => blockedUser.userblockedId === toCheck.userId))
+        //       return(toCheck)
+        //   })
+
+        //   console.log(newList);
+        //   // const 
+        //   // const friends = user.friends;
+        //   // const blockedByUsers = user.b
+        //   // console.log(user);
+        // }
+
 }
 
 

@@ -1,8 +1,9 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
-import { Messages, Prisma } from "@prisma/client";
+import { Messages, Prisma, User } from "@prisma/client";
 import { Channel, JoinChannel } from "src/chat/types/channel";
 import { CreateChannelDto, JoinChannelDto } from "src/chat/DTOs/dto";
+import { user } from "src/chat/types/user";
 
 @Injectable()
 export class PrismaChatService{
@@ -46,13 +47,20 @@ export class PrismaChatService{
 
           console.log("getting to create the channel");
          
+          this.IsFriend(data.creator, data.members);
+          // const creator = await this.getUser({where:{id:data.creator},
+          //   include:{
+          //     friends:true,
+          //     blockedUsers:true,
+          //     blockedByUsers:true,
+          //   }
+          // });
 
-          const creatorExists = await this.getUser({where:{id:data.creator}});
-          if (!creatorExists) throw new ForbiddenException("user creator doesn't exit"); // this check is probably usless
+          // if (!creator) throw new ForbiddenException("user creator doesn't exit"); // this check is probably usless
 
           // CheckForBlocked users
-
           
+        //  creator.
           
           if (data.members.length > 0){
             console.log("adding members...");
@@ -132,6 +140,21 @@ export class PrismaChatService{
 
         async getUser(params: Prisma.UserFindUniqueArgs){
           return (await this.prisma.user.findUnique(params))
+        }
+
+        async IsFriend(userId:string, usersTocheck:user[]){
+          const user = await this.getUser({where:{id:userId},
+            include:{
+              friends: true,
+                // include: {friend:true}
+              blockedUsers:true,
+              blockedByUsers:true,
+            }
+          });
+
+          // const friends = user.friends;
+          // const blockedByUsers = user.b
+          console.log(user);
         }
 }
 

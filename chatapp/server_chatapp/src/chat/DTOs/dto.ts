@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty } from 'class-validator';
-import { User } from '../types/user';
+import { user } from '../types/user';
 
 export class userDataDto {
     // @IsString()
@@ -55,7 +55,7 @@ export class CreateChannelDto{
 
 
     @IsNotEmpty()
-    members?: User[]
+    members?: user[]
 }
 
 export class JoinChannelDto{

@@ -23,8 +23,23 @@ export class TmpUserController{
         try{
             const [user1Friends, user2Friends] = await this.tmpUserAddService.makeFriendship(user1, user2);
         }
-        catch{
+        catch (e){
+            console.log("error: ", e);
             throw new HttpException("user have ths friend", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Patch('blockUser')
+    async blockUser(@Body() {userId1, userId2}: {userId1: string, userId2: string}){
+        const user1 = await this.tmpUserAddService.getTmpUser( {where:{id: userId1}});
+        const user2 = await this.tmpUserAddService.getTmpUser({where: {id: userId2}});
+
+        try{
+            const [user1Friends, user2Friends] = await this.tmpUserAddService.blockUser(user1, user2);
+        }
+        catch (e){
+            console.log("error: ", e);
+            throw new HttpException("some block error", HttpStatus.BAD_REQUEST);
         }
     }
 

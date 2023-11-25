@@ -22,11 +22,26 @@ export class TmpUserService{
 
     async makeFriendship(user1:User, user2:User){
 
-        // const hasFriendship = await this.getTmpUser({where:{id: user1.id, friends:{has:user2.id}}})
-        const user = await this.getTmpUser({where:{id: user1.id}, include:{friends:true}})
-        console.log("user: ", user)
-        // const hasFriendship = user.friends.;
-        // if (hasFriendship) throw new WsException('Friendship already exists')
+        const user = await this.prisma.user.findUnique({
+            where: { id: user1.id },
+            include: {
+              friends: true,
+              blockedUsers: true,
+              blockedByUsers: true,
+            },
+          });
+
+        // handle the bocked/blockedby situations
+
+        const hasFriendship = user.friends.some((friend)=> friend.id === user2.id);
+        if (hasFriendship) throw new WsException('Friendship already exists')
+
+        // const hasBlocked = user.blockedUsers.some((user)=> user.userblockedId == user2.id);
+        // if (hasBlocked) throw new WsException('you blocked this user')
+
+        // const isBlocked = user.blockedByUsers.some((user)=> user.userblockedById == user2.id);
+        // if (isBlocked) throw new WsException('this user has blocked you')
+
 
         const [user1Friends, user2Friends] = await Promise.all([
 
@@ -36,8 +51,7 @@ export class TmpUserService{
                 },
                 data: {
                     friends: {
-                        create:{friend:{connect:{id:user2.id}}}
-                        // connect: { friend:{ id: user2.id} }
+                        connect:{id:user2.id}
                     }
                 }
             })),
@@ -47,12 +61,32 @@ export class TmpUserService{
                 },
                 data:{
                     friends:{
-                        create:{friend:{connect:{id:user1.id}}}
+                        connect:{id:user1.id}
                     }
                 }
             })
         ])
+
         return [user1Friends, user2Friends];
+    }
+
+    async blockUser(user1:User, user2:User){
+
+        // const block = await this.prisma.block.create({
+        //     data: {
+        //       userblockedId: user2.id,
+        //       userblockedById: user1.id,
+        //     }})
+        await this.prisma.user.update({
+            where: {
+                id: user1.id,
+            },
+            data: {
+                blockedUsers:{connect:{id:user2.id}}
+            }
+        })
+
+        return [user1, user2];
     }
 
     async deleteTmpUser(params: Prisma.UserDeleteArgs){

@@ -41,8 +41,7 @@ export class PrismaChatService{
 
           console.log("getting to create the channel");
         
-          // problem probably in makeFriendShip
-          data.members = await this.checkUsersToAdd(data.creator, data.members);
+          data.members = await this.filterUsersToAdd(data.creator, data.members);
           console.log("new members: ", data.members)
           // if (!creator) throw new ForbiddenException("user creator doesn't exit"); // this check is probably usless
 
@@ -53,7 +52,7 @@ export class PrismaChatService{
                 channelName: data.channelName,
                 creator: data.creator,
                 channelType: data.type,
-                // later on user hashing service
+                // later on use hashing service
                 hash: data.password,
                 members: {
                   create: data.members.map((member) => ({
@@ -126,7 +125,7 @@ export class PrismaChatService{
           return (await this.prisma.user.findUnique(params))
         }
 
-        async checkUsersToAdd(userId: string, usersTocheck: user[]) {
+        async filterUsersToAdd(userId: string, usersTocheck: user[]) {
           const user = await this.prisma.user.findUnique({
             where: { id: userId },
             include: {
@@ -135,19 +134,15 @@ export class PrismaChatService{
               blockedByUsers: true,
             },
           });
-        
+
           if (!user) {
             console.log('User not found');
             return;
           }
-          console.log("userId: ", userId);
-          console.log("friends..:", user.friends);
-          const friends = user.friends.map(friend => friend.userId);
-          console.log("friends:", friends);
-          const blockedUsers = user.blockedUsers.map(blockedUser => blockedUser.userblockedId);
-          const blockedByUsers = user.blockedByUsers.map(blockedByUser => blockedByUser.userblockedById);
-        
-          // console.log("usersTocheck:", usersTocheck.map(user => user.userId));
+
+          const friends = user.friends.map(friend => friend.id);
+          const blockedUsers = user.blockedUsers.map(blockedUser => blockedUser.id);
+          const blockedByUsers = user.blockedByUsers.map(blockedByUser => blockedByUser.id);
         
           const newList = usersTocheck.filter(toCheck => {
             console.log("Checking userId:", toCheck.userId);
@@ -155,36 +150,11 @@ export class PrismaChatService{
               !blockedUsers.includes(toCheck.userId) && 
               !blockedByUsers.includes(toCheck.userId);
           });
-        
+
+          newList.push({userId:userId});
           console.log("New List: ", newList);
           return newList;
         }
-        // async IsFriend(userId:string, usersTocheck:user[]){
-        //   // const {user} = await this.getUser({where:{id:userId},
-        //   const user = await this.prisma.user.findUnique({where:{id:userId},
-        //     include:{
-        //       friends: true,
-        //         // include: {friend:true}
-        //       blockedUsers:true,
-        //       blockedByUsers:true,
-        //     }
-        //   });
-
-        //   // const newUsers:user[] = [];
-        //   const newList = usersTocheck.map((toCheck)=>{
-        //     if (user.friends.some(friend => friend.userId === toCheck.userId))
-        //       return(toCheck);
-        //   }).map((toCheck)=>{
-        //     if (!user.blockedUsers.some(blockedUser => blockedUser.userblockedId === toCheck.userId))
-        //       return(toCheck)
-        //   })
-
-        //   console.log(newList);
-        //   // const 
-        //   // const friends = user.friends;
-        //   // const blockedByUsers = user.b
-        //   // console.log(user);
-        // }
 
 }
 

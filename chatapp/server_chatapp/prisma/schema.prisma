@@ -11,12 +11,14 @@ datasource db {
 }
 
 model User{
-  id String @unique @default(uuid())
+  id String @id @unique @default(uuid())
   creatorOf String[]
   admineOf String[]
-  friends Friend[] @relation("friendsList")
-  blockedUsers Block[] @relation("blocked")
-  blockedByUsers Block[] @relation("blockedBy")
+  friends User[] @relation("friendsList")
+  friendOf User[] @relation("friendsList")
+
+  blockedUsers User[] @relation("blocked")
+  blockedByUsers User[] @relation("blocked")
   profilePic String
   username String @unique
   title String
@@ -33,39 +35,17 @@ model User{
   mutedUser Muted? @relation(fields: [mutedId], references: [id])
   mutedId String? @unique
 
-  FriendsUser Friend? @relation("friend",fields: [FriendsId], references: [id])
-  FriendsId Int? @unique
-
-  blockedUser Block? @relation("blockedUser", fields: [blockedUserId], references: [id])
-  blockedUserId Int? @unique
-  
-  blockedByUser Block? @relation("blockedByUser", fields: [blockedByUserId], references: [id])
-  blockedByUserId Int? @unique
 }
 
-model Block{
-  id Int @id() @default(autoincrement())
+// model Block{
+//   userblocked User @relation("blocked", fields: [userblockedId], references: [id])
+//   userblockedId String
 
-  // bockedUser User
-  blockedUserId User? @relation("blockedUser")
+//   userblockedBy User @relation("blockedBy", fields: [userblockedById], references: [id])
+//   userblockedById String
 
-  blockedByUserId User? @relation("blockedByUser")
-
-  userblocked User @relation("blocked", fields: [userblockedId], references: [id])
-  userblockedId String
-
-  userblockedBy User @relation("blockedBy", fields: [userblockedById], references: [id])
-  userblockedById String
-}
-
-model Friend{
-  id Int @id() @default(autoincrement())
-
-  user User? @relation("friendsList", fields: [userId], references: [id])
-  userId String? @unique
-
-  friend User? @relation("friend")
-}
+//   @@id([userblockedId, userblockedById])
+// }
 
 model GameRecord{
   id String @id @default(uuid())

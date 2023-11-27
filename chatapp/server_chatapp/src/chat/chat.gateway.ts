@@ -55,7 +55,7 @@ export class ChatGateway implements OnModuleInit{
       }
     })
 
-    this.prismaChat.addMessageToDM({messageSenderId:user1.id, messageRecieverId:user2.id, message:msg.message, DmMessage:{connect:DM}});
+    await this.prismaChat.addMessageToDM({messageSenderId:user1.id, messageRecieverId:user2.id, message:msg.message, DmMessage:{connect:DM}});
     // this.prismaChat.createNewDM(msg.messageFrom, {toUserId:msg.messageTo});
     console.log("sending message to", msg.messageTo);
     requestedSocket.emit('onMessage', msg.message);

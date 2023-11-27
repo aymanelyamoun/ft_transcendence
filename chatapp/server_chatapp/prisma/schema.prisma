@@ -12,11 +12,12 @@ datasource db {
 
 model User{
   id String @id @unique @default(uuid())
-  creatorOf String[]
-  admineOf String[]
+  creatorOf Channel[] @relation("channelCreator")
+  email String
+  hash String
+  // admineOf String[]
   friends User[] @relation("friendsList")
   friendOf User[] @relation("friendsList")
-
   blockedUsers User[] @relation("blocked")
   blockedByUsers User[] @relation("blocked")
   profilePic String
@@ -25,27 +26,12 @@ model User{
   userDMs UserMessages[]
   gameRecords GameRecord[]
   channels UserChannel[]
-
-  channelAdmin Channel? @relation("channelAdmin" , fields: [channelAdminId], references: [id])
-  channelAdminId String?
-  
-  channelBaned Channel? @relation("channelBaned" , fields: [channelBanedId], references: [id])
-  channelBanedId String?
+  channelBaned Channel[] @relation("channelBaned")
 
   mutedUser Muted? @relation(fields: [mutedId], references: [id])
   mutedId String? @unique
 
 }
-
-// model Block{
-//   userblocked User @relation("blocked", fields: [userblockedId], references: [id])
-//   userblockedId String
-
-//   userblockedBy User @relation("blockedBy", fields: [userblockedById], references: [id])
-//   userblockedById String
-
-//   @@id([userblockedId, userblockedById])
-// }
 
 model GameRecord{
   id String @id @default(uuid())
@@ -63,12 +49,9 @@ model Message{
   msgId String
 }
 
-// model UserInterface{
-//   id String @id @default(uuid())
-//   user User?
-// }
-
 model UserMessages{
+
+
   user User @relation(fields: [userId], references: [id])
   userId String
 
@@ -83,34 +66,28 @@ model Messages{
   sender	String
   receiver	String
   messages	Message[]
-  
-  // userMessages User @relation(fields: [messagesId], references: [id])
-  // messagesId String
+
   usersMessages UserMessages[]
 }
-
-// channel modules
 
 model Channel{
   id String @id() @default(uuid())
   channelName String
-  creator String
+  creator User @relation("channelCreator",fields: [creatorId], references: [id])
+  creatorId String
   channelType String @default("public")
   hash String?
   members UserChannel[]
-  admins User[] @relation("channelAdmin")
+  // admins User[] @relation("channelAdmin")
   banedUsers User[] @relation("channelBaned")
   mutedUsers Muted[]
-  // pendingUsers PendingUser[]
-
-  // userChannels 
-  // channelId String
 }
 
 
 
 model UserChannel{
-  // id Int @id @default(autoincrement())
+
+  isAdmin Boolean @default(false)
 
   users User @relation(fields: [userId], references: [id])
   userId String
@@ -129,15 +106,6 @@ model Muted{
   mutedChannel Channel @relation(fields: [mutedId], references: [id])
   mutedId String
 }
-
-// model PendingUser{
-//   id Int @id() @default(autoincrement())
-//   user User?
-
-//   channel Channel @relation(fields: [channelId], references: [id])
-//   channelId String
-
-// }
 
 
 

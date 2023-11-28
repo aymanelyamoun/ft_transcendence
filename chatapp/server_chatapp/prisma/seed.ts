@@ -6,6 +6,8 @@ const data = Array.from({length:10}).map(()=>{
         profilePic: "some link",
         username: faker.helpers.unique(faker.person.firstName),
         title: faker.person.lastName(),
+        email: faker.internet.email(),
+        hash: faker.internet.password(),
         // userInterface:{
             // create:{}
         // }

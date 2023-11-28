@@ -68,4 +68,14 @@ export class ChatGateway implements OnModuleInit{
       }
     }
   }
+
+  private getRequestedSockets(userId: string): Socket[] {
+    let matchedSockets: Socket[] = [];
+    for (const element of this.connectedSockets) {
+      if (element.userId === userId) {
+        matchedSockets.push(element.socket);
+      }
+    }
+    return matchedSockets;
+  }
 }

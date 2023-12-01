@@ -59,5 +59,6 @@ export class ChannelController{
         await this.prismaChatService.unbanUser(data);
     }
 
+
 }
 

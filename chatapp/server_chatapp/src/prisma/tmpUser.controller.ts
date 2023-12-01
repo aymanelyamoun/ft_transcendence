@@ -1,11 +1,13 @@
 import { Body, ConsoleLogger, Controller, Get, HttpException, HttpStatus, Injectable, Patch, Post } from "@nestjs/common";
 import { TmpUserService } from "./tmpUserAdd.service";
+import { StratDMDto } from "src/chat/types/user";
+import { PrismaChatService } from "./chat/prisma.chat.service";
 
 // @Injectable()
 @Controller('users')
 export class TmpUserController{
 
-    constructor(private readonly tmpUserAddService:TmpUserService){}
+    constructor(private readonly tmpUserAddService:TmpUserService, private readonly prismaChatService:PrismaChatService){}
 
     @Post('addUser')
     async addUser(@Body() data: any){
@@ -14,6 +16,7 @@ export class TmpUserController{
         const user = await this.tmpUserAddService.createTmpUser(data);
         console.log(user);
     }
+
     
     @Patch('makeFriendship')
     async makeFriendship(@Body() {userId1, userId2}: {userId1: string, userId2: string}){
@@ -62,5 +65,13 @@ export class TmpUserController{
     @Get('getAllUsers')
     async getAllUsers(){
         return (await this.tmpUserAddService.getAllUsers());
+    }
+
+
+    // this is just for test next move it to a separate file
+
+    @Post('startDM')
+    async startDM(@Body() stratDmInfo:StratDMDto){
+        await this.prismaChatService.createNewDM(stratDmInfo.userId, stratDmInfo.userId2);
     }
 }

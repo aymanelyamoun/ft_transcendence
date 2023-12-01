@@ -2,10 +2,6 @@ import { IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 import { user } from '../types/user';
 
 export class userDataDto {
-    // @IsString()
-    // @IsNotEmpty()
-    // username: string;
-
     @IsString()
     @IsNotEmpty()
     userId: string;
@@ -13,9 +9,6 @@ export class userDataDto {
     @IsBoolean()
     isAdmin: Boolean = false;
 
-    // @IsString()
-    // @IsNotEmpty()
-    // messageTo: string;
 }
 
 export class messageDto {
@@ -25,11 +18,11 @@ export class messageDto {
 
     @IsString()
     @IsNotEmpty()
-    messageTo: string;
+    conversationId: string;
 
     @IsString()
     @IsNotEmpty()
-    messageFrom?: string;
+    from?: string;
 
     @IsString()
     @IsNotEmpty()

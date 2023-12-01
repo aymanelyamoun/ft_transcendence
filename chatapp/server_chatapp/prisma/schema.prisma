@@ -23,14 +23,17 @@ model User{
   profilePic String
   username String @unique
   title String
-  userDMs UserMessages[]
+  userDMs Conversation[]
   gameRecords GameRecord[]
   channels UserChannel[]
   channelBaned Channel[] @relation("channelBaned")
 
+  memberConv Member[]
+
   mutedUser Muted? @relation(fields: [mutedId], references: [id])
   mutedId String? @unique
 
+  userMessages Message[]
 }
 
 model GameRecord{
@@ -41,34 +44,42 @@ model GameRecord{
 
 model Message{
   id String @id @default(uuid())
+
+  sender User @relation(fields: [userId], references: [id])
+  userId String
+
   message String
-  messageSenderId String // here we have id insteade of username, for if the user changed his username
-  timeSent DateTime @default(now())
-  messageRecieverId String // think this one will be removed
-  DmMessage Messages @relation(fields: [msgId], references: [id])
-  msgId String
+
+  createdAt DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
 }
 
-model UserMessages{
+model Conversation{
+  id String @id @default(uuid())
 
+  type String
+  members Member[]
+  users User[]
+  createdAt DateTime @default(now())
+  messages Message[]
+}
+
+model Member{
+  id Int @id @default(autoincrement())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
 
   user User @relation(fields: [userId], references: [id])
   userId String
-
-  messages Messages @relation(fields: [messagesId], references: [id])
-  messagesId String
-
-  @@id([userId, messagesId])
 }
 
-model Messages{
-  id	String @id() @default(uuid())
-  sender	String
-  receiver	String
-  messages	Message[]
+// model Messages{
+//   id	String @id() @default(uuid())
 
-  usersMessages UserMessages[]
-}
+// }
 
 model Channel{
   id String @id() @default(uuid())

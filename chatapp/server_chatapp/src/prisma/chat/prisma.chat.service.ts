@@ -1,38 +1,56 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
-import { Messages, Prisma, User } from "@prisma/client";
+import { Conversation,Prisma, User } from "@prisma/client";
 import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "src/chat/types/channel";
 import { CreateChannelDto, JoinChannelDto } from "src/chat/DTOs/dto";
 import { user } from "src/chat/types/user";
 import { IsStrongPassword } from "class-validator";
+import { MessageInfo } from "src/chat/types/message";
 
 @Injectable()
 export class PrismaChatService{
     constructor(private readonly prisma: PrismaService) {}
 
-        async createNewDM(userId:string, data: Prisma.MessagesCreateInput) {
-          const DMexists = await this.prisma.messages.findMany({
-            where: {
-              AND:[{
-                usersMessages: { some: { userId: data.receiver } },
-              },
-              {
-                usersMessages: { some: { userId: data.sender } },
-              }
-            ]
-            }
-          });
+    async getConversation(userId:string, userId2){
+      const DM = await this.prisma.conversation.findFirst({where:{
+        AND:[
+          {users:{some:{id:userId}}},
+          {users:{some:{id:userId2}}},
+          {type:"direct"},
+        ]
+      }});
 
-          if (DMexists.length) {return DMexists.at(0)}
+      if (DM) return DM;
 
-          const new_DM = await this.prisma.messages.create({ data });
-          console.log("new_DM", new_DM);
-          return new_DM;
-        }
+      const new_DM = await this.prisma.conversation.create({
+        data:{
+          type:"direct",
+          users:{connect:[{id:userId}, {id:userId2}]},
+      }
+      });
 
-        async addMessageToDM(message: Prisma.MessageCreateInput) {
-          const newMessage = this.prisma.message.create({ data: message });
-          console.log(newMessage);
+      return new_DM;
+    }
+
+          // if (DMexists.length) {return DMexists.at(0)}
+
+          // const new_DM = await this.prisma.messages.create({ data });
+          // console.log("new_DM", new_DM);
+          // return new_DM;
+        // }
+
+        async addMessageToDM(message:MessageInfo) {
+          const conversation = await this.prisma.conversation.findUnique({where:{id:message.conversationId}});
+
+          if (!conversation) throw new NotFoundException("the conversation you are asking does not exit");
+
+          const newMessage = await this.prisma.message.create({
+            data:{
+              message:message.message,
+              conversation:{connect:{id:message.conversationId}},
+              sender:{connect:{id:message.from}}}
+            });
+
           return newMessage;
         }
 
@@ -390,7 +408,64 @@ export class PrismaChatService{
           return newRemoveAdmins;
         }
 
+        async getMemberIn(userId:string){
+
+          const memberIn = await this.prisma.member.findMany({
+            where:{
+              userId:userId,
+            }
+          });
+
+          return memberIn
+        }
+
+        async getMemberInWithConv(userId:string){
+
+          const memberIn = await this.prisma.member.findMany({
+            where:{
+              userId:userId,
+            },
+            include:{
+              conversation:true,
+            }
+          });
+
+          return memberIn
+        }
+
+        async getUserConversations(userId:string){
+          const conversations = await this.prisma.conversation.findMany({
+            where:{
+              users:{some:{id:userId}}
+            },
+            include:{
+              members:true,
+            }
+        });
+          return conversations;
+        }
+
+        async createNewDM(userId1:string, userId2:string){
+          // need to add more logic to later, (this is just for test)
+
+          const newConversation = await this.prisma.conversation.create({
+            data:{
+              type:"direct",
+              members:{
+                create:[{userId:userId1}, {userId:userId2}]
+              },
+              users:{
+                connect:[{id:userId1}, {id:userId2}]
+              }
+            }
+          });
+          console.log("conversation created : ", newConversation);
+        }
 }
+
+
+
+
 
 
 

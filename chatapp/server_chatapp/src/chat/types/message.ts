@@ -1,6 +1,6 @@
-export type Message = {
+export type MessageInfo = {
     message: string;
-    messageTo: string;
-    messageFrom?: string;
+    conversationId: string;
+    from?: string;
     event?: string;
 }

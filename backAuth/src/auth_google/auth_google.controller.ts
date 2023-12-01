@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Inject, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Inject, Post, Redirect, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { Request, Response, NextFunction } from 'express';
 import { GoogleAuthGuard } from "./utils/Guards";
 import { AuthGuard } from '@nestjs/passport';
@@ -9,6 +9,7 @@ import { UserService } from "src/user/user.service";
 import { CreateUserDto } from "src/user/dto/user.dto";
 import { LoginDto } from "src/user/dto/auth.dto";
 import * as qrcode from 'qrcode';
+import { use } from "passport";
 const speakeasy = require('speakeasy');
 
 
@@ -35,56 +36,40 @@ export class AuthGoogleController
      @UseGuards(GoogleAuthGuard)
     handleLogin()
     {
-        //we have to rederict the user to google here
+      console.log('hello');
         return {msg : 'hello man'};
     }
 
-    @Get('42/login')
-    @UseGuards(IntraAuthGuard)
-    handleLogin42()
-    {
-      return {msg: "42 Login"}
-    }
-
-
-    // const user = authenticationResult.user || authenticationResult.newUser || null;
-        // if (user) {
-        //     const { accessToken, refreshToken } = authenticationResult.backendTokens;
-        //     // res.cookie('access_token', accessToken, {httpOnly: true});
-        //     // res.cookie('refresh_token', refreshToken, {httpOnly:  true });
-        //     res.setHeader('access_token', accessToken);
-        //     res.setHeader('refresh_token', refreshToken);
-        //     console.log('access_token:');
-        //     console.log(accessToken);
-        //     console.log('refresh token :')
-        //     console.log(refreshToken);
-        //   }
     @Get('google/redirect')
     @UseGuards(GoogleAuthGuard)
     async handleRedirect(@Req() req: Request, @Res() res: Response)
     {
-        //we have to rederict the user to google here
-        // accessToken: await this.jwtService.signAsync(payload, {
-        //   expiresIn: '1h',
-        //   secret: process.env.jwtSecretKey,
-        // })
-        console.log("------------")
-        console.log(req.user);
-        const jwtResult = await this.authGoogleService.generateJwt(req.user);
-        console.log("------------")
-
-        console.log("the access token :")
-        console.log(jwtResult.backendTokens.accessToken);
-
-        // Redirect with JWT in cookies or query parameters
-        res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
-        res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
-        // res.setHeader('access_token', jwtResult.backendTokens.accessToken);
-        // res.setHeader('refresh_token', jwtResult.backendTokens.accessToken);
-        console.log("the access token :6456456456456564564566645646")
-        return res.status(HttpStatus.OK).json(req.user);
+      const jwtResult = await this.authGoogleService.generateJwt(req.user);
+      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
+      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
+      return res.redirect('http://localhost:3000/profile')
+      // return res.status(HttpStatus.OK).json(req.user);
     }
-
+    
+    @Get('42/login')
+    @UseGuards(IntraAuthGuard)
+    handleLogin42()
+    {
+      
+      return {msg: "42 Login"}
+    }
+    
+        @Get('google/redirect42')
+        @UseGuards(IntraAuthGuard)
+        async handleRedirect42(@Req() req: Request, @Res() res: Response)
+        {
+            const jwtResult = await this.authGoogleService.generateJwt(req.user);
+            res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
+          res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
+          // console.log(jwtResult.backendTokens.accessToken);
+            return res.redirect('http://localhost:3000/profile')
+            // return res.status(HttpStatus.OK).json(req.user);
+        }
 
 
 
@@ -95,10 +80,10 @@ export class AuthGoogleController
     if (!accessToken) {
       throw new UnauthorizedException('Access token not provided');
     }
-    console.log('Access token:', accessToken);
+    // console.log('Access token:', accessToken);
     return { message: 'Protected route accessed' };
   }
-
+  
     // const authorizationHeader = request.headers.authorization;
     // if (!authorizationHeader) {
     //   return null;
@@ -110,7 +95,25 @@ export class AuthGoogleController
     // return null;
   //}
 
-
+@Get('check')
+// @UseGuards(JwtGuard)
+async check(@Req() req: Request, @Res() res: Response)
+{
+  try {
+    const user = await this.authGoogleService.check_token(req);
+    // console.log("---------");
+    // console.log(user);
+    // console.log("----------");
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    res.status(200).send(user);
+  } catch (error)
+  {
+        // console.log(error);
+        res.status(500).json({ message: 'Error finding user' });
+    }
+}
 
     @Get('generate/twofac')
     // @UseGuards(JwtGuard)
@@ -126,9 +129,9 @@ export class AuthGoogleController
       
         const secret  = user.TwoFactSecret;
         // const token = this.authGoogleService.extractTokenFromHeader(req);
-        console.log(secret);
+        // console.log(secret);
 
-        console.log(code);
+        // console.log(code);
         const verified = speakeasy.totp.verify({
           secret,
           encoding: 'base32',
@@ -141,7 +144,7 @@ export class AuthGoogleController
           res.json({ verified: false });
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({ message: 'Error finding user' });
       }
 
@@ -158,22 +161,6 @@ export class AuthGoogleController
     //   }      
     // }
 
-
-    @Get('google/redirect42')
-    @UseGuards(IntraAuthGuard)
-    async handleRedirect42(@Req() req: Request, @Res() res: Response)
-    {
-        console.log("------------")
-        console.log(req.user);
-        const jwtResult = await this.authGoogleService.generateJwt(req.user);
-        console.log("------------")
-        console.log("the access token :")
-        console.log(jwtResult.backendTokens.accessToken);
-        res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
-        res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
-        console.log("the access token :6456456456456564564566645646")
-        return res.status(HttpStatus.OK).json(req.user);
-    }
 
     @UseGuards(JwtGuard)
     @Get('google/test')
@@ -237,8 +224,24 @@ async generateTwoFactorAuthQR(@Req() req, @Res() res) {
     }
 
     @Post('login')
-    async login(@Body() dto:LoginDto )
+    async login(@Body() dto:LoginDto,@Req() req: Request, @Res() res: Response)
     {
-        return await this.authGoogleService.login(dto);
+      try {
+        const data = await this.authGoogleService.login(dto);
+        // console.log(dto.email);
+        // console.log(dto.password);
+        // console.log(data.backendTokens.backendTokens.accessToken);
+        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: true });
+        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: true });
+        // console.log(data);
+         //return res.redirect('http://localhost:3000/profile')
+        res.json(data);
+      }
+      catch (error) {
+    console.error('Error in login:', error);
+    // Handle errors appropriately
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+     // return res.redirect('http://localhost:3000/profile')
     }
 }

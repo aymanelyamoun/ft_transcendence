@@ -45,7 +45,7 @@ async login(dto:LoginDto)
     //npm i @nestjs/jwt
     const user = await this.validateUserlogin(dto);
     const payload = {
-        username: user.email,
+        email: user.email,
         sub: user.displayName,
     };
     const backendTokens = await this.generateJwt(payload)
@@ -53,7 +53,6 @@ async login(dto:LoginDto)
         user, 
         backendTokens
     }
-
 }
 
 async validateUserlogin(dto:LoginDto)
@@ -73,9 +72,6 @@ async validateUserlogin(dto:LoginDto)
 
 
 async validateUser(details: UserDtetails) {
-    console.log('AuthService');
-    console.log(details);
-  
     const user = await this.prisma.user.findUnique({
       where: {
         email: details.email,
@@ -83,34 +79,10 @@ async validateUser(details: UserDtetails) {
     });
   
     if (user) {
-      // If a user is found, return only necessary information in the JWT payload
-      // const payload = {
-      //   sub: user.id,
-      //   email: user.email,
-      //   displayName: user.displayName, // Include any other necessary fields
-      // };
-  
-      // return {
-      //   user,
-      //   backendTokens: {
-      //     accessToken: await this.jwtService.signAsync(payload, {
-      //       expiresIn: '1h',
-      //       secret: process.env.jwtSecretKey,
-      //     }),
-      //     refreshToken: await this.jwtService.signAsync(payload, {
-      //       expiresIn: '7d',
-      //       secret: process.env.jwtRefreshToken,
-      //     }),
-      //   },
-      // };
       return user;
     }
     console.log('User not found.');
-  
-    // If the user is not found, create a new user
     const tempSecret =  speakeasy.generateSecret()
-    console.log("------FAC");
-    console.log(tempSecret);
     const newUser = await this.prisma.user.create({
       data: {
         email: details.email,
@@ -120,32 +92,7 @@ async validateUser(details: UserDtetails) {
       },
       
     });
-    // const payload = {
-    //   sub: newUser.id,
-    //   email: newUser.email,
-    //   displayName: newUser.displayName,
-    //   TwoFactSecret: newUser.TwoFactSecret,
-    // };
-  //   backendTokens: {
-  //     accessToken: await this.jwtService.signAsync(payload, {
-  //         expiresIn: '1h',
-  //         secret: process.env.jwtSecretKey ,
-  //     }),
-  // };
     return newUser;
-  
-  // return {
-  //   newUser, backendTokens: {
-  //       accessToken: await this.jwtService.signAsync(payload, {
-  //           expiresIn: '1h',
-  //           secret: process.env.jwtSecretKey ,
-  //       }),
-  //       refreshToken: await this.jwtService.signAsync(payload, {
-  //           expiresIn: '7d',
-  //           secret: process.env.jwtRefreshToken ,
-  //       }),
-  //   }
-//}
   }
     async findUser(id: number)
     {
@@ -195,21 +142,50 @@ async validateUser(details: UserDtetails) {
   return token ;
 }
 
-async check_token(req: Request)
-{
-  let payload
+// async check_token(req: Request)
+// {
+//   let payload
+//   try {
+//       const token = this.extractTokenFromHeader(req);
+//        payload = await this.jwtService.verifyAsync(token, {
+//         secret : process.env.jwtSecretKey,
+//     });
+//   } catch {
+//        return null
+//     }
+//    const  user = await this.findUserByEmail(payload.email);
+//     if (!user)
+//       return null;
+//     return (user);
+  // }
+  
+
+  async check_token(req: Request) {
+  let payload;
   try {
-      const token = this.extractTokenFromHeader(req);
-       payload = await this.jwtService.verifyAsync(token, {
-        secret : process.env.jwtSecretKey,
+    const token = this.extractTokenFromHeader(req);
+    payload = await this.jwtService.verifyAsync(token, {
+      secret: process.env.jwtSecretKey,
     });
-  } catch {
-       return null
-    }
-   const  user = await this.findUserByEmail(payload.email);
-    if (!user)
-      return null;
-    return (user);
+    console.log('Payload:', payload); // Log the payload to see its structure
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return null;
+  }
+
+  // Add a check for payload existence
+  if (!payload || !payload.email) {
+    console.error('Invalid payload structure');
+    return null;
+  }
+
+  const user = await this.findUserByEmail(payload.email);
+  if (!user) {
+    console.error('User not found for email:', payload.email);
+    return null;
+  }
+
+  return user;
 }
 
 }

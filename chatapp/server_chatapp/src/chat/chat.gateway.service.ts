@@ -40,7 +40,6 @@ export class GatewayService{
         // })
     }
 
-
     private getConnectedMembers(members:member[]){
         const connnectedMembers = members.filter((member)=>{
             if (this.isConnected(member.userId))
@@ -48,7 +47,6 @@ export class GatewayService{
         })
         return connnectedMembers;
     }
-
 
     private getFriend(members:member[], userId:string){
         for(const member of members)

@@ -79,9 +79,25 @@ export class PrismaChatService{
                   isAdmin: member.isAdmin.valueOf(), // Convert Boolean wrapper object to primitive boolean
                 })),
               },
+              
             },
           });
 
+          const createConversation = await this.prisma.conversation.create({data:{
+            type:"groupChat",
+            members:{
+              create: data.members.map((member)=>({
+                user:{connect:{id:member.userId}}
+              }))
+            },
+            users:{
+              connect: data.members.map((member)=>({id:member.userId})),
+            },
+            channel:{connect:{id:channel.id},}
+          }
+
+        });
+        console.log(createConversation);
           console.log("the created channel:", channel);
         }
 

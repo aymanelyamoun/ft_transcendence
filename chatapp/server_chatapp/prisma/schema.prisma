@@ -64,6 +64,10 @@ model Conversation{
   users User[]
   createdAt DateTime @default(now())
   messages Message[]
+
+  channel Channel? @relation(fields: [channelId], references: [id])
+  channelId String? @unique
+
 }
 
 model Member{
@@ -89,6 +93,7 @@ model Channel{
   channelType String @default("public")
   hash String?
   members UserChannel[]
+  conversation Conversation?
   // admins User[] @relation("channelAdmin")
   banedUsers User[] @relation("channelBaned")
   mutedUsers Muted[]

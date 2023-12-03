@@ -7,6 +7,8 @@ import { user } from "src/chat/types/user";
 import { IsStrongPassword } from "class-validator";
 import { MessageInfo } from "src/chat/types/message";
 import * as bcrypt from 'bcrypt';
+import { NOTIF_TYPE } from "@prisma/client";
+import { title } from "process";
 
 @Injectable()
 export class PrismaChatService{
@@ -187,9 +189,58 @@ export class PrismaChatService{
 
           if (userIsBanned) throw new ForbiddenException("you are banned from this channel");
 
-          const joinedchannel =  await this.addChannelToUser(channelData.userId, channelData.channelId);
+          const correctPass = await bcrypt.compare(channelData.password, requestedChannel.hash);
 
-          console.log("has joined channel: ",joinedchannel);
+          if (correctPass)
+          {
+            // send request to join the channel
+
+            // const joinedchannel =  await this.addChannelToUser(channelData.userId, channelData.channelId);
+            // console.log("has joined channel: ",joinedchannel);
+          }
+          else
+            throw new ForbiddenException("wrong password please check again");
+
+
+        }
+
+        async addUserToChannel(data:ChannelEdit){
+          console.log(data);
+          const channel = this.getChannelWithProp(data.channelId);
+
+          if (!channel)
+            throw new NotFoundException("the channel you are asking does not exist");
+          
+          const user = await this.getUser({where:{id:data.userId2}})
+
+          if (!user)
+            throw new NotFoundException("the channel you are asking does not exist");
+
+          const isFriendOf = await this.isFriendOf(data.userId, data.userId2);
+          const isAdmin = await this.isAdminOnChannel(data.userId, data.channelId);
+
+          if (isAdmin && isFriendOf){
+           const joinChannel = await this.addChannelToUser(data.userId ,data.channelId);
+          }
+
+          else if (isAdmin){
+            console.log("sending request to user from admin");
+            await this.addNotifToUser(data.userId2, NOTIF_TYPE.acceptChannelReq, `${data.userId} requested you to join channel`, "yes or no");
+          }
+
+          else {
+            console.log("sending request to user");
+            await this.addNotifToUser(data.userId2, NOTIF_TYPE.joinChannelReq, `${data.userId} requested you to join channel`, "send join request");
+          }
+          
+        }
+
+        async addNotifToUser(userId:string, type:NOTIF_TYPE, title:string, discription:string){
+          // to handel : if the user has the multible notifs that do the same thing, ex: to join to the same channel
+          // check if the same notif information already exists
+          // const user = await this.prisma.user.up
+          const notif = await this.prisma.notification.create({data:{type:type, title:title, discription:discription, user:{connect:{id:userId}}}});
+
         }
 
         async addAdminOnChannel(data: ChannelEdit) {
@@ -309,6 +360,15 @@ export class PrismaChatService{
           return channel.members.some(admin => ((admin.userId) === userId && admin.isAdmin));
         }
 
+        async isFriendOf(userId:string, userId2:string):Promise<boolean> {
+          const user = await this.prisma.user.findUnique({where:{id:userId}, include:{friends:true}});
+
+          return (user.friends.some((friend)=>(friend.id === userId2)))
+        }
+
+        private async addUserTochannel(userId:string, channelId:string){
+
+        }
         // to be checked
         async addChannelToUser(userId: string, requestedUserChannelId: string) {
           const user = this.prisma.user.update({

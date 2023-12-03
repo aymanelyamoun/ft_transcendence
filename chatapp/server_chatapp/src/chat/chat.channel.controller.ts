@@ -23,6 +23,11 @@ export class ChannelController{
         await this.prismaChatService.joinChannel(joinData);
     }
 
+    @Patch('addUserToChannel')
+    async addUserToChannel(@Body() data:ChannelEditDto){
+        await this.prismaChatService.addUserToChannel(data);
+    }
+
     @Post('deleteChannel')
     async deleteChannel(@Body() deleteData:ChannelEditDto){
         await this.prismaChatService.deleteChannel(deleteData);

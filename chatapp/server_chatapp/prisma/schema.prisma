@@ -28,6 +28,8 @@ model User{
   channels UserChannel[]
   channelBaned Channel[] @relation("channelBaned")
 
+  notifications Notification[]
+
   memberConv Member[]
 
   mutedUser Muted? @relation(fields: [mutedId], references: [id])
@@ -80,6 +82,22 @@ model Member{
   userId String
 }
 
+model Notification{
+  id Int @id @default(autoincrement())
+
+  type NOTIF_TYPE
+  title String
+  discription String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+}
+
+enum NOTIF_TYPE{
+  friendReq
+  joinChannelReq
+  acceptChannelReq
+}
 // model Messages{
 //   id	String @id() @default(uuid())
 

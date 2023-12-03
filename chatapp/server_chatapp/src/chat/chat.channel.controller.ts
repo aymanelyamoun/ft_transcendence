@@ -1,7 +1,9 @@
-import { Body, Controller, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Patch, Post, UseGuards } from "@nestjs/common";
 import { ChangeChannelDataDto, ChannelEditDto, CreateChannelDto, JoinChannelDto } from "./DTOs/dto";
 import { PrismaChatService } from "src/prisma/chat/prisma.chat.service";
 import { JoinChannel } from "./types/channel";
+import { ChatChannelAdminGuard } from "./chat.channel.guard";
+import { Role, Roles } from "./roles.decorator";
 
 @Controller('channels')
 export class ChannelController{
@@ -13,6 +15,8 @@ export class ChannelController{
         await this.prismaChatService.createChannel(createChannelDto);
     }
 
+    @UseGuards(ChatChannelAdminGuard)
+    // @Roles(Role.Admin)
     @Patch('joinChannel')
     async joinChannel(@Body() joinData:JoinChannelDto){
         console.log("join the channel : ", joinData.channelId);

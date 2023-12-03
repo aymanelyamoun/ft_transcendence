@@ -1,3 +1,4 @@
 node_modules
+dist
 chatapp/server_chatapp/prisma/migrations
 chatapp/server_chatapp/dist

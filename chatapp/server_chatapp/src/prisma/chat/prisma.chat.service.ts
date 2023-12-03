@@ -6,6 +6,7 @@ import { CreateChannelDto, JoinChannelDto } from "src/chat/DTOs/dto";
 import { user } from "src/chat/types/user";
 import { IsStrongPassword } from "class-validator";
 import { MessageInfo } from "src/chat/types/message";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class PrismaChatService{
@@ -65,6 +66,8 @@ export class PrismaChatService{
 
           // add default for data.member.isAdmin to be false
 
+          const hash = await bcrypt.hash(data.password, 10);
+
           console.log("adding members...");
           const channel = await this.prisma.channel.create({
             data: {
@@ -72,7 +75,7 @@ export class PrismaChatService{
               creator: {connect:{id:data.creator}},
               channelType: data.type,
               // later on use hashing service
-              hash: data.password,
+              hash: hash,
               members: {
                 create: data.members.map((member) => ({
                   users: { connect: { id: member.userId } },
@@ -476,6 +479,13 @@ export class PrismaChatService{
             }
           });
           console.log("conversation created : ", newConversation);
+        }
+
+        async isAdminOnChannel(userId:string, channelId:string){
+          const user = await this.prisma.userChannel.findUnique({where:{userId_channelId:{userId,channelId}}});
+          console.log("the user: ", user);
+
+          return user.isAdmin
         }
 }
 

@@ -27,10 +27,11 @@ The validate method is called by Passport.js after successful authentication to 
 This method is part of the strategy and is called automatically by Passport.js. */
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
-        console.log(profile);
+        // console.log(profile);
       const user = await  this.authGoogleService.validateUser({
             email: profile.emails[0].value,
-            displayName: profile.displayName,
+          displayName: profile.displayName,
+          profilePic: profile._json.picture,
         });
         console.log('validate')
         // const user = authenticationResult.user || authenticationResult.newUser || null;

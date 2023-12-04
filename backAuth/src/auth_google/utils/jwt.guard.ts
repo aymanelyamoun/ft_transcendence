@@ -12,7 +12,7 @@ export class JwtGuard implements CanActivate{
 
 
 
-        console.log("----------------------------------------------------------");
+        // console.log("----------------------------------------------------------");
         const request =  context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();
@@ -21,9 +21,9 @@ export class JwtGuard implements CanActivate{
                 secret : process.env.jwtSecretKey,
             });
             const user = await this.authGoogleService.findUserByEmail(payload.email);
-            console.log("-----");
-            console.log(user);
-            console.log("-------")
+            // console.log("-----");
+            // console.log(user);
+            // console.log("-------")
             if (!user)
                 throw new UnauthorizedException();
             //check data base if user exit
@@ -32,6 +32,7 @@ export class JwtGuard implements CanActivate{
         catch {
             throw new UnauthorizedException();
         }
+        // console.log("heeere");
         return true;
 
     }

@@ -47,7 +47,7 @@ export class AuthGoogleController
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
       res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
-      return res.redirect('http://localhost:3000/profile')
+      return res.redirect('http://localhost:3000/confirm')
       // return res.status(HttpStatus.OK).json(req.user);
     }
     
@@ -67,7 +67,7 @@ export class AuthGoogleController
             res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
           res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
           // console.log(jwtResult.backendTokens.accessToken);
-            return res.redirect('http://localhost:3000/profile')
+            return res.redirect('http://localhost:3000/confirm')
             // return res.status(HttpStatus.OK).json(req.user);
         }
 
@@ -96,23 +96,19 @@ export class AuthGoogleController
   //}
 
 @Get('check')
-// @UseGuards(JwtGuard)
+@UseGuards(JwtGuard)
 async check(@Req() req: Request, @Res() res: Response)
 {
   try {
     const user = await this.authGoogleService.check_token(req);
-    // console.log("---------");
-    // console.log(user);
-    // console.log("----------");
     if (!user) {
       throw new UnauthorizedException();
     }
     res.status(200).send(user);
   } catch (error)
   {
-        // console.log(error);
         res.status(500).json({ message: 'Error finding user' });
-    }
+  }
 }
 
     @Get('generate/twofac')
@@ -128,10 +124,6 @@ async check(@Req() req: Request, @Res() res: Response)
         }
       
         const secret  = user.TwoFactSecret;
-        // const token = this.authGoogleService.extractTokenFromHeader(req);
-        // console.log(secret);
-
-        // console.log(code);
         const verified = speakeasy.totp.verify({
           secret,
           encoding: 'base32',
@@ -144,7 +136,6 @@ async check(@Req() req: Request, @Res() res: Response)
           res.json({ verified: false });
         }
       } catch (error) {
-        // console.log(error);
         res.status(500).json({ message: 'Error finding user' });
       }
 
@@ -196,16 +187,13 @@ async generateTwoFactorAuthQR(@Req() req, @Res() res) {
       return res.status(400).json({ message: '2FA already enabled!' });
     }
 
-    const secret = user.TwoFactSecret; // Retrieve the stored secret from the user object
-
-    // Construct the OTP authentication URL using the stored secret
+    const secret = user.TwoFactSecret;
     const otpAuthUrl = speakeasy.otpauthURL({
       secret: secret,
       label: `YourApp:${user.username}`,
       issuer: 'YourApp',
     });
 
-    // Generate a QR code from the OTP authentication URL
     const qrCodeDataURL = await qrcode.toDataURL(otpAuthUrl);
 
     return res.status(200).json({ qrCode: qrCodeDataURL });
@@ -226,22 +214,17 @@ async generateTwoFactorAuthQR(@Req() req, @Res() res) {
     @Post('login')
     async login(@Body() dto:LoginDto,@Req() req: Request, @Res() res: Response)
     {
-      try {
+      try
+      {
         const data = await this.authGoogleService.login(dto);
-        // console.log(dto.email);
-        // console.log(dto.password);
-        // console.log(data.backendTokens.backendTokens.accessToken);
         res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: true });
         res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: true });
-        // console.log(data);
-         //return res.redirect('http://localhost:3000/profile')
         res.json(data);
       }
-      catch (error) {
-    console.error('Error in login:', error);
-    // Handle errors appropriately
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-     // return res.redirect('http://localhost:3000/profile')
+      catch (error)
+      {
+        console.error('Error in login:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
     }
 }

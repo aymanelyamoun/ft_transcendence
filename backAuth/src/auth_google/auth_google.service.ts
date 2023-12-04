@@ -15,34 +15,10 @@ export class AuthGoogleService {
     constructor (private readonly prisma: PrismaService,
                 private readonly jwtService: JwtService,
                 private readonly userService: UserService){}
-//   async  validateUser(details: UserDtetails)
-//     {
-//         console.log('AuthService');
-//         console.log(details); 
-//         const user = await this.prisma.user.findUnique({
-//             where : {
-//                 email : details.email,
-//             },
-//         })
-//         console.log()
-//         if (user)
-//             return user;
-//             // if (user)
-//             // throw new ConflictException('email duplicated');
-//         console.log('user not found.')
-//         const newUser = await this.prisma.user.create({
-//             data:{
-//                 ...user,
-//             }
-//         })
-//         return (newUser);
-//     }
-
 
 
 async login(dto:LoginDto)
 {
-    //npm i @nestjs/jwt
     const user = await this.validateUserlogin(dto);
     const payload = {
         email: user.email,
@@ -66,12 +42,8 @@ async validateUserlogin(dto:LoginDto)
     throw new UnauthorizedException();
 }
 
-
-
-
-
-
-async validateUser(details: UserDtetails) {
+  async validateUser(details: UserDtetails)
+  {
     const user = await this.prisma.user.findUnique({
       where: {
         email: details.email,
@@ -87,8 +59,9 @@ async validateUser(details: UserDtetails) {
       data: {
         email: details.email,
         displayName: details.displayName,
-        password : 'snouaeishere',
-        TwoFactSecret : tempSecret.base32
+        password : '',
+        TwoFactSecret: tempSecret.base32,
+        profilePic: details.profilePic.toString()
       },
       
     });
@@ -141,23 +114,6 @@ async validateUser(details: UserDtetails) {
   console.log(token);
   return token ;
 }
-
-// async check_token(req: Request)
-// {
-//   let payload
-//   try {
-//       const token = this.extractTokenFromHeader(req);
-//        payload = await this.jwtService.verifyAsync(token, {
-//         secret : process.env.jwtSecretKey,
-//     });
-//   } catch {
-//        return null
-//     }
-//    const  user = await this.findUserByEmail(payload.email);
-//     if (!user)
-//       return null;
-//     return (user);
-  // }
   
 
   async check_token(req: Request) {
@@ -167,13 +123,12 @@ async validateUser(details: UserDtetails) {
     payload = await this.jwtService.verifyAsync(token, {
       secret: process.env.jwtSecretKey,
     });
-    console.log('Payload:', payload); // Log the payload to see its structure
+    console.log('Payload:', payload); 
   } catch (error) {
     console.error('Error verifying token:', error);
     return null;
   }
 
-  // Add a check for payload existence
   if (!payload || !payload.email) {
     console.error('Invalid payload structure');
     return null;

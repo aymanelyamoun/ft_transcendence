@@ -23,9 +23,10 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
     {
       const user = await  this.authGoogleService.validateUser({
         email: profile.emails[0].value,
-            displayName: profile.displayName,
+          displayName: profile.displayName,
+            profilePic: profile._json.image.link,
         });
-        console.log(profile);   
+        // console.log(profile);   
         console.log('validate')
          return (user);
     }

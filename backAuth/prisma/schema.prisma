@@ -13,8 +13,9 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
   email String @unique
-  displayName  String?
+  displayName  String @unique
   password String
+  profilePic String?
   TwoFactSecret String?
   // password: String?;
 }

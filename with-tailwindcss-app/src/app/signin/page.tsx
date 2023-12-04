@@ -33,6 +33,31 @@ export default function Signin() {
   });
   const router = useRouter();
 
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const res = await fetch(Backend_URL + 'auth/check', {
+        method: "GET",
+        mode: 'cors',
+        credentials:'include',
+        headers: {
+          "Content-Type": "application/json",
+          'Access-Control-Allow-Origin':'*'
+        },
+    });
+        if (!res.ok) {
+          const data = await res.json();
+        } else {
+            router.push('/profile');
+        }
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+      }
+    };
+  checkAuthentication();
+  },[router]);
+
   // async function google_log() {
     
   //   try {
@@ -52,6 +77,11 @@ export default function Signin() {
   //   }
   // };
   const log = async () => {
+
+
+    
+
+
     try {
         console.log('Before fetch request');
       const res = await fetch(Backend_URL + "auth/login", {

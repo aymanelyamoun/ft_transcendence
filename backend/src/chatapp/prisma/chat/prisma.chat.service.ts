@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConsoleLogger, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { Conversation,Prisma, User } from "@prisma/client";
 // import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "chatapp/server_chatapp/chat/types/channel";
@@ -84,7 +84,7 @@ export class PrismaChatService{
               hash: hash,
               members: {
                 create: data.members.map((member) => ({
-                  users: { connect: { id: member.userId } },
+                  user: { connect: { id: member.userId } },
                   isAdmin: member.isAdmin.valueOf(), // Convert Boolean wrapper object to primitive boolean
                 })),
               },
@@ -224,7 +224,8 @@ export class PrismaChatService{
           const isAdmin = await this.isAdminOnChannel(data.userId, data.channelId);
 
           if (isAdmin && isFriendOf){
-           const joinChannel = await this.addChannelToUser(data.userId ,data.channelId);
+            console.log("adding user to the channel");
+           const joinChannel = await this.addChannelToUser(data.userId2 ,data.channelId);
           }
 
           else if (isAdmin){
@@ -375,18 +376,33 @@ export class PrismaChatService{
         }
         // to be checked
         async addChannelToUser(userId: string, requestedUserChannelId: string) {
-          const user = this.prisma.user.update({
-            where: { id: userId },
-            data: {
-              channels: {
-                connectOrCreate: {
-                  where: { userId_channelId: { userId, channelId: requestedUserChannelId } },
-                  create: { channelId: requestedUserChannelId } // Add the create property
-                }
-              }
+          // const user = await this.prisma.user.update({
+          //   where: { id: userId },
+          //   data: {
+          //     channels: {
+          //       connectOrCreate: {
+          //         where: { userId_channelId: { userId, channelId: requestedUserChannelId } },
+          //         create:{ channelId: requestedUserChannelId } // Add the create property
+          //       }
+          //     }
+          //   },
+          // });
+
+          const existingUserChannel = await this.prisma.userChannel.findUnique({
+            where: {
+              userId_channelId: {
+                userId: userId,
+                channelId: requestedUserChannelId,
+              },
             },
           });
-          return user;
+
+          if (!existingUserChannel)
+          { const userChannel = await this.prisma.userChannel.create({data:{user:{connect:{id:userId}}, channel:{connect:{id:requestedUserChannelId}}}}) }
+
+
+          // console.log("the user: ", user);
+          // return user;
         }
 
         async getUser(params: Prisma.UserFindUniqueArgs){

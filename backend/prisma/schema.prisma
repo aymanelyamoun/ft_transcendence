@@ -126,10 +126,10 @@ model UserChannel{
 
   isAdmin Boolean @default(false)
 
-  users User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
   userId String
 
-  channels Channel @relation(fields: [channelId], references: [id])
+  channel Channel @relation(fields: [channelId], references: [id])
   channelId String
 
   @@id([userId, channelId])

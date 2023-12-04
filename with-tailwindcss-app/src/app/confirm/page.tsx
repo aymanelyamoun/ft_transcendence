@@ -215,7 +215,6 @@ export default function Signup() {
    return (
      <div>
        {!authenticated ? (
-         // Render a loading state or spinner while data is being fetched
          <Loading />
        ) : (
          <div

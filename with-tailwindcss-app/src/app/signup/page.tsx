@@ -67,9 +67,9 @@ import { useRouter } from 'next/navigation';
         mode: 'cors',
         credentials:'include',
       body: JSON.stringify({
-        displayName: data.current.displayName,
+        username: data.current.displayName,
         email: data.current.email,
-        password: data.current.password,
+        hash: data.current.password,
       }),
         headers: {
           "Content-Type": "application/json",
@@ -123,10 +123,10 @@ import { useRouter } from 'next/navigation';
           <Link href="/confirm" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-sky-950 mb-7' onClick={register}>Sign up</Link>
           <div className="border-2 border-white w-10 inline-block mb-7"></div>
           <div className="flex justify-center mb-7 ">
-            <Link href="http://localhost:8000/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950 ">
+            <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950 ">
               <FaGoogle className="text-sm text-white" /> 
             </Link>
-            <Link  href="http://localhost:8000/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950">
+            <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950">
               <FaLinkedinIn className="text-sm text-white" />
             </Link>
             </div>

@@ -14,7 +14,7 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
                 'u-s4t2ud-ae38f95888699e53a0d1e83d0112945b049d14a0d11d467ebb5d373db96cd2be',
             clientSecret:
                 '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',
-            callbackURL: 'http://localhost:8000/api/auth/google/redirect42',
+            callbackURL: 'http://localhost:3001/api/auth/google/redirect42',
             // scope: ['profile', 'email'],
         });
     }

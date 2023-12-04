@@ -167,10 +167,10 @@ export default function Signin() {
             <a href="" className='text-xs'> Forgot Password</a>
           </div> */}
           <div className="flex justify-center mb-7 ">
-            <Link href="http://localhost:8000/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950 ">
+            <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950 ">
               <FaGoogle className="text-sm text-white" /> 
             </Link>
-            <Link  href="http://localhost:8000/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950">
+            <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950">
               <FaLinkedinIn className="text-sm text-white" />
             </Link>
             </div>

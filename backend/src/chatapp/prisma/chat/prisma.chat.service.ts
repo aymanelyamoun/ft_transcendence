@@ -1,14 +1,18 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { Conversation,Prisma, User } from "@prisma/client";
-import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "chatapp/server_chatapp/chat/types/channel";
-import { CreateChannelDto, JoinChannelDto } from "chatapp/server_chatapp/chat/DTOs/dto";
-import { user } from "chatapp/server_chatapp/chat/types/user";
+// import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "chatapp/server_chatapp/chat/types/channel";
+// import { CreateChannelDto, JoinChannelDto } from "chatapp/server_chatapp/chat/DTOs/dto";
+// import { user } from "chatapp/server_chatapp/chat/types/user";
 import { IsStrongPassword } from "class-validator";
-import { MessageInfo } from "chatapp/server_chatapp/chat/types/message";
+// import { MessageInfo } from "chatapp/server_chatapp/chat/types/message";
 import * as bcrypt from 'bcrypt';
 import { NOTIF_TYPE } from "@prisma/client";
 import { title } from "process";
+import { MessageInfo } from "src/chatapp/chat/types/message";
+import { ChangeChannelData, ChannelData, ChannelEdit } from "src/chatapp/chat/types/channel";
+import { JoinChannelDto } from "src/chatapp/chat/DTOs/dto";
+import { user } from "src/chatapp/chat/types/user";
 
 @Injectable()
 export class PrismaChatService{

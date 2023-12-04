@@ -7,10 +7,11 @@ import { Response, Request } from 'express';
 // import { UserService } from "src/user/user.service";
 // import { LoginDto } from "src/user/dto/auth.dto";
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from "backAuth/src/prisma.service";
+// import { PrismaService } from "backAuth/src/prisma.service";
 import { UserService } from "../user/user.service";
 import { LoginDto } from "../user/dto/auth.dto";
 import { UserDtetails } from "src/types/types";
+import { PrismaService } from "src/chatapp/prisma/prisma.service";
 const speakeasy = require('speakeasy');
 
 @Injectable()

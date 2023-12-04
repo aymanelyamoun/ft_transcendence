@@ -22,6 +22,7 @@ async function bootstrap() {
   }))
   // app.useGlobalPipes(new ValidationPipe);
   try{
+    console.log("running on port : ", PORT);
     await app.listen(PORT, ()=>{`connected on port ${PORT}`});
   }
   catch (err){

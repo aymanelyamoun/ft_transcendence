@@ -24,6 +24,9 @@ export class AuthGoogleService {
 
 async login(dto:LoginDto)
 {
+  console.log("-----");
+  console.log(dto);
+  console.log("----");
     const user = await this.validateUserlogin(dto);
     const payload = {
         email: user.email,
@@ -59,6 +62,7 @@ async validateUserlogin(dto:LoginDto)
       return user;
     }
     console.log('User not found.');
+    console.log(details.username);
     const tempSecret =  speakeasy.generateSecret()
     const newUser = await this.prisma.user.create({
       data: {

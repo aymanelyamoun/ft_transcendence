@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation'
 
 type FormInputs = {
   email: string;
-  password: string;
+  hash: string;
 }
 
 
@@ -29,7 +29,7 @@ type FormInputs = {
 export default function Signin() {
   const [formData, setFormData] = useState<FormInputs>({
     email: '',
-    password: '',
+    hash: '',
   });
   const router = useRouter();
 
@@ -90,7 +90,7 @@ export default function Signin() {
         credentials:'include',
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password,
+          hash: formData.hash,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -123,7 +123,7 @@ export default function Signin() {
   };
   const data = useRef<FormInputs>({
     email: "",
-    password: "",
+    hash: "",
   })
 
   const gradientStyle = {
@@ -153,7 +153,7 @@ export default function Signin() {
             </div>
             <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
               {/* <MdLabelOutline className="text-gray-400 m-1" /> */}
-              <input type="password" name="password" placeholder='password' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1"
+              <input type="password" name="hash" placeholder='password' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1"
               onChange={handleInputChange}  
               />
             </div>

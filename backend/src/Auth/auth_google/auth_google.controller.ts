@@ -50,6 +50,7 @@ export class AuthGoogleController
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
       res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
+      //return {msg : 'user registred'};
       return res.redirect('http://localhost:3000/confirm')
       // return res.status(HttpStatus.OK).json(req.user);
     }

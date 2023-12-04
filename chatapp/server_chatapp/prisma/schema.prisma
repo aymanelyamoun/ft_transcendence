@@ -97,6 +97,7 @@ enum NOTIF_TYPE{
   friendReq
   joinChannelReq
   acceptChannelReq
+  acceptWantToJoin
 }
 // model Messages{
 //   id	String @id() @default(uuid())

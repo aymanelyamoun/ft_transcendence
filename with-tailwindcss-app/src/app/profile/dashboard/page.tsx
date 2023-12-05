@@ -11,21 +11,54 @@ import yamon from '../imgs/ael-yamo.jpeg';
 
 
 function App() {
-  const [data, setData] = useState({
-    sidebarInfo: {} as any,
-  })
+  interface UserData {
+    id: string;
+    username: string;
+    profilePic: string;
+    title: string;
+    wallet: number;
+    hash: string;
+  }
+
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [SidebarInfo, setSidebarInfo] = useState({
+    id: "",
+    username: "",
+    title: "",
+    profilePic: "",
+    wallet: 0,
+    online: false,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/user/profile');
-        const json = await res.json();
-
-        setData({
-          sidebarInfo: json.sidebarInfo,
+        const res = await fetch("http://localhost:3001/api/user/profile", {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
         });
+        if (res.ok) {
+          const data = await res.json();
+          console.log("-------");
+          console.log(data);
+          setUserData(data);
+          console.log('>>>>>>>>>',data.profilePic);
+          setSidebarInfo({
+            id: data.id,
+            username: data.username,
+            title: data.title, 
+            profilePic: data.profilePic,
+            wallet: data.wallet, 
+            online: true,
+          });
+        }
       } catch (error) {
-        console.error('Error fetching data: ', error);
+        console.error("Error fetching data: ", error);
       }
     };
 
@@ -54,7 +87,6 @@ function App() {
     { id: "8", name: "Friend 8", picture: yamon.src },
   ];
 
-  const SidebarInfo = { id: "1", name: "ael-hamon", title: "Depression", picture: yamon.src, wallet: 0, online: true };
 
   return (
     <>

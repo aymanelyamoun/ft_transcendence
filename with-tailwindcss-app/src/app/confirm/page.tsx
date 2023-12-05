@@ -20,6 +20,7 @@ type FormInputs = {
   hash: string;
 };
 export default function Signup() {
+  
   interface UserData {
     username: string;
     profilePic: string;

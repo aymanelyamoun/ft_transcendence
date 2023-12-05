@@ -69,7 +69,7 @@ async validateUserlogin(dto:LoginDto)
         email: details.email,
         username: details.username,
         hash : '',
-        title: '',
+        title: 'snouae rfa3 ta7di',
         wallet:10,
         TwoFactSecret: tempSecret.base32,
         profilePic: details.profilePic.toString()

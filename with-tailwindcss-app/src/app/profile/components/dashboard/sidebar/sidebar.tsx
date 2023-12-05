@@ -9,9 +9,9 @@ import Settings from '../Settings/Settings';
 
 interface SidebarInfo {
   id: string;
-  name: string;
-  title : string;
-  picture: string;
+  username: string;
+  profilePic: string;
+  title: string;
   wallet: number;
   online: boolean;
 }
@@ -27,8 +27,8 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
         <div className={styles['sidebar-container']}>
           <div className={styles['profile-header']}>
           <div className={styles['profile-image']}>
-            <img src={props.sidebar.picture} alt="Profile" className={styles['profile-image']} />
-            <span className={styles.username}>{props.sidebar.name}</span>
+            <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+            <span className={styles.username}>{props.sidebar.username}</span>
             <span className={styles['user-id']}>{props.sidebar.title}</span>
           </div>
         </div>

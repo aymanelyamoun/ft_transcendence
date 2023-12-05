@@ -15,12 +15,12 @@ export class UserController {
 
 
 
-    @UseGuards(JwtGuard)
-    @Get(":id")
-    async getUserProfile(@Param("id") id: string)
-    {
-        return await this.userService.findById(id);
-    }
+    // @UseGuards(JwtGuard)
+    // @Get(":id")
+    // async getUserProfile(@Param("id") id: string)
+    // {
+    //     return await this.userService.findById(id);
+    // }
 
 
   @Patch('confirm')
@@ -43,8 +43,10 @@ export class UserController {
   @UseGuards(JwtGuard)
   async check(@Req() req: Request, @Res() res: Response)
   {
+    console.log("heeeeeeere");
     try {
       const user = await this.authGoogleService.check_token(req);
+      console.log("user   ==>", user);
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -57,11 +59,13 @@ export class UserController {
 
 
   @Get('all')
-  @UseGuards(JwtGuard)
+  // @UseGuards(JwtGuard)
   async all(@Req() req: Request, @Res() res: Response)
   {
+    console.log("heeeeeeere");
     const users = await this.userService.allUsers();
-    return users
+    res.status(200).send(users);
+    // return users
   }
 
   

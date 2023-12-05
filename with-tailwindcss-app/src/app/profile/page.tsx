@@ -1,8 +1,9 @@
 import './globals.css'
 
 function App() {
-  // return (
-  // );
+  return (
+    <div>hello word</div>
+  );
 }
 
 export default App;

@@ -17,7 +17,7 @@
 
 // Skins.tsx
 import React from 'react';
-import styles from "/home/snouae/Desktop/ft_transcendence/with-tailwindcss-app/src/app/profile/components/dashboard/skins/skins.module.css"; // Update the import if needed
+import styles from "./skins.module.css"; // Update the import if needed
 
 const Skins: React.FC = () => {
   return (

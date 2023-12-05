@@ -1,7 +1,7 @@
 import React from 'react';
 import StatisticsChart from '../StatisticsChart/StatisticsChart';
 import StatisticsPie from '../StatisticsPie/StatisticsPie';
-import styles from "/home/snouae/Desktop/ft_transcendence/with-tailwindcss-app/src/app/profile/components/dashboard/statistics/statistics.module.css";
+import styles from "./statistics.module.css";
 
 interface StatisticsProps {}
 

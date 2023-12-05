@@ -27,7 +27,7 @@ interface FriendsProps {
   onFriendItemClick: (id: string) => void;
 }
 
-const Friends: React.FC<FriendsProps> = ({ friends, friendsReq, onFriendItemClick }) => {
+const Friends: React.FC<FriendsProps> = ({ friends, friendsReq}) => {
   const [showRequest, setRequest] = React.useState(false);
   const [selectedFriend, setSelectedFriend] = React.useState<Friend | null>(null);
   const [showInfo, setShowInfo] = React.useState(false);

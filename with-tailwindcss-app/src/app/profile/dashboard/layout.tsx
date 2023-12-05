@@ -10,6 +10,7 @@ import yamon from '../imgs/ael-yamo.jpeg'
 import Achievement from '../components/dashboard/achievements/achievement'
 import Statistics from '../components/dashboard/statistics/statistics'
 // import Statistics from '../components/dashboard/Statistics/Statistics'
+
 export default async function RootLayout({
   children,
 }: {
@@ -47,9 +48,7 @@ const FriendRequests = [
           <Skins/>
           <Achievement />
           <Statistics />
-          <Friends friends={friendsList} friendsReq={FriendRequests} onFriendItemClick={function (id: string): void {
-            throw new Error('Function not implemented.')
-          } }/>
+          <Friends friends={friendsList} friendsReq={FriendRequests}/>
       </div>
     </div>
         {children}

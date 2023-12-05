@@ -4,10 +4,11 @@ import React from 'react'
 import styles from './Notification.module.css'
 import NotifIcon from './notif_icon';
 import Friends from '../friends/friends';
-import yamon from "/home/snouae/Desktop/ft_transcendence/with-tailwindcss-app/src/app/profile/imgs/ael-yamo.jpeg";
+import yamon from "../../../imgs/ael-yamo.jpeg";
 
 
-
+// with-tailwindcss-app/src/app/profile/components/dashboard/Notification/Notification.tsx
+// with-tailwindcss-app/src/app/profile/imgs/ael-yamo.jpeg
 const friendsList = [
     { id: "1", name: "Friend 1", picture: yamon.src },
     { id: "2", name: "Friend 2", picture: yamon.src },

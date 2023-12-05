@@ -7,20 +7,34 @@ import { UilSetting } from '@iconscout/react-unicons';
 import { FaGoogleWallet } from 'react-icons/fa';
 import Settings from '../Settings/Settings';
 
-const Sidebar: React.FC = () => {
+interface SidebarInfo {
+  id: string;
+  name: string;
+  title : string;
+  picture: string;
+  wallet: number;
+  online: boolean;
+}
+
+interface SidebarProps {
+  sidebar: SidebarInfo;
+  // onSidebarItemClick: (id: string) => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = (props) => {
   return (
         <div className={styles.Sidebar}>
         <div className={styles['sidebar-container']}>
           <div className={styles['profile-header']}>
           <div className={styles['profile-image']}>
-            <img src={picture.src} alt="Profile" className={styles['profile-image']} />
-            <span className={styles.username}>Abderazzak</span>
-            <span className={styles['user-id']}>aoumad</span>
+            <img src={props.sidebar.picture} alt="Profile" className={styles['profile-image']} />
+            <span className={styles.username}>{props.sidebar.name}</span>
+            <span className={styles['user-id']}>{props.sidebar.title}</span>
           </div>
         </div>
         <div className={styles.wallet}>
               <FaGoogleWallet />
-              <span className={styles['wallet-value']}>215</span>
+              <span className={styles['wallet-value']}>{props.sidebar.wallet}</span>
         </div>
             <div className={styles['settings-container']}>
             <Settings />

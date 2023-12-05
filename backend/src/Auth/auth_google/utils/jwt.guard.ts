@@ -21,18 +21,13 @@ export class JwtGuard implements CanActivate{
                 secret : process.env.jwtSecretKey,
             });
             const user = await this.authGoogleService.findUserByEmail(payload.email);
-            // console.log("-----");
-            // console.log(user);
-            // console.log("-------")
             if (!user)
                 throw new UnauthorizedException();
-            //check data base if user exit
-            // request['user'] = payload;
+            request['user'] = user;
         }
         catch {
             throw new UnauthorizedException();
         }
-        // console.log("heeere");
         return true;
 
     }

@@ -6,7 +6,7 @@ import { AuthGoogleService } from './auth_google.service';
 import { JwtService } from '@nestjs/jwt';
 import { IntraStrategy } from './utils/IntraStrategy';
 // import { PrismaService } from 'backAuth/src/prisma.service';
-import { UserService } from '../user/user.service';
+import { UserService } from '../../profile/user/user.service';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
 // import { UserService } from 'src/user/user.service';
 // import { SessionSerializer } from './utils/Serializer';

@@ -11,7 +11,7 @@ import { ConfigModule } from '@nestjs/config'
 // import { PrismaChatService } from '../chatapp/server_chatapp/prisma/chat/prisma.chat.service';
 import { AuthGoogleModule } from './Auth/auth_google/auth_google.module';
 import { PassportModule } from '@nestjs/passport';
-import { UserModule } from './Auth/user/user.module';
+import { UserModule } from './profile/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ChatModule } from './chatapp/chat/chat.module';
 import { PrismaModule } from './chatapp/prisma/prisma.module';

@@ -23,7 +23,8 @@ export class UserService {
                     ...dto,
                     hash: await bcrypt.hash(dto.hash, 10),
                     title: "snouae rfa3 ta7di",
-                    profilePic: "jkdshkdshkgh",
+                    profilePic: "https://i.imgur.com/GJvG1b.png",
+                    wallet:10,
                 },
             });
         const {hash, ...result} = newUser;
@@ -46,6 +47,17 @@ export class UserService {
                 id: id,
             },
         });
+    }
+
+    async allUsers()
+    {
+        const users = await this.prisma.user.findMany({
+        select: {
+            id: true,
+            username: true,
+        },
+        });
+        return users;
     }
 
 

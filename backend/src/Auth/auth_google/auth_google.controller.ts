@@ -10,9 +10,9 @@ import { IntraAuthGuard } from "./utils/IntraGuard";
 // import { LoginDto } from "src/user/dto/auth.dto";
 import * as qrcode from 'qrcode';
 import { use } from "passport";
-import { UserService } from "../user/user.service";
-import { CreateUserDto } from "../user/dto/user.dto";
-import { LoginDto } from "../user/dto/auth.dto";
+import { UserService } from "../../profile/user/user.service";
+import { CreateUserDto } from "../../profile/user/dto/user.dto";
+import { LoginDto } from "../../profile/user/dto/auth.dto";
 const speakeasy = require('speakeasy');
 
 
@@ -104,7 +104,8 @@ export class AuthGoogleController
 async check(@Req() req: Request, @Res() res: Response)
 {
   try {
-    const user = await this.authGoogleService.check_token(req);
+    const user = req['user'];
+    console.log("user : ", user);
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -142,7 +143,6 @@ async check(@Req() req: Request, @Res() res: Response)
       } catch (error) {
         res.status(500).json({ message: 'Error finding user' });
       }
-
     }
     // @Post('/verify')
     // async VerifyFac(@Req() req: Request, @Res() res: Response)
@@ -178,8 +178,8 @@ async check(@Req() req: Request, @Res() res: Response)
     }
 
 
-    @Get('generate')
-async generateTwoFactorAuthQR(@Req() req, @Res() res) {
+  @Get('generate')
+  async generateTwoFactorAuthQR(@Req() req, @Res() res) {
   try {
     const user = req.user;
 

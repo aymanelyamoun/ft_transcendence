@@ -67,6 +67,12 @@ export class UserController {
     res.status(200).send(users);
     // return users
   }
-
   
+
+  @Get('friends')
+  @UseGuards(JwtGuard)
+  async allfriend(@Req() req: Request, @Res() res: Response)
+  {
+    // const friends = await this.userService.allFriend(req);
+  }
 }

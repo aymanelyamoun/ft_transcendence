@@ -124,7 +124,7 @@ export class PrismaChatService{
           const requestedChannel = await this.prisma.channel.findUnique({ where: { id: data.channelId } });
           if (!requestedChannel) throw new ForbiddenException("channel does not exist");
 
-          const userIsAdmin = this.userIsAdmin(data.userId, data.channelId);
+          const userIsAdmin = await this.userIsAdmin(data.userId, data.channelId);
           if (userIsAdmin) {
             await this.prisma.userChannel.delete({where:{userId_channelId:{userId: data.userId2, channelId:data.channelId}}});
           }
@@ -189,7 +189,8 @@ export class PrismaChatService{
         async joinChannel(channelData:JoinChannelDto){
           const requestedChannel = await this.getChannelWithProp(channelData.channelId);
           console.log("requested channel: ", requestedChannel);
-          const userIsBanned = (await requestedChannel).banedUsers.some((user)=> user.id === channelData.userId);
+          // const userIsBanned = (await requestedChannel).banedUsers.some((user)=> user.id === channelData.userId);
+          const userIsBanned = requestedChannel.banedUsers.some((user)=> user.id === channelData.userId);
 
           if (userIsBanned) throw new ForbiddenException("you are banned from this channel");
 
@@ -368,6 +369,8 @@ export class PrismaChatService{
         async isFriendOf(userId:string, userId2:string):Promise<boolean> {
           const user = await this.prisma.user.findUnique({where:{id:userId}, include:{friends:true}});
 
+          if (!user) throw new NotFoundException('user does not exist');
+
           return (user.friends.some((friend)=>(friend.id === userId2)))
         }
 
@@ -400,6 +403,10 @@ export class PrismaChatService{
           if (!existingUserChannel)
           { const userChannel = await this.prisma.userChannel.create({data:{user:{connect:{id:userId}}, channel:{connect:{id:requestedUserChannelId}}}}) }
 
+          const conversation = await this.getChannelConversation(requestedUserChannelId);
+
+          await this.addUserToConversation(userId, conversation.id);
+          // jump
 
           // console.log("the user: ", user);
           // return user;
@@ -566,6 +573,31 @@ export class PrismaChatService{
           console.log("the user: ", user);
 
           return user.isAdmin
+        }
+
+        async addUserToConversation(userId:string, conversationId:string){
+
+          const updatedConversation = await this.prisma.conversation.update({
+            where:{
+              id:conversationId,
+            },
+            data:{
+              members:{create:{user:{connect:{id:userId}}}},
+              users:{connect:{id:userId}}
+            }
+          });
+
+          
+
+          // const user = await this.prisma.user.update({where:{id:userId}, data:{memberConv}})
+
+          const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:true}});
+          console.log("conversation: ", conversation);
+        }
+
+        async getChannelConversation(channelId:string){
+          const channel = await this.prisma.channel.findUnique({where:{id:channelId}, include:{conversation:true}});
+          return channel.conversation;
         }
 }
 

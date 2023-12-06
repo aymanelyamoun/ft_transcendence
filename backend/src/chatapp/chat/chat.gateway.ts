@@ -1,5 +1,5 @@
 import { OnModuleInit } from '@nestjs/common';
-import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { messageDto, userDataDto } from './DTOs/dto';
 import { ConnectedSocketInfo } from './types/connected_socket_info';
@@ -12,7 +12,7 @@ import { PrismaChatService } from '../prisma/chat/prisma.chat.service';
 
 
 @WebSocketGateway()
-export class ChatGateway implements OnModuleInit{
+export class ChatGateway implements OnModuleInit, OnGatewayConnection{
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService) {}
 
@@ -23,7 +23,12 @@ export class ChatGateway implements OnModuleInit{
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
       console.log('a socket has connected, Id: ', socket.id);
-    })
+    }
+    )
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    console.log("client: ", client.id);
   }
 
   @SubscribeMessage('userData')

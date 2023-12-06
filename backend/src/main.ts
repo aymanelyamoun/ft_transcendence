@@ -8,13 +8,12 @@ async function bootstrap() {
   const {PORT} = process.env;
   app.use(cookieParser());
   app.setGlobalPrefix('api');
-
   app.enableCors({
-     credentials: true,
-  origin: 'http://localhost:3000',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
-
+  
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
@@ -23,6 +22,7 @@ async function bootstrap() {
   // app.useGlobalPipes(new ValidationPipe);
   try{
     console.log("running on port : ", PORT);
+    // await app.listen(process.env.PORT || 3000, '0.0.0.0');
     await app.listen(PORT, ()=>{`connected on port ${PORT}`});
   }
   catch (err){

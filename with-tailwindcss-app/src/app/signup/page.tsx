@@ -9,13 +9,13 @@ import { useRouter } from 'next/navigation';
 
 
 /* email String @unique
-  displayName  String?
+  username  String?
   password String */
 
   type FormInputs = {
-  displayName: string;
+  username: string;
   email: string;
-  password: string;
+  hash: string;
   };
 
   //  const [authenticated, setAuthenticated] = useState(false);
@@ -24,7 +24,7 @@ import { useRouter } from 'next/navigation';
   /*
   export class CreateUserDto{
     @IsString()
-    displayName: string;
+    username: string;
 
     @IsEmail()
     email: string;
@@ -67,9 +67,9 @@ import { useRouter } from 'next/navigation';
         mode: 'cors',
         credentials:'include',
       body: JSON.stringify({
-        username: data.current.displayName,
+        username: data.current.username,
         email: data.current.email,
-        hash: data.current.password,
+        hash: data.current.hash,
       }),
         headers: {
           "Content-Type": "application/json",
@@ -86,9 +86,9 @@ import { useRouter } from 'next/navigation';
   }
 
   const data = useRef<FormInputs>({
-    displayName: "",
+    username: "",
     email: "",
-    password: "",
+    hash: "",
   })
     const gradientStyle = {
     background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',
@@ -103,7 +103,7 @@ import { useRouter } from 'next/navigation';
           <div className="flex flex-col items-center ">
              <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
               <input type="text" name="Username" placeholder='Username' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1"
-              onChange={(e) => (data.current.displayName = e.target.value) }
+              onChange={(e) => (data.current.username = e.target.value) }
               />
             </div>
             <div style={{ background: 'rgba(154, 155, 211, 0.2)'}} className="  p-2 flex items-center mb-7 rounded-md w-full ">
@@ -117,7 +117,7 @@ import { useRouter } from 'next/navigation';
                 placeholder="password"
                 style={{ background: 'rgba(154, 155, 211, 0)' }}
                 className="outline-none text-sm flex-1"
-                onChange={(e) => (data.current.password = e.target.value)}
+                onChange={(e) => (data.current.hash = e.target.value)}
               />     
             </div>
           <Link href="/confirm" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-sky-950 mb-7' onClick={register}>Sign up</Link>

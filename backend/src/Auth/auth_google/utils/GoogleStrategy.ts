@@ -16,7 +16,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
                 '1036525550588-efro8tfrk1fc4df8vk8k6lm1pqh7g5aq.apps.googleusercontent.com',
             clientSecret:
                 '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',
-            callbackURL: 'http://localhost:3001/api/auth/google/redirect',
+          callbackURL: 'http://localhost:3001/api/auth/google/redirect',
+          //  callbackURL: 'http://localhost:3001/api/auth/google/redirect',
             scope: ['profile', 'email'],
         });
     }
@@ -27,7 +28,7 @@ The validate method is called by Passport.js after successful authentication to 
 This method is part of the strategy and is called automatically by Passport.js. */
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
-        // console.log(profile);
+        console.log(profile);
       const user = await  this.authGoogleService.validateUser({
             email: profile.emails[0].value,
           username: profile.displayName,

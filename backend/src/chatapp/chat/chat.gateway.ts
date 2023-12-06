@@ -11,7 +11,7 @@ import { PrismaChatService } from '../prisma/chat/prisma.chat.service';
 
 
 
-@WebSocketGateway()
+@WebSocketGateway({cors : {origin : '*'}})
 export class ChatGateway implements OnModuleInit{
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService) {}

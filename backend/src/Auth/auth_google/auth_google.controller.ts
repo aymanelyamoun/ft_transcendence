@@ -48,8 +48,8 @@ export class AuthGoogleController
     async handleRedirect(@Req() req: Request, @Res() res: Response)
     {
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
-      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
-      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
+      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
+      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
       //return {msg : 'user registred'};
       return res.redirect('http://localhost:3000/confirm')
       // return res.status(HttpStatus.OK).json(req.user);
@@ -68,8 +68,8 @@ export class AuthGoogleController
         async handleRedirect42(@Req() req: Request, @Res() res: Response)
         {
             const jwtResult = await this.authGoogleService.generateJwt(req.user);
-            res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
-          res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
+            res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
+          res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
           // console.log(jwtResult.backendTokens.accessToken);
             return res.redirect('http://localhost:3000/confirm')
             // return res.status(HttpStatus.OK).json(req.user);
@@ -221,8 +221,8 @@ async check(@Req() req: Request, @Res() res: Response)
       try
       {
         const data = await this.authGoogleService.login(dto);
-        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: true });
-        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: true });
+        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: false });
+        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: false });
         res.json(data);
       }
       catch (error)

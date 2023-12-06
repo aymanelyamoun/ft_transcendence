@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Patch, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "../../Auth/auth_google/utils/jwt.guard";
 import { UserService } from "./user.service";
 import { ConfirmUserDto } from "./dto/confirm.dto";
@@ -73,6 +73,15 @@ export class UserController {
   @UseGuards(JwtGuard)
   async allfriend(@Req() req: Request, @Res() res: Response)
   {
-    // const friends = await this.userService.allFriend(req);
+     return await this.userService.allFriend(req['use'].id);
   }
+
+
+  @Delete('remove')
+  @UseGuards(JwtGuard)
+  async Removefriend(@Req() req: Request, @Res() res: Response)
+  {
+    // handle remove friend from user
+  }
+
 }

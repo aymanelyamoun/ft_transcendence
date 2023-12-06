@@ -49,12 +49,15 @@ export class RequestService {
                 });
                 await prisma.user.update({
                     where: { id: userId },
+                    //check here
                     data: { friends: { connect: { id: notification.userId } } },
                 });
 
                 await prisma.user.update({
                     where: { id: notification.userId },
-                    data: { friends: { connect: { id: userId } } },
+                    data: {
+                        friends: { connect: { id: userId } }
+                    },
                 });
             });
         } catch (error)

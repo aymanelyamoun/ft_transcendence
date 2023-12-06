@@ -1,10 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Req } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-// import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import { ConfirmUserDto } from './dto/confirm.dto';
+// import { Request, Response } from 'express';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
-// import { PrismaService } from 'backAuth/src/prisma.service';
 
 @Injectable()
 export class UserService {
@@ -80,4 +79,27 @@ export class UserService {
                 },
                 })
     }
+
+    async allFriend(userId: string)
+    {
+        try {
+
+            const user = await this.prisma.user.findUnique({
+
+                where: { id: userId },
+                include: { friends: true },
+            });
+
+            if (!user)
+                throw new Error('User not found');
+            return user.friends;
+        } catch (error)
+        {
+            return {error: 'Internal server error'}
+        }
+    }
+
+    async removeFriend(userId:string, userId2:string) {
+        await this.prisma.user.update({where:{id:userId},data:{friends:{disconnect:{id:userId2}}}})
+     }
 }

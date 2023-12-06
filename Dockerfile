@@ -1,4 +1,4 @@
-From node
+From node:alpine
 
 COPY backend/package*.json ./
 COPY script.sh script.sh

@@ -8,21 +8,22 @@ export class RequestService {
     constructor(private readonly prisma: PrismaService) { }
     
 
-    async handleSendRequest(userId: string, message: string, typ: NOTIF_TYPE) {
-        try {
-            const notification = await this.prisma.notification.create({
-                data: {
-                    type: typ,
-                    title: 'login',
-                    discription: message,
-                    userId,
-                },
-            });
-            return notification
-        } catch (error)
-        {
-            return { error: 'Internal server error' };
-        }
+    async handleSendRequest(userId: string, senderId: string, message: string, typ: NOTIF_TYPE) {
+        // try {
+        //     // const notification = await this.prisma.notification.create({
+        //     //     data: {
+        //     //         type: typ,
+        //     //         title: 'login',
+        //     //         discription: message,
+        //     //         userId,
+        //     //         senderId,
+        //     //     },
+        //     });
+        //     return notification
+        // } catch (error)
+        // {
+        //     return { error: 'Internal server error' };
+        // }
     }
 
     async handleAcceptRequest(@Req() req: Request, notificationid: number)
@@ -35,14 +36,6 @@ export class RequestService {
             });
             if (!notification)
                 throw new NotFoundException();
-            /*
-            $transaction is a function provided by Prisma (the database toolkit) 
-            that allows you to group several database operations into a single
-             transaction. It ensures that either all the operations succeed 
-             and are permanently saved in the database, 
-             or if any of them fail, the entire transaction is canceled, 
-             and the database remains unchanged.
-             */
             return await this.prisma.$transaction(async (prisma) => {
                 await prisma.notification.delete({
                     where: { id: notificationid },
@@ -50,7 +43,7 @@ export class RequestService {
                 await prisma.user.update({
                     where: { id: userId },
                     //check here
-                    data: { friends: { connect: { id: notification.userId } } },
+                    data: { friends: { connect: { id: notification.senderId } } },
                 });
 
                 await prisma.user.update({

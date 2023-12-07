@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/user.dto';
 import { ConfirmUserDto } from './dto/confirm.dto';
 // import { Request, Response } from 'express';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
+import { use } from 'passport';
 
 @Injectable()
 export class UserService {
@@ -99,7 +100,28 @@ export class UserService {
         }
     }
 
-    async removeFriend(userId:string, userId2:string) {
-        await this.prisma.user.update({where:{id:userId},data:{friends:{disconnect:{id:userId2}}}})
+    async removeFriend(userId: string, friendId: string) {
+        try {
+            const user = await this.prisma.user.findUnique({ where: { id: userId } });
+            const friend = await this.prisma.user.findUnique({ where: { id: userId } });
+
+            if (!user || !friend)
+                throw new Error('User not found');
+            await this.prisma.user.update(
+                {
+                    where: { id: userId },
+                    data: {
+                        friends: {
+                            disconnect:
+                            {
+                                id: friendId
+                            }
+                        }
+                    }
+                })
+        } catch (error)
+        {
+            return {error: 'Internal server error'}
+        }
      }
 }

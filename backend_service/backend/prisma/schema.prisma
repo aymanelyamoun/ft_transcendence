@@ -95,9 +95,14 @@ model Notification{
   title String
   discription String
 
+
+
+  ///the user who receives the notification.
   user User @relation("userNotification", fields: [userId], references: [id])
   userId String
 
+
+  //the user who sends the notification
   sender User @relation("senderNotification",fields: [senderId], references: [id])
   senderId String
 }

@@ -3,9 +3,10 @@ import { JwtGuard } from "../../Auth/auth_google/utils/jwt.guard";
 import { UserService } from "./user.service";
 import { ConfirmUserDto } from "./dto/confirm.dto";
 import { AuthGoogleService } from "../../Auth/auth_google/auth_google.service";
-import { Request, Response } from 'express';
 import { asyncScheduler } from "rxjs";
 import { profile } from "console";
+import { Request, Response, NextFunction } from 'express';
+import { User } from "@prisma/client";
 
 @Controller('user')
 export class UserController {
@@ -27,7 +28,8 @@ export class UserController {
   @UseGuards(JwtGuard)
   async confirm(@Req() req: Request, @Res() res: Response, @Body() dto: ConfirmUserDto) {
     try {
-      const user = await this.authGoogleService.check_token(req);
+      // const user = await this.authGoogleService.check_token(req);
+      const user = req['user'] as User;
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -73,7 +75,9 @@ export class UserController {
   @UseGuards(JwtGuard)
   async allfriend(@Req() req: Request, @Res() res: Response)
   {
-     return await this.userService.allFriend(req['use'].id);
+    const user = req['user'];
+    // const id = user.id;
+     return await this.userService.allFriend(req['useR'].id);
   }
 
 
@@ -81,7 +85,7 @@ export class UserController {
   @UseGuards(JwtGuard)
   async Removefriend(@Req() req: Request, @Res() res: Response)
   {
-    // handle remove friend from user
+    // return await this.userService.removeFriend(req['user'].id)
   }
 
 }

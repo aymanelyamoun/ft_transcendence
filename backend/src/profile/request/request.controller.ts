@@ -12,12 +12,13 @@ import { NOTIF_TYPE } from "@prisma/client";
 export class RequestController {
     constructor(private readonly requestService : RequestService) { }
     
-    //http://localhost:3001/api/request/send/:userId
-    @Post('send/:userId')
+    //http://localhost:3001/api/request/send/:senderId
+    @Post('send/:senderId')
     @UseGuards(JwtGuard)
-    async sendRequest(@Param('userId') userId: string)
+    async sendRequest(@Req() req: Request, @Param('senderId') senderid: string)
     {
-      return  this.requestService.handleSendRequest(userId, "login sent you friend request", NOTIF_TYPE.friendReq);
+      const userId = req['user'].id
+      return  this.requestService.handleSendRequest(userId, senderid, "login sent you friend request", NOTIF_TYPE.friendReq);
     }
 
 

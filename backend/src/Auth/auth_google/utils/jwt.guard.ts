@@ -17,6 +17,8 @@ export class JwtGuard implements CanActivate{
         const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();
         try {
+            // console.log('heere');
+            // console.log(token);
             const payload = await this.jwtService.verifyAsync(token, {
                 secret : process.env.jwtSecretKey,
             });
@@ -42,7 +44,7 @@ export class JwtGuard implements CanActivate{
         if (req && req.cookies) {
           token = req.cookies['access_token'];
         }
-        console.log(token);
+        // console.log(token);
         return token ;
       }
 }

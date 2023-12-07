@@ -26,9 +26,10 @@ import { AuthGoogleService } from './Auth/auth_google/auth_google.service';
 import { UserService } from './profile/user/user.service';
 import { GameModule } from './Game/game.module';
 import { GameService } from './Game/game.service';
+import { RequestModule } from './profile/request/request.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), ChatModule, PrismaModule, AuthGoogleModule, PassportModule.register({session : true}), UserModule, GameModule],
+  imports: [ConfigModule.forRoot(), ChatModule, PrismaModule, AuthGoogleModule, PassportModule.register({session : true}), UserModule, GameModule , RequestModule],
   controllers: [TmpUserController],
   providers: [AppService, TmpUserService, PrismaService, PrismaChatService,UserService, JwtService, GameService, {
     provide: 'AUTH_SERVICE',

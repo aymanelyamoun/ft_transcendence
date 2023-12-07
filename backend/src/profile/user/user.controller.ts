@@ -28,7 +28,6 @@ export class UserController {
   @UseGuards(JwtGuard)
   async confirm(@Req() req: Request, @Res() res: Response, @Body() dto: ConfirmUserDto) {
     try {
-      // const user = await this.authGoogleService.check_token(req);
       const user = req['user'] as User;
       if (!user) {
         throw new UnauthorizedException();
@@ -61,7 +60,7 @@ export class UserController {
 
 
   @Get('all')
-  // @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   async all(@Req() req: Request, @Res() res: Response)
   {
     console.log("heeeeeeere");
@@ -75,17 +74,27 @@ export class UserController {
   @UseGuards(JwtGuard)
   async allfriend(@Req() req: Request, @Res() res: Response)
   {
-    const user = req['user'];
-    // const id = user.id;
-     return await this.userService.allFriend(req['useR'].id);
+    const user = req['user'] as User;
+    const friends = await this.userService.allFriend(user.id);
+    res.status(200).send(friends);
   }
 
 
-  @Delete('remove')
+  @Delete('remove/:friendid')
   @UseGuards(JwtGuard)
-  async Removefriend(@Req() req: Request, @Res() res: Response)
+  async Removefriend(@Param('friendid') friendid, @Req() req: Request, @Res() res: Response)
   {
-    // return await this.userService.removeFriend(req['user'].id)
+    const user = req['user'] as User;
+    const result = await this.userService.removeFriend(user.id, friendid)
+    res.status(200).send(result);
   }
 
+
+  @Get('search/:username')
+  @UseGuards(JwtGuard)
+  async SearchUser(@Param('username') username, @Res() res: Response, @Req() req: Request)
+  {
+    const users = await this.userService.Searchuser(username, req);
+    res.status(200).send(users);
+  }
 }

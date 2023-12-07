@@ -13,6 +13,7 @@ import { use } from "passport";
 import { UserService } from "../../profile/user/user.service";
 import { CreateUserDto } from "../../profile/user/dto/user.dto";
 import { LoginDto } from "../../profile/user/dto/auth.dto";
+import { User } from "@prisma/client";
 const speakeasy = require('speakeasy');
 
 
@@ -104,7 +105,7 @@ export class AuthGoogleController
 async check(@Req() req: Request, @Res() res: Response)
 {
   try {
-    const user = req['user'];
+    const user = req['user'] as User;
     console.log("user : ", user);
     if (!user) {
       throw new UnauthorizedException();

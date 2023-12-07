@@ -8,7 +8,9 @@ CREATE TABLE "User" (
     "hash" TEXT NOT NULL,
     "profilePic" TEXT NOT NULL,
     "username" TEXT NOT NULL,
+    "TwoFactSecret" TEXT,
     "title" TEXT NOT NULL,
+    "wallet" INTEGER,
     "mutedId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -59,6 +61,7 @@ CREATE TABLE "Notification" (
     "title" TEXT NOT NULL,
     "discription" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "senderId" TEXT NOT NULL,
 
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
@@ -181,6 +184,9 @@ ALTER TABLE "Member" ADD CONSTRAINT "Member_userId_fkey" FOREIGN KEY ("userId") 
 
 -- AddForeignKey
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Channel" ADD CONSTRAINT "Channel_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

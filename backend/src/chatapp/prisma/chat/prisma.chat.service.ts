@@ -230,21 +230,21 @@ export class PrismaChatService{
 
           else if (isAdmin){
             console.log("sending request to user from admin");
-            await this.addNotifToUser(data.userId2, NOTIF_TYPE.acceptChannelReq, `${data.userId} requested you to join channel`, "yes or no");
+            await this.addNotifToUser(data.userId2, data.userId, NOTIF_TYPE.acceptChannelReq, `${data.userId} requested you to join channel`, "yes or no");
           }
 
           else {
             console.log("sending request to user");
-            await this.addNotifToUser(data.userId2, NOTIF_TYPE.joinChannelReq, `${data.userId} requested you to join channel`, "send join request");
+            await this.addNotifToUser(data.userId2, data.userId, NOTIF_TYPE.joinChannelReq, `${data.userId} requested you to join channel`, "send join request");
           }
           
         }
 
-        async addNotifToUser(userId:string, type:NOTIF_TYPE, title:string, discription:string){
+        async addNotifToUser(userId:string, senderId:string,type:NOTIF_TYPE, title:string, discription:string){
           // to handel : if the user has the multible notifs that do the same thing, ex: to join to the same channel
           // check if the same notif information already exists
           // const user = await this.prisma.user.up
-          const notif = await this.prisma.notification.create({data:{type:type, title:title, discription:discription, user:{connect:{id:userId}}}});
+          const notif = await this.prisma.notification.create({data:{type:type, title:title, discription:discription, user:{connect:{id:userId}}, sender:{connect:{id:senderId}}}});
 
         }
 

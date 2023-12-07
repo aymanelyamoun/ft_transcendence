@@ -5,6 +5,6 @@ COPY frontend/package*.json .
 RUN npm install
 
 COPY frontend frontend
-WORKDIR backend
+WORKDIR frontend
 
 ENTRYPOINT npm run dev

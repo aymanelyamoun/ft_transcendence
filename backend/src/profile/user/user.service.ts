@@ -1,10 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Req } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-// import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import { ConfirmUserDto } from './dto/confirm.dto';
+// import { Request, Response } from 'express';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
-// import { PrismaService } from 'backAuth/src/prisma.service';
 
 @Injectable()
 export class UserService {
@@ -23,7 +22,8 @@ export class UserService {
                     ...dto,
                     hash: await bcrypt.hash(dto.hash, 10),
                     title: "snouae rfa3 ta7di",
-                    profilePic: "jkdshkdshkgh",
+                    profilePic: "https://i.imgur.com/GJvG1b.png",
+                    wallet:10,
                 },
             });
         const {hash, ...result} = newUser;
@@ -48,6 +48,17 @@ export class UserService {
         });
     }
 
+    async allUsers()
+    {
+        const users = await this.prisma.user.findMany({
+        select: {
+            id: true,
+            username: true,
+        },
+        });
+        return users;
+    }
+
 
 
     async confirm(email: string, dto: ConfirmUserDto)
@@ -68,4 +79,27 @@ export class UserService {
                 },
                 })
     }
+
+    async allFriend(userId: string)
+    {
+        try {
+
+            const user = await this.prisma.user.findUnique({
+
+                where: { id: userId },
+                include: { friends: true },
+            });
+
+            if (!user)
+                throw new Error('User not found');
+            return user.friends;
+        } catch (error)
+        {
+            return {error: 'Internal server error'}
+        }
+    }
+
+    async removeFriend(userId:string, userId2:string) {
+        await this.prisma.user.update({where:{id:userId},data:{friends:{disconnect:{id:userId2}}}})
+     }
 }

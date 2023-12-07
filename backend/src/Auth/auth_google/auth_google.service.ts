@@ -8,8 +8,8 @@ import { Response, Request } from 'express';
 // import { LoginDto } from "src/user/dto/auth.dto";
 import * as bcrypt from 'bcrypt';
 // import { PrismaService } from "backAuth/src/prisma.service";
-import { UserService } from "../user/user.service";
-import { LoginDto } from "../user/dto/auth.dto";
+import { UserService } from "../../profile/user/user.service";
+import { LoginDto } from "../../profile/user/dto/auth.dto";
 import { UserDtetails } from "src/types/types";
 import { PrismaService } from "src/chatapp/prisma/prisma.service";
 const speakeasy = require('speakeasy');
@@ -69,7 +69,8 @@ async validateUserlogin(dto:LoginDto)
         email: details.email,
         username: details.username,
         hash : '',
-        title:'',
+        title: 'snouae rfa3 ta7di',
+        wallet:10,
         TwoFactSecret: tempSecret.base32,
         profilePic: details.profilePic.toString()
       },

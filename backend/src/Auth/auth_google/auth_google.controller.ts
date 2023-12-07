@@ -10,9 +10,9 @@ import { IntraAuthGuard } from "./utils/IntraGuard";
 // import { LoginDto } from "src/user/dto/auth.dto";
 import * as qrcode from 'qrcode';
 import { use } from "passport";
-import { UserService } from "../user/user.service";
-import { CreateUserDto } from "../user/dto/user.dto";
-import { LoginDto } from "../user/dto/auth.dto";
+import { UserService } from "../../profile/user/user.service";
+import { CreateUserDto } from "../../profile/user/dto/user.dto";
+import { LoginDto } from "../../profile/user/dto/auth.dto";
 const speakeasy = require('speakeasy');
 
 
@@ -48,8 +48,8 @@ export class AuthGoogleController
     async handleRedirect(@Req() req: Request, @Res() res: Response)
     {
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
-      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
-      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
+      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
+      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
       //return {msg : 'user registred'};
       return res.redirect('http://localhost:3000/confirm')
       // return res.status(HttpStatus.OK).json(req.user);
@@ -68,8 +68,8 @@ export class AuthGoogleController
         async handleRedirect42(@Req() req: Request, @Res() res: Response)
         {
             const jwtResult = await this.authGoogleService.generateJwt(req.user);
-            res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: true });
-          res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: true });
+            res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
+          res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
           // console.log(jwtResult.backendTokens.accessToken);
             return res.redirect('http://localhost:3000/confirm')
             // return res.status(HttpStatus.OK).json(req.user);
@@ -104,7 +104,8 @@ export class AuthGoogleController
 async check(@Req() req: Request, @Res() res: Response)
 {
   try {
-    const user = await this.authGoogleService.check_token(req);
+    const user = req['user'];
+    console.log("user : ", user);
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -142,7 +143,6 @@ async check(@Req() req: Request, @Res() res: Response)
       } catch (error) {
         res.status(500).json({ message: 'Error finding user' });
       }
-
     }
     // @Post('/verify')
     // async VerifyFac(@Req() req: Request, @Res() res: Response)
@@ -178,8 +178,8 @@ async check(@Req() req: Request, @Res() res: Response)
     }
 
 
-    @Get('generate')
-async generateTwoFactorAuthQR(@Req() req, @Res() res) {
+  @Get('generate')
+  async generateTwoFactorAuthQR(@Req() req, @Res() res) {
   try {
     const user = req.user;
 
@@ -221,8 +221,8 @@ async generateTwoFactorAuthQR(@Req() req, @Res() res) {
       try
       {
         const data = await this.authGoogleService.login(dto);
-        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: true });
-        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: true });
+        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: false });
+        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: false });
         res.json(data);
       }
       catch (error)

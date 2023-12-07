@@ -17,10 +17,18 @@ services:
     # image: backend
     depends_on:
       - postgres
-    command: sh -c "npm run start:dev"
-    build: .
+    # command: sh -c "npm run start:dev"
+    build: ./backend_service
     ports:
       - "3001:3001"
+    networks:
+      - all_connect
+  frontend:
+    depends_on:
+      - backend
+    build: ./frontend_service
+    ports:
+      - "3000:3000"
     networks:
       - all_connect
 networks:

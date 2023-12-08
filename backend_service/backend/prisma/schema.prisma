@@ -45,8 +45,8 @@ model User{
 
 model GameRecord{
   id String @id @default(uuid())
-  userRecord User @relation(fields: [recordId], references: [id])
-  recordId String @unique
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Message{

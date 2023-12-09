@@ -1,14 +1,15 @@
-import { IsEmail, IsString } from "class-validator";
+import { IsEmail, IsString, IsNotEmpty } from 'class-validator';
 
+export class CreateUserDto {
+  @IsString({ message: 'Username must be a string.' })
+  @IsNotEmpty({ message: 'Username is required.' })
+  username: string;
 
-export class CreateUserDto{
-    @IsString()
-    username: string;
+  @IsEmail({}, {message: 'Invalid email format.'})
+  @IsNotEmpty({ message: 'Email is required.' })
+  email: string;
 
-    @IsEmail()
-    email: string;
-
-    @IsString()
-    hash: string;
-    
+  @IsString({ message: 'Password must be a string.' })
+  @IsNotEmpty({ message: 'Password is required.' })
+  hash: string;
 }

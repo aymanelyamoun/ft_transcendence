@@ -44,10 +44,7 @@ function App() {
         });
         if (res.ok) {
           const data = await res.json();
-          console.log("-------");
-          console.log(data);
           setUserData(data);
-          console.log('>>>>>>>>>',data.profilePic);
           setSidebarInfo({
             id: data.id,
             username: data.username,

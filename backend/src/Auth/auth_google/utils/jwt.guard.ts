@@ -12,19 +12,16 @@ export class JwtGuard implements CanActivate{
 
 
 
-        // console.log("----------------------------------------------------------");
         const request =  context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();
         try {
-            // console.log('heere');
-            // console.log(token);
             const payload = await this.jwtService.verifyAsync(token, {
                 secret : process.env.jwtSecretKey,
             });
             const user = await this.authGoogleService.findUserByEmail(payload.email);
             if (!user)
-                throw new UnauthorizedException();
+            throw new UnauthorizedException();
             request['user'] = user;
         }
         catch {
@@ -33,18 +30,12 @@ export class JwtGuard implements CanActivate{
         return true;
 
     }
-    // private extractTokenFromHeader(request: Request) {
-    //     const[type, token] = request.headers.authorization.split(' ') ?? [];
-    //     return type === 'Bearer' ? token : undefined;
-    // }
 
     private extractTokenFromHeader (req: Request){
-        // console.log(req);
         let token = null;
         if (req && req.cookies) {
           token = req.cookies['access_token'];
         }
-        // console.log(token);
         return token ;
       }
 }

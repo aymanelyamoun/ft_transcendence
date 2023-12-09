@@ -12,6 +12,7 @@ import { UserService } from "../../profile/user/user.service";
 import { LoginDto } from "../../profile/user/dto/auth.dto";
 import { UserDtetails } from "src/types/types";
 import { PrismaService } from "src/chatapp/prisma/prisma.service";
+import { LOG_TYPE, NOTIF_TYPE } from "@prisma/client";
 const speakeasy = require('speakeasy');
 
 @Injectable()
@@ -24,9 +25,6 @@ export class AuthGoogleService {
 
 async login(dto:LoginDto)
 {
-  console.log("-----");
-  console.log(dto);
-  console.log("----");
     const user = await this.validateUserlogin(dto);
     const payload = {
         email: user.email,
@@ -49,20 +47,31 @@ async validateUserlogin(dto:LoginDto)
     }
     throw new UnauthorizedException();
 }
+  
+  
 
-  async validateUser(details: UserDtetails)
+
+  async validateUser(details: UserDtetails, typ: LOG_TYPE)
   {
     const user = await this.prisma.user.findUnique({
       where: {
         email: details.email,
       },
     });
-  
-    if (user) {
+
+
+    if (user)
+    {
+      const updatedUser = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { isFirstLog: false },
+      });
       return user;
     }
-    console.log('User not found.');
-    console.log(details.username);
+    const tmpUsername = details.username
+    const Username = await this.prisma.user.findUnique({ where: { username: details.username } });
+    if (Username)
+      details.username = await this.userService.generateUsername(tmpUsername);
     const tempSecret =  speakeasy.generateSecret()
     const newUser = await this.prisma.user.create({
       data: {
@@ -72,11 +81,12 @@ async validateUserlogin(dto:LoginDto)
         title: 'snouae rfa3 ta7di',
         wallet:10,
         TwoFactSecret: tempSecret.base32,
-        profilePic: details.profilePic.toString()
+        profilePic: details.profilePic.toString(),
+        typeLog: typ,
+        isFirstLog: true
       },
-      
     });
-    return newUser;
+    return newUser
   }
     async findUser(id: string)
     {
@@ -111,6 +121,7 @@ async validateUserlogin(dto:LoginDto)
                expiresIn: '7d',
                secret: process.env.jwtRefreshToken ,
            }),
+           payload
         }
       
   }
@@ -122,7 +133,6 @@ async validateUserlogin(dto:LoginDto)
   if (req && req.cookies) {
     token = req.cookies['access_token'];
   }
-  console.log(token);
   return token ;
 }
   
@@ -134,7 +144,6 @@ async validateUserlogin(dto:LoginDto)
     payload = await this.jwtService.verifyAsync(token, {
       secret: process.env.jwtSecretKey,
     });
-    console.log('Payload:', payload); 
   } catch (error) {
     console.error('Error verifying token:', error);
     return null;

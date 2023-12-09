@@ -25,6 +25,8 @@ model User{
   TwoFactSecret String?
   title String
   wallet Int?
+  typeLog LOG_TYPE?
+  isFirstLog Boolean?
 
   userDMs Conversation[]
   gameRecords GameRecord[]
@@ -112,6 +114,12 @@ enum NOTIF_TYPE{
   joinChannelReq
   acceptChannelReq
   acceptWantToJoin
+}
+
+enum LOG_TYPE{
+  locallylog
+  googlelog
+  intralog
 }
 // model Messages{
 //   id	String @id() @default(uuid())

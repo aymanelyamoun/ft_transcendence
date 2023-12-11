@@ -66,7 +66,7 @@ model Message{
 model Conversation{
   id String @id @default(uuid())
 
-  type String
+  type CONVERSATION_TYPE
   members Member[]
   users User[]
   createdAt DateTime @default(now())
@@ -105,6 +105,11 @@ model Notification{
   //the user who sends the notification
   sender User @relation("senderNotification",fields: [senderId], references: [id])
   senderId String
+}
+
+enum CONVERSATION_TYPE{
+  DIRECT
+  CHANNEL_CHAT
 }
 
 enum NOTIF_TYPE{

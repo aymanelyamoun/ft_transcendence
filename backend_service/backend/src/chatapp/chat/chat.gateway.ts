@@ -24,13 +24,14 @@ export class ChatGateway implements OnModuleInit, OnGatewayConnection{
   server: Server;
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
-      console.log('a socket has connected, Id: ', socket.id);
+      console.log('a socket has connected from chat gateway, Id: ', socket.id);
     }
     )
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    console.log("client: ", client.id);
+    console.log('chat server id = ', this.server) 
+    console.log("a socket has connected from chat gateway, client: ", client.id);
   }
 
   @SubscribeMessage('userData')

@@ -8,11 +8,13 @@ import { IsStrongPassword } from "class-validator";
 // import { MessageInfo } from "chatapp/server_chatapp/chat/types/message";
 import * as bcrypt from 'bcrypt';
 import { NOTIF_TYPE } from "@prisma/client";
+import { CONVERSATION_TYPE } from "@prisma/client";
 import { title } from "process";
 import { MessageInfo } from "src/chatapp/chat/types/message";
 import { ChangeChannelData, ChannelData, ChannelEdit } from "src/chatapp/chat/types/channel";
 import { JoinChannelDto } from "src/chatapp/chat/DTOs/dto";
 import { user } from "src/chatapp/chat/types/user";
+import { ConversationInfo } from "src/chatapp/chat/types/conversation";
 
 @Injectable()
 export class PrismaChatService{
@@ -23,7 +25,7 @@ export class PrismaChatService{
         AND:[
           {users:{some:{id:userId}}},
           {users:{some:{id:userId2}}},
-          {type:"direct"},
+          {type:CONVERSATION_TYPE.DIRECT},
         ]
       }});
 
@@ -31,7 +33,7 @@ export class PrismaChatService{
 
       const new_DM = await this.prisma.conversation.create({
         data:{
-          type:"direct",
+          type:CONVERSATION_TYPE.DIRECT,
           users:{connect:[{id:userId}, {id:userId2}]},
       }
       });
@@ -93,7 +95,7 @@ export class PrismaChatService{
           });
 
           const createConversation = await this.prisma.conversation.create({data:{
-            type:"groupChat",
+            type: CONVERSATION_TYPE.CHANNEL_CHAT,
             members:{
               create: data.members.map((member)=>({
                 user:{connect:{id:member.userId}}
@@ -198,10 +200,8 @@ export class PrismaChatService{
 
           if (correctPass)
           {
-            // send request to join the channel
-
-            // const joinedchannel =  await this.addChannelToUser(channelData.userId, channelData.channelId);
-            // console.log("has joined channel: ",joinedchannel);
+            const joinedchannel =  await this.addChannelToUser(channelData.userId, channelData.channelId);
+            console.log("has joined channel: ",joinedchannel);
           }
           else
             throw new ForbiddenException("wrong password please check again");
@@ -229,15 +229,15 @@ export class PrismaChatService{
            const joinChannel = await this.addChannelToUser(data.userId2 ,data.channelId);
           }
 
-          else if (isAdmin){
-            console.log("sending request to user from admin");
-            await this.addNotifToUser(data.userId2, data.userId, NOTIF_TYPE.acceptChannelReq, `${data.userId} requested you to join channel`, "yes or no");
-          }
+          // else if (isAdmin){
+          //   console.log("sending request to user from admin");
+          //   await this.addNotifToUser(data.userId2, data.userId, NOTIF_TYPE.acceptChannelReq, `${data.userId} requested you to join channel`, "yes or no");
+          // }
 
-          else {
-            console.log("sending request to user");
-            await this.addNotifToUser(data.userId2, data.userId, NOTIF_TYPE.joinChannelReq, `${data.userId} requested you to join channel`, "send join request");
-          }
+          // else {
+          //   console.log("sending request to user");
+          //   await this.addNotifToUser(data.userId2, data.userId, NOTIF_TYPE.joinChannelReq, `${data.userId} requested you to join channel`, "send join request");
+          // }
           
         }
 
@@ -277,6 +277,7 @@ export class PrismaChatService{
         }
 
         async banUser(data: ChannelEdit) {
+
           const { channelId, userId, userId2 } = data;
 
           // Fetch the channel
@@ -341,6 +342,12 @@ export class PrismaChatService{
           });
 
           return updatedChannel;
+        }
+
+        async getChannelMembers(conversationInfo:ConversationInfo){
+          const {members} = await this.prisma.conversation.findUnique({where:{id:conversationInfo.conversationId}, include:{members:true}});
+          console.log("members: ",members);
+          return members;
         }
 
         async getChannel(channelId: string) {
@@ -547,16 +554,68 @@ export class PrismaChatService{
             include:{
               members:true,
             }
-        });
+          });
           return conversations;
         }
+
+        async getUserConversationsDirect(userData:user){
+          const conversations = await this.prisma.conversation.findMany({
+            where:{
+              users:{some:{id:userData.userId}},
+              type: CONVERSATION_TYPE.DIRECT,
+            },
+            }
+          ); 
+          return conversations;
+        }
+
+        async getUserConversationsChannelChat(userData:user){
+          const conversations = await this.prisma.conversation.findMany({
+            where:{
+              users:{some:{id:userData.userId}},
+              type: CONVERSATION_TYPE.CHANNEL_CHAT,
+            },
+            }
+          ); 
+          return conversations;
+        }
+
+        async getConversationMessages(conversationId:string, userData:user){
+          // maybe send pics as well
+          const {messages} = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
+          console.log("messages: ", "not printed")
+
+          return messages;
+        }
+
+        async getChannelInfo(channelId: string) {
+          const channelData = await this.prisma.channel.findUnique({
+            where: {id: channelId}, 
+            include: {creator: true, members: true, banedUsers: true, mutedUsers: true}
+          });
+
+          // Destructure the channelData object to separate the hash property
+          const { hash, ...channelInfoWithoutHash } = channelData;
+
+          // Return the channelInfoWithoutHash object which doesn't include the hash property
+          return channelInfoWithoutHash;
+        }
+
+    // this one is just tmeporary it should be handeled in the user part
+        async getFriends(userId:string){
+          const {friends} = await this.prisma.user.findUnique({where:{id:userId}, include:{friends:true}});
+
+          console.log("friends:", friends);
+          return friends;
+        }
+
 
         async createNewDM(userId1:string, userId2:string){
           // need to add more logic to later, (this is just for test)
 
           const newConversation = await this.prisma.conversation.create({
             data:{
-              type:"direct",
+              type:CONVERSATION_TYPE.DIRECT,
               members:{
                 create:[{userId:userId1}, {userId:userId2}]
               },

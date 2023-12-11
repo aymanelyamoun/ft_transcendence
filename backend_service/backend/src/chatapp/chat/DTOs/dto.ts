@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, isNumber, IsNumber } from 'class-validator';
 import { user } from '../types/user';
 
 export class userDataDto {
@@ -131,6 +131,16 @@ export class ChannelEditDto{
     userId2?:string;
 }
 
+export class ConversationInfoDto{
+    @IsNotEmpty()
+    @IsNumber()
+    conversationId:string;
+
+    @IsNotEmpty()
+    @IsString()
+    userId:string;
+
+}
 
 
 

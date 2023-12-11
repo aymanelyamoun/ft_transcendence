@@ -1,5 +1,5 @@
-import { Body, Controller, Patch, Post, UseGuards } from "@nestjs/common";
-import { ChangeChannelDataDto, ChannelEditDto, CreateChannelDto, JoinChannelDto } from "./DTOs/dto";
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { JoinChannel } from "./types/channel";
 import { ChatChannelAdminGuard } from "./chat.channel.guard";
@@ -69,6 +69,43 @@ export class ChannelController{
         await this.prismaChatService.unbanUser(data);
     }
 
+    @Get('/conversation/groupMembers')
+    async getChannelMembers(@Body() conversationInfo:ConversationInfoDto){
+        return await this.prismaChatService.getChannelMembers(conversationInfo);
+    }
 
+    @Get('getUserConversationsDirect')
+    async getUserConversationsDirect(@Body() userData:userDataDto){
+        return await this.prismaChatService.getUserConversationsDirect(userData);
+    }
+
+    @Get('getUserConversationsChannelChat')
+    async getUserConversationsChannelChat(@Body() userData:userDataDto){
+        return await this.prismaChatService.getUserConversationsChannelChat(userData);
+    }
+
+    @Get('/conversation/:id')
+    async getConversationsMessages(@Param('id') id:string, @Body()userData:userDataDto){
+        return await this.prismaChatService.getConversationMessages(id, userData);
+    }
+
+    // this one is just tmeporary it should be handeled in the user part
+    @Get('friends/:id')
+    async getFriends(@Param('id') id:string){
+        return await this.prismaChatService.getFriends(id)
+    }
 }
+
+// * getUserConversations [*]
+// * getUserSelfId - no need
+// * GetConverstion messages [*]
+// * GetCoversation info <
+//   - admins
+//   - name
+//   - profile pic
+// * GetFriends [*]
+// * Get group members [*]
+
+// don't allow other  admins to (ban, kick, remove admin to channel creator)
+// only channel creator can change channel proberties
 

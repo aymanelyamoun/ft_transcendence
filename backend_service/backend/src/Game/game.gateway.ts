@@ -7,15 +7,21 @@ import { GameService } from './game.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGoogleService } from 'src/Auth/auth_google/auth_google.service';
 
-@WebSocketGateway({namespace: 'api/game', cors : {origin : '*'}})
+@WebSocketGateway({cors : {origin : '*'}})
 export class GameGateway implements  OnGatewayConnection, OnGatewayDisconnect{
     constructor(private readonly gameService: GameService,private readonly jwtService: JwtService,
       @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService)  {}
   @WebSocketServer()
   server: Server;
-  async handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]) {
     const token = client.handshake.auth.token;
-    console.log('client connected with this token : ' , token);
+    // console.log('server id = ', this.server) 
+    
+    console.log('client connected with this token : ' , client.id);
+
+    console.log (this.server['lalala']);
+    client.disconnect(true);
+    return;
     try
     {
         const payload = await this.jwtService.verifyAsync(token, {

@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, Req } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException, Req } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/user.dto';
 import { ConfirmUserDto } from './dto/confirm.dto';
@@ -6,31 +6,46 @@ import { ConfirmUserDto } from './dto/confirm.dto';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
 import { use } from 'passport';
 import { Request, Response, NextFunction } from 'express';
-import { User } from '@prisma/client';
+import { LOG_TYPE, User } from '@prisma/client';
+import { tr } from '@faker-js/faker';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UserService {
     constructor (private readonly prisma: PrismaService){}
     async create(dto: CreateUserDto)
     {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                email: dto.email,
-            }
-        });
-        if (user)
-            throw new ConflictException('email duplicated');
+        console.log(dto);
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    email: dto.email,
+                }
+            });
+            if (user)
+                 throw new ConflictException('email duplicated');
+                //throw new NotFoundException();
+            const tmpUsername = dto.username
+            const Username = await this.prisma.user.findUnique({ where: { username: dto.username } });
+            if (Username)
+                dto.username = await this.generateUsername(tmpUsername);
             const newUser = await this.prisma.user.create({
-                data:{
+                data: {
                     ...dto,
                     hash: await bcrypt.hash(dto.hash, 10),
                     title: "snouae rfa3 ta7di",
                     profilePic: "https://i.imgur.com/GJvG1b.png",
-                    wallet:10,
+                    wallet: 10,
+                    typeLog: LOG_TYPE.locallylog
                 },
             });
-        const {hash, ...result} = newUser;
-        return result;
+            const { hash, ...result } = newUser;
+            return result;
+        } catch (error) {
+            if (error instanceof ConflictException) 
+                throw new ConflictException('email duplicated');
+            throw new HttpException("user can't create account", HttpStatus.BAD_REQUEST);
+        }
     }
     
     async findByEmail(email: string) 
@@ -147,4 +162,28 @@ export class UserService {
             return {error: 'Internal server error'}
         }
     }
+
+
+    async generateUsername(Username: string)
+    {
+        let newUsername = Username;
+        let counter = 1;
+
+        while (await this.isUsernameexist(newUsername)){
+            newUsername = `${Username}${counter++}`;
+        }
+        return newUsername;
+    }
+
+
+    async isUsernameexist(username: string)
+    {
+        const exist = await this.prisma.user.findUnique({
+            where: {
+                username,
+            },
+        });
+        return !!exist;
+    }
+
 }

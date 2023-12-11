@@ -14,16 +14,6 @@ export class UserController {
         @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
     ) { }
 
-
-
-    // @UseGuards(JwtGuard)
-    // @Get(":id")
-    // async getUserProfile(@Param("id") id: string)
-    // {
-    //     return await this.userService.findById(id);
-    // }
-
-
   @Patch('confirm')
   @UseGuards(JwtGuard)
   async confirm(@Req() req: Request, @Res() res: Response, @Body() dto: ConfirmUserDto) {
@@ -38,7 +28,6 @@ export class UserController {
       res.status(500).json({ message: 'Error finding user' });
     }
   }
-    
     
   @Get('profile')
   @UseGuards(JwtGuard)
@@ -69,7 +58,6 @@ export class UserController {
     // return users
   }
   
-
   @Get('friends')
   @UseGuards(JwtGuard)
   async allfriend(@Req() req: Request, @Res() res: Response)

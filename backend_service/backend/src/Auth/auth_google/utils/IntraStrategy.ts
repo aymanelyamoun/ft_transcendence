@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-42';
 import { AuthGoogleService } from '../auth_google.service';
 import {Response} from 'express';
+import { LOG_TYPE } from '@prisma/client';
 
 @Injectable()
 export class IntraStrategy extends PassportStrategy(Strategy) {
@@ -22,14 +23,11 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
 
-      console.log(profile);
       const user = await  this.authGoogleService.validateUser({
         email: profile.emails[0].value,
           username: profile._json.login,
             profilePic: profile._json.image.link,
-        });
-        // console.log(profile);   
-        console.log('validate')
+        }, LOG_TYPE.intralog);
          return (user);
     }
 }

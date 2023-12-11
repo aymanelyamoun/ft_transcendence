@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
 import { AuthGoogleService } from '../auth_google.service';
 import {Response} from 'express';
+import { LOG_TYPE } from '@prisma/client';
 // import { AuthService } from '../auth.service';
 
 @Injectable()
@@ -17,7 +18,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
             clientSecret:
                 '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',
           callbackURL: 'http://localhost:3001/api/auth/google/redirect',
-          //  callbackURL: 'http://localhost:3001/api/auth/google/redirect',
             scope: ['profile', 'email'],
         });
     }
@@ -26,34 +26,20 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 The validate method is called by Passport.js after successful authentication to validate and process
  the user's profile information. 
 This method is part of the strategy and is called automatically by Passport.js. */
+    
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
-        console.log(profile);
-      const user = await  this.authGoogleService.validateUser({
-            email: profile.emails[0].value,
-          username: profile.displayName,
-          profilePic: profile._json.picture,
-        });
-        console.log('validate')
-        // const user = authenticationResult.user || authenticationResult.newUser || null;
-        // if (user) {
-        //     const { accessToken, refreshToken } = authenticationResult.backendTokens;
-        //     // res.cookie('access_token', accessToken, {httpOnly: true});
-        //     // res.cookie('refresh_token', refreshToken, {httpOnly:  true });
-        //     res.setHeader('access_token', accessToken);
-        //     res.setHeader('refresh_token', refreshToken);
-        //     console.log('access_token:');
-        //     console.log(accessToken);
-        //     console.log('refresh token :')
-        //     console.log(refreshToken);
-        //   }
-        console.log(user);
+        const user = await  this.authGoogleService.validateUser({
+                email: profile.emails[0].value,
+                username: profile.emails[0].value.split('@')[0],
+                profilePic: profile._json.picture,
+        }, LOG_TYPE.googlelog);
+        
         return (user);
-        // done(null, user);
     }
 }
-
-
+    
+    
 //validate is executed by Passport.js middleware during the authentication flow.
 /*
 Strategy Initialization:

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Inject, Post, Redirect, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Inject, Post, Redirect, Req, Res, UnauthorizedException, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Request, Response, NextFunction } from 'express';
 import { GoogleAuthGuard } from "./utils/Guards";
 import { AuthGuard } from '@nestjs/passport';
@@ -40,8 +40,6 @@ export class AuthGoogleController
      @UseGuards(GoogleAuthGuard)
     handleLogin()
     {
-      console.log('hello');
-        return {msg : 'hello man'};
     }
 
     @Get('google/redirect')
@@ -52,7 +50,11 @@ export class AuthGoogleController
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
       res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
       //return {msg : 'user registred'};
-      return res.redirect('http://localhost:3000/confirm')
+      const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
+      if (user.isFirstLog) {
+        return res.redirect('http://localhost:3000/confirm')
+      }
+      return res.redirect('http://localhost:3000/profile/dashboard')
       // return res.status(HttpStatus.OK).json(req.user);
     }
     
@@ -68,12 +70,14 @@ export class AuthGoogleController
         @UseGuards(IntraAuthGuard)
         async handleRedirect42(@Req() req: Request, @Res() res: Response)
         {
-            const jwtResult = await this.authGoogleService.generateJwt(req.user);
-            res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
+          const jwtResult = await this.authGoogleService.generateJwt(req.user);
+          res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
           res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
-          // console.log(jwtResult.backendTokens.accessToken);
+               const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
+          if (user.isFirstLog) {
             return res.redirect('http://localhost:3000/confirm')
-            // return res.status(HttpStatus.OK).json(req.user);
+          }
+          return res.redirect('http://localhost:3000/profile/dashboard')
         }
 
 
@@ -85,7 +89,6 @@ export class AuthGoogleController
     if (!accessToken) {
       throw new UnauthorizedException('Access token not provided');
     }
-    // console.log('Access token:', accessToken);
     return { message: 'Protected route accessed' };
   }
   
@@ -106,7 +109,6 @@ async check(@Req() req: Request, @Res() res: Response)
 {
   try {
     const user = req['user'] as User;
-    console.log("user : ", user);
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -166,14 +168,6 @@ async check(@Req() req: Request, @Res() res: Response)
 
     @Get('google/status')
     user(@Req() request: Request) {
-      // console.log(request.user);
-      // if (request.user) {
-      //   return { msg: 'Authenticated' };
-      // } else {
-      //   return { msg: 'Not Authenticated' };
-      // }
-      // // const[type, token] = request.headers.authorization.split(' ') ?? [];
-      //     console.log(token);
     
     return { msg: 'Authenticated', user: request.user };
     }
@@ -211,9 +205,17 @@ async check(@Req() req: Request, @Res() res: Response)
 
 
     @Post('register')
-    async registerUser(@Body() dto:CreateUserDto)
+    async registerUser(@Body() dto:CreateUserDto, @Res() res: Response)
     {
-        return await this.userService.create(dto);
+      try {
+      const data = await this.userService.create(dto);
+        return res.status(200).send(data);
+      } catch (error)
+      {
+        console.error('Error in login:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    //  return await this.userService.create(dto);
     }
 
     @Post('login')

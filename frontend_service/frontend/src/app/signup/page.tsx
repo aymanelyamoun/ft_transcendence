@@ -52,7 +52,7 @@ import { useRouter } from 'next/navigation';
         if (!res.ok) {
           const data = await res.json();
         } else {
-            router.push('/profile');
+            router.push("/profile/dashboard");
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
@@ -62,27 +62,32 @@ import { useRouter } from 'next/navigation';
   },[]);
   const register = async () =>
   {
-    const res = await fetch(Backend_URL + "auth/register", {
+    try {
+      const res = await fetch(Backend_URL + "auth/register", {
         method: "POST",
         mode: 'cors',
-        credentials:'include',
-      body: JSON.stringify({
-        username: data.current.username,
-        email: data.current.email,
-        hash: data.current.hash,
-      }),
+        credentials: 'include',
+        body: JSON.stringify({
+          username: data.current.username,
+          email: data.current.email,
+          hash: data.current.hash,
+        }),
         headers: {
           "Content-Type": "application/json",
-          'Access-Control-Allow-Origin':'*'
+          'Access-Control-Allow-Origin': '*'
         },
-    });
-    if (!res.ok) {
-      alert(res.statusText);
-      return;
+      });
+      if (!res.ok) {
+        alert(res.statusText);
+        return;
+      }
+      router.push("/signin");
+      const response = await res.json();
+      alert('user created');
+    } catch (error)
+    {
+         console.error("Error in log function:", error);
     }
-    const response = await res.json();
-    alert("User Registered!");
-    console.log({ response });
   }
 
   const data = useRef<FormInputs>({
@@ -120,7 +125,7 @@ import { useRouter } from 'next/navigation';
                 onChange={(e) => (data.current.hash = e.target.value)}
               />     
             </div>
-          <Link href="/confirm" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-sky-950 mb-7' onClick={register}>Sign up</Link>
+          <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-sky-950 mb-7' onClick={register}>Sign up</Link>
           <div className="border-2 border-white w-10 inline-block mb-7"></div>
           <div className="flex justify-center mb-7 ">
             <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950 ">

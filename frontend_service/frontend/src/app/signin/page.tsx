@@ -49,7 +49,7 @@ export default function Signin() {
         if (!res.ok) {
           const data = await res.json();
         } else {
-            router.push('/profile');
+            router.push('/profile/dashboard');
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
@@ -83,7 +83,6 @@ export default function Signin() {
 
 
     try {
-        console.log('Before fetch request');
       const res = await fetch(Backend_URL + "auth/login", {
         method: "POST",
         mode: 'cors',
@@ -97,16 +96,13 @@ export default function Signin() {
           'Access-Control-Allow-Origin':'*'
         },
       });
-      
-      console.log('After fetch request');
       if (!res.ok) {
         alert(res.statusText);
         return;
       }
       const resp = await res.json();
        alert("User Loged!"); 
-       console.log({ resp });
-      router.push('/profile');
+      router.push("/profile/dashboard");
       //window.location.href = 'http://localhost:3000/profile';
     }
     catch (error)

@@ -37,7 +37,7 @@ const CreateChannel = () => {
             </div>
             <div className="">
               <input
-                className="channelName"
+                className="channelName  placeholder-[#545781]"
                 type="text"
                 placeholder="Channel Name"
               />

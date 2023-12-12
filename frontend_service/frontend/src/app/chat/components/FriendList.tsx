@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
 import msg from "../../../../public/msg_icon.png";
 import msgs2 from "../../../../public/msgs2_icons.png";
@@ -41,6 +41,15 @@ const FriendList = ({
   channelSearch,
   setChannelSearch,
 }: FriendListProps) => {
+
+  // fetching ...
+
+  useEffect(() => {
+    fetch("http://localhost:300/api/channels/getUserConversationsDirect")
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  },[] );
+
   // const [activeChat, setActiveChat] = useState<'friend' | 'channel'>('friend');
   const activeChat = useRef<"friend" | "channel">("friend");
   const selectFriend = useRef<boolean>(false);

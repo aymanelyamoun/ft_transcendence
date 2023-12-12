@@ -6,8 +6,10 @@ export class userDataDto {
     @IsNotEmpty()
     userId: string;
 
-    @IsBoolean()
-    isAdmin: Boolean = false;
+    // @IsBoolean()
+    @IsString()
+    @IsNotEmpty()
+    isAdmin: string = "false";
 
 }
 

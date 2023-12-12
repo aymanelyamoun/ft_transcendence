@@ -5,9 +5,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthGoogleService } from "./auth_google.service";
 import { JwtGuard } from "./utils/jwt.guard";
 import { IntraAuthGuard } from "./utils/IntraGuard";
-// import { UserService } from "src/user/user.service";
-// import { CreateUserDto } from "src/user/dto/user.dto";
-// import { LoginDto } from "src/user/dto/auth.dto";
+
 import * as qrcode from 'qrcode';
 import { use } from "passport";
 import { UserService } from "../../profile/user/user.service";
@@ -49,13 +47,11 @@ export class AuthGoogleController
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
       res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
-      //return {msg : 'user registred'};
       const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
-      if (user.isFirstLog) {
-        return res.redirect('http://localhost:3000/confirm')
+      if (user.hash != '') {
+        return res.redirect('http://localhost:3000/profile/dashboard')
       }
-      return res.redirect('http://localhost:3000/profile/dashboard')
-      // return res.status(HttpStatus.OK).json(req.user);
+      return res.redirect('http://localhost:3000/confirm')
     }
     
     @Get('42/login')
@@ -74,10 +70,10 @@ export class AuthGoogleController
           res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
           res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
                const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
-          if (user.isFirstLog) {
-            return res.redirect('http://localhost:3000/confirm')
+          if (user.hash != '') {
+            return res.redirect('http://localhost:3000/profile/dashboard')
           }
-          return res.redirect('http://localhost:3000/profile/dashboard')
+          return res.redirect('http://localhost:3000/confirm')
         }
 
 
@@ -91,17 +87,6 @@ export class AuthGoogleController
     }
     return { message: 'Protected route accessed' };
   }
-  
-    // const authorizationHeader = request.headers.authorization;
-    // if (!authorizationHeader) {
-    //   return null;
-    // }
-    // const [type, token] = authorizationHeader.split(' ');
-    // if (type === 'Bearer' && token) {
-    //   return token;
-    // }
-    // return null;
-  //}
 
 @Get('check')
 @UseGuards(JwtGuard)
@@ -118,104 +103,108 @@ async check(@Req() req: Request, @Res() res: Response)
         res.status(500).json({ message: 'Error finding user' });
   }
 }
+  
+  @Get('2FA/generate')
+  @UseGuards(JwtGuard)
+  async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
 
-    @Get('generate/twofac')
-    // @UseGuards(JwtGuard)
-    async RegisterFac(@Req() req: Request, @Res() res: Response)
-    {
-      try {
-        const user = await this.authGoogleService.check_token(req);
-        const {code} = req.body
-      
-        if (!user || user.TwoFactSecret === null) {
-          throw new UnauthorizedException();
-        }
-      
-        const secret  = user.TwoFactSecret;
-        const verified = speakeasy.totp.verify({
-          secret,
-          encoding: 'base32',
-          token: code,
-        });
-      
-        if (verified) {
-          res.json({ verified: true });
-        } else {
-          res.json({ verified: false });
-        }
-      } catch (error) {
-        res.status(500).json({ message: 'Error finding user' });
-      }
-    }
-    // @Post('/verify')
-    // async VerifyFac(@Req() req: Request, @Res() res: Response)
-    // {
-    //   const {token, userId} = req.body
-    //   try
-    //   {
-    //     const path =`/user/${userId}`
-    //     comst user = db.getData(path)
-    //     const {base32:}
-    //   }      
-    // }
-
-
-    @UseGuards(JwtGuard)
-    @Get('google/test')
-    getTestData() {
-      return { message: 'This is a protected route for testing JWT authentication.' };
-    }
-
-    @Get('google/status')
-    user(@Req() request: Request) {
-    
-    return { msg: 'Authenticated', user: request.user };
-    }
-
-
-  @Get('generate')
-  async generateTwoFactorAuthQR(@Req() req, @Res() res) {
-  try {
-    const user = req.user;
-
-    if (!user) {
-      return res.status(401).json({ message: 'User not authenticated' });
-    }
-
-    if (user.isTwoFactorAuthenticationEnabled) {
-      return res.status(400).json({ message: '2FA already enabled!' });
-    }
-
-    const secret = user.TwoFactSecret;
-    const otpAuthUrl = speakeasy.otpauthURL({
+    const user = req['user'] as User;
+    const secret = this.authGoogleService.generateTwoFactorAuthenticationSecret(user.username);
+    const Url = speakeasy.otpauthURL({
+      label: 'Ft_Transcendence',
       secret: secret,
-      label: `YourApp:${user.username}`,
-      issuer: 'YourApp',
     });
-
-    const qrCodeDataURL = await qrcode.toDataURL(otpAuthUrl);
-
-    return res.status(200).json({ qrCode: qrCodeDataURL });
-  } catch (error) {
-    console.error('Error generating QR code:', error);
-    return res.status(500).json({ message: 'Error generating QR code' });
+    try {
+    const qrCode = await qrcode.toDataURL(Url);
+      await this.userService.updateUser(user.id, { TwoFactSecret: secret });
+      return res.status(200).json(qrCode);
+    } catch (error) {
+      console.error('Error generating QR code:', error);
+      return res.status(500).json({ message: 'Error generating QR code' });
+    }
   }
-}
 
+  @Post('2FA/enable')
+  @UseGuards(JwtGuard)
+  async enableTwoFactorAuth(@Req() req, @Body() body, @Res() res)
+  {
+    const user = req['user'] as User;
+    const { token } = body;
+    const isValidToken = this.authGoogleService.validateTwoFactorAuthenticationToken(
+      token,
+      user.TwoFactSecret,
+      );
+    await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
+    if (!isValidToken) {
+      return res.status(401).json('Invalid 2FA token');
+    }
+    try
+    {
+      user.isTwoFactorEnabled = true;
+      await this.userService.updateUser(user.id, { isTwoFactorEnabled: true });
+      return res.status(200).json('2FA enabled successfully');
+    }
+    catch (error)
+    {
+      await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
+      return res.status(500).json('Error updating user');
+    }
+  }
+  
+
+  @Post('2FA/disable')
+  @UseGuards(JwtGuard)
+  async disableTwoFactorAuth(@Req() req, @Body() body, @Res() res)
+  {
+    const user = req['user'] as User;
+    try
+    {
+      await this.userService.updateUser(user.id, { isTwoFactorEnabled: false, TwoFactSecret: null });
+      return res.status(200).json('2FA disabled successfully');
+    }
+    catch (error)
+    {
+      return res.status(500).json('Error disabling 2FA');
+    }
+  }
+
+  @Post('2FA/validate')
+  @UseGuards(JwtGuard)
+  async validateTwoFactorAuth(@Req() req, @Body() body, @Res() res)
+  {
+    const user = req['user'] as User;
+      if (!user.isTwoFactorEnabled) {
+    return res.status(400).json('2FA is not enabled for this user!');
+      }
+    const { token } = body;
+    const isValidToken = this.authGoogleService.validateTwoFactorAuthenticationToken(
+      token,
+      user.TwoFactSecret
+    );
+    if (!isValidToken) {
+      return res.status(401).json('Invalid 2FA token');
+    }
+    return res.status(200).json('User validate');
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('google/test')
+  getTestData() {
+    return { message: 'This is a protected route for testing JWT authentication.' };
+  }
 
 
     @Post('register')
     async registerUser(@Body() dto:CreateUserDto, @Res() res: Response)
     {
       try {
-      const data = await this.userService.create(dto);
+        const data = await this.userService.create(dto);
         return res.status(200).send(data);
       } catch (error)
       {
         console.error('Error in login:', error);
         res.status(500).json({ error: 'Internal Server Error' });
       }
-    //  return await this.userService.create(dto);
     }
 
     @Post('login')

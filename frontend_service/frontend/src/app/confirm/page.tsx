@@ -83,6 +83,8 @@ const [hash, setPassword] = useState('');
   }, []);
   
   const confirm = async () => {
+
+    console.log(userData?.profilePic);
     const res = await fetch(Backend_URL + "user/confirm", {
       method: "PATCH",
       mode: "cors",

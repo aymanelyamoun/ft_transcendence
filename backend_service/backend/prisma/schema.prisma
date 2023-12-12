@@ -27,6 +27,7 @@ model User{
   wallet Int?
   typeLog LOG_TYPE?
   isFirstLog Boolean?
+  isTwoFactorEnabled Boolean?
 
   userDMs Conversation[]
   gameRecords GameRecord[]

@@ -9,9 +9,6 @@ export class JwtGuard implements CanActivate{
     constructor (private readonly jwtService: JwtService,
         @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService){}
     async canActivate(context: ExecutionContext): Promise<boolean>{
-
-
-
         const request =  context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();

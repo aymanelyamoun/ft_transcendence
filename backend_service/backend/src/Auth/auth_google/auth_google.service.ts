@@ -72,7 +72,7 @@ async validateUserlogin(dto:LoginDto)
     const Username = await this.prisma.user.findUnique({ where: { username: details.username } });
     if (Username)
       details.username = await this.userService.generateUsername(tmpUsername);
-    const tempSecret =  speakeasy.generateSecret()
+    // const tempSecret =  speakeasy.generateSecret()
     const newUser = await this.prisma.user.create({
       data: {
         email: details.email,
@@ -80,7 +80,7 @@ async validateUserlogin(dto:LoginDto)
         hash : '',
         title: 'snouae rfa3 ta7di',
         wallet:10,
-        TwoFactSecret: tempSecret.base32,
+        // TwoFactSecret: tempSecret.base32,
         profilePic: details.profilePic.toString(),
         typeLog: typ,
         isFirstLog: true
@@ -88,27 +88,28 @@ async validateUserlogin(dto:LoginDto)
     });
     return newUser
   }
-    async findUser(id: string)
-    {
-        const user = await  this.prisma.user.findUnique({
-            where : {
-                id : id,
-            },
-        })
-        return (user);
-    }
 
-    async findUserByEmail(email: string)
-    {
-        const user = await  this.prisma.user.findUnique({
-            where : {
-                email : email,
-            },
-        })
-        if (!user)
-          return null;
-        return (user);
-    }
+  async findUser(id: string)
+  {
+      const user = await  this.prisma.user.findUnique({
+          where : {
+              id : id,
+          },
+      })
+      return (user);
+  }
+
+  async findUserByEmail(email: string)
+  {
+      const user = await  this.prisma.user.findUnique({
+          where : {
+              email : email,
+          },
+      })
+      if (!user)
+        return null;
+      return (user);
+  }
 
     async generateJwt(payload) {
       return {
@@ -123,7 +124,6 @@ async validateUserlogin(dto:LoginDto)
            }),
            payload
         }
-      
   }
 }
 
@@ -153,15 +153,37 @@ async validateUserlogin(dto:LoginDto)
     console.error('Invalid payload structure');
     return null;
   }
-
+    
   const user = await this.findUserByEmail(payload.email);
   if (!user) {
     console.error('User not found for email:', payload.email);
     return null;
+    }
+    return user;
   }
 
-  return user;
-}
+  generateTwoFactorAuthenticationSecret(username : string) {
+    const secret = speakeasy.generateSecret({
+      name: 'snouae',
+      issuer: 'snouae',
+    });
+    return secret.base32;
+  }
+
+  generateTwoFactorAuthenticationToken(secret : string) {
+    return speakeasy.totp({
+      secret,
+      encoding: 'base32',
+    });
+  }
+
+  validateTwoFactorAuthenticationToken(token : string, secret : string) {
+    const isValid = speakeasy.totp.verify({
+      secret,
+      token,
+    });
+    return isValid;
+  }
 
 }
 

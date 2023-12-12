@@ -7,6 +7,8 @@ import { asyncScheduler } from "rxjs";
 import { profile } from "console";
 import { Request, Response, NextFunction } from 'express';
 import { User } from "@prisma/client";
+import { UpdatePassDto } from "./dto/updatepass.dto";
+
 
 @Controller('user')
 export class UserController {
@@ -33,10 +35,8 @@ export class UserController {
   @UseGuards(JwtGuard)
   async check(@Req() req: Request, @Res() res: Response)
   {
-    console.log("heeeeeeere");
     try {
       const user = await this.authGoogleService.check_token(req);
-      console.log("user   ==>", user);
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -67,7 +67,6 @@ export class UserController {
     res.status(200).send(friends);
   }
 
-
   @Delete('remove/:friendid')
   @UseGuards(JwtGuard)
   async Removefriend(@Param('friendid') friendid, @Req() req: Request, @Res() res: Response)
@@ -77,12 +76,36 @@ export class UserController {
     res.status(200).send(result);
   }
 
-
   @Get('search/:username')
   @UseGuards(JwtGuard)
   async SearchUser(@Param('username') username, @Res() res: Response, @Req() req: Request)
   {
     const users = await this.userService.Searchuser(username, req);
     res.status(200).send(users);
+  }
+
+  @Patch('update/password')
+  @UseGuards(JwtGuard)
+  async UpdatePass(@Res() res: Response, @Req() req: Request, @Body() dto:UpdatePassDto)
+  {
+      const data = await this.userService.updatepass(req, dto);
+      return res.status(200).send(data);
+  }
+
+  
+  @Patch('update/username')
+  @UseGuards(JwtGuard)
+  async UpdateUsername(@Res() res: Response, @Body() body, @Req() req: Request)
+  {
+    const data = await this.userService.updateusername(req, body);
+    return res.status(200).send(data);
+  }
+  
+  @Patch('update/image')
+  @UseGuards(JwtGuard)
+  async UpdateImage(@Res() res: Response, @Req() req: Request, @Body() body)
+  {
+    const data = await this.userService.updateimage(req, body);
+    return res.status(200).send(data);
   }
 }

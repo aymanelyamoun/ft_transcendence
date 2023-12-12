@@ -49,6 +49,8 @@ const FriendList = ({
   const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
   const inOrOutSearch = useRef<HTMLDivElement>(null);
 
+  const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
+
   useEffect(() => {
     const f = async () => {
       try {
@@ -182,10 +184,11 @@ const FriendList = ({
                 />
               </div>
             ) : null}
-            {showAddChannel && <CreateChannel />}
-            {/* {showAddChannel && <AddNewChannel
+            {showAddChannel && <AddNewChannel
             setShowAddChannel={setShowAddChannel}
-            />} */}
+            setGoToCreateChannel={setGoToCreateChannel}
+            />}
+            { goToCreateChannel && <CreateChannel />}
           </ul>
         </div>
       </div>

@@ -646,8 +646,6 @@ export class PrismaChatService{
             }
           });
 
-          
-
           // const user = await this.prisma.user.update({where:{id:userId}, data:{memberConv}})
 
           const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:true}});
@@ -657,6 +655,18 @@ export class PrismaChatService{
         async getChannelConversation(channelId:string){
           const channel = await this.prisma.channel.findUnique({where:{id:channelId}, include:{conversation:true}});
           return channel.conversation;
+        }
+
+        async makeConversation(userId:string, userId2:string){
+          const conversation = await this.prisma.conversation.create({
+            data:{
+              type:CONVERSATION_TYPE.DIRECT,
+              users:{
+                connect:[{id:userId}, {id:userId2}]
+              }
+            }
+          });
+          return conversation;
         }
 }
 

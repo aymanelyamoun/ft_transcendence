@@ -6,6 +6,9 @@ import { ChatChannelAdminGuard } from "./chat.channel.guard";
 import { Role, Roles } from "./roles.decorator";
 import { PrismaChatService } from "../prisma/chat/prisma.chat.service";
 
+
+
+
 @Controller('channels')
 export class ChannelController{
 
@@ -74,8 +77,12 @@ export class ChannelController{
         return await this.prismaChatService.getChannelMembers(conversationInfo);
     }
 
-    @Get('getUserConversationsDirect')
+    @Post('getUserConversationsDirect')
     async getUserConversationsDirect(@Body() userData:userDataDto){
+        // async getUserConversationsDirect(@Param('id') id:string){
+        // async getUserConversationsDirect(@Param('id') id:string){
+        console.log("------------------------------");
+
         return await this.prismaChatService.getUserConversationsDirect(userData);
     }
 

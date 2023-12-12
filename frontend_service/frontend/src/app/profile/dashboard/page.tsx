@@ -36,7 +36,7 @@ function App() {
   });
 
   const [FriendsList, setFriendsList] = useState<FriendL[]>([]);
-  const [FriendRequestsInfo, setFriendRequestsInfo] = useState<FriendR>([]);
+  const [FriendRequestsInfo, setFriendRequestsInfo] = useState<Friend[]>([]);
   
   const fetchUserData = async () => {
     try {

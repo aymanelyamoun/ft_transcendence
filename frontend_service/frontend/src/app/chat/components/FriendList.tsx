@@ -4,6 +4,7 @@ import Image, { StaticImageData } from "next/image";
 import msg from "../../../../public/msg_icon.png";
 import msgs2 from "../../../../public/msgs2_icons.png";
 import splitBar from "../../../../public/splitBar.png";
+import axios from "axios";
 // import msg from "../../../../public/msg_icon.png";
 // import msgs2 from "../../../../public/msgs2_icons.png";
 // import splitBar from "../../../../public/splitBar.png";
@@ -11,12 +12,7 @@ import SearchBar from "./SearchBar";
 import FriendsChat from "./FriendsChat";
 import ChannelChat from "./ChannelChat";
 // import { Friend, friendsData } from '../../../../app/(notRoot)/page';
-import {
-  Friend,
-  friendsData,
-  Channel,
-  channelsData,
-} from "../page";
+import { Friend, friendsData, Channel, channelsData } from "../page";
 // import {
 //   Friend,
 //   friendsData,
@@ -41,24 +37,43 @@ const FriendList = ({
   channelSearch,
   setChannelSearch,
 }: FriendListProps) => {
-
   // fetching ...
-
-  useEffect(() => {
-    fetch("http://localhost:300/api/channels/getUserConversationsDirect")
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  },[] );
 
   // const [activeChat, setActiveChat] = useState<'friend' | 'channel'>('friend');
   const activeChat = useRef<"friend" | "channel">("friend");
   const selectFriend = useRef<boolean>(false);
   const [channelChatIcon, setChannelChatIcon] =
-  useState<StaticImageData>(msgs2);
+    useState<StaticImageData>(msgs2);
   const [friendsChatIcon, setFriendsChatIcon] = useState<StaticImageData>(msg);
   const [showAddChannel, setShowAddChannel] = useState(false);
   const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
   const inOrOutSearch = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const f = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3001/api/channels/getUserConversationsDirect",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "http://localhost:3000",
+            },
+            body: JSON.stringify({
+              userId: "035f6077-a06a-4a25-922c-ee82a46a938b",
+              isAdmin: false,
+            }),
+          }
+        );
+        console.log(JSON.stringify(res));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    f();
+  }, []);
 
   const handleFriendChatClick = () => {
     activeChat.current = "friend";
@@ -74,14 +89,16 @@ const FriendList = ({
   };
 
   const handleSelectFriend = (friend: Friend) => {
-    if (selectedFriends.includes(friend)){
-      setSelectedFriends(selectedFriends.filter((selectedFriend) => selectedFriend.id !== friend.id));
+    if (selectedFriends.includes(friend)) {
+      setSelectedFriends(
+        selectedFriends.filter(
+          (selectedFriend) => selectedFriend.id !== friend.id
+        )
+      );
       return;
     }
     setSelectedFriends([...selectedFriends, friend]);
   };
-
-
 
   const iconStyle = {
     width: "50px",
@@ -165,8 +182,7 @@ const FriendList = ({
                 />
               </div>
             ) : null}
-            {showAddChannel && <CreateChannel/>
-            }
+            {showAddChannel && <CreateChannel />}
             {/* {showAddChannel && <AddNewChannel
             setShowAddChannel={setShowAddChannel}
             />} */}

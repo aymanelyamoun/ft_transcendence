@@ -1,14 +1,14 @@
 From node:alpine
 
-COPY backend/package*.json ./
+# COPY backend/package*.json ./
 
-RUN npm install
 
 
 
 COPY backend backend
-WORKDIR backend
-COPY script.sh script.sh
+WORKDIR /backend
+RUN npm install
+# COPY script.sh script.sh
 
 # WORKDIR /backend/prisma
 

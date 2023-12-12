@@ -25,9 +25,11 @@ interface FriendsProps {
   friends: Friend[];
   friendsReq: FriendRequest[];
   onFriendItemClick: (id: string) => void;
+  acceptRequest: (id: string) => void;
+  refuseRequest: (id: string) => void;
 }
 
-const Friends: React.FC<FriendsProps> = ({ friends, friendsReq}) => {
+const Friends: React.FC<FriendsProps> = ({ friends, friendsReq, acceptRequest, refuseRequest}) => {
   const [showRequest, setRequest] = React.useState(false);
   const [selectedFriend, setSelectedFriend] = React.useState<Friend | null>(null);
   const [showInfo, setShowInfo] = React.useState(false);
@@ -80,7 +82,11 @@ const Friends: React.FC<FriendsProps> = ({ friends, friendsReq}) => {
         <span className={styles['friends-title']}>Friends</span>
         <Notification onRequestClick={handleRequestClick} />
         {showRequest ? (
-          <FriendRequests friendRequests={friendsReq} />
+          <FriendRequests 
+            friendRequests={friendsReq} 
+            acceptRequest={acceptRequest}
+            refuseRequest={refuseRequest}
+          />
           ) : (
             <FriendList 
             friends={friends} 

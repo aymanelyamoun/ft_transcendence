@@ -3,14 +3,23 @@ import styles from './friends.module.css'
 import { FcOk } from "react-icons/fc";
 import { FcCancel } from "react-icons/fc";
 
-interface FriendRequestItemProps  {
-    name: string;
-    picture: string;
-    id: string;
+interface FriendRequestItemProps {
+  id: string;
+  name: string;
+  picture: string;
+  acceptRequest: (id: string) => void;
+  refuseRequest: (id: string) => void;
 }
 
-
 const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
+
+  const handleAcceptRequest = () => {
+    props.acceptRequest(props.id);
+  };
+
+  const handleRefuseRequest = () => {
+    props.refuseRequest(props.id);
+  };
   return (
     <div className={styles['friendReqItem']}>
         <div className={styles['friendReq-image']}>
@@ -21,8 +30,8 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
         </div>
         <div className={styles['friendReqSent']}>
                 <span className={styles['friendReqSent']}>{props.name} sent you a friend request</span>
-                <button className={styles['friendReqAccept']}><FcOk /></button>
-                <button className={styles['friendReqDecline']}><FcCancel /></button>
+                <button className={styles['friendReqAccept']} onClick={handleAcceptRequest}><FcOk /></button>
+                <button className={styles['friendReqDecline']} onClick={handleRefuseRequest}><FcCancel /></button>
         </div>
     </div>
   );

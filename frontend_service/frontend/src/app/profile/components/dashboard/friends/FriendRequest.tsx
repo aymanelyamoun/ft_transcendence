@@ -10,9 +10,11 @@ interface FriendRequest {
 
 interface FriendRequestProps {
   friendRequests: FriendRequest[];
+  acceptRequest: (id: string) => void;
+  refuseRequest: (id: string) => void;
 }
 
-const FriendRequest: React.FC<FriendRequestProps> = ({ friendRequests }) => {
+const FriendRequest: React.FC<FriendRequestProps> = ({ friendRequests, acceptRequest, refuseRequest }) => {
   return (
     <div className={styles['friendRequest']}>
       <ul>
@@ -22,6 +24,8 @@ const FriendRequest: React.FC<FriendRequestProps> = ({ friendRequests }) => {
             id={friendRequest.id}
             name={friendRequest.name}
             picture={friendRequest.picture}
+            acceptRequest={acceptRequest}
+            refuseRequest={refuseRequest}
           />
         ))}
       </ul>

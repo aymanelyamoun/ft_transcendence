@@ -15,7 +15,7 @@ export class RequestController {
     constructor(private readonly requestService : RequestService) { }
     
     //http://localhost:3001/api/request/send/:senderId
-    @Get('send/:recieverId')
+    @Post('send/:recieverId')
     @UseGuards(JwtGuard)
     async sendRequest(@Req() req: Request, @Param('recieverId') recieverid: string)
     {

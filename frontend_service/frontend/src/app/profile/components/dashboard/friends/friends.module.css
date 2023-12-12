@@ -63,8 +63,8 @@ div span.friends-title {
 {
     background: rgba(154, 155, 211, 0.2);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
+    /* justify-content: space-between; */
     width: 94%;
     box-sizing: border-box;
     height: 80px;
@@ -107,27 +107,25 @@ div span.friends-title {
 {
     font-family: "Poppins", sans-serif;
     font-weight: 400;
-    font-size: 15px;
+    font-size: 19px;
     font-weight: bold;
     color: aliceblue;
-    position: sticky;
-    top: 0vh;
-    left: 0vw;
+    position: relative;
+    top: 0.6vh;
+    left: 0.3vw;
 
 }
 
-.friendReqSent
+.friendReqMess
 {
     font-family: 'Inter', sans-serif;
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
+    font-size: 0.62rem;
     font-weight: bold;
     color: aliceblue;
-    position: sticky;
-    /* padding-left: 0.3rem;
-    margin-top: 3.6rem; */
-    top: 11vh;
-    left: 0vw;
+    position: relative;
+    top: 4vh;
+    left: -3vw;
 }
 
 .MoreIcon
@@ -165,6 +163,46 @@ div span.friends-title {
 {
     width: 40px;
     height: 40px;
+}
+
+.friendReqAccept
+{
+    color: aliceblue;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    right: 1rem;
+    top: 1rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    cursor: pointer;
+}
+
+.friendReqAccept >svg
+{
+    width: 30px;
+    height: 30px;
+}
+
+.friendReqDecline
+{
+    color: aliceblue;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    right: 1rem;
+    top: 1rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    cursor: pointer;
+}
+
+.friendReqDecline >svg
+{
+    width: 30px;
+    height: 30px;
 }
 
 @media (min-width: 1300px) and (max-width: 1900px)

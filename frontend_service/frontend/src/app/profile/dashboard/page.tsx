@@ -6,21 +6,24 @@ import Skins from '../components/dashboard/skins/skins';
 import Friends from '../components/dashboard/friends/friends';
 import Achievement from '../components/dashboard/achievements/achievement';
 import Statistics from '../components/dashboard/statistics/statistics';
-import aoumad from '../imgs/aoumad.jpeg';
-import yamon from '../imgs/ael-yamo.jpeg';
+import { Backend_URL } from '@/lib/Constants';
 
+interface FriendL
+{
+  id: string;
+  name: string;
+  picture: string;
+}
+
+interface FriendR
+{
+  id: string;
+  name: string;
+  picture: string;
+}
 
 function App() {
-  interface UserData {
-    id: string;
-    username: string;
-    profilePic: string;
-    title: string;
-    wallet: number;
-    hash: string;
-  }
 
-  const [userData, setUserData] = useState<UserData | null>(null);
   const [SidebarInfo, setSidebarInfo] = useState({
     id: "",
     username: "",
@@ -30,60 +33,129 @@ function App() {
     online: false,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("http://localhost:3001/api/user/profile", {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setUserData(data);
-          setSidebarInfo({
-            id: data.id,
-            username: data.username,
-            title: data.title, 
-            profilePic: data.profilePic,
-            wallet: data.wallet, 
-            online: true,
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
+  const [FriendsList, setFriendsList] = useState<FriendL[]>([]);
+  const [FriendRequestsInfo, setFriendRequestsInfo] = useState<FriendR>([]);
+  // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
+
+  const acceptFriendRequest = async (notificationid: string) => {
+    try {
+      const res = await fetch( `Backend_URL + request/accept/${notificationid}`, 
+      {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
       }
-    };
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setFriendRequestsInfo(data);
+      } else {
+        console.error("Error accepting friend request", res.statusText);
+      }
+    }
+    catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
 
-    fetchData();
+  const refuseFriendRequest = async (notificationid: string) => {
+    try {
+      const res = await fetch( `Backend_URL + request/Refuse/${notificationid}`,
+      {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+      );
+      if (res.ok)
+      {
+        const data = await res.json();
+        setFriendRequestsInfo(data);
+      } else {
+        console.error("Error accepting friend request", res.statusText);
+      }
+    }
+    catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+  
+  const fetchUserData = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/api/user/profile", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSidebarInfo(data);
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+
+  const fetchFriendsListData = async () => {
+    try {
+      const res = await fetch( Backend_URL + "user/friends", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json() as FriendL[];
+        setFriendsList(data);
+      }
+    }
+    catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+
+  const fetchReqData = async () => {
+    try {
+      const res = await fetch( Backend_URL + "request/notification", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json() as FriendR[];
+        setFriendRequestsInfo(data);
+      }
+    
+    } catch (error)
+    {
+      console.error("Error fetching data: ", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchUserData();
+    fetchReqData();
+    fetchFriendsListData();
   }, []);
-
-  const friendsList = [
-    { id: "1", name: "Friend 1", picture: aoumad.src },
-    { id: "2", name: "Friend 2", picture: aoumad.src },
-    { id: "3", name: "Friend 3", picture: aoumad.src },
-    { id: "4", name: "Friend 4", picture: aoumad.src },
-    { id: "5", name: "Friend 5", picture: aoumad.src },
-    { id: "6", name: "Friend 6", picture: aoumad.src },
-    { id: "7", name: "Friend 7", picture: aoumad.src },
-    { id: "8", name: "Friend 8", picture: aoumad.src },
-  ];
-
-  const FriendRequests = [
-    { id: "1", name: "Friend 1", picture: yamon.src },
-    { id: "2", name: "Friend 2", picture: yamon.src },
-    { id: "3", name: "Friend 3", picture: yamon.src },
-    { id: "4", name: "Friend 4", picture: yamon.src },
-    { id: "5", name: "Friend 5", picture: yamon.src },
-    { id: "6", name: "Friend 6", picture: yamon.src },
-    { id: "7", name: "Friend 7", picture: yamon.src },
-    { id: "8", name: "Friend 8", picture: yamon.src },
-  ];
-
 
   return (
     <>
@@ -93,10 +165,14 @@ function App() {
           <Skins />
           <Achievement />
           <Statistics />
-          <Friends friends={friendsList} friendsReq={FriendRequests} />
+          <Friends
+          friends={FriendsList} 
+          friendsReq={FriendRequestsInfo} 
+          acceptRequest={acceptFriendRequest}
+          refuseRequest={refuseFriendRequest}
+          />
         </div>
       </div>
-      {/* {children} */}
     </>
   );
 };

@@ -246,8 +246,6 @@ export class UserService {
         const user = req['user'] as User;
         const userId = user.id;
         const { pic } = body;
-      //  console.log(body);
-        //console.log(pic);
         const newupdat = await this.prisma.user.update({
             where: { id: userId },
             data: { profilePic: pic },

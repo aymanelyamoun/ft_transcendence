@@ -88,10 +88,6 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
       reader.onloadend = async () => {
         const profilePic = reader.result as string;
-
-        // console.log(profilePic);
-
-        // Send the base64 encoded image data to the server
         const response = await fetch(Backend_URL + "user/update/image", {
           method: "PATCH",
           mode: "cors",
@@ -102,8 +98,9 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
             "Access-Control-Allow-Origin": "*",
           },
         });
-
         if (response.ok) {
+          const data = await response.json();
+          setUserData(data.newupdat);
           alert("Image updated successfully");
         } else {
           alert("Failed to update image");
@@ -270,7 +267,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 <img
                   id="preview_img"
                   className="w-20 h-auto object-cover rounded-full sm:w-24 md:w-32 lg:w-40 xl:w-48"
-                  src="https://cdn.intra.42.fr/users/c06c0753f8262f275a233097381d0190/snouae.jpg"
+                  src={userData?.profilePic}
                   alt="Current profile photo"
                 />
               </label>
@@ -593,16 +590,6 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                         </div>
                       </div>
                     )}
-                    {/* <input
-                      // value={userData?.username}
-                      type="text"
-                      name="Username"
-                      style={{
-                        background: "rgba(154, 155, 211, 0)",
-                      }}
-                      className="outline-none text-sm flex-1 "
-                      // onChange={(e) => (data.current.username = e.target.value)}
-                    /> */}
                     <Link
                       href=""
                       className=" border  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 mb-4 shadow-xl hover:bg-sky-950 max-w-full"

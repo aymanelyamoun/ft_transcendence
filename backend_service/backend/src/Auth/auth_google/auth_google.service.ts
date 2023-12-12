@@ -25,27 +25,36 @@ export class AuthGoogleService {
 
 async login(dto:LoginDto)
 {
+  try {
     const user = await this.validateUserlogin(dto);
     const payload = {
-        email: user.email,
-        sub: user.username,
+      email: user.email,
+      sub: user.username,
     };
     const backendTokens = await this.generateJwt(payload)
     return {
-        user, 
-        backendTokens
+      user,
+      backendTokens
     }
+  } catch (error)
+  {
+    throw new UnauthorizedException();
+  }
 }
 
 async validateUserlogin(dto:LoginDto)
 {
+  try {
     const user = await this.userService.findByEmail(dto.email);
-    if (user && (await bcrypt.compare(dto.hash, user.hash)))
-    {
-        const { hash, ...result} = user;
-        return result;
+    if (user && (await bcrypt.compare(dto.hash, user.hash))) {
+      const { hash, ...result } = user;
+      return result;
     }
     throw new UnauthorizedException();
+  } catch (error)
+  {
+    throw new UnauthorizedException(error);
+  }
 }
   
   
@@ -53,40 +62,41 @@ async validateUserlogin(dto:LoginDto)
 
   async validateUser(details: UserDtetails, typ: LOG_TYPE)
   {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: details.email,
-      },
-    });
-
-
-    if (user)
-    {
-      const updatedUser = await this.prisma.user.update({
-        where: { id: user.id },
-        data: { isFirstLog: false },
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: details.email,
+        },
       });
-      return user;
+
+      if (user) {
+        const updatedUser = await this.prisma.user.update({
+          where: { id: user.id },
+          data: { isFirstLog: false },
+        });
+        return user;
+      }
+      const tmpUsername = details.username
+      const Username = await this.prisma.user.findUnique({ where: { username: details.username } });
+      if (Username)
+        details.username = await this.userService.generateUsername(tmpUsername);
+      const newUser = await this.prisma.user.create({
+        data: {
+          email: details.email,
+          username: details.username,
+          hash: '',
+          title: 'snouae rfa3 ta7di',
+          wallet: 10,
+          profilePic: details.profilePic.toString(),
+          typeLog: typ,
+          isFirstLog: true
+        },
+      });
+      return newUser
+    } catch (error)
+    {
+       throw new UnauthorizedException(error);
     }
-    const tmpUsername = details.username
-    const Username = await this.prisma.user.findUnique({ where: { username: details.username } });
-    if (Username)
-      details.username = await this.userService.generateUsername(tmpUsername);
-    // const tempSecret =  speakeasy.generateSecret()
-    const newUser = await this.prisma.user.create({
-      data: {
-        email: details.email,
-        username: details.username,
-        hash : '',
-        title: 'snouae rfa3 ta7di',
-        wallet:10,
-        // TwoFactSecret: tempSecret.base32,
-        profilePic: details.profilePic.toString(),
-        typeLog: typ,
-        isFirstLog: true
-      },
-    });
-    return newUser
   }
 
   async findUser(id: string)
@@ -179,7 +189,7 @@ async validateUserlogin(dto:LoginDto)
 
   validateTwoFactorAuthenticationToken(token : string, secret : string) {
     const isValid = speakeasy.totp.verify({
-      secret,
+      secret, 
       token,
     });
     return isValid;

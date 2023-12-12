@@ -48,7 +48,9 @@ export class AuthGoogleController
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
       res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
       const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
-      if (user.hash != '') {
+      if (user.isTwoFactorEnabled)
+        return res.redirect('http://localhost:3000/confirmauth')
+     else if (user.hash != '') {
         return res.redirect('http://localhost:3000/profile/dashboard')
       }
       return res.redirect('http://localhost:3000/confirm')
@@ -69,8 +71,10 @@ export class AuthGoogleController
           const jwtResult = await this.authGoogleService.generateJwt(req.user);
           res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
           res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
-               const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
-          if (user.hash != '') {
+          const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
+          if (user.isTwoFactorEnabled)
+            return res.redirect('http://localhost:3000/confirmauth')
+          else if (user.hash != '') {
             return res.redirect('http://localhost:3000/profile/dashboard')
           }
           return res.redirect('http://localhost:3000/confirm')
@@ -118,7 +122,8 @@ async check(@Req() req: Request, @Res() res: Response)
     const qrCode = await qrcode.toDataURL(Url);
       await this.userService.updateUser(user.id, { TwoFactSecret: secret });
       return res.status(200).json(qrCode);
-    } catch (error) {
+    } catch (error)
+    {
       console.error('Error generating QR code:', error);
       return res.status(500).json({ message: 'Error generating QR code' });
     }
@@ -215,7 +220,7 @@ async check(@Req() req: Request, @Res() res: Response)
         const data = await this.authGoogleService.login(dto);
         res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: false });
         res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: false });
-        res.json(data);
+        res.json(data.user);
       }
       catch (error)
       {

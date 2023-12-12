@@ -164,13 +164,13 @@ export class UserService {
                     NOT : {id: userloged},
                 }
             })
-        if (!users || users.length === 0) {
-        return { error: 'No users found' };
+            if (!users || users.length === 0) {
+            throw new UnauthorizedException('No users found');
     }
         return(users);
         } catch (error)
         {
-            return {error: 'Internal server error'}
+            throw new UnauthorizedException('Internal server error');
         }
     }
 

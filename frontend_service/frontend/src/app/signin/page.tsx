@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation'
 type FormInputs = {
   email: string;
   hash: string;
+
 }
 
 
@@ -28,8 +29,8 @@ type FormInputs = {
 
 export default function Signin() {
   const [formData, setFormData] = useState<FormInputs>({
-    email: '',
-    hash: '',
+    email: "",
+    hash: "",
   });
   const router = useRouter();
 
@@ -101,7 +102,12 @@ export default function Signin() {
         return;
       }
       const resp = await res.json();
-       alert("User Loged!"); 
+      if (resp.isTwoFactorEnabled)
+      {
+        router.push("/confirmauth");
+        return;
+      }
+        alert("User Loged!"); 
       router.push("/profile/dashboard");
       //window.location.href = 'http://localhost:3000/profile';
     }

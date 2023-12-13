@@ -1,86 +1,45 @@
 "use client";
 import { Backend_URL } from "@/lib/Constants";
 import Link from "next/link";
-import Image from "next/image";
-import {
-  FaFacebook,
-  FaLinkedinIn,
-  FaGoogle,
-  FaEnvelope,
-  FaRegEnvelope,
-} from "react-icons/fa";
-import { MdLabelOutline } from "react-icons/md";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Loading from "../components/Loading";
-
-type FormInputs = {
-  username: string;
-  profilePic: string;
-  hash: string;
-};
-export default function Signup() {
-
-  enum LOG_TYPE {
-    locallylog = "locallylog",
-    googlelog = "googlelog",
-    intralog = "intralog",
-    none = "none",
-  }
-  
+import Loading from "../../components/Loading";
+import { useUser } from "../layout";
+export default function Confirm() {
   interface UserData {
     username: string;
-    profilePic: string;
+    profilePic?: string;
     hash: string;
-     typeLog: string;
-
+    typeLog: string;
   }
 
-  // const [imagePreview, setImagePreview] = useState(
-  //   "https://cdn.intra.42.fr/users/9881b3331d37fa6b6121528fa0aa990e/ael-yamo.jpg"
-  // );
-
+  const user = useUser();
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
-  const [typeLog, setTypeLog] = useState(null)
-  
-  
-  const [userData, setUserData] = useState<UserData | null>(null);
-
-const [hash, setPassword] = useState('');
-
+  const [userData, setUserData] = useState<UserData | null>({
+    username: user?.username || '',
+    profilePic: user?.profilePic || '',
+    hash: user?.hash || '',
+    typeLog: user?.typeLog || '',
+  });
+  const [hash, setPassword] = useState<string>(user?.hash || '');
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      try {
-        const res = await fetch(Backend_URL + "auth/check", {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        if (res.ok) {
+        if (user) {
+
+          setUserData({
+            username: user.username,
+            profilePic: user.profilePic,
+            hash: user.hash,
+            typeLog: user.typeLog,
+          });
+          setPassword(user.hash);
           setAuthenticated(true);
-          const data = await res.json();
-          setUserData(data);
-          const receivedPassword = data.hash;
-
-          setPassword(receivedPassword);
-          // setTypeLog(userData?.typeLog)
-        } else {
-          router.push("/");
-          setAuthenticated(false);
         }
-      } catch (error) {
-        console.error("Error checking authentication:", error);
-      }
     };
-
     checkAuthentication();
-  }, []);
+  }, [user, router]);
   
   const confirm = async () => {
 
@@ -104,19 +63,11 @@ const [hash, setPassword] = useState('');
       alert(res.statusText);
       return;
     }
+    alert("User confirmed!");
     router.push("/profile/dashboard");
-    const response = await res.json();
-    alert("User Registered!");
-    // console.log({ response });
   };
   
-  const data = useRef<FormInputs>({
-    username: "",
-    profilePic: "",
-    hash: "",
-  });
   
-
   
   const handleConfirm = () => {
     if (userData?.hash != '') {
@@ -194,14 +145,11 @@ const [hash, setPassword] = useState('');
                      placeholder="Username"
                      style={{ background: "rgba(154, 155, 211, 0)" }}
                      className=" outline-none text-sm flex-1 text-white"
-                     // onChange={(e) => (data.current.username = e.target.value)}
                      onChange={(e) =>
                        setUserData(
                          (prev) =>
                            ({
                              username: e.target.value,
-                             // id: prev?.id || undefined,
-
                              profilePic: prev?.profilePic || undefined,
                            } as UserData)
                        )
@@ -226,7 +174,6 @@ const [hash, setPassword] = useState('');
                              ({
                                hash: e.target.value,
                                username: prev?.username || undefined,
-                               // id: prev?.id || undefined,
                                profilePic: prev?.profilePic || undefined,
                              } as UserData)
                          )
@@ -234,10 +181,7 @@ const [hash, setPassword] = useState('');
                      />
                    </div>
                  )}
-                 {/* {!isPassword && <p>Password is required!</p>} */}
-
                  <div className="border-2 border-white w-10 inline-block mb-7"></div>
-
                  <Link
                    href=""
                    className={

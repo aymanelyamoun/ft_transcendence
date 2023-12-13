@@ -4,9 +4,12 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { IoSettingsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
+import Authorization from '@/utils/auth';
 
 export default function page() {
+  // const isAuthenticated = Authorization();
+  // console.log("he check is ", isAuthenticated );
   const [isUsernameVisible, setIsUsernameVisible] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isTofaVisible, setIsTofaVisible] = useState(false);
@@ -67,7 +70,7 @@ export default function page() {
             setUserData(data);
            setIsToggleChecked(data.isTwoFactorEnabled);
           } else {
-            router.push("/");
+           // router.push("/");
             setAuthenticated(false);
           }
         } catch (error) {
@@ -252,13 +255,17 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
       }
     }, [isChecked]);
   return (
+    <div>
+    {/* {!isAuthenticated? (
+      <Loading />
+    ) : ( */}
     <div
       style={{ background: "#050A27" }}
       className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
     >
       <div
         style={gradientStyle}
-        className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto h-2/3"
+        className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
       >
         <div className="py-10">
           <div className="flex flex-col items-center ">
@@ -605,5 +612,8 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
         </div>
       </div>
     </div>
+    {/* )}  */}
+    </div>
   );
 }
+

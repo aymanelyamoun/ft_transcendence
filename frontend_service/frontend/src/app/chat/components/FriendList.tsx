@@ -51,7 +51,26 @@ const FriendList = ({
 
   const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
 
-  // useEffect(() => {
+
+
+  useEffect(() => {
+      fetch("http://localhost:3001/api/channels/getUserConversationsDirect")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => console.error(err));
+  }, [])
+
+  const handleFriendChatClick = () => {
+    activeChat.current = "friend";
+
+
+
+
+
+
+    // useEffect(() => {
   //   const f = async () => {
   //     try {
   //       const res = await fetch(
@@ -77,17 +96,7 @@ const FriendList = ({
   //   f();
   // }, []);
 
-  useEffect(() => {
-      fetch("http://localhost:3001/api/channels/getUserConversationsDirect")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => console.error(err));
-  }, [])
 
-  const handleFriendChatClick = () => {
-    activeChat.current = "friend";
   };
 
   const handleChannelChatClick = () => {

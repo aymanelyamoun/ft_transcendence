@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { Conversation, Prisma, User } from "@prisma/client";
 // import FriendList from './chat/components/FriendList'
 import FriendList from "./components/FriendList";
 import ChatSection from "./components/ChatSection";
@@ -14,147 +15,18 @@ import jake from "../../../public/jakeWithHeadPhones.jpg";
 // import ChannelPic from '../../../public/group_pic.jpg';
 // import jake from '../../../public/jakeWithHeadPhones.jpg';
 import { useState } from "react";
+import ConversationList, {
+  ChatToggel,
+  Conversations,
+} from "./components/ConversationList";
 
 // import Message from './Message'
 
-export interface Conversations {
-  id: number;
-  name: string;
-  profilePic: StaticImageData;
-}
 export interface Channel {
   id: number;
   channelName: string;
   channelPic: StaticImageData;
 }
-
-export const friendsData: Conversations[] = [
-  {
-    id: 1,
-    name: "Anas",
-    profilePic: avatar,
-  },
-  {
-    id: 2,
-    name: "Abdo",
-    profilePic: avatar,
-  },
-  {
-    id: 3,
-    name: "Aymane",
-    profilePic: avatar,
-  },
-  {
-    id: 4,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 5,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 6,
-    name: "Aymane",
-    profilePic: avatar,
-  },
-  {
-    id: 7,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 8,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 9,
-    name: "Aymane",
-    profilePic: avatar,
-  },
-  {
-    id: 10,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 11,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 12,
-    name: "Aymane",
-    profilePic: avatar,
-  },
-  {
-    id: 13,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 14,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 15,
-    name: "Aymane",
-    profilePic: avatar,
-  },
-  {
-    id: 16,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 17,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 18,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 19,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 20,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 21,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 22,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 23,
-    name: "Oussama",
-    profilePic: jake,
-  },
-  {
-    id: 24,
-    name: "Snowa",
-    profilePic: avatar,
-  },
-  {
-    id: 25,
-    name: "Oussama",
-    profilePic: jake,
-  },
-];
 
 export const channelsData: Channel[] = [
   {
@@ -285,18 +157,15 @@ export const channelsData: Channel[] = [
 ];
 
 export default function Home() {
-  const [friendSearch, setFriendSearch] = useState<Friend[]>(friendsData);
+  // const [friendSearch, setFriendSearch] = useState<Friend[]>(friendsData);
   const [channelSearch, setChannelSearch] = useState<Channel[]>(channelsData);
 
   return (
     <main className="main flex justify-center items-center h-full w-full ">
       <div className="h-full basis-1/4 flex">
-        <FriendList
-          friendSearch={friendSearch}
-          setFriendSearch={setFriendSearch}
-          channelSearch={channelSearch}
-          setChannelSearch={setChannelSearch}
-        />
+        <Conversations>
+          {/* <ConversationList /> */}
+        </Conversations>
       </div>
       <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
         <ChatSection />

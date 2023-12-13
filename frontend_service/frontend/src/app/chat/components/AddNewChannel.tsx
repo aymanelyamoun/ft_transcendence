@@ -111,7 +111,7 @@ const AddNewChannel = ( {setShowAddChannel, setGoToCreateChannel} :{setShowAddCh
             ))}
           </div>
         </div>
-        <button onClick={() => setGoToCreateChannel(true)} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
+        <button onClick={() => {setGoToCreateChannel(true); setShowAddChannel(false)}} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
           NEXT
         </button>
       </div>

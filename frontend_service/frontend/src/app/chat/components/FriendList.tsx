@@ -188,7 +188,7 @@ const FriendList = ({
             setShowAddChannel={setShowAddChannel}
             setGoToCreateChannel={setGoToCreateChannel}
             />}
-            { goToCreateChannel && <CreateChannel />}
+            { goToCreateChannel && <CreateChannel/>}
           </ul>
         </div>
       </div>

@@ -24,13 +24,13 @@ const CreateChannel = () => {
   const [password, setPassword] = useState<boolean>(false);
 
   return (
-    <div className=" addChannelOverlay flex justify-center items-center ">
+    <div className=" createChannelOverlay flex justify-center items-center ">
       <div
         id="AddchannelContainer"
         className="addChannelModal felx justify-between rounded-[10px] "
       >
         <div className=" px-24 pt-4">
-          <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[581px] overflow-y-auto ">
+          <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
             <div>
               <Image
                 className="channelImage"

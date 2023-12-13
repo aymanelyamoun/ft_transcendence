@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-/Users/aadnane/goinfre/ft_transcendence/node_modules
+/ft_transcendence/node_modules
 
 # testing
 /coverage

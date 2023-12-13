@@ -51,31 +51,40 @@ const FriendList = ({
 
   const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
 
+  // useEffect(() => {
+  //   const f = async () => {
+  //     try {
+  //       const res = await fetch(
+  //         "http://localhost:3001/api/channels/getUserConversationsDirect",
+  //         {
+  //           method: "POST",
+  //           credentials: "include",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             "Access-Control-Allow-Origin": "http://localhost:3000",
+  //           },
+  //           body: JSON.stringify({
+  //             userId: "035f6077-a06a-4a25-922c-ee82a46a938b",
+  //             isAdmin: false,
+  //           }),
+  //         }
+  //       );
+  //       console.log(JSON.stringify(res));
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   f();
+  // }, []);
+
   useEffect(() => {
-    const f = async () => {
-      try {
-        const res = await fetch(
-          "http://localhost:3001/api/channels/getUserConversationsDirect",
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "http://localhost:3000",
-            },
-            body: JSON.stringify({
-              userId: "035f6077-a06a-4a25-922c-ee82a46a938b",
-              isAdmin: false,
-            }),
-          }
-        );
-        console.log(JSON.stringify(res));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    f();
-  }, []);
+      fetch("http://localhost:3001/api/channels/getUserConversationsDirect")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => console.error(err));
+  }, [])
 
   const handleFriendChatClick = () => {
     activeChat.current = "friend";

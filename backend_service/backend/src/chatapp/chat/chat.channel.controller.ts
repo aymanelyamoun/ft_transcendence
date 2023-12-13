@@ -99,6 +99,7 @@ export class ChannelController{
         // return await this.prismaChatService.getConversationMessages(id, );
     }
 
+
     // this one is just tmeporary it should be handeled in the user part
     @Get('friends/:id')
     async getFriends(@Param('id') id:string){

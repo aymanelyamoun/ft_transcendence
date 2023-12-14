@@ -13,8 +13,8 @@ services:
       POSTGRES_DB: db
     networks:
       - all_connect
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+    # volumes:
+    #   - ./postgres_data:/var/lib/postgresql/data
   backend:
     # image: backend
     depends_on:

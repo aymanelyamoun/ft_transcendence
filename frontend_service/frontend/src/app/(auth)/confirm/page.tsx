@@ -63,8 +63,10 @@ export default function Confirm() {
       alert(res.statusText);
       return;
     }
+    window.location.href = "/profile/dashboard";
+
+    
     alert("User confirmed!");
-    router.push("/profile/dashboard");
   };
   
   
@@ -84,9 +86,9 @@ export default function Confirm() {
   
   return (
      <div>
-       {!authenticated ? (
+       {/* {!authenticated ? (
          <Loading />
-       ) : (
+       ) : ( */}
          <div
            style={{ background: "#050A27" }}
            className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
@@ -195,7 +197,7 @@ export default function Confirm() {
              </div>
            </div>
          </div>
-       )} 
+       {/* )}  */}
      </div>
    );
 }

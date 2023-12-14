@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState, createContext } from "react";
 import Loading from "@/app/components/Loading";
 import { Backend_URL } from "@/lib/Constants";
 import Authorization from "@/utils/auth";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Confirm from "./confirm/page";
 
@@ -34,7 +34,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-
+  const pathname = usePathname();
+  
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -60,7 +61,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     };
 
     checkAuthentication();
-  }, []);
+  }, [pathname]);
 
   const value = { user, setUser };
 

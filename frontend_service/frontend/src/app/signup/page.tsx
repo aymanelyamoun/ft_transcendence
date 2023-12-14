@@ -125,17 +125,17 @@ import { useRouter } from 'next/navigation';
                 onChange={(e) => (data.current.hash = e.target.value)}
               />     
             </div>
-          <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-sky-950 mb-7' onClick={register}>Sign up</Link>
+          <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#999BD3] mb-7' onClick={register}>Sign up</Link>
           <div className="border-2 border-white w-10 inline-block mb-7"></div>
           <div className="flex justify-center mb-7 ">
-            <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950 ">
+            <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
               <FaGoogle className="text-sm text-white" /> 
             </Link>
-            <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-sky-950">
+            <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
               <FaLinkedinIn className="text-sm text-white" />
             </Link>
             </div>
-              <Link href="/signin" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-sky-950'>Sign in</Link>
+              <Link href="/signin" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:bg-[#999BD3]'>Sign in</Link>
           </div>
           </div>
         </div>

@@ -82,9 +82,11 @@ export class ChannelController{
     async getUserConversationsDirect(@Query() userData:userDataDto){
         // async getUserConversationsDirect(@Param('id') id:string){
         // async getUserConversationsDirect(@Param('id') id:string){
-        // console.log("------------------------------");
+        console.log("------------------------------===========----------------");
         const userData_ = this.getUserData(userData);
-        return await this.prismaChatService.getUserConversationsDirect(userData_);
+        const res = await this.prismaChatService.getUserConversationsDirect(userData_);
+        // console.log(res);
+        return res;
     }
 
     @Get('getUserConversationsChannelChat')

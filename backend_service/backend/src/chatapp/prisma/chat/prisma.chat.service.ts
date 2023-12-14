@@ -564,6 +564,7 @@ export class PrismaChatService{
               users:{some:{id:userData.userId}},
               type: CONVERSATION_TYPE.DIRECT,
             },
+            include:{users:true}
             }
           ); 
           return conversations;
@@ -574,8 +575,9 @@ export class PrismaChatService{
             where:{
               users:{some:{id:userData.userId},},
               type: CONVERSATION_TYPE.CHANNEL_CHAT,
-              include: {}
+              
             },
+            include:{users:true}
             }
           ); 
           return conversations;

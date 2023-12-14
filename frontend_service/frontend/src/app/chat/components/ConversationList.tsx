@@ -65,7 +65,7 @@ export const ConversationList = () => {
   return (
     <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-        {conversation.map((conv) => {
+        {conversation && conversation.map((conv) => {
           console.log(conv);
           return (
             <ConversationIthem

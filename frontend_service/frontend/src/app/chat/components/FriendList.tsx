@@ -142,14 +142,14 @@ const FriendList = ({
             setFriendsChatIcon={setFriendsChatIcon}
           />
         </div>
-        <div className="searchBarContainer">
+        {/* <div> */}
           <SearchBar
             // friendSearch={friendSearch}
             // setFriendSearch={setFriendSearch}
             channelSearch={channelSearch}
             setChannelSearch={setChannelSearch}
           />
-        </div>
+        {/* </div> */}
 
         <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
           <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">

@@ -17,7 +17,8 @@ import { Prisma, $Enums } from "@prisma/client";
 export interface Conversation{
   id: string;
   type: $Enums.CONVERSATION_TYPE;
-  createdAt: Date;
+  // createdAt: Date;
+  createdAt: string;
   channelId: string;
   lastMessage: string;
   profilePic: string;

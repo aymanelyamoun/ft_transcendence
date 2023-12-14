@@ -15,6 +15,7 @@ import { ChangeChannelData, ChannelData, ChannelEdit } from "src/chatapp/chat/ty
 import { JoinChannelDto } from "src/chatapp/chat/DTOs/dto";
 import { user } from "src/chatapp/chat/types/user";
 import { ConversationInfo } from "src/chatapp/chat/types/conversation";
+import { ConversationIthem } from "types/chatTypes";
 
 @Injectable()
 export class PrismaChatService{
@@ -564,9 +565,24 @@ export class PrismaChatService{
               users:{some:{id:userData.userId}},
               type: CONVERSATION_TYPE.DIRECT,
             },
-            include:{users:true}
+            include:{
+              users:true,
+
+            }
             }
           ); 
+          const conversationIthem:ConversationIthem[] = conversations.map((conversation)=>{
+            const friend = conversation.users[0].id === userData.userId ? conversation.users[1] : conversation.users[0];
+            return {
+              id:conversation.id,
+              type:conversation.type,
+              createdAt:conversation.createdAt,
+              channelId:conversation.channelId,
+              lastMessage:conversation.lastMessage,
+              profilePic:friend.profilePic,
+              name:friend.username,
+            }
+          });
           return conversations;
         }
 
@@ -580,6 +596,7 @@ export class PrismaChatService{
             include:{users:true}
             }
           ); 
+
           return conversations;
         }
 

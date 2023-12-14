@@ -187,7 +187,7 @@ export default function Confirm() {
                  <Link
                    href=""
                    className={
-                   "border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-sky-950 mb-7"   
+                   "border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#999BD3] mb-7"   
                    }
                    onClick={handleConfirm}
                  >

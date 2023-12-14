@@ -349,7 +349,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                   </div>
                   <Link
                     href=""
-                    className=" border  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 mb-4 shadow-xl hover:bg-sky-950"
+                    className=" border  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 mb-4 shadow-xl hover:bg-[#999BD3]"
                     onClick={handlUpdateUsername}
                   >
                     Confirm
@@ -486,7 +486,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                   </div>
                   <Link
                     href=""
-                    className=" border mb-5  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 shadow-xl hover:bg-sky-950"
+                    className=" border mb-5  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 shadow-xl hover:bg-[#999BD3]"
                     onClick={handlUpdatePass}
                   >
                     Confirm
@@ -599,7 +599,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                     )}
                     <Link
                       href=""
-                      className=" border  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 mb-4 shadow-xl hover:bg-sky-950 max-w-full"
+                      className=" border  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 mb-4 shadow-xl hover:bg-[#999BD3] max-w-full"
                       onClick={handlEnableTwoFa}
                     >
                       Confirm

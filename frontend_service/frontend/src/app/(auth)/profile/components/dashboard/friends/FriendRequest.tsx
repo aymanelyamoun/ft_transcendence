@@ -6,7 +6,9 @@ interface FriendRequest
 {
   id: string;
   title: string;
-  // profilePic: string;
+  sender: {
+    profilePic: string;
+  };
   discription: string;
 }
 
@@ -26,7 +28,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({ friendRequests, acceptReq
             id={friendRequest.id}
             title={friendRequest.title}
             discription={friendRequest.discription}
-            // picture={friendRequest.picture}
+            profilePic={friendRequest.sender.profilePic}
             acceptRequest={acceptRequest}
             refuseRequest={refuseRequest}
           />

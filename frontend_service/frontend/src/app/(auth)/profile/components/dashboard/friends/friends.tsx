@@ -20,7 +20,9 @@ interface FriendRequest
 {
   id: string;
   title: string;
-  // profilePic: string;
+  sender: {
+    profilePic: string;
+  };
   discription: string;
 }
 

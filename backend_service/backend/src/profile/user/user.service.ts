@@ -94,6 +94,16 @@ export class UserService {
             },
             where: {
                 id: { not: userloged },
+                friends: {
+                    none: {
+                        id: userloged
+                    }
+                },
+                notifications: {
+                    none: {
+                        userId: userloged
+                    }
+                }
             },
         });
         return users;
@@ -269,22 +279,26 @@ export class UserService {
     }
 
 
-    async getNotifications(id: string)
-    {
-        try {   
+    async getNotifications(id: string) {
+        try {
             const notifications = await this.prisma.notification.findMany({
-                where: { userId: id,
-                    type: "friendReq" 
+                where: {
+                    userId: id,
+                    type: "friendReq"
                 },
+                include: {
+                    sender: {
+                        select: {
+                            profilePic: true
+                        }
+                    }
+                }
             });
-            // const user = await this.findById(not);
-            // if (!user)
-            //     throw new UnauthorizedException('User not found');
-
+            console.log(notifications);
             return notifications;
-        } catch (error)
-        {
+        } catch (error) {
             throw new UnauthorizedException('Internal server error');
         }
     }
+    
 }

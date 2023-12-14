@@ -7,7 +7,9 @@ import { Backend_URL } from '@/lib/Constants';
 interface FriendRequestItemProps {
   id: string;
   title: string;
-  // profilePic: string;
+  // sender: {
+    profilePic: string;
+  // };
   discription: string;
   acceptRequest: (id: string) => void;
   refuseRequest: (id: string) => void;
@@ -69,8 +71,8 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
   return (
     <div className={styles['friendReqItem']}>
         <div className={styles['friendReq-image']}>
-        <img alt="Profile" className="rounded-lg" />
-            {/* <img src={props.picture} alt="Profile" className="rounded-lg" /> */}
+        {/* <img alt="Profile" className="rounded-lg" /> */}
+            <img src={props.profilePic} alt="Profile" className="rounded-lg" />
         </div>
         <div className={styles['friendReq-name']}>
             <span className={styles['friendReq-name']}>{props.title}</span>

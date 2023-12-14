@@ -35,7 +35,10 @@ const ConversationIthem = (props: ConversationIthemProps) => {
         // alt={conversationProps.name}
         alt={conversationProps.name}
       />
-      <p className="friendsName">{conversationProps.name}</p>
+      <div className="flex flex-col">
+        <p className="friendsName">{conversationProps.name}</p>
+        <p className="text-xs font-thin">{"tmp message hi"}</p>
+      </div>
     </li>
   );
 };
@@ -92,6 +95,7 @@ export const ConversationList = ({
                 name={conv.name}
                 profilePic={conv.profilePic}
                 type={conv.type}
+                title="title"
                 createdAt={conv.createdAt}
                 channelId={conv.channelId}
                 lastMessage={conv.lastMessage}

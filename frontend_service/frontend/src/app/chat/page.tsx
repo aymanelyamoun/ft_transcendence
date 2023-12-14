@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Conversation, Prisma, User } from "@prisma/client";
 // import FriendList from './chat/components/FriendList'
 import FriendList from "./components/FriendList";
 import ChatSection from "./components/ChatSection";
@@ -19,6 +18,8 @@ import ConversationList, {
   ChatToggel,
   Conversations,
 } from "./components/ConversationList";
+import { ConversationInfo } from "./components/conversationInfo";
+// import { CONVERSATION_TYP } from "../../../../../backend_service/backend/types/chatTypes";
 
 // import Message from './Message'
 
@@ -163,13 +164,12 @@ export default function Home() {
   return (
     <main className="main flex justify-center items-center h-full w-full ">
       <div className="h-full basis-1/4 flex">
-        <Conversations>
-          {/* <ConversationList /> */}
-        </Conversations>
+        <Conversations>{/* <ConversationList /> */}</Conversations>
       </div>
       <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
         <ChatSection />
-        <ProfileInfos />
+        {/* <ProfileInfos /> */}
+        <ConversationInfo type="DIRECT"></ConversationInfo>
       </div>
     </main>
   );

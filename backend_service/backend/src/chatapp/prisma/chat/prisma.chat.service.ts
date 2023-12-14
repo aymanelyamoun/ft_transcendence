@@ -575,14 +575,15 @@ export class PrismaChatService{
           const conversationIthem: ConversationIthemProps[] = conversations.map((conversation) => {
             const friend = conversation.users[0].id === userData.userId ? conversation.users[1] : conversation.users[0];
             return {
-              id: conversation.id,
-              type: conversation.type,
-              createdAt: conversation.createdAt.toISOString(), // Convert Date to string
-              channelId: conversation.channelId,
-              lastMessage: conversation.lastMessage, // Add the 'lastMessage' property
-              profilePic: friend.profilePic,
-              name: friend.username,
-            };
+              id:conversation.id,
+              type:conversation.type,
+              createdAt:conversation.createdAt.toISOString(),
+              channelId:conversation.channelId,
+              lastMessage:conversation.lastMessage,
+              profilePic:friend.profilePic,
+              name:friend.username,
+              title:friend.title,
+            }
           });
           return conversationIthem;
         }
@@ -609,6 +610,7 @@ export class PrismaChatService{
               lastMessage:conversation.lastMessage,
               profilePic:conversation.channel.channelPic,
               name:conversation.channel.channelName,
+              title:"",
             }
           });
           return conversationIthem;

@@ -14,7 +14,7 @@ import { Prisma, $Enums } from "@prisma/client";
 //     mutedId: string;
 //   }
 
-export interface Conversation{
+export interface ConversationIthem{
   id: string;
   type: $Enums.CONVERSATION_TYPE;
   // createdAt: Date;

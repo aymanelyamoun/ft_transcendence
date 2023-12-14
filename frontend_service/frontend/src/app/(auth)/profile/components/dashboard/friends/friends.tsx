@@ -13,6 +13,7 @@ interface Friend {
   id: string;
   name: string;
   profilePic: string;
+  title? : string;
 }
 
 interface FriendRequest
@@ -100,8 +101,9 @@ const Friends: React.FC<FriendsProps> = ({ friends, friendsReq, acceptRequest, r
     {showInfo && selectedFriend && (
         <FriendInfo
           id={selectedFriend.id}
-          name={selectedFriend.name}
-          picture={selectedFriend.profilePic}
+          username={selectedFriend.name}
+          profilePic={selectedFriend.profilePic}
+          title={selectedFriend.title}
           ref={infoRef}
         />)}
       </>

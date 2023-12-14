@@ -22,4 +22,5 @@ export interface ConversationIthem{
   lastMessage: string;
   profilePic: string;
   name:string;
+  title:string;
 }

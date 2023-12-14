@@ -582,6 +582,7 @@ export class PrismaChatService{
               lastMessage:conversation.lastMessage,
               profilePic:friend.profilePic,
               name:friend.username,
+              title:friend.title,
             }
           });
           return conversations;
@@ -609,6 +610,7 @@ export class PrismaChatService{
               lastMessage:conversation.lastMessage,
               profilePic:conversation.channel.channelPic,
               name:conversation.channel.channelName,
+              title:"",
             }
           });
           return conversations;

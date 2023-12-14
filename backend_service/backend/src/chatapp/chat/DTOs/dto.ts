@@ -35,6 +35,10 @@ export class CreateChannelDto{
     @IsNotEmpty()
     @IsString()
     channelName: string;
+
+    @IsNotEmpty()
+    @IsString()
+    channelPic:string;
     
     @IsNotEmpty()
     @IsString()

@@ -81,6 +81,7 @@ export class PrismaChatService{
           const channel = await this.prisma.channel.create({
             data: {
               channelName: data.channelName,
+              channelPic: data.channelPic,
               creator: {connect:{id:data.creator}},
               channelType: data.type,
               // later on use hashing service
@@ -593,11 +594,31 @@ export class PrismaChatService{
               type: CONVERSATION_TYPE.CHANNEL_CHAT,
               
             },
-            include:{users:true}
+            include:{
+              users:true,
+              channel:true,
+            }
             }
           ); 
-
+          const conversationIthem:ConversationIthem[] = conversations.map((conversation)=>{
+            return {
+              id:conversation.id,
+              type:conversation.type,
+              createdAt:conversation.createdAt,
+              channelId:conversation.channelId,
+              lastMessage:conversation.lastMessage,
+              profilePic:conversation.channel.channelPic,
+              name:conversation.channel.channelName,
+            }
+          });
           return conversations;
+        }
+
+        async getConversationIthemList(userData:user){
+          const DMs = await this.getUserConversationsDirect(userData);
+          const channelChats = await this.getUserConversationsChannelChat(userData);
+
+          return [...DMs, ...channelChats];
         }
 
         async getConversationMessages(conversationId:string, userData:user){

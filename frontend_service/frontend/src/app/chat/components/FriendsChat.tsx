@@ -12,7 +12,7 @@ import msgs2 from '../../../../public/msgs2_icons.png'
 // import msg2 from '../../../../public/msg2_icon.png'
 // import msgs2 from '../../../../public/msgs2_icons.png'
 import { useState } from 'react';
-import { Friend, friendsData} from '../page';
+// import { Friend, friendsData} from '../page';
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 
 

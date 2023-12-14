@@ -564,6 +564,7 @@ export class PrismaChatService{
               users:{some:{id:userData.userId}},
               type: CONVERSATION_TYPE.DIRECT,
             },
+            include:{users:true}
             }
           ); 
           return conversations;
@@ -572,9 +573,11 @@ export class PrismaChatService{
         async getUserConversationsChannelChat(userData:user){
           const conversations = await this.prisma.conversation.findMany({
             where:{
-              users:{some:{id:userData.userId}},
+              users:{some:{id:userData.userId},},
               type: CONVERSATION_TYPE.CHANNEL_CHAT,
+              
             },
+            include:{users:true}
             }
           ); 
           return conversations;

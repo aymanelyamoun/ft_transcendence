@@ -62,7 +62,7 @@ model Message{
 
   createdAt DateTime @default(now())
 
-  conversation Conversation @relation(fields: [conversationId], references: [id])
+  conversation Conversation @relation("conversation", fields: [conversationId], references: [id])
   conversationId String
 }
 
@@ -73,7 +73,8 @@ model Conversation{
   members Member[]
   users User[]
   createdAt DateTime @default(now())
-  messages Message[]
+  messages Message[]@relation("conversation")
+  lastMessage String?
 
   channel Channel? @relation(fields: [channelId], references: [id])
   channelId String? @unique

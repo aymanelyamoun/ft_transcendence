@@ -49,7 +49,7 @@ const SearchBar = ({
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const filteredFriends = rowData.filter((conv) => {
-      return conv.id.toLowerCase().startsWith(e.target.value.toLowerCase());
+      return conv.name.toLowerCase().startsWith(e.target.value.toLowerCase());
     });
     
     setSearchText(e.target.value);

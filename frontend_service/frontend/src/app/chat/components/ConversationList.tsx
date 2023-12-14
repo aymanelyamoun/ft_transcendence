@@ -1,5 +1,5 @@
 import React, { use, useContext } from "react";
-import { Conversation } from "../../../../../../backend_service/backend/types/chatTypes";
+import { ConversationIthemProps } from "../../../../../../backend_service/backend/types/chatTypes";
 import { useState, useEffect, createContext } from "react";
 import Image from "next/image";
 import msg from "../../../../public/msg_icon.png";
@@ -16,7 +16,7 @@ import SearchBar from "./SearchBar";
 
 export const IsChannelContext = createContext(false);
 
-const ConversationIthem = (props: Conversation) => {
+const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
   // const { id, name, profilePic, type, createdAt, channelId, lastMessage } =
   props;
@@ -24,39 +24,20 @@ const ConversationIthem = (props: Conversation) => {
   const isChannel = useContext(IsChannelContext);
   // console.log("conversationp:", conversationProps);
   return (
-    <>
+    <li
+      // key={props.id}
+      className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
+    >
+      <Image
+        className=" w-[49px] h-[49px] rounded-full"
+        src={avatar}
+        // src={conversationProps.profilePic}
+        // alt={conversationProps.name}
+        alt={conversationProps.name}
+      />
+      <p className="friendsName">{conversationProps.name}</p>
+    </li>
     
-    { !isChannel ? (
-      <li
-        // key={props.id}
-        className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
-        >
-        <Image
-          className=" w-[49px] h-[49px] rounded-full"
-          src={avatar}
-          // src={conversationProps.profilePic}
-          // alt={conversationProps.name}
-          alt={conversationProps.id}
-          />
-        <p className="friendsName">{conversationProps.id}</p>
-      </li> ): (
-        <li
-          // key={props.id}
-        className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
-      >
-        <Image
-          className=" w-[49px] h-[49px] rounded-full"
-          src={avatar}
-          // src={conversationProps.profilePic}
-          // alt={conversationProps.name}
-          alt={conversationProps.createdAt}
-        />
-        <p className="friendsName">{conversationProps.createdAt}</p>
-        </li>)
-    }
-
-
-    </>
   );
 };
 
@@ -66,8 +47,10 @@ export const ConversationList = ({
   setConversation,
 }: {
   // rowData: Conversation[];
-  conversation: Conversation[];
-  setConversation: React.Dispatch<React.SetStateAction<Conversation[]>>;
+  conversation: ConversationIthemProps[];
+  setConversation: React.Dispatch<
+    React.SetStateAction<ConversationIthemProps[]>
+  >;
 }) => {
   // const [conversation, setConversation] = useState<Conversation[]>([]);
 
@@ -102,7 +85,7 @@ export const ConversationList = ({
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
         {conversation &&
           conversation.map((conv) => {
-            console.log(conv);
+            // console.log(conv);
             return (
               <ConversationIthem
                 key={conv.id}
@@ -123,12 +106,14 @@ export const ConversationList = ({
 
 export const Conversations = ({ children }: { children: React.ReactNode }) => {
   const [isChannel, setIsChannel] = useState<boolean>(false);
-  const [conversation, setConversation] = useState<Conversation[]>([]);
+  const [conversation, setConversation] = useState<ConversationIthemProps[]>(
+    []
+  );
 
-  const userId = "0e1d8b57-aef4-45e6-9cf8-b834b87d0788";
+  const userId = "0c2f7c7b-b1a7-4543-b3d0-51da9654f640";
   const isAdmin = "false";
 
-  const [rowData, setRowData] = useState<Conversation[]>([]);
+  const [rowData, setRowData] = useState<ConversationIthemProps[]>([]);
 
   useEffect(() => {
     const fetchFun = async () => {
@@ -154,7 +139,7 @@ export const Conversations = ({ children }: { children: React.ReactNode }) => {
     fetchFun();
   }, []);
 
-  console.log(isChannel);
+  // console.log(isChannel);
   return (
     <div className="friendList w-full mr-12 relative">
       <IsChannelContext.Provider value={isChannel}>

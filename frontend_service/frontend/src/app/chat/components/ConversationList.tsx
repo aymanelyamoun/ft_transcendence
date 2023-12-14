@@ -37,7 +37,6 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       />
       <p className="friendsName">{conversationProps.name}</p>
     </li>
-    
   );
 };
 
@@ -110,7 +109,7 @@ export const Conversations = ({ children }: { children: React.ReactNode }) => {
     []
   );
 
-  const userId = "0c2f7c7b-b1a7-4543-b3d0-51da9654f640";
+  const userId = "1106e273-cd14-483c-8b3f-ec8076e413ad";
   const isAdmin = "false";
 
   const [rowData, setRowData] = useState<ConversationIthemProps[]>([]);
@@ -118,7 +117,7 @@ export const Conversations = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchFun = async () => {
       const res = await fetch(
-        `http://localhost:3001/api/channels/getUserConversationsDirect?userId=${userId}&isAdmin=${isAdmin}`,
+        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userId}&isAdmin=${isAdmin}`,
         {
           method: "GET",
           credentials: "include",

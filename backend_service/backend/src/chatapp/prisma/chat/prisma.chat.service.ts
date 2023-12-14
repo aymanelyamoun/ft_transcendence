@@ -600,18 +600,18 @@ export class PrismaChatService{
             }
             }
           ); 
-          const conversationIthem:ConversationIthem[] = conversations.map((conversation)=>{
+          const conversationIthem:ConversationIthemProps[] = conversations.map((conversation)=>{
             return {
               id:conversation.id,
               type:conversation.type,
-              createdAt:conversation.createdAt,
+              createdAt:conversation.createdAt.toISOString(),
               channelId:conversation.channelId,
               lastMessage:conversation.lastMessage,
               profilePic:conversation.channel.channelPic,
               name:conversation.channel.channelName,
             }
           });
-          return conversations;
+          return conversationIthem;
         }
 
         async getConversationIthemList(userData:user){

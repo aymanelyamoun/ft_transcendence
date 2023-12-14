@@ -5,7 +5,7 @@ import FriendItem from './FriendItem';
 interface Friend {
     id: string;
     name: string;
-    picture: string;
+    profilePic: string;
   }
   
   interface FriendsProps {
@@ -22,7 +22,7 @@ const FriendList: React.FC<FriendsProps> = ({ friends , onFriendItemClick}) => {
             key={friend.id}
             id={friend.id}
             name={friend.name}
-            picture={friend.picture}
+            picture={friend.profilePic}
             onFriendItemClick={() => onFriendItemClick(friend.id)}
         />
         ))}

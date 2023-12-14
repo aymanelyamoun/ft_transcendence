@@ -11,7 +11,7 @@ export class RequestService {
 
     async handleSendRequest(userId: string, recieverId: string, message: string, typ: NOTIF_TYPE) {
         try {
-            const notification = await this.prisma.notification.create({
+         const notif =  await this.prisma.notification.create({
                 data: {
                     type: typ,
                     title: 'login',
@@ -20,10 +20,13 @@ export class RequestService {
                     senderId : userId,
                 },
             });
-            return notification
+            return { message: 'request sended successfully' };
+            // console.log('notification sent');
+            // return notification
         } catch (error)
         {
-            return { error: 'Internal server error' };
+            throw new NotFoundException(error);
+            // return { error: 'Internal server error' };
         }
     }
 
@@ -58,8 +61,7 @@ export class RequestService {
             });
         } catch (error)
         {
-            console.error(error);
-            return { error: 'Internal server error' };
+            throw new NotFoundException(error);
         }
   }
 
@@ -71,7 +73,7 @@ export class RequestService {
             });
         } catch (error)
         {
-            return { error: 'Internal server error' };
+            throw new NotFoundException(error);
         }
     }
 }

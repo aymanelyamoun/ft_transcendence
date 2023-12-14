@@ -2,7 +2,8 @@ import React from 'react'
 import Image from 'next/image'
 import { useState, ChangeEvent, useRef, useEffect } from 'react';
 import { Friend, friendsData} from '../page';
-import searchBarInAddChannel from "../../../public/iconSearchInAddChannel.png";
+// import searchBarInAddChannel from "../../../public/iconSearchInAddChannel.png";
+import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 // import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 

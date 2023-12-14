@@ -1,4 +1,4 @@
-import { Body, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException, Req, UnauthorizedException } from '@nestjs/common';
+import { Body, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException, Req, Res, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/user.dto';
 import { ConfirmUserDto } from './dto/confirm.dto';
@@ -13,6 +13,7 @@ import { UpdatePassDto } from './dto/updatepass.dto';
 
 @Injectable()
 export class UserService {
+    context: any;
     constructor (private readonly prisma: PrismaService){}
     async create(dto: CreateUserDto)
     {
@@ -75,17 +76,29 @@ export class UserService {
             },
         });
     }
+    // // "                where: {
+    //     username: {
+    //         startsWith: username,
+    //         mode: 'insensitive',
+    //     },
+    //     NOT : {id: userloged},
+    // }"
 
-    async allUsers()
+    async allUsers(userloged: string)
     {
         const users = await this.prisma.user.findMany({
             select: {
                 id: true,
                 username: true,
+                profilePic: true,
+            },
+            where: {
+                id: { not: userloged },
             },
         });
         return users;
     }
+
 
     async confirm(email: string, dto: ConfirmUserDto)
     {
@@ -253,5 +266,25 @@ export class UserService {
         if (!newupdat)
             throw new UnauthorizedException("the pic profile can't modify");
         return {message: 'Profile image updated successfully', newupdat}
+    }
+
+
+    async getNotifications(id: string)
+    {
+        try {   
+            const notifications = await this.prisma.notification.findMany({
+                where: { userId: id,
+                    type: "friendReq" 
+                },
+            });
+            // const user = await this.findById(not);
+            // if (!user)
+            //     throw new UnauthorizedException('User not found');
+
+            return notifications;
+        } catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
     }
 }

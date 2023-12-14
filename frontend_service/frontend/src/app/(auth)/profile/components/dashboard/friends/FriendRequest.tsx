@@ -2,10 +2,12 @@ import React from 'react';
 import styles from './friends.module.css';
 import FriendRequestItem from './FriendRequestItem';
 
-interface FriendRequest {
+interface FriendRequest
+{
   id: string;
-  name: string;
-  picture: string;
+  title: string;
+  // profilePic: string;
+  discription: string;
 }
 
 interface FriendRequestProps {
@@ -22,8 +24,9 @@ const FriendRequest: React.FC<FriendRequestProps> = ({ friendRequests, acceptReq
           <FriendRequestItem
             key={friendRequest.id}
             id={friendRequest.id}
-            name={friendRequest.name}
-            picture={friendRequest.picture}
+            title={friendRequest.title}
+            discription={friendRequest.discription}
+            // picture={friendRequest.picture}
             acceptRequest={acceptRequest}
             refuseRequest={refuseRequest}
           />

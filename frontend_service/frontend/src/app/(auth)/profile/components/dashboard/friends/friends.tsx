@@ -12,19 +12,21 @@ import FriendInfo from '../FriendInfo/FriendInfo';
 interface Friend {
   id: string;
   name: string;
-  picture: string;
+  profilePic: string;
 }
 
-interface FriendRequest {
+interface FriendRequest
+{
   id: string;
-  name: string;
-  picture: string;
+  title: string;
+  // profilePic: string;
+  discription: string;
 }
 
 interface FriendsProps {
   friends: Friend[];
   friendsReq: FriendRequest[];
-  onFriendItemClick: (id: string) => void;
+  // onFriendItemClick: (id: string) => void;
   acceptRequest: (id: string) => void;
   refuseRequest: (id: string) => void;
 }
@@ -99,7 +101,7 @@ const Friends: React.FC<FriendsProps> = ({ friends, friendsReq, acceptRequest, r
         <FriendInfo
           id={selectedFriend.id}
           name={selectedFriend.name}
-          picture={selectedFriend.picture}
+          picture={selectedFriend.profilePic}
           ref={infoRef}
         />)}
       </>

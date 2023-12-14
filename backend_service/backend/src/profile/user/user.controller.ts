@@ -52,8 +52,9 @@ export class UserController {
   @UseGuards(JwtGuard)
   async all(@Req() req: Request, @Res() res: Response)
   {
-    console.log("heeeeeeere");
-    const users = await this.userService.allUsers();
+    const user = req['user'] as User;
+    const userid = user.id;
+    const users = await this.userService.allUsers(userid);
     res.status(200).send(users);
     // return users
   }
@@ -106,6 +107,15 @@ export class UserController {
   async UpdateImage(@Res() res: Response, @Req() req: Request, @Body() body)
   {
     const data = await this.userService.updateimage(req, body);
+    return res.status(200).send(data);
+  }
+
+  @Get('notifications')
+  @UseGuards(JwtGuard)
+  async getNotifications(@Req() req: Request, @Res() res: Response)
+  {
+    const user = req['user'] as User;
+    const data = await this.userService.getNotifications(user.id);
     return res.status(200).send(data);
   }
 }

@@ -17,11 +17,12 @@ export class RequestController {
     //http://localhost:3001/api/request/send/:senderId
     @Post('send/:recieverId')
     @UseGuards(JwtGuard)
-    async sendRequest(@Req() req: Request, @Param('recieverId') recieverid: string)
+    async sendRequest(@Req() req: Request, @Param('recieverId') recieverid: string,  @Res() res: Response)
     {
-      console.log('heeeere');
+      console.log(recieverid);
       const user = req['user'] as User
-      return  this.requestService.handleSendRequest(user.id, recieverid, "login sent you friend request", NOTIF_TYPE.friendReq);
+      const Notif = await this.requestService.handleSendRequest(user.id, recieverid, "login sent you friend request", NOTIF_TYPE.friendReq);
+      return res.status(200).send(Notif);
     }
 
 
@@ -36,10 +37,13 @@ export class RequestController {
 
 
     //http://localhost:3001/api/request/Refuse/:notificationid
-    @Post('Refuse/:notificationid')
+    @Post('refuse/:notificationid')
     @UseGuards(JwtGuard)
-    async refuse(@Param('notificationid') notificationId: number)
+    async refuse(@Param('notificationid') notificationId: number, @Res() res: Response)
     {
-       return this.requestService.handleRefuseRequest(notificationId)
+       const result = this.requestService.handleRefuseRequest(notificationId);
+       return res.status(200).send(result);
     }
+
+
 }

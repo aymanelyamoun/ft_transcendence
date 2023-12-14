@@ -136,6 +136,7 @@ enum LOG_TYPE{
 model Channel{
   id String @id() @default(uuid())
   channelName String
+  channelPic String
   creator User @relation("channelCreator",fields: [creatorId], references: [id])
   creatorId String
   channelType String @default("public")

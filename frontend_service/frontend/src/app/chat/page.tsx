@@ -18,7 +18,7 @@ import ConversationList, {
   ChatToggel,
   Conversations,
 } from "./components/ConversationList";
-import { ConversationInfo } from "./components/conversationInfo";
+import { ConversationInfo } from "./components/ConversationInfo";
 // import { CONVERSATION_TYP } from "../../../../../backend_service/backend/types/chatTypes";
 
 // import Message from './Message'

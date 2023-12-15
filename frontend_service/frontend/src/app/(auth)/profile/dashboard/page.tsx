@@ -42,6 +42,19 @@ const SearchDiv = styled.div`
   left: 5vw;
 `;
 
+const AppGlass = styled.div`
+  display: grid;
+  height: 90%;
+  width: 90%;
+  border-radius: 2rem;
+  overflow: hidden;
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-template-columns: 2rem 30rem auto 40rem 2rem;
+  grid-template-rows: repeat(3, 1fr);
+  z-index: auto;
+`;
+
 
 function App() {
 
@@ -211,7 +224,7 @@ function App() {
         <SearchDiv >
           <SearchHeader onSearch={() => {}}  onClose={() => {}} searchUsers={SearchUsers} />
         </SearchDiv>
-        <div className="AppGlass">
+        <AppGlass>
           <Sidebar sidebar={SidebarInfo} />
           <Skins />
           <Achievement />
@@ -223,7 +236,7 @@ function App() {
           refuseRequest={refuseFriendRequest}
           // onFriendItemClick={handleFriendItemClick} 
           />
-        </div>
+        </AppGlass>
       </div>
     </>
   );

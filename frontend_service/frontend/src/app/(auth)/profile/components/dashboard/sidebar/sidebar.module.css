@@ -99,7 +99,7 @@
     justify-content: center;
 } */
 
-@media (min-width: 1300px) and (max-width: 1900px) {
+/* @media (min-width: 1300px) and (max-width: 1900px) {
   .Sidebar {
     grid-row-start: 1;
     grid-row-end: 3;
@@ -160,7 +160,7 @@
 }
 
 /* Small screen size: max-width 767px */
-@media (max-width: 1300px) {
+/* @media (max-width: 1300px) {
   .Sidebar {
     grid-row-start: 1;
     grid-row-end: 2;
@@ -218,4 +218,4 @@
   .wallet span {
     font-size: 14px;
   }
-}
+} */

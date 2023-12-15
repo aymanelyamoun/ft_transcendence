@@ -5,11 +5,76 @@ import styles from './Settings.module.css'
 import { UilSetting } from '@iconscout/react-unicons';
 import LogOut from '../LogOut/LogOut';
 import EditProfile from '../EditProfile/EditProfile';
+import styled from 'styled-components';
 
 interface SettingsProps {
     isOpen?: boolean;
-    onClick?: () => void;
+    onClick: () => void;
 }
+
+const SettingsContainer = styled.div`
+    color: aliceblue;
+    position: relative;
+    height: 2vh;
+    width: 13vw;
+    top: 18vh;
+    left: 0vw;
+    margin: 1.56rem;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+        transition: all 0.3s ease-in-out;
+        background: rgba(5, 10, 39, 0.55);
+    }
+    &:active {
+        transition: all 0.3s ease-in-out;
+        background: rgba(5, 10, 39, 0.55);
+    }
+`;
+
+const OpenBarContainer = styled.div`
+  position: relative;
+  top: 0vh;
+  left: 0vw;
+  gap: 0.9rem;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: height 0.2s ease-in-out;
+  overflow: hidden;
+
+  &.open {
+    height: 10vh;
+    transition: height 0.2s ease-in-out;
+  }
+`;
+
+const OpenedBar = styled.div`
+    position: absolute;
+    bottom: 0.1vh;
+    left: 0;
+    width: 13vw;
+    height: 13.5rem;
+    background: rgba(5, 10, 39, 0.55);
+    transition: height 0.3s ease-in-out; /* Smooth transition */
+    border-radius: 1rem;
+`;
+
+const SettingSpan = styled.span`
+    color: #FEFFFF;
+    font-family: Poppins;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+`;
 
 const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
     const [open, setOpen] = React.useState(false);
@@ -21,28 +86,49 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
         // }
     };
 
+    React.useEffect(() => {
+        if (isOpen) {
+            setOpen(true);
+        }
+    }, [isOpen]);
+
     return (
-        <div
-          className={styles.settings}
+        <SettingsContainer
           onClick={handleClick}
         >
           {open && (
-            <div className={styles.OpenedBar}>
+            <OpenedBar>
                 <div className={styles.otherBar}>
                     <EditProfile />
                 </div>
                 <div className={styles.otherBar}>
                     <LogOut />
                 </div>
-            </div>
+            </OpenedBar>
           )}
           {/* <div className={styles['settings-container']}> */}
-           <div className={`${styles['openBar-container']} ${open ? 'open' : ''}`}>
+          <OpenBarContainer isOpen={open}>
             <UilSetting />
-            <span className={styles['setting-span']}> Settings</span>
-          </div>
-          </div>
+            <SettingSpan> Settings</SettingSpan>
+          </OpenBarContainer>
+          </SettingsContainer>
       );
 };
 
 export default Settings;
+
+// {open && (
+//     <OpenBarContent>
+//         <div className={styles.otherBar}>
+//             <EditProfile />
+//         </div>
+//         <div className={styles.otherBar}>
+//             <LogOut />
+//         </div>
+//     </OpenBarContent>
+//   )}
+//   {/* <div className={styles['settings-container']}> */}
+//   <OpenBarContainer isOpen={open}>
+//     <UilSetting />
+//     <span className={styles['setting-span']}> Settings</span>
+//   </OpenBarContainer>

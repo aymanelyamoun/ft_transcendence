@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { get } from "http";
 import { JwtGuard } from "src/Auth/auth_google/utils/jwt.guard";
 import { RequestService } from "./request.service";
@@ -42,7 +42,7 @@ export class RequestController {
        return res.status(200).send(result);
     }
 
-    @Post('block/:userIdB')
+    @Delete('block/:userIdB')
     @UseGuards(JwtGuard)
     async blockUser(@Req() req: Request, @Param('userIdB') userIdB: string,  @Res() res: Response)
     {

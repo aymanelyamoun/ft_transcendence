@@ -104,10 +104,19 @@ async check(@Req() req: Request, @Res() res: Response)
     res.status(200).send(user);
   } catch (error)
   {
-        res.status(500).json({ message: 'Error finding user' });
+    res.status(500).json({ message: 'Error finding user' });
   }
 }
-  
+
+@Get('logout')
+@UseGuards(JwtGuard)
+async logout(@Req() req: Request, @Res() res: Response)
+{
+  res.cookie('access_token', '', {expires: new Date()})
+  res.clearCookie('access_token');
+  res.status(200).json({ message: 'Logout successful' });
+}
+
   @Get('2FA/generate')
   @UseGuards(JwtGuard)
   async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
@@ -229,12 +238,4 @@ async check(@Req() req: Request, @Res() res: Response)
       }
     }
 
-    @Get('logout')
-    @UseGuards(JwtGuard)
-    async logout(@Req() req: Request, @Res() res: Response)
-    {
-      res.cookie('access_token', '', {expires: new Date()})
-      res.clearCookie('access_token');
-      res.status(200).json({ message: 'Logout successful' });
-    }
 }

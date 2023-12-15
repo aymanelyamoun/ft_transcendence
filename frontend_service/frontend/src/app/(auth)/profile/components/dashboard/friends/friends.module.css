@@ -171,7 +171,7 @@ div span.friends-title {
     width: 30px;
     height: 30px;
     position: relative;
-    right: 1rem;
+    margin-right: auto;
     top: 1rem;
     background-repeat: no-repeat;
     background-size: cover;
@@ -191,7 +191,7 @@ div span.friends-title {
     width: 30px;
     height: 30px;
     position: relative;
-    right: 1rem;
+    margin-right: auto;
     top: 1rem;
     background-repeat: no-repeat;
     background-size: cover;
@@ -203,6 +203,20 @@ div span.friends-title {
 {
     width: 30px;
     height: 30px;
+}
+
+.friendReqSent
+{
+    color: #FFF;
+    font-family: "Poppins", sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: normal;
+    text-transform: lowercase;
+    position: relative;
+    top: 1vh;
+    right: 0.8vw;
 }
 
 @media (min-width: 1300px) and (max-width: 1900px)

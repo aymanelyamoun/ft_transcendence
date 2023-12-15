@@ -95,6 +95,11 @@ export class UserService {
                         id: userloged
                     }
                 },
+                blockedByUsers: {
+                    none: {
+                        id: userloged
+                    }
+                },
             },
         });
         return users;

@@ -5,6 +5,7 @@ import { MdGroupAdd } from "react-icons/md";
 import { IoPersonRemoveSharp } from "react-icons/io5";
 import { IoGameController } from "react-icons/io5";
 import { BsPersonFillSlash } from "react-icons/bs";
+import { Backend_URL } from '@/lib/Constants';
 
 interface FriendInfoProps {
   id: string;
@@ -105,17 +106,58 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
   useEffect(() => {
     console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
 
-    // Clean-up function (optional)
     return () => {
       console.log("FriendInfo Unmounted");
     };
   }, [props.id, props.username, props.profilePic]);
 
+  const SendDeclineReq = async (id: string) => {
+    try {
+      const response = await fetch(`${Backend_URL}user/remove/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if(response.ok){
+        alert("the user has been removed");
+      }else {
+        alert("the user has not been removed");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const SendBlockUser = async (id: string) => {
+    try {
+      const response = await fetch(`${Backend_URL}request/block/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if(response.ok){
+        alert("the user has been blocked");
+      }else {
+        alert("the user has not been blocked");
+      }
+    } catch (error) {
+      console.log(error);
+    };
+  };
+
   return (
   <div className=" addChannelOverlay flex justify-center items-center ">
     <div ref={ref} className={styles['info-container']}>
       <div className={styles['info-picture']}>
-        <img src={props.profilePic} alt={props.username} className={styles['info-picture']}/>
+        <img src={props.profilePic} alt="" className={styles['info-picture']}/>
       </div>
       <InfoName>
         <span >Snouae</span>
@@ -127,10 +169,10 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
       <GameButton>
         <IoGameController />
       </GameButton>
-      <RemoveFriendButton>
+      <RemoveFriendButton onClick={() => SendDeclineReq(props.id)}>
         <IoPersonRemoveSharp />
       </RemoveFriendButton>
-      <BlockButton>
+      <BlockButton onClick={() => SendBlockUser(props.id)}>
         <BsPersonFillSlash />
       </BlockButton>
       </ButtonContainer>

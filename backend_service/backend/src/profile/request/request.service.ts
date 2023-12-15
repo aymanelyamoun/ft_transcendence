@@ -126,7 +126,7 @@ export class RequestService {
                 });
                 await prisma.user.update({
                     where : {id : userIdB},
-                    data:{blockedByUsers:{connect : {id : userId}}}
+                    data:{blockedUsers:{connect : {id : userId}}}
                 })
             })
         }

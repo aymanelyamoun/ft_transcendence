@@ -6,6 +6,8 @@ import { UilSetting } from '@iconscout/react-unicons';
 import LogOut from '../LogOut/LogOut';
 import EditProfile from '../EditProfile/EditProfile';
 import styled from 'styled-components';
+import { Backend_URL } from '@/lib/Constants';
+import { useRouter } from "next/navigation";
 
 interface SettingsProps {
     isOpen?: boolean;
@@ -77,6 +79,7 @@ const SettingSpan = styled.span`
 `;
 
 const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
+    const router = useRouter();
     const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
@@ -92,6 +95,27 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
         }
     }, [isOpen]);
 
+    const LogOutReq = async () => {
+        try {
+            const response = await fetch(`${Backend_URL}auth/logout`, {
+                method: "GET",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                },
+            });
+            if(response.ok){
+                router.push("/");
+            }else {
+               alert("the logout has not been sent");
+              }
+        } catch (error) {
+            console.log(error);
+        };
+    }
+
     return (
         <SettingsContainer
           onClick={handleClick}
@@ -101,7 +125,7 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
                 <div className={styles.otherBar}>
                     <EditProfile />
                 </div>
-                <div className={styles.otherBar}>
+                <div className={styles.otherBar} onClick={ () => LogOutReq()}>
                     <LogOut />
                 </div>
             </OpenedBar>

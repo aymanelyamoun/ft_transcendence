@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { MdGroupAdd } from "react-icons/md";
+import { IoPersonRemoveSharp } from "react-icons/io5";
+import { IoGameController } from "react-icons/io5";
+import { BsPersonFillSlash } from "react-icons/bs";
 
 interface FriendInfoProps {
   id: string;
@@ -17,25 +20,85 @@ const InfoName = styled.div`
   margin-left: 1rem;
   color: aliceblue;
   position: relative;
-  top: initial;
   right: 0.5rem;
-  margin-top: -10.5rem;
+  bottom: 6vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const AddGroupButton = styled.button`
+  border-radius: 0.5rem;
   position: relative;
-  // left: 13vw;
-  margin-left: auto;
-  margin-right: 1vw;
-  top: 0vh;
+  width: 3vw;
+  height: 3vh;
+  cursor: pointer;
+  align-items: center;
+    background: rgba(154, 155, 211, 0.2);
   svg {
-      font-size: 1.5rem;
+      font-size: 2rem;
       color: aliceblue;
+      display: inline;
   }
 
+`;
+
+const RemoveFriendButton = styled.button`
+  border-radius: 0.5rem;
+  position: relative;
+  width: 3vw;
+  height: 3vh;
+  cursor: pointer;
+  align-items: center;
+  background: rgba(154, 155, 211, 0.2);
+  svg {
+      font-size: 1.7rem;
+      color: red;
+      display: inline;
+  }
+`;
+
+const ButtonContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    position: relative;
+    bottom: 11vh;
+`;
+
+const BlockButton = styled.button`
+  border-radius: 0.5rem;
+  position: relative;
+  width: 3vw;
+  height: 3vh;
+  cursor: pointer;
+  align-items: center;
+  background: rgba(154, 155, 211, 0.2);
+  svg {
+      font-size: 1.7rem;
+      color: red;
+      display: inline;
+  }
+`;
+
+const GameButton = styled.button`
+  border-radius: 0.5rem;
+  position: relative;
+  width: 3vw;
+  height: 3vh;
+  cursor: pointer;
+  align-items: center;
+  background: rgba(154, 155, 211, 0.2);
+  svg {
+      font-size: 1.7rem;
+      color: aliceblue;
+      display: inline;
+  }
 `;
 
 const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref) => {
@@ -57,9 +120,20 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
       <InfoName>
         <span >Snouae</span>
       </InfoName>
-      <AddGroupButton>
-        <MdGroupAdd />
-      </AddGroupButton>
+      <ButtonContainer>
+        <AddGroupButton>
+          <MdGroupAdd />
+        </AddGroupButton>
+      <GameButton>
+        <IoGameController />
+      </GameButton>
+      <RemoveFriendButton>
+        <IoPersonRemoveSharp />
+      </RemoveFriendButton>
+      <BlockButton>
+        <BsPersonFillSlash />
+      </BlockButton>
+      </ButtonContainer>
     </div>
   </div>
   );

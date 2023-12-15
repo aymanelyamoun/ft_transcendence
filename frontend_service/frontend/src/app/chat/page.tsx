@@ -18,7 +18,7 @@ import ConversationList, {
   ChatToggel,
   Conversations,
 } from "./components/ConversationList";
-import { ConversationInfo } from "./components/ConversationInfo";
+import { ChatPage, ConversationInfo } from "./components/ConversationInfo";
 // import { CONVERSATION_TYP } from "../../../../../backend_service/backend/types/chatTypes";
 
 // import Message from './Message'
@@ -162,15 +162,19 @@ export default function Home() {
   const [channelSearch, setChannelSearch] = useState<Channel[]>(channelsData);
 
   return (
-    <main className="main flex justify-center items-center h-full w-full ">
-      <div className="h-full basis-1/4 flex">
-        <Conversations>{/* <ConversationList /> */}</Conversations>
-      </div>
-      <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
-        <ChatSection />
-        {/* <ProfileInfos /> */}
-        <ConversationInfo type="h"></ConversationInfo>
-      </div>
-    </main>
+    <>
+      <ChatPage />
+      {/* <ChatPage /> */}
+    </>
+    // <main className="main flex justify-center items-center h-full w-full ">
+    //   <div className="h-full basis-1/4 flex">
+    //     <Conversations>{/* <ConversationList /> */}</Conversations>
+    //   </div>
+    //   <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
+    //     <ChatSection />
+    //     {/* <ProfileInfos /> */}
+    //     <ConversationInfo type="D"></ConversationInfo>
+    //   </div>
+    // </main>
   );
 }

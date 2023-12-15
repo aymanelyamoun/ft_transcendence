@@ -160,7 +160,7 @@ body {
   /* align-items: baseline; */
   /* margin-left: 9px; */
   flex-direction: column;
-  padding: 0px 40px 0px;
+  padding: 0px 40px 40px 40px;
   position: relative;
 }
 
@@ -371,6 +371,14 @@ body {
   border-radius: 50%;
 
   width: 54%;
+}
+.avatar-small {
+  /* display: block; */
+  /* margin: 4.5vh auto 60px; */
+
+  border-radius: 50%;
+
+  width: 100%;
 }
 
 .friendsPics {

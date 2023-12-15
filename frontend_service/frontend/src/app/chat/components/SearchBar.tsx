@@ -19,6 +19,7 @@ import { Conversation } from "../../../../../../backend_service/backend/types/ch
 // }
 
 // const SearchBar  = ({ friendSearch, setFriendSearch, channelSearch, setChannelSearch } : FriendListProps) => {
+
 const SearchBar = ({
   rowData,
   conversation,

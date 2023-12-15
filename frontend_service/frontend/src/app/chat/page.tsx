@@ -169,7 +169,7 @@ export default function Home() {
       <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
         <ChatSection />
         {/* <ProfileInfos /> */}
-        <ConversationInfo type="DIRECT"></ConversationInfo>
+        <ConversationInfo type="h"></ConversationInfo>
       </div>
     </main>
   );

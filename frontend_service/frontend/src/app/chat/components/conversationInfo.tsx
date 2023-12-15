@@ -1,6 +1,10 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
 import avatar from "../../../../public/garou-kid.jpeg";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import { MdGroupAdd } from "react-icons/md";
+import { IoGameController } from "react-icons/io5";
+import { FaRunning } from "react-icons/fa";
 // import { $Enums } from "@prisma/client";
 // import { CONVERSATION_TYPE } from "../../../../../../backend_service/backend/types/chatTypes";
 // import { CONVERSATION_TYP } from "../../../../../../backend_service/backend/types/chatTypes";
@@ -14,7 +18,36 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           title="title"
           imgUrl={avatar}
         >
-          <p className="">here go buttons</p>
+          <ButtonInfo width="10" hight="10">
+            <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10">
+              <CostumeButton
+                bgColor="bg-white-blue border-[#FEFFFF]"
+                color="white"
+                width="w-20"
+                hight="h-11"
+              >
+                <MdPersonAddAlt1 color="#1C2041" size={24} />
+              </CostumeButton>
+
+              <CostumeButton
+                bgColor="bg-white-blue border-[#FEFFFF]"
+                color="white"
+                width="w-20"
+                hight="h-11"
+              >
+                <MdGroupAdd color="#1C2041" size={24} />
+              </CostumeButton>
+
+              <CostumeButton
+                bgColor="bg-white-blue border-[#FEFFFF]"
+                color="white"
+                width="w-44"
+                hight="h-11"
+              >
+                <IoGameController color="#1C2041" size={24} />
+              </CostumeButton>
+            </div>
+          </ButtonInfo>
         </ConversationInfoWrapper>
       ) : (
         <ConversationInfoWrapper
@@ -22,7 +55,40 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           title=""
           imgUrl={avatar}
         >
-          <p>here go members</p>
+          <ButtonInfo width="10" hight="10">
+            {/* <div className="flex min-h-3b max-w-button-max flex-col justify-between items-center"> */}
+            <>
+              <CostumeButton
+                bgColor="bg-transparent border-[#FC2B5D]"
+                color="wthie"
+                width="w-4/5"
+                hight="h-11"
+              >
+                <p className="bg-red">exit</p>
+                <FaRunning color="red" />
+              </CostumeButton>
+
+              <CostumeButton
+                bgColor="bg-transparent border-[#FC2B5D]"
+                color="wthie"
+                width="w-4/5"
+                hight="h-11"
+              >
+                <p className="bg-red">exit</p>
+                <FaRunning color="red" />
+              </CostumeButton>
+
+              <CostumeButton
+                bgColor="bg-transparent border-[#FC2B5D]"
+                color="wthie"
+                width="w-4/5"
+                hight="h-11"
+              >
+                <p className="bg-red">exit</p>
+                <FaRunning color="red" />
+              </CostumeButton>
+            </>
+          </ButtonInfo>
         </ConversationInfoWrapper>
       )}
     </>
@@ -55,8 +121,40 @@ const ConversationInfoWrapper = ({
   );
 };
 
-export const ButtonInfo = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
+const CostumeButton = ({
+  bgColor,
+  color,
+  children,
+  width,
+  hight,
+}: {
+  bgColor: string;
+  color: string;
+  width: string;
+  hight: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <button
+      className={`flex items-center justify-around ${bgColor} text-[${color}] p-2 ${width} ${hight} rounded-sm border-2`}
+    >
+      {children}
+    </button>
+  );
+};
+
+export const ButtonInfo = ({
+  children,
+}: {
+  width: string;
+  hight: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className="flex min-h-3b max-w-button-max flex-col justify-between items-center">
+      {children}
+    </div>
+  );
 };
 
 const ProfileInfos = ({

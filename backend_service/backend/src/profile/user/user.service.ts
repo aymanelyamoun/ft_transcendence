@@ -17,7 +17,6 @@ export class UserService {
     constructor (private readonly prisma: PrismaService){}
     async create(dto: CreateUserDto)
     {
-        // console.log(dto);
         try {
             const user = await this.prisma.user.findUnique({
                 where: {
@@ -26,7 +25,6 @@ export class UserService {
             });
             if (user)
                  throw new ConflictException('email duplicated');
-                //throw new NotFoundException();
             const tmpUsername = dto.username
             const Username = await this.prisma.user.findUnique({ where: { username: dto.username } });
             if (Username)
@@ -76,13 +74,6 @@ export class UserService {
             },
         });
     }
-    // // "                where: {
-    //     username: {
-    //         startsWith: username,
-    //         mode: 'insensitive',
-    //     },
-    //     NOT : {id: userloged},
-    // }"
 
     async allUsers(userloged: string)
     {
@@ -93,17 +84,17 @@ export class UserService {
                 profilePic: true,
             },
             where: {
-                id: { not: userloged },
-                friends: {
+                id: { not: userloged },//his excludes user loged
+                friends: { //his excludes friends
+                    none: {
+                        id: userloged
+                    }
+                }, //this excludes blocked list
+                blockedUsers: {
                     none: {
                         id: userloged
                     }
                 },
-                notifications: {
-                    none: {
-                        userId: userloged
-                    }
-                }
             },
         });
         return users;
@@ -149,28 +140,39 @@ export class UserService {
 
     async removeFriend(userId: string, friendId: string) {
         try {
-            const user = await this.prisma.user.findUnique({ where: { id: userId } });
-            const friend = await this.prisma.user.findUnique({ where: { id: userId } });
-
-            if (!user || !friend)
-                throw new Error('User not found');
-            await this.prisma.user.update(
-                {
+          return  await this.prisma.$transaction(async (prisma) => {
+                const user = await prisma.user.findUnique({ where: { id: userId } });
+                const friend = await prisma.user.findUnique({ where: { id: friendId } });
+    
+                if (!user || !friend) {
+                    throw new Error('User or friend not found');
+                }
+                await prisma.user.update({
                     where: { id: userId },
                     data: {
                         friends: {
-                            disconnect:
-                            {
+                            disconnect: {
                                 id: friendId
                             }
                         }
                     }
-                })
-        } catch (error)
-        {
-            return {error: 'Internal server error'}
+                });
+                await prisma.user.update({
+                    where: { id: friendId },
+                    data: {
+                        friends: {
+                            disconnect: {
+                                id: userId
+                            }
+                        }
+                    }
+                });
+            });
+        } catch (error) {
+            return { error: 'Internal server error' };
         }
     }
+    
     
 
     async Searchuser(username: string, @Req() req: Request)
@@ -294,7 +296,6 @@ export class UserService {
                     }
                 }
             });
-            console.log(notifications);
             return notifications;
         } catch (error) {
             throw new UnauthorizedException('Internal server error');

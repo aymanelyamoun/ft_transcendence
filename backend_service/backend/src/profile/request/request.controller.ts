@@ -14,7 +14,6 @@ import { user } from "src/chatapp/chat/types/user";
 export class RequestController {
     constructor(private readonly requestService : RequestService) { }
     
-    //http://localhost:3001/api/request/send/:senderId
     @Post('send/:recieverId')
     @UseGuards(JwtGuard)
     async sendRequest(@Req() req: Request, @Param('recieverId') recieverid: string,  @Res() res: Response)
@@ -26,7 +25,6 @@ export class RequestController {
     }
 
 
-    //http://localhost:3001/api/request/accept/:notificationid
     @Post('accept/:notificationid')
     @UseGuards(JwtGuard)
     async acceptRequest(@Req() req: Request, @Res() res: Response, @Param('notificationid') notificationId: number)
@@ -36,7 +34,6 @@ export class RequestController {
     }
 
 
-    //http://localhost:3001/api/request/Refuse/:notificationid
     @Post('refuse/:notificationid')
     @UseGuards(JwtGuard)
     async refuse(@Param('notificationid') notificationId: number, @Res() res: Response)
@@ -45,5 +42,22 @@ export class RequestController {
        return res.status(200).send(result);
     }
 
+    @Post('block/:userIdB')
+    @UseGuards(JwtGuard)
+    async blockUser(@Req() req: Request, @Param('userIdB') userIdB: string,  @Res() res: Response)
+    {
+      const user = req['user'] as User
+      const result = this.requestService.BlockUser(user.id, userIdB);
+      return res.status(200).send(result);
+    }
 
+
+    @Post('deblock/:userIdB')
+    @UseGuards(JwtGuard)
+    async deblockUser(@Req() req: Request, @Param('userIdB') userIdB: string,  @Res() res: Response)
+    {
+      const user = req['user'] as User
+      const result = this.requestService.DeBlockUser(user.id, userIdB);
+      return res.status(200).send(result);
+    }
 }

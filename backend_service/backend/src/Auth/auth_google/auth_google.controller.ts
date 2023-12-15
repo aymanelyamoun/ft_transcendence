@@ -228,4 +228,13 @@ async check(@Req() req: Request, @Res() res: Response)
         res.status(500).json({ error: 'Internal Server Error' });
       }
     }
+
+    @Get('logout')
+    @UseGuards(JwtGuard)
+    async logout(@Req() req: Request, @Res() res: Response)
+    {
+      res.cookie('access_token', '', {expires: new Date()})
+      res.clearCookie('access_token');
+      res.status(200).json({ message: 'Logout successful' });
+    }
 }

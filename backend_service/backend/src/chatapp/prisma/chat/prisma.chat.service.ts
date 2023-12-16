@@ -623,12 +623,18 @@ export class PrismaChatService{
           return [...DMs, ...channelChats];
         }
 
-        async getConversationMessages(conversationId:string, userData:user){
+        // async getConversationMessages(conversationId:string, userData:user){
+        async getConversationMessages(conversationId:string){
           // maybe send pics as well
-          const {messages} = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
+          const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}});
+          // const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
+          // if (!conversation)
+          if (!messages_)
+            return new NotFoundException("conversation not found");
+          // const {messages} = conversation;
           console.log("messages: ", "not printed")
 
-          return messages;
+          return messages_;
         }
 
         async getChannelInfo(channelId: string) {

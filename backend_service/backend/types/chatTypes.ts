@@ -36,3 +36,10 @@ export interface ConversationIthemProps{
   title:string;
 }
 
+export interface MessageProps{
+  id: string;
+  userId: string;
+  message: string;
+  createdAt: Date;
+  conversationId: string;
+}

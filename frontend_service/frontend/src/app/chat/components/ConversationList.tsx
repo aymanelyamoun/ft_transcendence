@@ -12,19 +12,26 @@ import splitBar from "../../../../public/splitBar.png";
 import { HiMiniChatBubbleLeftRight } from "react-icons/hi2";
 import { HiMiniChatBubbleLeft } from "react-icons/hi2";
 import { Console } from "console";
-import SearchBar from "./SearchBar";
+// import SearchBar from "./SearchBar";
+import { ConversationListContext, LstConversationSetStateContext } from "./ConversationInfo";
 
 export const IsChannelContext = createContext(false);
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
   // const { id, name, profilePic, type, createdAt, channelId, lastMessage } =
+  const  setConversationList = useContext(LstConversationSetStateContext);
   props;
 
   const isChannel = useContext(IsChannelContext);
+  const handleChatClick = () => {
+    console.log("conversationp:", conversationProps);
+    setConversationList(conversationProps);
+  }
   // console.log("conversationp:", conversationProps);
   return (
     <li
+      onClick={handleChatClick}
       // key={props.id}
       className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
     >
@@ -45,15 +52,16 @@ const ConversationIthem = (props: ConversationIthemProps) => {
 
 export const ConversationList = ({
   // rowData,
-  conversation,
-  setConversation,
+  // conversation,
+  // setConversation,
 }: {
   // rowData: Conversation[];
-  conversation: ConversationIthemProps[];
-  setConversation: React.Dispatch<
-    React.SetStateAction<ConversationIthemProps[]>
-  >;
+  // conversation: ConversationIthemProps[];
+  // setConversation: React.Dispatch<
+  //   React.SetStateAction<ConversationIthemProps[]>
+  // >;
 }) => {
+  const ConversationListData = useContext(ConversationListContext);
   // const [conversation, setConversation] = useState<Conversation[]>([]);
 
   // const userId = "0e1d8b57-aef4-45e6-9cf8-b834b87d0788";
@@ -85,8 +93,8 @@ export const ConversationList = ({
   return (
     <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-        {conversation &&
-          conversation.map((conv) => {
+        {ConversationListData &&
+          ConversationListData.map((conv) => {
             // console.log(conv);
             return (
               <ConversationIthem
@@ -107,59 +115,69 @@ export const ConversationList = ({
   );
 };
 
-export const Conversations = ({ children }: { children: React.ReactNode }) => {
+export const Conversations = ({
+  // conversationList,
+  // setConversationList,
+  children,
+}: {
+  // conversationList: ConversationIthemProps[];
+  // setConversationList: React.Dispatch<
+    // React.SetStateAction<ConversationIthemProps[]>
+  // >;
+  children: React.ReactNode;
+}) => {
   const [isChannel, setIsChannel] = useState<boolean>(false);
-  const [conversation, setConversation] = useState<ConversationIthemProps[]>(
-    []
-  );
+  // const [conversation, setConversation] = useState<ConversationIthemProps[]>(
+  //   []
+  // );
 
   const userId = "1106e273-cd14-483c-8b3f-ec8076e413ad";
   const isAdmin = "false";
 
   const [rowData, setRowData] = useState<ConversationIthemProps[]>([]);
 
-  useEffect(() => {
-    const fetchFun = async () => {
-      const res = await fetch(
-        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userId}&isAdmin=${isAdmin}`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((res) => {
-          return res.json();
-          // const data: Conversation[];
-        })
-        .then((data) => {
-          setRowData(data);
-          setConversation(data);
-        });
-    };
-    fetchFun();
-  }, []);
+  // useEffect(() => {
+  //   const fetchFun = async () => {
+  //     const res = await fetch(
+  //       `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userId}&isAdmin=${isAdmin}`,
+  //       {
+  //         method: "GET",
+  //         credentials: "include",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     )
+  //       .then((res) => {
+  //         return res.json();
+  //         // const data: Conversation[];
+  //       })
+  //       .then((data) => {
+  //         setRowData(data);
+  //         setConversation(data);
+  //       });
+  //   };
+  //   fetchFun();
+  // }, []);
 
   // console.log(isChannel);
   return (
     <div className="friendList w-full mr-12 relative">
       <IsChannelContext.Provider value={isChannel}>
         <ChatToggel setIsChannel={setIsChannel} />
-        <SearchBar
+        {/* <SearchBar
           rowData={rowData}
-          conversation={conversation}
-          setConversation={setConversation}
+          // conversation={conversationList}
+          // setConversation={setConversationList}
           // friendSearch={friendSearch}
           // setFriendSearch={setFriendSearch}
           // channelSearch={channelSearch}
           // setChannelSearch={setChannelSearch}
-        />
+        /> */}
         <ConversationList
-          conversation={conversation}
+          // conversationListData={conversationList}
           // rowData={rowData}
-          setConversation={setConversation}
+          // setConversation={setConversationList}
         />
         {/* {children} */}
       </IsChannelContext.Provider>

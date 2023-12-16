@@ -1,4 +1,10 @@
-import React, { use, useState } from "react";
+import React, {
+  createContext,
+  use,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Image, { StaticImageData } from "next/image";
 import avatar from "../../../../public/garou-kid.jpeg";
 import { MdPersonAddAlt1 } from "react-icons/md";
@@ -7,18 +13,23 @@ import { IoGameController } from "react-icons/io5";
 import { FaRunning } from "react-icons/fa";
 import ChatSection from "./ChatSection";
 import { Conversations } from "./ConversationList";
-import { ConversationIthemProps } from "../../../../../../backend_service/backend/types/chatTypes";
+import {
+  ConversationIthemProps,
+  MessageProps,
+} from "../../../../../../backend_service/backend/types/chatTypes";
 // import { $Enums } from "@prisma/client";
 // import { CONVERSATION_TYPE } from "../../../../../../backend_service/backend/types/chatTypes";
 // import { CONVERSATION_TYP } from "../../../../../../backend_service/backend/types/chatTypes";
 
 export const ConversationInfo = ({ type }: { type: string }) => {
+  const conversationProps = useContext(LstConversationStateContext);
+  // handle if the conversationProps is undefined
   return (
     <>
-      {type === "DIRECT" ? (
+      {conversationProps?.type === "DIRECT" ? (
         <ConversationInfoWrapper
           username="username"
-          title="title"
+          title={conversationProps?.title}
           imgUrl={avatar}
         >
           <ButtonInfo width="10" hight="10">
@@ -173,10 +184,11 @@ const ConversationInfoWrapper = ({
   imgUrl: StaticImageData;
   children: React.ReactNode;
 }) => {
+  const conversationProps = useContext(LstConversationStateContext);
   return (
     <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto pb-12">
       {title !== "" ? (
-        <ProfileInfos username="tmp">
+        <ProfileInfos username={conversationProps?.name}>
           {" "}
           <p className="titleInfo">{title}</p>{" "}
         </ProfileInfos>
@@ -199,17 +211,99 @@ const Conversation = () => {
   );
 };
 
+export const ConversationListContext = createContext(
+  {} as ConversationIthemProps[]
+);
+
+export const MessagesContext = createContext({} as MessageProps[]);
+
+export const LstConversationSetStateContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<ConversationIthemProps | undefined>>
+);
+export const LstConversationStateContext = createContext(
+  {} as ConversationIthemProps | undefined
+);
+
 export const ChatPage = () => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [ConversationList, setConversationList] = useState<ConversationIthemProps[]>([]);
+  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [ConversationList, setConversationList] = useState<
+    ConversationIthemProps[]
+  >([]);
+  const [conversation, setConversation] = useState<ConversationIthemProps>();
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
+  const userId = "04b357c8-ba9f-4198-b434-7d2f4a74e4a0";
+  const isAdmin = "false";
+
+  useEffect(() => {
+    const fetchFun = async () => {
+       await fetch(
+        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userId}&isAdmin=${isAdmin}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+          // const data: Conversation[];
+        })
+        .then((data) => {
+          setConversationList(data);
+        });
+    };
+    fetchFun();
+  }, []);
+
+  useEffect(() => {
+    console.log("cnvId:",conversation?.id);
+    const fetchFun = async () => {
+      await fetch(
+        `http://localhost:3001/api/channels/conversation/${conversation?.id}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log("data:",data);
+          setMessages(data);
+        })
+        .catch((err) =>{
+          console.log(err)
+        })
+      // return res;
+    };
+    fetchFun();
+  }, [conversation]);
+
+  console.log("messages");
+  console.log(messages);
+  console.log("messages/");
 
   return (
     <main className="main flex justify-center items-center h-full w-full ">
-      <div className="h-full basis-1/4 flex">
-        <Conversations>{/* <ConversationList /> */}</Conversations>
-      </div>
-      <Conversation />
+      <ConversationListContext.Provider value={ConversationList}>
+        <LstConversationSetStateContext.Provider value={setConversation}>
+          <LstConversationStateContext.Provider value={conversation}>
+            <div className="h-full basis-1/4 flex">
+              <Conversations> {/* <ConversationList /> */}</Conversations>
+              {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
+            </div>
+            <MessagesContext.Provider value={messages}>
+              <Conversation />
+            </MessagesContext.Provider>
+          </LstConversationStateContext.Provider>
+        </LstConversationSetStateContext.Provider>
+      </ConversationListContext.Provider>
     </main>
   );
 };
@@ -254,7 +348,7 @@ const ProfileInfos = ({
   username,
   children,
 }: {
-  username: string;
+  username: string | undefined;
   children: React.ReactNode;
 }) => {
   return (

@@ -255,15 +255,15 @@ body {
   /* margin-top: 200px; */
   margin-bottom: 30px;
   /* width: 439.339px; */
-  display: block;
+  /* display: block; */
   /* height: 35px; */
   max-width: 400px;
-  padding-left: 12px;
-  padding-right: 15px;
+  padding-left: 6px;
+  padding-right: 6px;
   padding-top: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   background-color: #9a9bd3;
-  border-radius: 25px 3px 15px 3px;
+  border-radius: 30px 3px 15px 3px;
   text-align-last: left;
   width: fit-content;
   /* text-indent: 15px; */
@@ -273,27 +273,12 @@ body {
   margin-bottom: 30px;
 }
 
-/* .messageContent {
-  max-width: 400px;
-  padding: 4px;
-  background-color: #9a9bd3;
-  border-radius: 3px 3px 15px 3px;
-  text-align: left;
-  width: fit-content;
- position: relative; 
-} */
-
-/* .wrap {
-  float: right; 
-  margin: 5px;
- } */
-
 .sendMsg {
   /* margin-left: 270px; */
   /* margin-top: 200px; */
   /* position: absolute; */
   /* position: relative; */
-  display: block;
+  /* display: block; */
   /* margin-top: 2ß00px; */
   /* left: 68%; */
   margin-bottom: 22px;
@@ -304,14 +289,15 @@ body {
   /* right: 500px; */
   width: fit-content;
   max-width: 400px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 6px;
+  padding-right: 6px;
   padding-top: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   /* margin-top: 70px; */
   /* height: 35px; */
   background-color: rgba(154, 155, 211, 0.2);
-  border-radius: 3px 3px 3px 15px;
+  /* border-radius: 3px 30px 3px 15px; */
+  border-radius: 30px 3px 15px 3px; 
   text-align-last: left;
   /* text-indent: 15px; */
 
@@ -319,6 +305,10 @@ body {
   word-wrap: break-word;
   word-break: break-word;
   white-space: pre-line;
+
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
 }
 
 

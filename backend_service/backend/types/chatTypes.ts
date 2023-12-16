@@ -38,8 +38,9 @@ export interface ConversationIthemProps{
 
 export interface MessageProps{
   id: string;
-  userId: string;
+  senderId: string;
   message: string;
   createdAt: Date;
   conversationId: string;
+  sender:{profilePic:string}
 }

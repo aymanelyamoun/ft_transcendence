@@ -20,7 +20,7 @@ import {
 
 
 
-export const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
+export const userId = "01bcddba-bcdf-4142-905d-4ad5cfff45bc";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";

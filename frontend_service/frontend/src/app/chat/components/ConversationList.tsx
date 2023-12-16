@@ -100,7 +100,7 @@ export const ConversationList = ({}: // rowData,
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
         {ConversationListData &&
           ConversationListData.map((conv) => {
-            // console.log(conv);
+            console.log(conv);
             return (
               <ConversationIthem
                 key={conv.id}
@@ -108,7 +108,7 @@ export const ConversationList = ({}: // rowData,
                 name={conv.name}
                 profilePic={conv.profilePic}
                 type={conv.type}
-                title="title"
+                title={conv.title}
                 createdAt={conv.createdAt}
                 channelId={conv.channelId}
                 lastMessage={conv.lastMessage}

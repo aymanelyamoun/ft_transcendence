@@ -15,7 +15,7 @@ import { ChangeChannelData, ChannelData, ChannelEdit } from "src/chatapp/chat/ty
 import { JoinChannelDto } from "src/chatapp/chat/DTOs/dto";
 import { user } from "src/chatapp/chat/types/user";
 import { ConversationInfo } from "src/chatapp/chat/types/conversation";
-import { ConversationIthemProps } from "types/chatTypes";
+import { ConversationIthemProps, MessageProps } from "types/chatTypes";
 
 @Injectable()
 export class PrismaChatService{
@@ -548,6 +548,24 @@ export class PrismaChatService{
           return memberIn
         }
 
+        async getConversationMembers(conversationId:string){
+          const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:{
+            select:{
+              user:{select:{
+                profilePic:true,
+                username:true,
+              }}             
+            }
+          }}});
+
+          if (!conversation)
+            throw new NotFoundException("this conversation does not exist");
+
+          const {members} = conversation;
+
+          return members
+        }
+
         async getUserConversations(userId:string){
           const conversations = await this.prisma.conversation.findMany({
             where:{
@@ -567,7 +585,14 @@ export class PrismaChatService{
               type: CONVERSATION_TYPE.DIRECT,
             },
             include:{
-              users:true,
+              users:{
+                select:{
+                  profilePic:true,
+                  username:true,
+                  title:true,
+                  id:true,
+                }
+              },
 
             }
             }
@@ -587,6 +612,34 @@ export class PrismaChatService{
           });
           return conversationIthem;
         }
+
+        // async getUserConversationsDirect(userData:user){
+        //   const conversations = await this.prisma.conversation.findMany({
+        //     where:{
+        //       users:{some:{id:userData.userId}},
+        //       type: CONVERSATION_TYPE.DIRECT,
+        //     },
+        //     include:{
+        //       users:true,
+
+        //     }
+        //     }
+        //   ); 
+        //   const conversationIthem: ConversationIthemProps[] = conversations.map((conversation) => {
+        //     const friend = conversation.users[0].id === userData.userId ? conversation.users[1] : conversation.users[0];
+        //     return {
+        //       id:conversation.id,
+        //       type:conversation.type,
+        //       createdAt:conversation.createdAt.toISOString(),
+        //       channelId:conversation.channelId,
+        //       lastMessage:conversation.lastMessage,
+        //       profilePic:friend.profilePic,
+        //       name:friend.username,
+        //       title:friend.title,
+        //     }
+        //   });
+        //   return conversationIthem;
+        // }
 
         async getUserConversationsChannelChat(userData:user){
           const conversations = await this.prisma.conversation.findMany({
@@ -626,15 +679,17 @@ export class PrismaChatService{
         // async getConversationMessages(conversationId:string, userData:user){
         async getConversationMessages(conversationId:string){
           // maybe send pics as well
-          const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}});
+          let messages:MessageProps[];
+          const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}, include:{sender:{ select: {profilePic:true}}}});
           // const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
           // if (!conversation)
           if (!messages_)
             return new NotFoundException("conversation not found");
           // const {messages} = conversation;
-          console.log("messages: ", "not printed")
+          console.log("messages: ", messages_)
 
-          return messages_;
+          // messages = messages_;
+          return messages;
         }
 
         async getChannelInfo(channelId: string) {

@@ -60,4 +60,15 @@ export class RequestController {
       const result = this.requestService.DeBlockUser(user.id, userIdB);
       return res.status(200).send(result);
     }
+
+
+    @Get('blockList')
+    @UseGuards(JwtGuard)
+    async blockList(@Req() req: Request, @Res() res: Response)
+    {
+      const user = req['user'] as User
+      const list = await this.requestService.BlockList(user.id)
+      console.log(list);
+      return res.status(200).send(list);
+    }
 }

@@ -75,35 +75,116 @@ export class UserService {
         });
     }
 
-    async allUsers(userloged: string)
+    async BlockList(userId: string)
     {
-        const users = await this.prisma.user.findMany({
-            select: {
-                id: true,
-                username: true,
-                profilePic: true,
-            },
+        try
+        {
+            const user = await this.prisma.user.findUnique({
+                where: { id: userId },
+                select: { blockedUsers: true },
+            });
+
+            if (!user)
+                throw new Error('User not found');
+            return user.blockedUsers;
+        }
+        catch (error)
+        {
+            throw new Error( 'Internal server error')
+        }
+    }
+
+
+    // async allUsers(userloged: string)
+    // {
+    //     const users = await this.prisma.user.findMany({
+    //         select: {
+    //             id: true,
+    //             username: true,
+    //             profilePic: true,
+    //         },
+    //         where: {
+    //             id: { not: userloged },//his excludes user loged
+    //             friends: { //his excludes friends
+    //                 none: {
+    //                     id: userloged
+    //                 }
+    //             },
+    //         },
+    //     });
+    //     return users;
+    // }
+
+    async allUsers(userloged: string) {
+        try {
+            const users = await this.prisma.user.findMany({
+                select: {
+                    id: true,
+                    username: true,
+                    profilePic: true,
+                },
+            //     where: {
+            //         id: { not: userloged },
+            //     AND:{
+            //         NOT:{
+            //             friends: {
+            //             some: {
+            //                 id: userloged, 
+            //             },
+            //         },
+            //     },
+            //         blockedByUsers: {
+            //         some: {
+            //             id: userloged,
+            //         },
+            //         }
+            // },
+            //     },
+            // where: {
+            //     id: { not: userloged },
+            //     friends: {
+            //         none: {
+            //             id: userloged,
+            //         },
+            //     },
+            //     blockedUsers: {
+            //         none: {
+            //             id: userloged,
+            //         },
+            //     },
+            // },
+
+            /*If none of them have the id equal to userloged, the condition is satisfied,
+            and the filter allows these users to be included in the final result.
+If any of them had an id equal to userloged, the condition would not be satisfied, and that user would be excluded from the result. */
             where: {
-                id: { not: userloged },//his excludes user loged
-                friends: { //his excludes friends
+                id: { not: userloged },
+                friends: {
                     none: {
-                        id: userloged
-                    }
-                }, //this excludes blocked list
+                        id: userloged,
+                    },
+                },
                 blockedUsers: {
                     none: {
-                        id: userloged
-                    }
-                },
-                blockedByUsers: {
-                    none: {
-                        id: userloged
-                    }
+                        id: userloged,
+                    },
                 },
             },
-        });
-        return users;
+            
+            
+            });
+            const blockedUsers = await this.BlockList(userloged);
+            const usersWithBlockedFlag = users.map((user) => ({
+                ...user,
+                isBlocked: blockedUsers.some((blockedUser) => blockedUser.id === user.id),
+            }));
+            console.log(usersWithBlockedFlag);
+            return usersWithBlockedFlag;
+        } catch (error) {
+            throw new Error('Internal server error');
+        }
     }
+    
 
 
     async confirm(email: string, dto: ConfirmUserDto)
@@ -191,7 +272,18 @@ export class UserService {
                         startsWith: username,
                         mode: 'insensitive',
                     },
-                    NOT : {id: userloged},
+                    // NOT : {id: userloged},
+                    id: { not: userloged },
+                    friends: {
+                        none: {
+                            id: userloged,
+                        },
+                    },
+                    blockedUsers: {
+                        none: {
+                            id: userloged,
+                        },
+                    },
                 }
             })
             if (!users || users.length === 0) {
@@ -208,10 +300,10 @@ export class UserService {
     async generateUsername(Username: string)
     {
         let newUsername = Username;
-        let counter = 1;
+        let c = 1;
 
         while (await this.isUsernameexist(newUsername)){
-            newUsername = `${Username}${counter++}`;
+            newUsername = `${Username}${c++}`;
         }
         return newUsername;
     }

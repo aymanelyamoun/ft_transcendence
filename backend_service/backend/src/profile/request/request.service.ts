@@ -22,11 +22,12 @@ export class RequestService {
         });
         if (!existingNotification)
         {
-         const notif =  await this.prisma.notification.create({
+                const  sender = await this.userService.findById(userId);            
+                const notif =  await this.prisma.notification.create({
                 data: {
                     type: typ,
-                    title: 'login',
-                    discription: message,
+                    title: sender.username,
+                    discription: sender.username + ' sent you friend request',
                     userId : recieverId,
                     senderId : userId,
                 },
@@ -126,7 +127,7 @@ export class RequestService {
                 });
                 await prisma.user.update({
                     where : {id : userIdB},
-                    data:{blockedUsers:{connect : {id : userId}}}
+                    data:{blockedByUsers:{connect : {id : userId}}}
                 })
             })
         }
@@ -154,6 +155,25 @@ export class RequestService {
         catch(error)
         {
             throw new NotFoundException(error);
+        }
+    }
+
+    async BlockList(userId: string)
+    {
+        try
+        {
+            const user = await this.prisma.user.findUnique({
+                where: { id: userId },
+                select: { blockedUsers: true },
+            });
+
+            if (!user)
+                throw new Error('User not found');
+            return user.blockedUsers;
+        }
+        catch (error)
+        {
+            throw new Error( 'Internal server error')
         }
     }
 }

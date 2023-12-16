@@ -73,17 +73,11 @@ export const ConversationChatSection = () => {
 
 const Message = ({ message }: { message: MessageProps }) => {
   return (
-    <div className="rcvMsg flex items-start">
-      {/* <Image src={message.senderProfilePic} alt="profile pic" /> */}
-        {/* <Image className="rounded-full" src={avatar} alt="profile pic" width={37}/> */}
-        {/* <div className="wrap"> */}
-          <Image className="rounded-full sticky" src={avatar} alt="profile pic" width={37} height={37}/>
-        {/* </div> */}
-        <div className="ml-2 indent-1">
-          <p className="messageContent "> 
-          {message.message} 
-          </p>
-        </div>
+    <div className="rcvMsg">
+      <div className=""> 
+        <Image className="rounded-full float-left mr-[10px] mt-[4px] border-[1.5px] border-[#202345]" src={avatar} alt="profile pic" width={42} height={42} />
+        <p className=""> {message.message} </p>
+      </div>
     </div>
   );
 };

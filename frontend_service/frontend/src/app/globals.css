@@ -258,12 +258,12 @@ body {
   display: block;
   /* height: 35px; */
   max-width: 400px;
-  padding-left: 15px;
+  padding-left: 12px;
   padding-right: 15px;
   padding-top: 8px;
   padding-bottom: 8px;
   background-color: #9a9bd3;
-  border-radius: 3px 3px 15px 3px;
+  border-radius: 25px 3px 15px 3px;
   text-align-last: left;
   width: fit-content;
   /* text-indent: 15px; */
@@ -273,7 +273,7 @@ body {
   margin-bottom: 30px;
 }
 
-.messageContent {
+/* .messageContent {
   max-width: 400px;
   padding: 4px;
   background-color: #9a9bd3;
@@ -281,7 +281,7 @@ body {
   text-align: left;
   width: fit-content;
  position: relative; 
-}
+} */
 
 /* .wrap {
   float: right; 

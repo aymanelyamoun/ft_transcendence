@@ -280,8 +280,13 @@ body {
   border-radius: 3px 3px 15px 3px;
   text-align: left;
   width: fit-content;
-  
+ position: relative; 
 }
+
+/* .wrap {
+  float: right; 
+  margin: 5px;
+ } */
 
 .sendMsg {
   /* margin-left: 270px; */

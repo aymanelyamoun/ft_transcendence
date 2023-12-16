@@ -20,7 +20,6 @@ import {
 
 export const IsChannelContext = createContext(false);
 
-
 import { userId, isAdmin } from "./ConversationInfo";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
@@ -100,7 +99,7 @@ export const ConversationList = ({}: // rowData,
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
         {ConversationListData &&
           ConversationListData.map((conv) => {
-            console.log(conv);
+            // console.log(conv);
             return (
               <ConversationIthem
                 key={conv.id}

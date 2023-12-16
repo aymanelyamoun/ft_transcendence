@@ -66,7 +66,7 @@ export const ConversationChatSection = () => {
     <div className="chatSection flex-grow flex flex-col justify-between">
       <div className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">
         {messages.map((message) => {
-          if (message.userId === userId) {
+          if (message.senderId === userId) {
             return <Message message={message} />;
           }
         })}
@@ -88,14 +88,14 @@ const Message = ({ message }: { message: MessageProps }) => {
       <div className="sendMsg">
         <div className=""> 
           <Image className="rounded-full float-left mr-[10px] mt-[4px] border-[1.5px] border-[#202345]" src={avatar} alt="profile pic" width={43} height={43} />
-          <p className="ml-2 mt-3 "> {message.message} </p>
+          <p className="ml-2 mt-2 mb-2"> {message.message} </p>
         </div>
       </div>
 
       <div className="rcvMsg">
         <div className=""> 
           <Image className="rounded-full float-left mr-[10px] mt-[4px] border-[1.5px] border-[#202345]" src={jake} alt="profile pic" width={43} height={43} />
-          <p className="ml-2 mt-3 "> {message.message} </p>
+          <p className="ml-2 mt-2 mb-2"> {message.message} </p>
         </div>
       </div>
     </>

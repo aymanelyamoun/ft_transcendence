@@ -18,9 +18,7 @@ import {
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-
-
-export const userId = "01bcddba-bcdf-4142-905d-4ad5cfff45bc";
+export const userId = "03ccf6ec-5f36-468b-b32e-70d77a414868";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -277,6 +275,7 @@ export const ChatPage = () => {
         }
       )
         .then((res) => {
+          console.log("res:",res);
           return res.json();
         })
         .then((data) => {

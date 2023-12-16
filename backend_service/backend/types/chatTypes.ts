@@ -36,11 +36,24 @@ export interface ConversationIthemProps{
   title:string;
 }
 
-export interface MessageProps{
+// export interface MessageProps{
+//   id: string;
+//   senderId: string;
+//   message: string;
+//   createdAt: Date;
+//   conversationId: string;
+//   sender:{profilePic:string}
+//   // profilePic:string;
+// }
+
+export type MessageProps = {
+  sender: {
+      profilePic: string;
+  };
+} & {
   id: string;
   senderId: string;
   message: string;
   createdAt: Date;
   conversationId: string;
-  sender:{profilePic:string}
 }

@@ -679,7 +679,6 @@ export class PrismaChatService{
         // async getConversationMessages(conversationId:string, userData:user){
         async getConversationMessages(conversationId:string){
           // maybe send pics as well
-          let messages:MessageProps[];
           const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}, include:{sender:{ select: {profilePic:true}}}});
           // const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
           // if (!conversation)
@@ -689,7 +688,7 @@ export class PrismaChatService{
           console.log("messages: ", messages_)
 
           // messages = messages_;
-          return messages;
+          return messages_;
         }
 
         async getChannelInfo(channelId: string) {

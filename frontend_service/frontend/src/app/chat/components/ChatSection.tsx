@@ -6,11 +6,15 @@ import {
   MessagesContext,
 } from "./ConversationInfo";
 import { MessageProps } from "../../../../../../backend_service/backend/types/chatTypes";
+import avatar from "../../../../public/garou-kid.jpeg";
+import Image from "next/image";
+
+import { userId, isAdmin } from "./ConversationInfo";
 
 const ChatSection = () => {
   const messagesData = useContext(MessagesContext);
   const conversation = useContext(LstConversationStateContext);
-  const [messages, setMessages] = useState<MessageProps[]>([])
+  const [messages, setMessages] = useState<MessageProps[]>([]);
 
   // const handleSendMessage = (message: MessageProps) => {
   //   setMessages((prevMessages) => [...prevMessages, message]);
@@ -20,8 +24,6 @@ const ChatSection = () => {
     setMessages(messagesData);
   }, [messagesData]);
 
-
-  const userId = "04b357c8-ba9f-4198-b434-7d2f4a74e4a0";
   console.log("messages:", messages);
   console.log("messagesData:", messagesData);
   return (
@@ -49,4 +51,39 @@ const ChatSection = () => {
     </div>
   );
 };
+
+export const ConversationChatSection = () => {
+  const messagesData = useContext(MessagesContext);
+  const [messages, setMessages] = useState<MessageProps[]>([]);
+
+  useEffect(() => {
+    setMessages(messagesData);
+  }, [messagesData]);
+
+  return (
+    <div className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">
+      {messages.map((message) => {
+        if (message.userId === userId) {
+          return <Message message={message} />;
+        }
+      })}
+    </div>
+  );
+};
+
+const Message = ({ message }: { message: MessageProps }) => {
+  return (
+    <div className="rcvMsg flex items-start">
+      {/* <Image src={message.senderProfilePic} alt="profile pic" /> */}
+        {/* <Image className="rounded-full" src={avatar} alt="profile pic" width={37}/> */}
+        <Image className="rounded-full" src={avatar} alt="profile pic" width={37} height={37}/>
+        <div className="ml-2">
+          <p className="messageContent "> 
+          {message.message} 
+          </p>
+        </div>
+    </div>
+  );
+};
+
 export default ChatSection;

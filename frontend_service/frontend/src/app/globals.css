@@ -267,6 +267,20 @@ body {
   text-align-last: left;
   width: fit-content;
   /* text-indent: 15px; */
+
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.messageContent {
+  max-width: 400px;
+  padding: 4px;
+  background-color: #9a9bd3;
+  border-radius: 3px 3px 15px 3px;
+  text-align: left;
+  width: fit-content;
+  
 }
 
 .sendMsg {
@@ -301,6 +315,7 @@ body {
   word-break: break-word;
   white-space: pre-line;
 }
+
 
 .sendMsgButton {
   background-image: url("../../public/sendButton.png");

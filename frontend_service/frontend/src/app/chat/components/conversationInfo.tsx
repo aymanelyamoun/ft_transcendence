@@ -11,12 +11,18 @@ import { MdPersonAddAlt1 } from "react-icons/md";
 import { MdGroupAdd } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { FaRunning } from "react-icons/fa";
-import ChatSection from "./ChatSection";
+import ChatSection, { ConversationChatSection } from "./ChatSection";
 import { Conversations } from "./ConversationList";
 import {
   ConversationIthemProps,
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
+
+
+
+export const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
+export const isAdmin = false;
+
 // import { $Enums } from "@prisma/client";
 // import { CONVERSATION_TYPE } from "../../../../../../backend_service/backend/types/chatTypes";
 // import { CONVERSATION_TYP } from "../../../../../../backend_service/backend/types/chatTypes";
@@ -205,7 +211,8 @@ const ConversationInfoWrapper = ({
 const Conversation = () => {
   return (
     <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
-      <ChatSection />
+      <ConversationChatSection />
+      {/* <ChatSection /> */}
       <ConversationInfo type="D"></ConversationInfo>
     </div>
   );
@@ -231,8 +238,7 @@ export const ChatPage = () => {
   >([]);
   const [conversation, setConversation] = useState<ConversationIthemProps>();
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
-  const userId = "04b357c8-ba9f-4198-b434-7d2f4a74e4a0";
-  const isAdmin = "false";
+  // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
 
   useEffect(() => {
     const fetchFun = async () => {

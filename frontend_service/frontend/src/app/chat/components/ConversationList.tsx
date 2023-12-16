@@ -13,21 +13,27 @@ import { HiMiniChatBubbleLeftRight } from "react-icons/hi2";
 import { HiMiniChatBubbleLeft } from "react-icons/hi2";
 import { Console } from "console";
 // import SearchBar from "./SearchBar";
-import { ConversationListContext, LstConversationSetStateContext } from "./ConversationInfo";
+import {
+  ConversationListContext,
+  LstConversationSetStateContext,
+} from "./ConversationInfo";
 
 export const IsChannelContext = createContext(false);
+
+
+import { userId, isAdmin } from "./ConversationInfo";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
   // const { id, name, profilePic, type, createdAt, channelId, lastMessage } =
-  const  setConversationList = useContext(LstConversationSetStateContext);
+  const setConversationList = useContext(LstConversationSetStateContext);
   props;
 
   const isChannel = useContext(IsChannelContext);
   const handleChatClick = () => {
     console.log("conversationp:", conversationProps);
     setConversationList(conversationProps);
-  }
+  };
   // console.log("conversationp:", conversationProps);
   return (
     <li
@@ -50,11 +56,10 @@ const ConversationIthem = (props: ConversationIthemProps) => {
   );
 };
 
-export const ConversationList = ({
-  // rowData,
-  // conversation,
-  // setConversation,
-}: {
+export const ConversationList = ({}: // rowData,
+// conversation,
+// setConversation,
+{
   // rowData: Conversation[];
   // conversation: ConversationIthemProps[];
   // setConversation: React.Dispatch<
@@ -122,7 +127,7 @@ export const Conversations = ({
 }: {
   // conversationList: ConversationIthemProps[];
   // setConversationList: React.Dispatch<
-    // React.SetStateAction<ConversationIthemProps[]>
+  // React.SetStateAction<ConversationIthemProps[]>
   // >;
   children: React.ReactNode;
 }) => {
@@ -131,8 +136,8 @@ export const Conversations = ({
   //   []
   // );
 
-  const userId = "1106e273-cd14-483c-8b3f-ec8076e413ad";
-  const isAdmin = "false";
+  // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
+  // const isAdmin = "false";
 
   const [rowData, setRowData] = useState<ConversationIthemProps[]>([]);
 
@@ -175,9 +180,9 @@ export const Conversations = ({
           // setChannelSearch={setChannelSearch}
         /> */}
         <ConversationList
-          // conversationListData={conversationList}
-          // rowData={rowData}
-          // setConversation={setConversationList}
+        // conversationListData={conversationList}
+        // rowData={rowData}
+        // setConversation={setConversationList}
         />
         {/* {children} */}
       </IsChannelContext.Provider>

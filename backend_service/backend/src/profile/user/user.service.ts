@@ -178,7 +178,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                 ...user,
                 isBlocked: blockedUsers.some((blockedUser) => blockedUser.id === user.id),
             }));
-            console.log(usersWithBlockedFlag);
+            // console.log(usersWithBlockedFlag);
             return usersWithBlockedFlag;
         } catch (error) {
             throw new Error('Internal server error');
@@ -263,9 +263,12 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async Searchuser(username: string, @Req() req: Request)
     {
+       // console.log(username);
+        const user = req['user'] as User;
+        const userloged = user.id;
+        if(!username)
+            return this.allUsers(userloged);
         try {
-            const user = req['user'] as User;
-            const userloged = user.id;
             const users = await this.prisma.user.findMany({
                 where: {
                     username: {
@@ -286,9 +289,9 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                     },
                 }
             })
-            if (!users || users.length === 0) {
-            throw new UnauthorizedException('No users found');
-    }
+    //         if (!users || users.length === 0) {
+    //         throw new UnauthorizedException('No users found');
+    // }
         return(users);
         } catch (error)
         {

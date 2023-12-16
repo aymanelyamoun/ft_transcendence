@@ -6,6 +6,9 @@ import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 // import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 import styled from 'styled-components';
+import { Backend_URL } from '@/lib/Constants';
+import SearchHeader from '../Header/SearchHeader';
+import ResultItem from '../Header/ResultItem';
 
 const SearchContainer = styled.div`
   position: relative;
@@ -25,42 +28,58 @@ interface FriendListProps {
   addChannelSearch: boolean;
   setAddChannelSearch: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
+  setFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
-const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSearch}: FriendListProps) => {
+interface SearchU
+{
+    id: number;
+    username: string;
+    profilePic: string;
+    group: boolean;
+    groupMembers?: string[];
+}
+
+
+const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
 
   // const SearchBar = useRef<HTMLDivElement>(null);
   const SearchIcon = useRef<HTMLDivElement>(null);
   const [searchText, setSearchText] = useState<string>('');
+  const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
 
 
-  useEffect(() => {
-      const handleClickOutside = (event: any) => {
-
-       if (!SearchIcon.current?.contains(event.target)) {
-          setAddChannelSearch(false);
-        }
-
+  const Searchusers = async (username: string) => {
+    try {
+      console.log(searchText);
+      const res = await fetch( Backend_URL+"user/search/"+username, {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json() as SearchU[];
+        setFriendSearch(data);
+        console.log(SearchUsers);
+      }else {
+        alert("Error fetching data: ");
+        console.error("Error fetching data: ", res.statusText);
+      }
+    } catch (error) {
+      console.error("Err1or fetching data: ", error);
     }
-      const AddchannelContainer = document.getElementById("AddchannelContainer");
-
-      AddchannelContainer?.addEventListener("click", handleClickOutside);
-
-    return () => {
-      AddchannelContainer?.removeEventListener("click", handleClickOutside);
-    };
-
-    }, [])
+  };
 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-
-    const filteredFriends = friendsData.filter((friend) => {
-      return friend.name.toLowerCase().startsWith(e.target.value.toLowerCase());
-    });
-    console.log("filteredFriends : ", filteredFriends);
+  // if(e.target.value)
+    Searchusers(e.target.value);
     setSearchText(e.target.value);
-    setChannelFriendSearch(filteredFriends);
+
   };
 
 return ( 
@@ -69,6 +88,15 @@ return (
          value={searchText}
          onChange={handleInputChange}
          />
+        {/* {SearchUsers.map((friend) => (
+              <ResultItem key={friend.id}
+                  id={friend.id}
+                  username={friend.username}
+                  profilePic={friend.profilePic}
+                  group={friend.group}
+                  groupMembers={friend.groupMembers}          
+              />
+              ))} */}
         </SearchContainer>
 )
 }

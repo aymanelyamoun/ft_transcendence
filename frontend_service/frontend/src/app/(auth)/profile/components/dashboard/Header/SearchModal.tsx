@@ -211,7 +211,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onSearch, onClose, searchUser
                 {/* <div className=" px-40 pt-4"> */}
                 <ResultList>
                     {/* <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[750px] overflow-y-auto "> */}
-                        <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} />
+                        <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch}/>
                         {friendSearch.map((friend) => (
                         <ResultItem key={friend.id}
                             id={friend.id}

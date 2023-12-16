@@ -9,7 +9,7 @@ const MatchXp: React.FC<MatchXpProps> = ({ matchXp }) => {
     return (
         <div className={styles['matchItem-xp']}>
             {/* <span className={styles['matchItem-xp']}>{matchXp}</span> */}
-            {matchXp > 0 ? <span className={styles['matchItem-xp-win']}>+{matchXp}</span> : <span className={styles['matchItem-xp-loss']}>{matchXp}</span>}
+            {matchXp > 0 ? <span className={styles['matchItem-xp-win']}>+{matchXp+ 'XP'}</span> : <span className={styles['matchItem-xp-loss']}>{matchXp + 'XP'}</span>}
         </div>
     );
 };

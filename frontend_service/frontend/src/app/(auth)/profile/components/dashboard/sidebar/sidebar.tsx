@@ -30,13 +30,13 @@ const SidebarRoot = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  top: 5.4vh;
+  top: 4vh;
   transition: all 300ms ease;
   `;
   
   const SidebarContainer = styled.div`
   background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
-  padding-bottom: 30vh;
+  padding-bottom: 26.2vh;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;

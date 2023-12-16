@@ -1,10 +1,10 @@
 .Table
 {
-    width: 74vw;
-    height:  55vh;
-    margin: 10px 50px;
+    width: 65vw;
+    height: 55vh;
+    margin: 10px 4.57vw;
     position: fixed;
-    left: 10vw;
+    left: 15vw;
     top: 27vh;
     display: flex;
 }

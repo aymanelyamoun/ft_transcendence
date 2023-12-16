@@ -227,7 +227,6 @@ function App() {
         <AppGlass>
           <Sidebar sidebar={SidebarInfo} />
           <Skins />
-          <Achievement />
           <Statistics />
           <Friends
           friends={FriendsList} 

@@ -23,7 +23,6 @@ const SearchBar: React.FC = () => {
   return (
     <form className={styles.searchContainer} onSubmit={handleSubmit}>
       <div className={styles.searchBoxContainer}>
-        {/* <BsSearch className={styles.searchBoxContainer} /> */}
         <input
           id="search-box"
           type="text"

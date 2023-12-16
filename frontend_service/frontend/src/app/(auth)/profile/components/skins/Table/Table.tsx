@@ -11,7 +11,7 @@ const Table: React.FC = () => {
     <div className={styles.Table}>
       <SkinComp svgImage={Skin_yellow} skinName="Snouae rfe3 ta7di" WalletValue={215} />
       <SkinComp svgImage={Skin_purple} skinName="Anas senior frontend" WalletValue={215} />
-      <SkinComp svgImage={Skin_green} skinName="Youssef NASIK" WalletValue={215} />
+      <SkinComp svgImage={Skin_green} skinName="Levi Ait Ackerman" WalletValue={215} />
       <SkinComp svgImage={Skin_black} skinName="Ayman fih Depression" WalletValue={215} />
     </div>
   );

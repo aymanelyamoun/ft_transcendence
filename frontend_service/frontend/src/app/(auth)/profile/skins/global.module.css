@@ -6,7 +6,6 @@
     justify-content: center;
     align-items: center;
     font-family: 'Inter', sans-serif;
-    z-index: auto; /* Lower the z-index value */
   }
   
   .skins-container
@@ -22,7 +21,9 @@
     grid-column-end: 5;
     grid-template-columns: 2rem 25rem auto 40rem 2rem;
     grid-template-rows: repeat(3, 1fr);
-    z-index: auto;
+    justify-content: space-around;
+    align-items: stretch;
+    justify-items: stretch;
   }
   
   @media (min-width: 1300px) and (max-width: 1900px) {
@@ -47,8 +48,9 @@
   .wallet {
     color: aliceblue;
     position: absolute;
-    top: 21vh;
-    right: 23vw;
+    top: 22.5vh;
+    right: 25vw;
+    /* margin-left: auto; */
     gap: 0.5rem;
     /* padding: 0.625px; */
     border-radius: 5px;

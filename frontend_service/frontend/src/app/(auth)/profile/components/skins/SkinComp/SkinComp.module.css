@@ -1,12 +1,12 @@
 .SkinComp {
-    transition: width 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
+    /* transition: width 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
       border-radius 2s ease-in-out,
       background 2s ease-in-out,
       box-shadow 2s ease-in-out;
-    transition-property: all;
+    transition-property: all; */
     border: none;
     cursor: pointer;
-    width: 14vw;
+    width: 12vw;
     height: 42vh;
     border-radius: 10px;
     background: rgba(30, 35, 61, 0.7);
@@ -19,18 +19,19 @@
     padding: 0.875vw 0 0.875vw 0;
     position: relative;
     overflow: hidden;
-    margin: 3rem;
+    margin: 5rem 2rem;
   }
   
   .SkinComp:hover {
-    width: 19%;
-    height: 55vh;
-    transform: scaleX(1.2);
-    transition: width 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
+    width: 13vw;
+    height: 46vh;
+    transform: scaleX(1.1) scaleY(1.1);
+    transition: width 2s heigh 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
     border-radius 2s ease-in-out,
     background 2s ease-in-out,
     box-shadow 2s ease-in-out;
     transition-property: all;
+    border: 1px solid #C2FF86;
   }
   
   .skin-name {

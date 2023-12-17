@@ -13,9 +13,8 @@ import ResultItem from './ResultItem';
 interface SearchU {
   id: number;
   username: string;
-  // Change "profilePic" to the actual type of the data being passed
-  // e.g., string or StaticImageData
   profilePic: string;
+  isBlocked: boolean;
   group: boolean;
   groupMembers?: string[];
 }
@@ -26,160 +25,6 @@ interface SearchModalProps {
     searchUsers: SearchU[];
 }
 
-
-// const friendsData: Friend[] = [
-//     {
-//       id: 1,
-//       name: 'Anas',
-//       profilePic: avatar,
-//         group: false,
-//     },
-//     {
-//       id: 2,
-//       name: 'Abdo',
-//       profilePic: avatar,
-//         group: false,
-//     },
-//     {
-//       id: 3,
-//       name: 'Aymane',
-//       profilePic: avatar,
-//       group: true,
-//       groupMembers: [avatar, jake, avatar, jake, avatar],
-//     },
-//     {
-//       id: 4,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 5,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 6,
-//       name: 'Aymane',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 7,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 8,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 9,
-//       name: 'Aymane',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 10,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 11,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 12,
-//       name: 'Aymane',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 13,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 14,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 15,
-//       name: 'Aymane',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 16,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 17,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 18,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 19,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 20,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 21,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 22,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 23,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//     {
-//       id: 24,
-//       name: 'Snowa',
-//       profilePic: avatar,
-//       group: false,
-//     },
-//     {
-//       id: 25,
-//       name: 'Oussama',
-//       profilePic: jake,
-//       group: false,
-//     },
-//   ];
 
   const ResultList = styled.div`
   flex: 1; // Fills remaining space vertically
@@ -217,6 +62,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onSearch, onClose, searchUser
                             id={friend.id}
                             username={friend.username}
                             profilePic={friend.profilePic}
+                            isBlocked={friend.isBlocked}
                             group={friend.group}
                             groupMembers={friend.groupMembers}          
                         />

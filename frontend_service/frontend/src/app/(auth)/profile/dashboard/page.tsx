@@ -10,22 +10,7 @@ import { Backend_URL } from '@/lib/Constants';
 import SearchHeader from '../components/dashboard/Header/SearchHeader';
 import styled from 'styled-components';
 
-interface FriendL
-{
-  id: string;
-  name: string;
-  profilePic: string;
-}
 
-interface FriendR
-{
-  id: string;
-  title: string;
-  sender: {
-    profilePic: string;
-  };
-  discription: string;
-}
 
 interface SearchU
 {
@@ -67,62 +52,12 @@ function App() {
     online: false,
   });
 
-  const [FriendsList, setFriendsList] = useState<FriendL[]>([]);
-  const [FriendRequestsInfo, setFriendRequestsInfo] = useState<FriendR[]>([]);
+ 
+  
   const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
   // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
 
-  const acceptFriendRequest = async (notificationid: string) => {
-    try {
-      const res = await fetch( `Backend_URL + request/accept/${notificationid}`, 
-      {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setFriendRequestsInfo(data);
-      } else {
-        console.error("Error accepting friend request", res.statusText);
-      }
-    }
-    catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  };
 
-  const refuseFriendRequest = async (notificationid: string) => {
-    try {
-      const res = await fetch( `Backend_URL + request/Refuse/${notificationid}`,
-      {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-      );
-      if (res.ok)
-      {
-        const data = await res.json();
-        setFriendRequestsInfo(data);
-      } else {
-        console.error("Error accepting friend request", res.statusText);
-      }
-    }
-    catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  };
-  
   const fetchUserData = async () => {
     try {
       const res = await fetch("http://localhost:3001/api/user/profile", {
@@ -139,49 +74,6 @@ function App() {
         setSidebarInfo(data);
       }
     } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  };
-
-  const fetchFriendsListData = async () => {
-    try {
-      const res = await fetch( Backend_URL + "user/friends", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json() as FriendL[];
-        setFriendsList(data);
-      }
-    }
-    catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  };
-
-  const fetchReqData = async () => {
-    try {
-      const res = await fetch( Backend_URL + "user/notifications", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json() as FriendR[];
-        setFriendRequestsInfo(data);
-      }
-    
-    } catch (error)
-    {
       console.error("Error fetching data: ", error);
     }
   };
@@ -212,8 +104,7 @@ function App() {
   
   useEffect(() => {
     fetchUserData();
-    fetchReqData();
-    fetchFriendsListData();
+    // fetchReqData();
     fetchUsers();
   }, []);
   
@@ -229,10 +120,6 @@ function App() {
           <Skins />
           <Statistics />
           <Friends
-          friends={FriendsList} 
-          friendsReq={FriendRequestsInfo} 
-          acceptRequest={acceptFriendRequest}
-          refuseRequest={refuseFriendRequest}
           // onFriendItemClick={handleFriendItemClick} 
           />
         </AppGlass>

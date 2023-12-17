@@ -1,8 +1,10 @@
 import React from 'react';
 import styles from './friends.module.css';
 import FriendRequestItem from './FriendRequestItem';
+import { useState, useEffect } from 'react';
+import { Backend_URL } from '@/lib/Constants';
 
-interface FriendRequest
+interface FriendR
 {
   id: string;
   title: string;
@@ -12,13 +14,35 @@ interface FriendRequest
   discription: string;
 }
 
-interface FriendRequestProps {
-  friendRequests: FriendRequest[];
-  acceptRequest: (id: string) => void;
-  refuseRequest: (id: string) => void;
-}
 
-const FriendRequest: React.FC<FriendRequestProps> = ({ friendRequests, acceptRequest, refuseRequest }) => {
+const FriendRequest = () => {
+  const [friendRequests, setFriendRequests] = useState<FriendR[]>([]);
+
+  useEffect(() => {
+    const fetchReqData = async () => {
+      try {
+        const res = await fetch( Backend_URL + "user/notifications", {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.ok) {
+          const data = await res.json() as FriendR[];
+          setFriendRequests(data);
+        }
+      
+      } catch (error)
+      {
+        console.error("Error fetching data: ", error);
+      }
+    };
+    fetchReqData();
+  },[]);
+
   return (
     <div className={styles['friendRequest']}>
       <ul>
@@ -29,8 +53,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({ friendRequests, acceptReq
             title={friendRequest.title}
             discription={friendRequest.discription}
             profilePic={friendRequest.sender.profilePic}
-            acceptRequest={acceptRequest}
-            refuseRequest={refuseRequest}
+            setfriendRequests={setFriendRequests}
           />
         ))}
       </ul>

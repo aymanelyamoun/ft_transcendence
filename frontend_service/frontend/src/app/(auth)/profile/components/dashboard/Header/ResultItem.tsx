@@ -17,6 +17,7 @@ interface ResultItemProps {
     id: number;
     username: string;
     profilePic: string;
+    isBlocked: boolean;
     group: boolean;
     groupMembers?: string[];
   }
@@ -41,7 +42,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
       {props.group ? (
         <GroupComponent id={props.id} username={props.username} profilePic={props.profilePic} groupMembers={props.groupMembers}/>
       ) : (
-        <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic}/>
+        <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked}/>
       )}
     </ItemContainer>
   );

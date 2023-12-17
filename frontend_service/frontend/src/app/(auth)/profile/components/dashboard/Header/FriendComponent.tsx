@@ -4,10 +4,12 @@ import { StaticImageData } from 'next/image'
 import AddFriend from '@/app/chat/components/AddFriend';
 import { IoMdPersonAdd } from "react-icons/io";
 import { Backend_URL } from '@/lib/Constants';
+import { CgUnblock } from "react-icons/cg";
 
 interface FriendComponentProps {
     id: number;
     username: string;
+    isBlocked: boolean;
     profilePic: string;
 }
 
@@ -46,6 +48,18 @@ const AddFriendButton = styled.button`
     }
 `;
 
+const UnblockButton = styled.button`
+    position: relative;
+    // left: 13vw;
+    margin-left: auto;
+    margin-right: 1vw;
+    top: 0vh;
+    svg {
+        font-size: 1.5rem;
+        color: red;
+    }
+`;
+
 const FriendComponent: React.FC<FriendComponentProps> = (props) => {
 
     const SendRequest = async (props: FriendComponentProps) => {
@@ -69,6 +83,28 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             console.log(error);
         };
     };
+
+    const UnblockFriend = async (props: FriendComponentProps) => {
+        try {
+            console.log(props.id);
+            const response = await fetch(`${Backend_URL}request/deblock/${props.id}`, {
+                method: "POST",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                },
+            });
+            if(response.ok){
+                alert("the user has been unblocked");
+            }else {
+               alert("the user has not been unblocked");
+              }
+        } catch (error) {
+            console.log(error);
+        }
+    };
   return (
     <>
         <FriendImage>
@@ -77,11 +113,17 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         <FriendName>
             <span>{props.username}</span>
         </FriendName>
+        {props.isBlocked ? (
+        <UnblockButton onClick={() => UnblockFriend(props)}>
+            <CgUnblock />
+        </UnblockButton>
+        ) : (
         <AddFriendButton onClick={() => SendRequest(props)}>
             <IoMdPersonAdd />
         </AddFriendButton>
+        )}
     </>
   )
 }
 
-export default FriendComponent
+export default FriendComponent;

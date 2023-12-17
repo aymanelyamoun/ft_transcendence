@@ -45,6 +45,7 @@ interface SearchU
     id: number;
     username: string;
     profilePic: string;
+    isBlocked: boolean; 
     group: boolean;
     groupMembers?: string[];
 }

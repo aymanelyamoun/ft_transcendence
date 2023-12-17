@@ -16,39 +16,13 @@ interface Friend {
   title? : string;
 }
 
-interface FriendRequest
-{
-  id: string;
-  title: string;
-  sender: {
-    profilePic: string;
-  };
-  discription: string;
-}
 
-interface FriendsProps {
-  friends: Friend[];
-  friendsReq: FriendRequest[];
-  // onFriendItemClick: (id: string) => void;
-  acceptRequest: (id: string) => void;
-  refuseRequest: (id: string) => void;
-}
-
-const Friends: React.FC<FriendsProps> = ({ friends, friendsReq, acceptRequest, refuseRequest}) => {
+const Friends  = () => {
   const [showRequest, setRequest] = React.useState(false);
-  const [selectedFriend, setSelectedFriend] = React.useState<Friend | null>(null);
-  const [showInfo, setShowInfo] = React.useState(false);
+  const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
   const infoRef = useRef<HTMLDivElement>(null);
-  const [Blur, setBlur] = useState({} as any);
-
-  const handleFriendItemClick = (friendId: string) => {
-    const selectedFriend = friends.find((friend) => friend.id === friendId) || null;
-    setSelectedFriend(selectedFriend);
-    setShowInfo(true);
-  };
 
   const handleRequestClick = () => {
-    // Toggle the visibility of the Friends component
     setRequest((prevShowRequest) => !prevShowRequest);
   };
 
@@ -56,22 +30,9 @@ const Friends: React.FC<FriendsProps> = ({ friends, friendsReq, acceptRequest, r
     if (infoRef.current && !infoRef.current.contains(event.target as Node))
     {
       // Click outside the FriendInfo component, hide it
-      setShowInfo(false);
+      setSelectedFriend(false);
     }
   };
-
-  useEffect(() => {
-    if (showInfo)
-    {
-      // make the activeBlur true
-      setBlur({filter: 'blur(10px)'});
-    }
-    else
-    {
-      // make the activeBlur false
-      setBlur({});
-    }
-  }, []);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -82,25 +43,21 @@ const Friends: React.FC<FriendsProps> = ({ friends, friendsReq, acceptRequest, r
 
   return (
     <>
-    <div className={styles.friends} style={Blur}>
+    <div className={styles.friends}>
       <div className={styles['friends-container']}>
         <span className={styles['friends-title']}>Friends</span>
         <Notification onRequestClick={handleRequestClick} />
         {showRequest ? (
           <FriendRequests 
-            friendRequests={friendsReq} 
-            acceptRequest={acceptRequest}
-            refuseRequest={refuseRequest}
           />
           ) : (
-            <FriendList 
-            friends={friends} 
-            onFriendItemClick={handleFriendItemClick}
+            <FriendList
+              onFriendItemClick={setSelectedFriend}
             />
             )}
       </div>
     </div>
-    {showInfo && selectedFriend && (
+    {selectedFriend && (
         <FriendInfo
           id={selectedFriend.id}
           username={selectedFriend.name}

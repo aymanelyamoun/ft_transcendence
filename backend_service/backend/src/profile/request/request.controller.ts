@@ -29,7 +29,11 @@ export class RequestController {
     @UseGuards(JwtGuard)
     async acceptRequest(@Req() req: Request, @Res() res: Response, @Param('notificationid') notificationId: number)
     {
-      const result = this.requestService.handleAcceptRequest(req, notificationId);
+      const result = await this.requestService.handleAcceptRequest(req, notificationId);
+
+      if (result === undefined)
+        return res.status(200).send([]);
+
       return res.status(200).send(result);
     }
 
@@ -38,7 +42,11 @@ export class RequestController {
     @UseGuards(JwtGuard)
     async refuse(@Param('notificationid') notificationId: number, @Res() res: Response)
     {
-       const result = this.requestService.handleRefuseRequest(notificationId);
+       const result = await this.requestService.handleRefuseRequest(notificationId);
+
+      if (result === undefined)
+          return res.status(200).send([]);
+  
        return res.status(200).send(result);
     }
 

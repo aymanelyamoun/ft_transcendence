@@ -4,6 +4,17 @@ import { FcOk } from "react-icons/fc";
 import { FcCancel } from "react-icons/fc";
 import { Backend_URL } from '@/lib/Constants';
 
+interface FriendR
+{
+  id: string;
+  title: string;
+  sender: {
+    profilePic: string;
+  };
+  discription: string;
+}
+
+
 interface FriendRequestItemProps {
   id: string;
   title: string;
@@ -11,15 +22,14 @@ interface FriendRequestItemProps {
     profilePic: string;
   // };
   discription: string;
-  acceptRequest: (id: string) => void;
-  refuseRequest: (id: string) => void;
+  setfriendRequests: any;
 }
 
 const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
 
   const fetchAcceptRequest = async (props: FriendRequestItemProps) => {
     try {
-      const response = await fetch(`${Backend_URL}request/accept/${props.id}`,
+      const res = await fetch(`${Backend_URL}request/accept/${props.id}`,
         {
           method: 'POST',
           mode: "cors",
@@ -29,7 +39,9 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
             "Access-Control-Allow-Origin": "*",
           },
       });
-      if(response.ok){
+      if(res.ok){
+          const data = await res.json();
+          props.setfriendRequests(data);
           alert("the accept request has been sent");
       }else {
          alert("the accept request has not been sent");
@@ -41,7 +53,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
 
   const fetchRefuseRequest = async (props: FriendRequestItemProps) => {
     try {
-      const response = await fetch(`${Backend_URL}request/refuse/${props.id}`,
+      const res = await fetch(`${Backend_URL}request/refuse/${props.id}`,
         {
           method: 'POST',
           mode: "cors",
@@ -51,7 +63,10 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
             "Access-Control-Allow-Origin": "*",
           },
       });
-      if(response.ok){
+      if(res.ok){
+        const data : FriendR[] = await res.json();
+        console.log(data);
+        props.setfriendRequests(data);
           alert("the refuse request has been sent");
       }else {
          alert("the refuse request has not been sent");
@@ -61,13 +76,6 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
     }
   };
 
-  const handleAcceptRequest = () => {
-    props.acceptRequest(props.id);
-  };
-
-  const handleRefuseRequest = () => {
-    props.refuseRequest(props.id);
-  };
   return (
     <div className={styles['friendReqItem']}>
         <div className={styles['friendReq-image']}>

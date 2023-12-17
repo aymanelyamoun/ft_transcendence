@@ -80,7 +80,7 @@ export class UserController {
   @UseGuards(JwtGuard)
   async SearchUser(@Param('username') username, @Res() res: Response, @Req() req: Request)
   {
-    console.log('heeereeeeee');
+    console.log('ana wsalt');
     const users = await this.userService.Searchuser(username, req);
     res.status(200).send(users);
   }

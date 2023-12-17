@@ -51,8 +51,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
 
   const Searchusers = async (username: string) => {
     try {
-      console.log(searchText);
-      const res = await fetch( Backend_URL+"user/search/"+username, {
+      const res = await fetch( Backend_URL+"user/"+username, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -65,10 +64,11 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
         const data = await res.json() as SearchU[];
         setFriendSearch(data);
         console.log(SearchUsers);
-      }else {
-        alert("Error fetching data: ");
-        console.error("Error fetching data: ", res.statusText);
       }
+      // }else {
+      //   alert("Error fetching data: ");
+      //   console.error("Error fetching data: ", res.statusText);
+      // }
     } catch (error) {
       console.error("Err1or fetching data: ", error);
     }
@@ -76,8 +76,12 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-  // if(e.target.value)
-    Searchusers(e.target.value);
+   let username : string = e.target.value;
+    username = username.trim();
+    if (username)
+      Searchusers('search/'+username);
+    else
+      Searchusers('all');
     setSearchText(e.target.value);
 
   };

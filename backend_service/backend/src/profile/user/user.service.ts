@@ -263,7 +263,8 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async Searchuser(username: string, @Req() req: Request)
     {
-       // console.log(username);
+    //     console.log('here with : |',username,'|')
+    //    console.log(username);
         const user = req['user'] as User;
         const userloged = user.id;
         username = username.trim();

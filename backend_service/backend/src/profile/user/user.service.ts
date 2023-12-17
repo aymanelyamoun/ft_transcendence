@@ -266,7 +266,8 @@ If any of them had an id equal to userloged, the condition would not be satisfie
        // console.log(username);
         const user = req['user'] as User;
         const userloged = user.id;
-        if(!username)
+        username = username.trim();
+        if(username.length == 0)
             return this.allUsers(userloged);
         try {
             const users = await this.prisma.user.findMany({

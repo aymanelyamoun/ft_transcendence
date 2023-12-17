@@ -55,10 +55,13 @@ const ConversationIthem = (props: ConversationIthemProps) => {
   );
 };
 
-export const ConversationList = ({}: // rowData,
+export const ConversationList = ({
+  isChannel,
+}: // rowData,
 // conversation,
 // setConversation,
 {
+  isChannel: boolean;
   // rowData: Conversation[];
   // conversation: ConversationIthemProps[];
   // setConversation: React.Dispatch<
@@ -94,25 +97,57 @@ export const ConversationList = ({}: // rowData,
   //   fetchFun();
   // }, []);
 
+  if (!isChannel) {
+    {
+      return (
+        <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
+          <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
+            {ConversationListData &&
+              ConversationListData.map((conv) => {
+                console.log(conv);
+                if (conv.type === "DIRECT") {
+                  return (
+                    <ConversationIthem
+                      key={conv.id}
+                      id={conv.id}
+                      name={conv.name}
+                      profilePic={conv.profilePic}
+                      type={conv.type}
+                      title={conv.title}
+                      createdAt={conv.createdAt}
+                      channelId={conv.channelId}
+                      lastMessage={conv.lastMessage}
+                    />
+                  );
+                }
+              })}
+          </ul>
+        </div>
+      );
+    }
+  }
   return (
     <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
         {ConversationListData &&
           ConversationListData.map((conv) => {
-            // console.log(conv);
-            return (
-              <ConversationIthem
-                key={conv.id}
-                id={conv.id}
-                name={conv.name}
-                profilePic={conv.profilePic}
-                type={conv.type}
-                title={conv.title}
-                createdAt={conv.createdAt}
-                channelId={conv.channelId}
-                lastMessage={conv.lastMessage}
-              />
-            );
+            console.log(conv);
+            if (conv.type === "CHANNEL_CHAT") {
+              console.log("conv:", conv);
+              return (
+                <ConversationIthem
+                  key={conv.id}
+                  id={conv.id}
+                  name={conv.name}
+                  profilePic={conv.profilePic}
+                  type={conv.type}
+                  title={conv.title}
+                  createdAt={conv.createdAt}
+                  channelId={conv.channelId}
+                  lastMessage={conv.lastMessage}
+                />
+              );
+            }
           })}
       </ul>
     </div>
@@ -179,9 +214,10 @@ export const Conversations = ({
           // setChannelSearch={setChannelSearch}
         /> */}
         <ConversationList
-        // conversationListData={conversationList}
-        // rowData={rowData}
-        // setConversation={setConversationList}
+          isChannel={isChannel}
+          // conversationListData={conversationList}
+          // rowData={rowData}
+          // setConversation={setConversationList}
         />
         {/* {children} */}
       </IsChannelContext.Provider>

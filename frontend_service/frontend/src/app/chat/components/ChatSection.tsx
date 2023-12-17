@@ -5,6 +5,8 @@ import {
   LstConversationStateContext,
   MessagesContext,
 } from "./ConversationInfo";
+import { socket } from './socket';
+
 import { MessageProps } from "../../../../../../backend_service/backend/types/chatTypes";
 import avatar from "../../../../public/garou-kid.jpeg";
 import jake from "../../../../public/jakeWithHeadPhones.jpg";

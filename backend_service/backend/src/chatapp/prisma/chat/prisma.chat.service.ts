@@ -562,6 +562,9 @@ export class PrismaChatService{
             throw new NotFoundException("this conversation does not exist");
 
           const {members} = conversation;
+          if (!members)
+            throw new NotFoundException("this conversation does not have any members");
+          // console.log("conversation: ", members);
 
           return members
         }

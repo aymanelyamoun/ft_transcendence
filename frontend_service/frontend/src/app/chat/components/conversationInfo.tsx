@@ -15,10 +15,11 @@ import ChatSection, { ConversationChatSection } from "./ChatSection";
 import { Conversations } from "./ConversationList";
 import {
   ConversationIthemProps,
+  MemberProps,
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-export const userId = "03ccf6ec-5f36-468b-b32e-70d77a414868";
+export const userId = "1e01a005-4c5d-400b-b9c1-f8ea47f87a96";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -28,6 +29,9 @@ export const isAdmin = false;
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
   // handle if the conversationProps is undefined
+  if (conversationProps?.id === undefined) {
+    return;
+  }
   return (
     <>
       {conversationProps?.type === "DIRECT" ? (
@@ -142,27 +146,49 @@ const MemberIthem = ({
 };
 
 const MemberList = ({}: {}) => {
+  const conversation = useContext(LstConversationStateContext);
+  const [members, setMembers] = useState<MemberProps[]>([]);
+
+  const [isSet, setIsSet] = useState(false);
+
+  useEffect(() => {
+    const fetchFun = async () => {
+      await fetch(
+        `http://localhost:3001/api/channels/getChannelMembers/${conversation?.id}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+          // const data: Conversation[];
+        })
+        .then((data) => {
+          console.log("data:", data);
+          setMembers(data);
+        });
+    };
+    fetchFun();
+  }, [conversation, isSet]);
+
   return (
     <>
       <MemberSeparator />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
-      <MemberIthem imgUrl="some/url" name="name" isAdmin={true} />
+      {isSet &&
+        members.map((member) => {
+          return (
+            <MemberIthem
+              imgUrl="some/url"
+              name={member.user.username}
+              isAdmin={true}
+            />
+          );
+        })}
+      {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
     </>
   );
 };
@@ -190,7 +216,7 @@ const ConversationInfoWrapper = ({
 }) => {
   const conversationProps = useContext(LstConversationStateContext);
   return (
-    <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto pb-12">
+    <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12">
       {title !== "" ? (
         <ProfileInfos username={conversationProps?.name}>
           {" "}
@@ -240,7 +266,7 @@ export const ChatPage = () => {
 
   useEffect(() => {
     const fetchFun = async () => {
-       await fetch(
+      await fetch(
         `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userId}&isAdmin=${isAdmin}`,
         {
           method: "GET",
@@ -262,7 +288,7 @@ export const ChatPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("cnvId:",conversation?.id);
+    console.log("cnvId:", conversation?.id);
     const fetchFun = async () => {
       await fetch(
         `http://localhost:3001/api/channels/conversation/${conversation?.id}`,
@@ -275,16 +301,16 @@ export const ChatPage = () => {
         }
       )
         .then((res) => {
-          console.log("res:",res);
+          console.log("res:", res);
           return res.json();
         })
         .then((data) => {
-          console.log("data:",data);
+          console.log("data:", data);
           setMessages(data);
         })
-        .catch((err) =>{
-          console.log(err)
-        })
+        .catch((err) => {
+          console.log(err);
+        });
       // return res;
     };
     fetchFun();

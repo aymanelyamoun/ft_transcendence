@@ -57,3 +57,10 @@ export type MessageProps = {
   createdAt: Date;
   conversationId: string;
 }
+
+export type MemberProps = {
+  user: {
+      profilePic: string;
+      username: string;
+  };
+}

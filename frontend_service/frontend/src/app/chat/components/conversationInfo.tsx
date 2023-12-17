@@ -19,7 +19,7 @@ import {
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-export const userId = "1e01a005-4c5d-400b-b9c1-f8ea47f87a96";
+export const userId = "09a7b8df-3f26-460a-9918-7dbf7ae9b520";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -29,9 +29,9 @@ export const isAdmin = false;
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
   // handle if the conversationProps is undefined
-  if (conversationProps?.id === undefined) {
-    return;
-  }
+  // if (conversationProps?.id === undefined) {
+  //   return;
+  // }
   return (
     <>
       {conversationProps?.type === "DIRECT" ? (
@@ -154,7 +154,7 @@ const MemberList = ({}: {}) => {
   useEffect(() => {
     const fetchFun = async () => {
       await fetch(
-        `http://localhost:3001/api/channels/getChannelMembers/${conversation?.id}`,
+        `http://localhost:3001/api/channels/getConversationMembers/${conversation?.id}`,
         {
           method: "GET",
           credentials: "include",
@@ -165,16 +165,17 @@ const MemberList = ({}: {}) => {
       )
         .then((res) => {
           return res.json();
-          // const data: Conversation[];
         })
         .then((data) => {
-          console.log("data:", data);
           setMembers(data);
+          if (data) setIsSet(true);
         });
     };
-    fetchFun();
+    if (conversation?.id !== undefined) fetchFun();
   }, [conversation, isSet]);
 
+  // console.log("isSet:", isSet);
+  // console.log("members:", members);
   return (
     <>
       <MemberSeparator />
@@ -288,7 +289,6 @@ export const ChatPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("cnvId:", conversation?.id);
     const fetchFun = async () => {
       await fetch(
         `http://localhost:3001/api/channels/conversation/${conversation?.id}`,
@@ -301,11 +301,9 @@ export const ChatPage = () => {
         }
       )
         .then((res) => {
-          console.log("res:", res);
           return res.json();
         })
         .then((data) => {
-          console.log("data:", data);
           setMessages(data);
         })
         .catch((err) => {
@@ -315,10 +313,6 @@ export const ChatPage = () => {
     };
     fetchFun();
   }, [conversation]);
-
-  console.log("messages");
-  console.log(messages);
-  console.log("messages/");
 
   return (
     <main className="main flex justify-center items-center h-full w-full ">

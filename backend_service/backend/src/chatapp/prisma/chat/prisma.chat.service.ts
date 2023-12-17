@@ -549,6 +549,7 @@ export class PrismaChatService{
         }
 
         async getConversationMembers(conversationId:string){
+          console.log("conversationId: ", conversationId);
           const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:{
             select:{
               user:{select:{
@@ -564,7 +565,7 @@ export class PrismaChatService{
           const {members} = conversation;
           if (!members)
             throw new NotFoundException("this conversation does not have any members");
-          // console.log("conversation: ", members);
+          console.log("conversation: ", members);
 
           return members
         }

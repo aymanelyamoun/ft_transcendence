@@ -30,10 +30,8 @@ const ConversationIthem = (props: ConversationIthemProps) => {
 
   const isChannel = useContext(IsChannelContext);
   const handleChatClick = () => {
-    console.log("conversationp:", conversationProps);
     setConversationList(conversationProps);
   };
-  // console.log("conversationp:", conversationProps);
   return (
     <li
       onClick={handleChatClick}
@@ -104,7 +102,6 @@ export const ConversationList = ({
           <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
             {ConversationListData &&
               ConversationListData.map((conv) => {
-                console.log(conv);
                 if (conv.type === "DIRECT") {
                   return (
                     <ConversationIthem
@@ -131,9 +128,7 @@ export const ConversationList = ({
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
         {ConversationListData &&
           ConversationListData.map((conv) => {
-            console.log(conv);
             if (conv.type === "CHANNEL_CHAT") {
-              console.log("conv:", conv);
               return (
                 <ConversationIthem
                   key={conv.id}
@@ -199,7 +194,6 @@ export const Conversations = ({
   //   fetchFun();
   // }, []);
 
-  // console.log(isChannel);
   return (
     <div className="friendList w-full mr-12 relative">
       <IsChannelContext.Provider value={isChannel}>

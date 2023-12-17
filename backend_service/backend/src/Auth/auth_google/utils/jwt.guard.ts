@@ -20,6 +20,7 @@ export class JwtGuard implements CanActivate{
             if (!user)
             throw new UnauthorizedException();
             request['user'] = user;
+            request['isConfirmed2Fa'] = payload.isConfirmed2Fa;
         }
         catch {
             throw new UnauthorizedException();

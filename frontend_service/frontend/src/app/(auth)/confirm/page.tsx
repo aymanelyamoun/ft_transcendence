@@ -27,7 +27,7 @@ export default function Confirm() {
   useEffect(() => {
     const checkAuthentication = async () => {
         if (user) {
-
+          // console.log("psspspspspsps:   ",user)
           setUserData({
             username: user.username,
             profilePic: user.profilePic,

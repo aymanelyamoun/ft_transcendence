@@ -18,7 +18,7 @@ export class RequestController {
     @UseGuards(JwtGuard)
     async sendRequest(@Req() req: Request, @Param('recieverId') recieverid: string,  @Res() res: Response)
     {
-      console.log(recieverid);
+      // console.log(recieverid);
       const user = req['user'] as User
       const Notif = await this.requestService.handleSendRequest(user.id, recieverid, "login sent you friend request", NOTIF_TYPE.friendReq);
       return res.status(200).send(Notif);

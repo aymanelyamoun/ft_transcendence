@@ -7,6 +7,7 @@ import Authorization from "@/utils/auth";
 import { redirect, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Confirm from "./confirm/page";
+import ConfirmAuth from "./confirmauth/page";
 
 
 interface User {
@@ -16,14 +17,14 @@ interface User {
   profilePic?: string;
   hash: string;
   typeLog: string;
+  isTwoFactorEnabled: Boolean;
+  isConfirmed2Fa: Boolean;
 }
-
 
 interface UserContextValue {
   user: User | null;
   setUser: (user: User | null) => void; 
 }
-
 
 const UserContext = createContext<UserContextValue>({
   user: null as User | null,
@@ -32,10 +33,11 @@ const UserContext = createContext<UserContextValue>({
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [twoFa, setTwoFa] = useState<boolean>(false)
+  // const [check2fa, setCheck2fa] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-  const pathname = usePathname();
-  
+  const pathname = usePathname();  
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -49,17 +51,23 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             },
           });
         if (res.ok) {
-          setAuthenticated(true);
           const data = await res.json();
           setUser(data);
-        } else {
+          setAuthenticated(true);
+          if (data?.isTwoFactorEnabled  && !data.isConfirmed2Fa)
+          {
+              //router.push("/confirmauth");
+              setTwoFa(true);
+              return ; 
+          }
+          } else {
+          
           router.push("/");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-
     checkAuthentication();
   }, [pathname]);
 
@@ -67,7 +75,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <UserContext.Provider value={value}>
-    {authenticated ? (
+    {/* {authenticated ? (
       !user?.hash ? (
         <Confirm />
       ) : (
@@ -77,7 +85,27 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       )
     ) : (
       <Loading />
+    )} */}
+      <>
+    {authenticated ? (
+      twoFa ? (
+        // Render Confirm component when authenticated and twoFa is true
+        <ConfirmAuth />
+      ) : (
+        // Render children if user is authenticated and !user.hash is true
+        !user?.hash ? (
+          <Confirm /> // Replace with your component for 2FA confirmation
+        ) : (
+          <> 
+            {children}
+          </>
+        )
+      )
+    ) : (
+      // Render Loading component when not authenticated
+      <Loading />
     )}
+  </>
     </UserContext.Provider>
   );
 }

@@ -30,6 +30,7 @@ async login(dto:LoginDto)
     const payload = {
       email: user.email,
       sub: user.username,
+      isConfirmed2Fa: false,
     };
     const backendTokens = await this.generateJwt(payload)
     return {

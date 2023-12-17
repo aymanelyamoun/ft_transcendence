@@ -65,10 +65,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
         setFriendSearch(data);
         console.log(SearchUsers);
       }
-      // }else {
-      //   alert("Error fetching data: ");
-      //   console.error("Error fetching data: ", res.statusText);
-      // }
     } catch (error) {
       console.error("Err1or fetching data: ", error);
     }
@@ -83,7 +79,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
     else
       Searchusers('all');
     setSearchText(e.target.value);
-
   };
 
 return ( 
@@ -92,15 +87,7 @@ return (
          value={searchText}
          onChange={handleInputChange}
          />
-        {/* {SearchUsers.map((friend) => (
-              <ResultItem key={friend.id}
-                  id={friend.id}
-                  username={friend.username}
-                  profilePic={friend.profilePic}
-                  group={friend.group}
-                  groupMembers={friend.groupMembers}          
-              />
-              ))} */}
+
         </SearchContainer>
 )
 }

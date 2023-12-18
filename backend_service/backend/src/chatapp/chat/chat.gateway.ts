@@ -39,7 +39,7 @@ export class ChatGateway implements OnModuleInit, OnGatewayConnection {
 
   @SubscribeMessage('userData')
   subscribeUserData(client: Socket, data: userDataDto) {
-    console.log(data);
+    console.log('got user data: ', data);
     const connectedSocket = this.gatewayService.addConnectedSocket({socket:client, userId:data.userId});
     // this.connectedSockets.add({socket: client, userId: data.userId})
 
@@ -50,7 +50,9 @@ export class ChatGateway implements OnModuleInit, OnGatewayConnection {
   async sendMessageTo(client: Socket, msg: messageDto) {
 
     // client.emit('privateMessage', msg.message, msg.conversationId);
-    client.broadcast.to(msg.conversationId).emit("privateMessage", msg.message);
+    console.log("sending message: ", msg.conversationId);
+    this.server.emit("rcvMessage", msg.message);
+    // client.broadcast.to(msg.conversationId).emit("rcvMessage", msg.message);
     // check if there is aconversation between the two users
     // if not create a new conversation
     // next add messages to database 

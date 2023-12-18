@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 import Image from "next/image";
 import {
   FaFacebook,
@@ -14,7 +13,10 @@ import { use, useEffect } from "react";
 
 export default function Home() {
   useEffect(() => {
+    socket.connect();
+
     socket.on("connect", () => {
+      // socket.emit("userData", { userId: userId, isAdmin: "false" });
       console.log("connected to server");
     });
 
@@ -29,6 +31,9 @@ export default function Home() {
     socket.on("pong", (data) => {
       console.log(data);
     });
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const gradientStyle = {

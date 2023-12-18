@@ -60,6 +60,7 @@ export class PrismaChatService{
               conversation:{connect:{id:message.conversationId}},
               sender:{connect:{id:message.from}}}
             });
+          if (!newMessage) throw new NotFoundException("the message you are trying to send does not exist");
 
           return newMessage;
         }
@@ -688,10 +689,6 @@ export class PrismaChatService{
           // if (!conversation)
           if (!messages_)
             return new NotFoundException("conversation not found");
-          // const {messages} = conversation;
-          console.log("messages: ", messages_)
-
-          // messages = messages_;
           return messages_;
         }
 

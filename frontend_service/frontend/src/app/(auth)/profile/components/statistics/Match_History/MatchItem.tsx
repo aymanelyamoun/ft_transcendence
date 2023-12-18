@@ -28,7 +28,6 @@ const MatchItem: React.FC<Match> = (props) => {
             <img src={props.player2_profile} alt="Profile" className="rounded-lg" />
         </div>
         <div className={styles['matchItem-result']}>
-            {/* {props.result === 'win' ? <span className={styles['matchItem-result-win']}>Win</span> : <span className={styles['matchItem-result-loss']}>Loss</span>} */}
             <span className={styles['matchItem-result']}>{props.result}</span>
         </div>
         <div className={styles['matchItem-scores']}>

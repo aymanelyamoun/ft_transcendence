@@ -3,6 +3,8 @@ import styles from './friends.module.css';
 import FriendRequestItem from './FriendRequestItem';
 import { useState, useEffect } from 'react';
 import { Backend_URL } from '@/lib/Constants';
+import { GiAstronautHelmet } from "react-icons/gi";
+import styled from 'styled-components';
 
 interface FriendR
 {
@@ -14,6 +16,24 @@ interface FriendR
   discription: string;
 }
 
+const NoRequestsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 15vh;
+  color: #fff;
+`;
+
+const NoRequestIcon = styled.div`
+  font-size: 5rem;
+  color: #fff;
+`;
+
+const NoRequestSpan = styled.span`
+  font-size: 1.5rem;
+`;
 
 const FriendRequest = () => {
   const [friendRequests, setFriendRequests] = useState<FriendR[]>([]);
@@ -45,6 +65,7 @@ const FriendRequest = () => {
 
   return (
     <div className={styles['friendRequest']}>
+      {friendRequests.length ? (
       <ul>
         {friendRequests.map((friendRequest) => (
           <FriendRequestItem
@@ -56,7 +77,14 @@ const FriendRequest = () => {
             setfriendRequests={setFriendRequests}
           />
         ))}
-      </ul>
+      </ul> ) : (
+        <NoRequestsContainer>
+          <NoRequestIcon>
+            <GiAstronautHelmet />
+          </NoRequestIcon>
+          <NoRequestSpan>No Requests yet</NoRequestSpan>
+        </NoRequestsContainer>
+      )}
     </div>
   );
 }

@@ -8,9 +8,9 @@ interface FriendR
 {
   id: string;
   title: string;
-  sender: {
+  // sender: {
     profilePic: string;
-  };
+  // };
   discription: string;
 }
 
@@ -79,7 +79,6 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
   return (
     <div className={styles['friendReqItem']}>
         <div className={styles['friendReq-image']}>
-        {/* <img alt="Profile" className="rounded-lg" /> */}
             <img src={props.profilePic} alt="Profile" className="rounded-lg" />
         </div>
         <div className={styles['friendReq-name']}>

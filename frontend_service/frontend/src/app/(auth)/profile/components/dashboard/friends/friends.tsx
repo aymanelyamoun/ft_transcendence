@@ -45,7 +45,11 @@ const Friends  = () => {
     <>
     <div className={styles.friends}>
       <div className={styles['friends-container']}>
-        <span className={styles['friends-title']}>Friends</span>
+        {showRequest ? (
+          <span className={styles['friends-title']}>Friend Requests</span>
+          ) : (
+            <span className={styles['friends-title']}>Friends</span>
+            )}
         <Notification onRequestClick={handleRequestClick} />
         {showRequest ? (
           <FriendRequests 

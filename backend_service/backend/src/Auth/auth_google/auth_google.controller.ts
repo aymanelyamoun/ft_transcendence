@@ -71,6 +71,7 @@ export class AuthGoogleController
     @UseGuards(IntraAuthGuard)
     async handleRedirect42(@Req() req: Request, @Res() res: Response)
     {
+      try{
       (req.user as any).isConfirmed2Fa = false;
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
@@ -82,7 +83,12 @@ export class AuthGoogleController
         return res.redirect('http://localhost:3000/profile/dashboard')
       }
       return res.redirect('http://localhost:3000/confirm')
+    } catch (error)
+    {
+      console.error('Error in login:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
+  }
     
   @Get('protected')
   protectedRoute(@Req() request) {

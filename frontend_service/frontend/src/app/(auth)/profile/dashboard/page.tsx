@@ -24,7 +24,7 @@ interface SearchU
 const SearchDiv = styled.div`
   position: absolute;
   top: 1vh;
-  left: 5vw;
+  left: 7vw;
 `;
 
 const AppGlass = styled.div`
@@ -120,7 +120,6 @@ function App() {
           <Skins />
           <Statistics />
           <Friends
-          // onFriendItemClick={handleFriendItemClick} 
           />
         </AppGlass>
       </div>

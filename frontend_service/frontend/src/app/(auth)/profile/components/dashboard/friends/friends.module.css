@@ -7,7 +7,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    padding-top: 4rem;
+    top: 4vh;
     transition: all 300ms ease;
 }
 
@@ -18,10 +18,8 @@
     position: absolute;
     justify-content: space-between;
     box-sizing: border-box;
-    height: 50vh;
-    width: 20vw;
-    margin: 5px;
-    border: 1px solid rgba(154, 155, 211, 0.2);
+    height: 90%;
+    width: 85%;
     border-radius: 10px;
 }
 /* &::-webkit-scrollbar {
@@ -48,13 +46,11 @@ div span.friends-title {
     background: rgba(154, 155, 211, 0.2);
     display: flex;
     align-items: center;
-    cursor: pointer;
     justify-content: space-between;
     width: 94%;
     padding: 10px 10px;
     box-sizing: border-box;
     height: 80px;
-    border-bottom: 1px solid rgba(154, 155, 211, 0.2);
     margin: 15px 10px;
     border-radius: 15px;
 }
@@ -64,7 +60,6 @@ div span.friends-title {
     background: rgba(154, 155, 211, 0.2);
     display: flex;
     align-items: flex-start;
-    /* justify-content: space-between; */
     width: 94%;
     box-sizing: border-box;
     height: 80px;

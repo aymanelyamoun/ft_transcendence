@@ -19,7 +19,7 @@ const SettingsContainer = styled.div`
     position: relative;
     height: 2vh;
     width: 13vw;
-    top: 18vh;
+    // top: 18vh;
     left: 0vw;
     margin: 1.56rem;
     padding: 2.5rem;
@@ -28,6 +28,7 @@ const SettingsContainer = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    margin-top: auto;
 
     &:hover {
         transition: all 0.3s ease-in-out;
@@ -77,6 +78,7 @@ const SettingSpan = styled.span`
     font-weight: 400;
     line-height: normal;
 `;
+
 
 const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
     const router = useRouter();

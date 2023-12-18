@@ -44,13 +44,13 @@
     border-radius: 15px;
     display: flex;
     align-items: center;
-    /* width: 40vw; */
     width: 50vw;
-    padding: 10px 10px;
     box-sizing: border-box;
     height: 7vh;
     border-bottom: 1px solid rgba(154, 155, 211, 0.2);
     margin: 30px 10px;
+    flex-direction: row;
+    flex-wrap: nowrap
 }
 
 .matchItem-player1
@@ -60,9 +60,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
-    /* position: sticky; */
-    /* left: 3vw; */
-    /* margin: 0.2rem; */
+    margin: 0.1rem;
 }
 
 .matchItem-player2
@@ -72,7 +70,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
-    /* margin: 0.2rem; */
+    margin: 0.1rem;
 }
 
 .matchItem-vs
@@ -98,8 +96,12 @@
     color: aliceblue;
     font-size: 1.5rem;
     font-weight: 600;
-    margin-left: 4vw;
-    margin-right: 3vw;
+    /* margin-left: 4vw;
+    margin-right: 3vw; */
+    width: 18vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .matchItem-scores
@@ -128,6 +130,7 @@
 .matchItem-xp-loss
 {
     color: #a51033;
+    /* color: #FC2B5D; */
     font-size: 1.5rem;
     font-weight: 600;
     font-style: normal;

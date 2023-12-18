@@ -8,7 +8,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    top: 1.9vh;
+    top: 2.5vh;
     /* padding-bottom: 2rem; */
     transition: all 300ms ease;
 }

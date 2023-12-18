@@ -55,7 +55,7 @@ export class RequestController {
     async blockUser(@Req() req: Request, @Param('userIdB') userIdB: string,  @Res() res: Response)
     {
       const user = req['user'] as User
-      const result = this.requestService.BlockUser(user.id, userIdB);
+      const result = await this.requestService.BlockUser(user.id, userIdB);
       return res.status(200).send(result);
     }
 
@@ -65,7 +65,7 @@ export class RequestController {
     async deblockUser(@Req() req: Request, @Param('userIdB') userIdB: string,  @Res() res: Response)
     {
       const user = req['user'] as User
-      const result = this.requestService.DeBlockUser(user.id, userIdB);
+      const result = await this.requestService.DeBlockUser(user.id, userIdB);
       return res.status(200).send(result);
     }
 
@@ -76,7 +76,7 @@ export class RequestController {
     {
       const user = req['user'] as User
       const list = await this.requestService.BlockList(user.id)
-      console.log(list);
+      // console.log(list);
       return res.status(200).send(list);
     }
 }

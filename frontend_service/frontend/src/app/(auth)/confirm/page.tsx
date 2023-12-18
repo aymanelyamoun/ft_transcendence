@@ -27,7 +27,6 @@ export default function Confirm() {
   useEffect(() => {
     const checkAuthentication = async () => {
         if (user) {
-          // console.log("psspspspspsps:   ",user)
           setUserData({
             username: user.username,
             profilePic: user.profilePic,
@@ -42,7 +41,6 @@ export default function Confirm() {
   }, [user, router]);
   
   const confirm = async () => {
-
     console.log(userData?.profilePic);
     const res = await fetch(Backend_URL + "user/confirm", {
       method: "PATCH",
@@ -63,10 +61,9 @@ export default function Confirm() {
       alert(res.statusText);
       return;
     }
-    window.location.href = "/profile/dashboard";
-
-    
+    window.location.href = "/profile/dashboard";    
     alert("User confirmed!");
+  
   };
   
   
@@ -89,10 +86,10 @@ export default function Confirm() {
        {/* {!authenticated ? (
          <Loading />
        ) : ( */}
-         <div
-           style={{ background: "#050A27" }}
-           className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
-         >
+    <div
+      style={{ background: "#050A27" }}
+      className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
+    >
            <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3">
              {" "}
              PONG
@@ -101,10 +98,10 @@ export default function Confirm() {
              style={{ background: "#9A9BD3", transform: "rotate(-137.42deg)" }}
              className="fixed top-4 left-36 w-[30px] h-[323px] rounded-lg"
            ></div>
-           <div
-             style={gradientStyle}
-             className="  sm:w-2/4 w-80 p-1 rounded-md sm:block px-20"
-           >
+      <div
+        style={gradientStyle}
+        className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
+      >
              <div className="py-10">
                <div className="flex flex-col items-center ">
                  <div className="flex items-center shrink-0 mb-7">

@@ -8,31 +8,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/navigation';
 
 
-/* email String @unique
-  username  String?
-  password String */
-
   type FormInputs = {
   username: string;
   email: string;
   hash: string;
   };
-
-  //  const [authenticated, setAuthenticated] = useState(false);
-
-  
-  /*
-  export class CreateUserDto{
-    @IsString()
-    username: string;
-
-    @IsEmail()
-    email: string;
-    
-    @IsString()
-    password: string;
-  }
-  */
  
  export default function Signup()
  {
@@ -100,19 +80,25 @@ import { useRouter } from 'next/navigation';
     };
   
   return(
-    <div style={{ background: '#050A27' }} className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen">
+    <div
+    style={{ background: "#050A27" }}
+    className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
+  >
       <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG</h2>
       <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 w-[30px] h-[323px] rounded-lg'></div>
-        <div style={gradientStyle} className="  sm:w-2/4 w-80 p-1 rounded-md sm:block px-20">
+      <div
+        style={gradientStyle}
+        className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
+      >
           <div className='py-10'>
           <div className="flex flex-col items-center ">
              <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
-              <input type="text" name="Username" placeholder='Username' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1"
+              <input type="text" name="Username" placeholder='Username' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1 max-w-full"
               onChange={(e) => (data.current.username = e.target.value) }
               />
             </div>
             <div style={{ background: 'rgba(154, 155, 211, 0.2)'}} className="  p-2 flex items-center mb-7 rounded-md w-full ">
-              <input style={{ background: 'rgba(154, 155, 211, 0)' }} type="email" name="email" placeholder='Email' className=" outline-none text-sm flex-1"
+              <input style={{ background: 'rgba(154, 155, 211, 0)' }} type="email" name="email" placeholder='Email' className=" outline-none text-sm flex-1 max-w-full"
                 onChange={(e) => (data.current.email = e.target.value) } />
             </div>
             <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
@@ -121,7 +107,7 @@ import { useRouter } from 'next/navigation';
                 name="password"
                 placeholder="password"
                 style={{ background: 'rgba(154, 155, 211, 0)' }}
-                className="outline-none text-sm flex-1"
+                className="outline-none text-sm flex-1 max-w-full"
                 onChange={(e) => (data.current.hash = e.target.value)}
               />     
             </div>
@@ -139,7 +125,6 @@ import { useRouter } from 'next/navigation';
           </div>
           </div>
         </div>
-      {/* </div> */}
     </div>
   );
 }

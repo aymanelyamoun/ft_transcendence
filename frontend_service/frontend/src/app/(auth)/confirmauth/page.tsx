@@ -83,7 +83,7 @@ export default function ConfirmAuth() {
             name="Username"
             placeholder="CODE"
             style={{ background: "rgba(154, 155, 211, 0)" }}
-            className="outline-none text-sm flex-1 text-white"
+            className="outline-none text-sm flex-1 max-w-full text-white"
             value={codeTwoFa}
             onChange={(e) => setCodeTwoFa(e.target.value)}
             onKeyDown={(e) => {

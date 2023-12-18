@@ -414,7 +414,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                       style={{
                         background: "rgba(154, 155, 211, 0)",
                       }}
-                      className="outline-none text-sm flex-1 "
+                      className="outline-none text-sm flex-1 max-w-full "
                       onChange={(e) =>
                         setUserPass(
                           (prevUserPass) =>
@@ -443,7 +443,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                       style={{
                         background: "rgba(154, 155, 211, 0)",
                       }}
-                      className="outline-none text-sm flex-1 "
+                      className="outline-none text-sm flex-1 max-w-full"
                       onChange={(e) =>
                         setUserPass(
                           (prevUserPass) =>
@@ -472,7 +472,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                       style={{
                         background: "rgba(154, 155, 211, 0)",
                       }}
-                      className="outline-none text-sm flex-1 "
+                      className="outline-none text-sm flex-1 max-w-full"
                       onChange={(e) =>
                         setUserPass(
                           (prevUserPass) =>
@@ -591,7 +591,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
                               background: "rgba(154, 155, 211, 0)",
                               overflowWrap: "break-word",
                             }}
-                            className="outline-none text-sm flex-1 "
+                            className="outline-none text-sm flex-1 max-w-full"
                             onChange={(e) => setCodeTwoFa(e.target.value)}
                           />
                         </div>

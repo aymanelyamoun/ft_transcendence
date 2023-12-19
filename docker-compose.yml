@@ -43,6 +43,7 @@ services:
 networks:
   all_connect:
     driver: bridge
+
 #     volumes:
 #       - my_postgres_data_auth:/var/lib/postgresql/data  
 

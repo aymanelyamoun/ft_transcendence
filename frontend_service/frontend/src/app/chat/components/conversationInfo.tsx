@@ -20,7 +20,7 @@ import {
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-export const userId = "03af010b-f22d-402c-b2a8-2a22bf55ebe0";
+export const userId = "047a9c1b-9832-4fb7-acc4-a54d52306ab2";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";

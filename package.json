@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "start": "^5.1.0"
+    "start": "^5.1.0",
+    "styled-components": "^6.1.1"
   }
 }

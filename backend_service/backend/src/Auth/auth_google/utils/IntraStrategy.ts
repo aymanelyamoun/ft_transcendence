@@ -11,10 +11,11 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
         @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
       ){
         super({
+          
             clientID:
                 'u-s4t2ud-ae38f95888699e53a0d1e83d0112945b049d14a0d11d467ebb5d373db96cd2be',
             clientSecret:
-                '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',
+                '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',
             callbackURL: 'http://localhost:3001/api/auth/google/redirect42',
             // scope: ['profile', 'email'],
         });

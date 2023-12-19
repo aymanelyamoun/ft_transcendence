@@ -275,8 +275,9 @@ export const ChatToggel = ({
       //       </p>
       //       <MdDelete color="#FEFFFF" size={24} />
       //     </CostumeButton>
+      // </AlertMessage>
 
-      // exit 
+      //  exit 
 
       //   <AlertMessage message={"are you sure you want to exit groupName you can no longer send or see messages in this group"} type={"exit"}>
       //      <CostumeButton
@@ -291,7 +292,7 @@ export const ChatToggel = ({
       //       <FaRunning color="#FC2B5D" size={24} />
       //     </CostumeButton> 
 
-      // </AlertMessage>
+      //  </AlertMessage>
       
       // notify
 

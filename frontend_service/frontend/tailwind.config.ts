@@ -30,9 +30,6 @@ const config: Config = {
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
-        // 'poppins-100': ['Poppins', 'sans-serif', { fontWeight: '100' }],
-        // 'poppins-200': ['Poppins', 'sans-serif', { fontWeight: '200' }],
-        // 'poppins-500': ['Poppins', 'sans-serif', { fontWeight: '500' }],
       },
     },
   },

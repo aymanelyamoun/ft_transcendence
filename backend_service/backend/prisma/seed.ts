@@ -58,6 +58,9 @@ async function main() {
             await prisma.conversation.create({
                 data:{
                     type:CONVERSATION_TYPE.DIRECT,
+                    members:{
+                        create:[{userId:user.id}, {userId:friend.id}]
+                      },
                     users:{
                         connect:[
                             {id:user.id},

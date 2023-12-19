@@ -27,8 +27,9 @@ import { Prisma, $Enums } from "@prisma/client";
 export interface ConversationIthemProps{
   id: string;
   type: string;
-  // createdAt: Date;
-  createdAt: string;
+  createdAt: Date;
+  updatedAt: Date;
+  // createdAt: string;
   channelId: string;
   lastMessage: string;
   profilePic: string;
@@ -49,9 +50,13 @@ export interface ConversationIthemProps{
 export type MessageProps = {
   sender: {
       profilePic: string;
+      username: string;
   };
+  conversation:{
+    type:string;
+  }
 } & {
-  id: string;
+  id: number;
   senderId: string;
   message: string;
   createdAt: Date;

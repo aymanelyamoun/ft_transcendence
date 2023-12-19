@@ -14,11 +14,13 @@
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "next": "^14.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
     "socket.io-client": "^4.7.2",
+    "styled-components": "^6.1.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -11,6 +11,10 @@ import { MdLabelOutline } from "react-icons/md";
 import { socket } from "../socket";
 import { use, useEffect } from "react";
 
+const gradientStyle = {
+  background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',
+};
+
 export default function Home() {
   useEffect(() => {
     socket.connect();
@@ -33,8 +37,8 @@ export default function Home() {
     });
     return () => {
       socket.disconnect();
-    };
-  
+    }});
+
     return (
       <div style={{ background: '#050A27' }} className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen">
       <div style={gradientStyle} className='fixed top-8 left-1/4 transform -translate-x-1/2 -rotate-6 w-[200px] h-[423px] rounded-lg animate-pulse'></div>

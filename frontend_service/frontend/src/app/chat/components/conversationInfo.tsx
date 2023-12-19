@@ -13,7 +13,10 @@ import { MdGroupAdd } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { FaRunning } from "react-icons/fa";
 import ChatSection, { ConversationChatSection } from "./ChatSection";
+import { jwtDecode } from "jwt-decode";
 import { Conversations } from "./ConversationList";
+import Cookies from 'js-cookie';
+
 import {
   ConversationIthemProps,
   MemberProps,
@@ -29,6 +32,10 @@ export const isAdmin = false;
 
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
+  const authToken = Cookies.get('access_token');
+  console.log("authToken:", authToken);
+  const decodedToken = jwtDecode(authToken);
+  console.log("decodedToken:", decodedToken);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
   //   return;

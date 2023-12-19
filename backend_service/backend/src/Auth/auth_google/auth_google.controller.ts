@@ -160,7 +160,7 @@ async logout(@Req() req: Request, @Res() res: Response)
       await this.userService.updateUser(user.id, { isTwoFactorEnabled: true });
       (user as any).isConfirmed2Fa = true;
       const accessToken = await this.jwtService.signAsync(user, {
-        expiresIn: '1h',
+        expiresIn: '1m',
         secret: process.env.jwtSecretKey,
       });
       res.cookie('access_token', accessToken, { httpOnly: false });
@@ -184,7 +184,7 @@ async logout(@Req() req: Request, @Res() res: Response)
       await this.userService.updateUser(user.id, { isTwoFactorEnabled: false, TwoFactSecret: null });
       (user as any).isConfirmed2Fa = false;
       const accessToken = await this.jwtService.signAsync(user, {
-        expiresIn: '1h',
+        expiresIn: '1m',
         secret: process.env.jwtSecretKey,
       });
       res.cookie('access_token', accessToken, { httpOnly: false });
@@ -214,7 +214,7 @@ async logout(@Req() req: Request, @Res() res: Response)
     }
     (user as any).isConfirmed2Fa = true;
     const accessToken = await this.jwtService.signAsync(user, {
-      expiresIn: '1h',
+      expiresIn: '1m',
       secret: process.env.jwtSecretKey,
     });
     res.cookie('access_token', accessToken, { httpOnly: false });

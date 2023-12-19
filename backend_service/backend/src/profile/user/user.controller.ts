@@ -36,7 +36,7 @@ export class UserController {
   async check(@Req() req: Request, @Res() res: Response)
   {
     try {
-      const user = await this.authGoogleService.check_token(req);
+      const user = req['user'] as User;;
       if (!user) {
         throw new UnauthorizedException();
       }

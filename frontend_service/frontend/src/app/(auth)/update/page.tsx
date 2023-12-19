@@ -13,8 +13,8 @@ export default function page() {
   const [isUsernameVisible, setIsUsernameVisible] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isTofaVisible, setIsTofaVisible] = useState(false);
-  const [isChecked, setIsChecked] = useState(true);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
   const [isToggleChecked, setIsToggleChecked] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
@@ -255,9 +255,6 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     }, [isChecked]);
   return (
     <div>
-    {/* {!isAuthenticated? (
-      <Loading />
-    ) : ( */}
     <div
       style={{ background: "#050A27" }}
       className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"

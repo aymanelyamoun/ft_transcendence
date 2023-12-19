@@ -247,7 +247,6 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
           .then((response) => response.json())
           .then((data) => {
             setQrCode(data);
-            console.log("QR code data:", data);
           })
           .catch((error) => {
             console.error("Error fetching QR code data:", error);

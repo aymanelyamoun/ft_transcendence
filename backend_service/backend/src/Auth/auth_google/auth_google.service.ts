@@ -1,13 +1,8 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { use } from "passport";
-// import { PrismaService } from "src/prisma.service";
-// import { UserDtetails } from "src/utils/types";
 import { Response, Request } from 'express';
-// import { UserService } from "src/user/user.service";
-// import { LoginDto } from "src/user/dto/auth.dto";
 import * as bcrypt from 'bcrypt';
-// import { PrismaService } from "backAuth/src/prisma.service";
 import { UserService } from "../../profile/user/user.service";
 import { LoginDto } from "../../profile/user/dto/auth.dto";
 import { UserDtetails } from "src/types/types";
@@ -39,7 +34,7 @@ async login(dto:LoginDto)
     }
   } catch (error)
   {
-    throw new UnauthorizedException();
+    throw new UnauthorizedException({message : "user can't log"});
   }
 }
 
@@ -58,10 +53,7 @@ async validateUserlogin(dto:LoginDto)
   }
 }
   
-  
-
-
-  async validateUser(details: UserDtetails, typ: LOG_TYPE)
+async validateUser(details: UserDtetails, typ: LOG_TYPE)
   {
     try {
       const user = await this.prisma.user.findUnique({
@@ -122,7 +114,7 @@ async validateUserlogin(dto:LoginDto)
       return (user);
   }
 
-    async generateJwt(payload) {
+  async generateJwt(payload) {
       return {
         backendTokens: {
            accessToken: await this.jwtService.signAsync(payload, {
@@ -137,7 +129,6 @@ async validateUserlogin(dto:LoginDto)
         }
   }
 }
-
 
  extractTokenFromHeader(req: Request) {
   let token = null;

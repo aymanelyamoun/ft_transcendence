@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "../../components/Loading";
 import { useUser } from "../layout";
+import { json } from "stream/consumers";
 export default function Confirm() {
   interface UserData {
     username: string;
@@ -56,9 +57,11 @@ export default function Confirm() {
         "Access-Control-Allow-Origin": "*",
       },
     });
+    const data = await res.json();
+    console.log(data);
     if (!res.ok) {
       
-      alert(res.statusText);
+      alert(data.message);
       return;
     }
     window.location.href = "/profile/dashboard";    

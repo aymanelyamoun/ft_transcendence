@@ -238,31 +238,32 @@ async logout(@Req() req: Request, @Res() res: Response)
     @Post('register')
     async registerUser(@Body() dto:CreateUserDto, @Res() res: Response)
     {
-      try {
+      // try {
         const data = await this.userService.create(dto);
         return res.status(200).send(data);
-      } catch (error)
-      {
-        console.error('Error in login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
+      // } catch (error)
+      // {
+      //   console.error('Error in login:', error);
+      //   res.status(500).json({ error: 'Internal Server Error' });
+      // }
     }
 
     @Post('login')
     async login(@Body() dto:LoginDto,@Req() req: Request, @Res() res: Response)
     {
-      try
-      {
+      // try
+      // {
         const data = await this.authGoogleService.login(dto);
         res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: false });
         res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: false });
-        res.json(data.user);
-      }
-      catch (error)
-      {
-        console.error('Error in login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
+        return res.status(200).send(data); 
+        //res.json(data.user);
+      // }
+      // catch (error)
+      // {
+      //   console.error('Error in login:', error);
+      //   res.status(500).json({ error: 'Internal Server Error' });
+      // }
     }
 
 }

@@ -14,6 +14,7 @@ import Image from "next/image";
 import { socket } from "../../../socket";
 
 import { userId, isAdmin } from "./ConversationInfo";
+import sendIcon from "../../../../public/sendButton.png";
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>
@@ -126,16 +127,16 @@ const MessageChat = ({
 }) => {
   return (
     <div className={type}>
-      {/* <div className=""> */}
+      <div className="">
       <Image
-        className="rounded-full float-left mr-[10px] mt-[4px] border-[1.5px] border-[#202345]"
+        className={`rounded-full ${type == "rcvMsg" ? 'float-left' : 'float-right'} mr-[10px] mt-[4px] border-[1.5px] border-[#202345]`}
         src={avatar}
         alt="profile pic"
         width={43}
         height={43}
       />
-      <p className="ml-2 mt-2 mb-2"> {message.message} </p>
-      {/* </div> */}
+      <p className="ml-2 mt-2 mb-2 text-[#FFFFFF]"> {message.message} </p>
+      </div>
     </div>
   );
 };
@@ -169,6 +170,12 @@ const TypeMessage = ({maxId}:{maxId:number}) => {
       setInputValue("");
     }
   };
+  
+  
+  const handleClick = () => {
+    sendMessage();
+    setInputValue("");
+  };
 
   return (
     <div onKeyDown={handlePressKey} className="TypeMsgcontainer flex">
@@ -179,6 +186,12 @@ const TypeMessage = ({maxId}:{maxId:number}) => {
         onSubmit={sendMessage}
         placeholder="Type Something ..."
         className="typeMsg"
+      />
+       <Image
+        onClick={handleClick}
+        className="sendIcon"
+        src={sendIcon}
+        alt="sendIcone"
       />
     </div>
   );

@@ -54,7 +54,7 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       />
       <div className="flex flex-col">
         <p className="friendsName">{conversationProps.name}</p>
-        <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden ">{"tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."}</p>
+        <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">{"tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."}</p>
       </div>
     </li>
   );
@@ -234,7 +234,7 @@ export const ChatToggel = ({
     // add space-evenly using tailwindcss
     <div className="msgs flex justify-evenly">
       <ChatButton onClick={handleChatClick}>
-        <HiMiniChatBubbleLeft size={22} />
+        <HiMiniChatBubbleLeft size={22} color={`white`} />
       </ChatButton>
 
       <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
@@ -255,7 +255,7 @@ export const ChatToggel = ({
       <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
 
       <ChatButton onClick={handleChannelClick}>
-        <HiMiniChatBubbleLeftRight size={22} />
+        <HiMiniChatBubbleLeftRight size={22} color={`white`}/>
       </ChatButton>
     </div>
   );

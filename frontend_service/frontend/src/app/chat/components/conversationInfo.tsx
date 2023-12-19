@@ -225,7 +225,7 @@ const ConversationInfoWrapper = ({
           <p className="titleInfo">{title}</p>{" "}
         </ProfileInfos>
       ) : (
-        <ProfileInfos username="tmp2">
+        <ProfileInfos username="channel name">
           <></>
         </ProfileInfos>
       )}

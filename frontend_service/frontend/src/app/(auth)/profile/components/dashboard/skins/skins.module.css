@@ -83,17 +83,52 @@ div span.skins-title
 @media (min-width: 1300px) and (max-width: 1900px) {
     .Skins
     {
+        padding-left: 3rem;
         grid-row-start: 2;
         grid-row-end: 3;
         grid-column-start: 3;
         grid-column-end: 5;
     }
+    .skins-container
+    {
+        background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
+        height: 77%;
+        width: 95%;
+        padding-bottom: 0px;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+    }
 
+    .Skins-rectangle
+    {
+        width: 12vw;
+        height: 23vh;
+        background-color: white;
+        position: absolute;
+        right: 7%;
+        bottom: 22%;
+        transform: rotate(22deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+    }
     .Skins-stick {
-        width: 260px;
-        height: 20px;
-        right: 8%;
-        bottom: 50%;
+        width: 18vw;
+        height: 1.5vh;
+        background: rgba(186, 216, 239, 1);
+        position: absolute;
+        left: 73%;
+        bottom: 59%;
+        transform: rotate(73deg);
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
     }
 
     div span.skins-title

@@ -12,6 +12,14 @@ import GroupComponent from './GroupComponent'
 //   group: boolean;
 //   groupMembers?: StaticImageData[];
 // }
+interface SearchU {
+  id: number;
+  username: string;
+  profilePic: string;
+  isBlocked: boolean;
+  group: boolean;
+  groupMembers?: string[];
+}
 
 interface ResultItemProps {
     id: number;
@@ -20,6 +28,7 @@ interface ResultItemProps {
     isBlocked: boolean;
     group: boolean;
     groupMembers?: string[];
+    setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
   }
 
   const ItemContainer = styled.div`
@@ -42,7 +51,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
       {props.group ? (
         <GroupComponent id={props.id} username={props.username} profilePic={props.profilePic} groupMembers={props.groupMembers}/>
       ) : (
-        <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked}/>
+        <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked} setSearchUsers={props.setSearchUsers}/>
       )}
     </ItemContainer>
   );

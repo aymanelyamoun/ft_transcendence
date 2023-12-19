@@ -49,12 +49,11 @@ function App() {
     title: "",
     profilePic: "",
     wallet: 0,
-    online: false,
   });
 
  
   
-  const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
+  // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
   // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
 
 
@@ -78,34 +77,12 @@ function App() {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const res = await fetch( Backend_URL + "user/all", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json() as SearchU[];
-        console.log(data);
-        setSearchUsers(data);
-      }else {
-        alert("Error fetching data: ");
-        console.error("Error fetching data: ", res.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  };
+
   
   useEffect(() => {
     fetchUserData();
     // fetchReqData();
-    fetchUsers();
+    // fetchUsers();
   }, []);
   
 
@@ -113,7 +90,7 @@ function App() {
     <>
       <div className="App">
         <SearchDiv >
-          <SearchHeader onSearch={() => {}}  onClose={() => {}} searchUsers={SearchUsers} />
+          <SearchHeader />
         </SearchDiv>
         <AppGlass>
           <Sidebar sidebar={SidebarInfo} />

@@ -14,7 +14,6 @@ interface SidebarInfo {
   profilePic: string;
   title: string;
   wallet: number;
-  online: boolean;
 }
 
 interface SidebarProps {
@@ -115,14 +114,12 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
           <ProfileHeader>
           <ProfileImage>
             <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+            {/* <OnlineStatus online={props.sidebar.online}>
+            </OnlineStatus> */}
             <Username>{props.sidebar.username}</Username>
             <UserId>{props.sidebar.title}</UserId>
           </ProfileImage>
         </ProfileHeader>
-        {/* <div className={styles.wallet}>
-              <FaGoogleWallet />
-              <span className={styles['wallet-value']}>{props.sidebar.wallet}</span>
-        </div> */}
         <Wallet>
             <WalletIcon />
             <WalletValue>{props.sidebar.wallet}</WalletValue>

@@ -45,14 +45,15 @@ div span.friends-title {
 {
     background: rgba(154, 155, 211, 0.2);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 94%;
     padding: 10px 10px;
     box-sizing: border-box;
     height: 80px;
     margin: 15px 10px;
     border-radius: 15px;
+    align-content: center;
+    /* justify-content: space-between; */
+    align-items: center;
 }
 
 .friendReqItem
@@ -75,6 +76,9 @@ div span.friends-title {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 .friendReq-image
@@ -90,12 +94,13 @@ div span.friends-title {
 {
     font-family: "Inter", sans-serif;
     font-weight: 800;
-    font-size: 20px;
+    font-size: 1.5rem;
     font-weight: bold;
     color: aliceblue;
     align-self: flex-start;
-    margin-left: 40px;
-    position: absolute;
+    position: relative;
+    top: 0.5vh;
+    margin: 0 0 0 0.5vw;
 }
 
 .friendReq-name
@@ -210,15 +215,15 @@ div span.friends-title {
     line-height: normal;
     text-transform: lowercase;
     position: relative;
-    top: 1vh;
-    right: 0.8vw;
+    top: 2vh;
+    right: 1.3vw;
 }
 
 @media (min-width: 1300px) and (max-width: 1900px)
 {
     .friends
     {
-        padding-left: 4rem;
+        padding-left: 3rem;
         grid-row-start: 1;
         grid-row-end: 2;
         grid-column-start: 3;
@@ -227,8 +232,8 @@ div span.friends-title {
 
     .friends-container
     {
-        width: 83%;
-        height: 83%;
+        width: 90%;
+        height: 90%;
     }
 
     .friendItem-container

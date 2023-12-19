@@ -11,7 +11,7 @@ import FriendInfo from '../FriendInfo/FriendInfo';
 
 interface Friend {
   id: string;
-  name: string;
+  username: string;
   profilePic: string;
   title? : string;
 }
@@ -64,7 +64,7 @@ const Friends  = () => {
     {selectedFriend && (
         <FriendInfo
           id={selectedFriend.id}
-          username={selectedFriend.name}
+          username={selectedFriend.username}
           profilePic={selectedFriend.profilePic}
           title={selectedFriend.title}
           ref={infoRef}

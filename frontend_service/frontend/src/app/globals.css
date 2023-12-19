@@ -388,7 +388,7 @@ body {
 
   border-radius: 50%;
 
-  width: 100%;
+  /* width: 100%; */
 }
 
 .friendsPics {
@@ -736,6 +736,15 @@ i    --linear-blue_purble,
   padding-left: 5px;
   margin-bottom: 39px;
 }
+
+.optionsMenu {
+  width: 182px;
+  height: 165px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: #202446; 
+}
+
 .passWord {
   width: 276px;
   height: 45px;

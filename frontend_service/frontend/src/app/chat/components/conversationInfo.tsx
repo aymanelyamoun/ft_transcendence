@@ -19,8 +19,9 @@ import {
   MemberProps,
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
+import { SlOptions } from "react-icons/sl";
 
-export const userId = "047a9c1b-9832-4fb7-acc4-a54d52306ab2";
+export const userId = "03af010b-f22d-402c-b2a8-2a22bf55ebe0";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -133,15 +134,33 @@ const MemberIthem = ({
   name: string;
   isAdmin: boolean;
 }) => {
+  const [isOptions, setIsOptions] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("public");
+
   return (
     <div className="flex justify-between w-full  m-2 items-center ">
-      <div className="flex w-24 justify-between items-center">
-        <div className="w-10 h-10">
-          <Image className="avatar-small" src={avatar} alt={"avatar"} />
-        </div>
+      <div className="flex  justify-between items-center ">
+        {/* <div className=""> */}
+          <Image className="avatar-small mr-[10px]" src={avatar} alt={"avatar"} width={40}/>
+        {/* </div> */}
         <h3>{name}</h3>
       </div>
-      <p>Admin</p>
+      {/* <p>Admin</p> */}
+      {
+
+        !isOptions ? <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
+        :
+        <div>
+          <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
+      <select className="optionsMenu fixed">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+        <option value="orange">Orange</option>
+      </select>
+
+        </div>
+
+      }
     </div>
   );
 };
@@ -180,17 +199,17 @@ const MemberList = ({}: {}) => {
   return (
     <>
       <MemberSeparator />
-      {isSet &&
-        members.map((member) => {
-          return (
-            <MemberIthem
-              imgUrl="some/url"
-              name={member.user.username}
-              isAdmin={true}
-            />
-          );
-        })}
-      {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
+        {isSet &&
+          members.map((member) => {
+            return (
+              <MemberIthem
+                imgUrl="some/url"
+                name={member.user.username}
+                isAdmin={true}
+              />
+            );
+          })}
+        {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
     </>
   );
 };

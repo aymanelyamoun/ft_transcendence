@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "@iconscout/react-unicons": "^2.0.2",
     "axios": "^1.6.2",
     "echarts": "^5.4.3",

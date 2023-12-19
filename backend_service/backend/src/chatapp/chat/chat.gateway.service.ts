@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { ConnectedSocketInfo } from "./types/connected_socket_info";
 import { Socket } from 'socket.io';
 // import { TmpUserService } from "chatapp/server_chatapp/prisma/tmpUserAdd.service";
@@ -17,27 +17,27 @@ export class GatewayService{
         return(connectedSocket);
     }
 
+    removeConnectedSocket(connectedSocket:ConnectedSocketInfo){
+        this.connectedSockets.delete(connectedSocket);
+    }
+
     async joinRooms(connectedSocket:ConnectedSocketInfo){
         // const memberIn = await this.prismaChat.getMemberIn(connectedSocket.userId);
         const conversations = await this.prismaChat.getUserConversations(connectedSocket.userId);
+        // if (conversations.length === 0)
+        //     throw new NotFoundException("no conversations found");
+
 
         conversations.forEach((conversation)=>{
                 const connectedMembers = this.getConnectedMembers(conversation.members);
-
-                // later you can add a check if the socket is already in a room
                 if (connectedMembers.length >= 2){
                     connectedMembers.forEach((connectedMember)=>{
-                        console.log("connectedMember:", connectedMember.userId);
                         const sockets = this.getRequestedSockets(connectedMember.userId);
                         sockets.forEach((socket)=>{
-                            console.log("the socketId: ", socket.id, " has connected conv");
                             socket.join(conversation.id);
                         })
                     });
                 }
-            // }
-
-            // handle disconnect
         });
         // })
     }

@@ -2,6 +2,7 @@ import { user } from "./user";
 
 export type ChannelData = {
     channelName: string;
+    channelPic: string;
     password?: string;
     type: string;
     admines?: string[];

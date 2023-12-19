@@ -80,11 +80,14 @@ export class ChannelController{
 
     @Get('getUserConversationsDirect')
     async getUserConversationsDirect(@Query() userData:userDataDto){
-        // async getUserConversationsDirect(@Param('id') id:string){
-        // async getUserConversationsDirect(@Param('id') id:string){
-        // console.log("------------------------------");
         const userData_ = this.getUserData(userData);
         return await this.prismaChatService.getUserConversationsDirect(userData_);
+    }
+    
+    @Get('getUserConversationsIthemList')
+    async getUserConversationsIthemList(@Query() userData:userDataDto){
+        const userData_ = this.getUserData(userData);
+        return await this.prismaChatService.getConversationIthemList(userData_);
     }
 
     @Get('getUserConversationsChannelChat')
@@ -94,10 +97,18 @@ export class ChannelController{
     }
 
     @Get('/conversation/:id')
-    async getConversationsMessages(@Param('id') id:string, @Body()userData:userDataDto){
-        const userData_ = this.getUserData(userData);
-        // return await this.prismaChatService.getConversationMessages(id, );
+    // async getConversationsMessages(@Param('id') id:string, @Body()userData:userDataDto){
+    async getConversationsMessages(@Param('id') id:string){
+        // const userData_ = this.getUserData(userData);
+        return await this.prismaChatService.getConversationMessages(id);
     }
+
+    @Get('/getConversationMembers/:id')
+    // async getConversationMembers(@Query() conversationInfo:ConversationInfoDto, @Param('id') id:string){
+    async getConversationMembers(@Param('id') id:string){
+        return await this.prismaChatService.getConversationMembers( id );
+    }
+
 
     // this one is just tmeporary it should be handeled in the user part
     @Get('friends/:id')

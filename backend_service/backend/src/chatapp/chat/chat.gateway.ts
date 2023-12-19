@@ -13,8 +13,8 @@ import { PrismaChatService } from '../prisma/chat/prisma.chat.service';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
-@WebSocketGateway({cors : {origin : '*'}})
-export class ChatGateway implements OnModuleInit, OnGatewayConnection{
+@WebSocketGateway({cors : {origin : "http://localhost:3000", credentials: true}})
+export class ChatGateway implements OnModuleInit, OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService) {}
 
@@ -24,19 +24,23 @@ export class ChatGateway implements OnModuleInit, OnGatewayConnection{
   server: Server;
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
+      console.log("socket: ", socket.handshake.headers.cookie);
       console.log('a socket has connected from chat gateway, Id: ', socket.id);
+    });
+    this.server.on('disconnect', (socket: Socket) => {
+      console.log('a socket has disconnected from chat gateway, Id: ', socket.id);
     }
-    )
+    );
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    console.log('chat server id = ', this.server) 
+    // console.log('chat server id = ', this.server) 
     console.log("a socket has connected from chat gateway, client: ", client.id);
   }
 
   @SubscribeMessage('userData')
   subscribeUserData(client: Socket, data: userDataDto) {
-    console.log(data);
+    console.log('got user data: ', data);
     const connectedSocket = this.gatewayService.addConnectedSocket({socket:client, userId:data.userId});
     // this.connectedSockets.add({socket: client, userId: data.userId})
 
@@ -47,14 +51,16 @@ export class ChatGateway implements OnModuleInit, OnGatewayConnection{
   async sendMessageTo(client: Socket, msg: messageDto) {
 
     // client.emit('privateMessage', msg.message, msg.conversationId);
-    client.broadcast.to(msg.conversationId).emit("privateMessage", msg.message);
+    console.log("sending message: ", msg.conversationId);
+    // this.server.emit("rcvMessage", msg.message);
+    const newMessage = await this.prismaChat.addMessageToDM(msg);
+    client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
     // check if there is aconversation between the two users
     // if not create a new conversation
     // next add messages to database 
 
     // const requestedSocket = this.getRequestedSocket(msg.);
 
-    await this.prismaChat.addMessageToDM(msg);
     // console.log("sending message to", msg.messageTo);
     // requestedSocket.emit('onMessage', msg.message);
   }

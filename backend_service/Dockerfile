@@ -1,12 +1,10 @@
 From node:alpine
 
-# COPY backend/package*.json ./
 RUN apk update
 
 
 COPY backend backend
 WORKDIR /backend
-# RUN npm install
 # COPY script.sh script.sh
 
 # WORKDIR /backend/prisma
@@ -18,4 +16,5 @@ WORKDIR /backend
 # WORKDIR /
 
 ENTRYPOINT ./script.sh
+
 # CMD npx prisma migrate dev --name init && npx prisma db seed && npm run start:dev

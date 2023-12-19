@@ -1,10 +1,8 @@
 'use client';
 import { useEffect, useRef} from "react";
-import Matter, {Engine, Bodies, World, Render, Composite, Vector} from 'matter-js';
+import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
 import { addBodies } from '../components/Simulation';
 import { IoArrowBackCircle } from "react-icons/io5";
-// import { collisionDetect } from './utils/collisions';
-
 
 const HEIGHT : number = 800;
 const WIDTH : number = 1500;
@@ -116,6 +114,7 @@ const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.E
             ballVelocity.x = (ballVelocity.x / speed) * ballSpeed
             ballVelocity.y = (ballVelocity.y / speed) * ballSpeed
             ballVelocity = Vector.create(ballVelocity.x, ballVelocity.y)
+            console.log('calculated')
         }
         if ((bodyB == topWall || bodyB == bottomWall) && (bodyA == ball))
         {
@@ -141,8 +140,6 @@ const wallWalk = (newPos: number, paddleOne: Matter.Body, engine : Engine) : boo
     const topWall = engine.world.bodies[0];
     const bottomWall = engine.world.bodies[1];
     const paddleHeight = Math.abs(paddleOne.vertices[2].y - paddleOne.vertices[0].y);
-    // if (newPos - paddleHeight / 2 < topWall.bounds.max.y || newPos + paddleHeight / 2 > bottomWall.bounds.min.y)
-    //     return true;
     if (newPos - paddleHeight / 2 < topWall.position.y || newPos + paddleHeight / 2 > bottomWall.position.y)
         return true;
     return false;
@@ -257,10 +254,8 @@ const checkGoals = (engine: Matter.Engine, render : Render) => {
 }
 
 export default function Singleplayer (){
-    
+    const engine = useRef(Matter.Engine.create({ enableSleeping: false, gravity: { x: 0, y: 0 }}));
     useEffect(() => {
-        const engine = useRef(Matter.Engine.create({ enableSleeping: false, gravity: { x: 0, y: 0 }}));
-        console.log('Singleplayer')
         const render = Render.create({
           element: document.getElementById('SingleMatch') as HTMLElement,
           engine: engine.current,
@@ -275,20 +270,23 @@ export default function Singleplayer (){
         const runner = Matter.Runner.create();
         runner.isFixed = true;
         Matter.Runner.run(runner, engine.current);
-        Matter.Events.on(engine.current, 'collisionStart', (event) => {collisionDetect(engine.current, event)});
-        Matter.Events.on(runner, "afterTick", () => {
+        const CollisionEvent =  (event: Matter.IEventCollision<Matter.Engine>) => {collisionDetect(engine.current, event)}
+        const renderLoop = () => {
             checkGoals(engine.current, render);
             botMove(engine.current);
             handlePlayerMoves(engine.current);
             ballSpeed = ScaleAndRender(engine.current, render, ballVelocity, ballSpeed)
-            console.log('Ai Predict : ' + aiPredict, 'Ai Direction : ' + aiDirection)
             Matter.Render.world(render)
-        });
+        }
+        Matter.Events.on(engine.current, 'collisionStart', CollisionEvent);
+        Matter.Events.on(runner, "afterTick", renderLoop);
         window.addEventListener('keydown', pressHandle);
         window.addEventListener('keyup', releaseHandle);
         return () => {
             window.removeEventListener('keydown', pressHandle);
             window.removeEventListener('keyup', releaseHandle);
+            Matter.Events.off(engine.current, 'collisionStart', CollisionEvent);
+            Matter.Events.off(runner, "afterTick", renderLoop);
             Matter.Runner.stop(runner)
             console.log('Singleplayer unmount')
             Render.stop(render)

@@ -3,6 +3,8 @@ import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import Matter, {Engine, Bodies, World, Render, Composite} from 'matter-js';
 
+var ballVelocity = { x: 5, y: 0 };
+
 export const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
     // add a pong game bodies
     const ball = Bodies.circle(cw / 2, ch / 2, 10, { isStatic: false, restitution: 1,
@@ -14,6 +16,18 @@ export const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
     const wallTop = Bodies.rectangle(cw / 2, -10, cw, 20, { isStatic: true, render:{visible: false} })
     const wallBottom = Bodies.rectangle(cw / 2, ch + 10, cw, 20, { isStatic: true, render:{visible: false} })
     World.add(engine.world, [wallTop, wallBottom, paddleA, paddleB, ball])
+}
+
+const collisionDetect = (engine: Matter.Engine, event: Matter.IEventCollision<Matter.Engine>) => {
+    const pairs = event.pairs;
+    // for (let i = 0, j = pairs.length; i != j; ++i) {
+    //   const pair = pairs[i];
+    //   console.log(pair.bodyA.label, pair.bodyB.label)
+    //     const ball = pair.bodyA.label === 'ball' ? pair.bodyA : pair.bodyB;
+    //     const paddle = ball === pair.bodyA ? pair.bodyB : pair.bodyA;
+    //   }
+      ballVelocity.x *= -1;
+  
 }
 
 export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF THIS COMPONENT RELATIVE A W9
@@ -33,27 +47,34 @@ export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF TH
             background: 'transparent'
           }
         })
-        // boundaries
+        const runner = Matter.Runner.create();
+        runner.isFixed = true;
+        Matter.Runner.run(runner, engine.current);
         addBodies(engine.current, cw, ch);
-        setInterval(() => {
-            const ball = engine.current.world.bodies[4];
-            Matter.Body.setVelocity(ball, Matter.Vector.create(-5, 0));
+        
+        const CollisionEvent =  (event: Matter.IEventCollision<Matter.Engine>) => {collisionDetect(engine.current, event)}
+        const ball = engine.current.world.bodies[4];
+        const renderLoop = () => {
+            Matter.Body.setVelocity(ball, ballVelocity);
             render.canvas.style.width = '100%'
             render.canvas.style.height = '100%'
             render.canvas.style.background = 'transparent'
-            Matter.Engine.update(engine.current, 1000 / 60)
+            Matter.Composite.scale(engine.current.world, 1, 1, Matter.Vector.create(0, 0));
             Matter.Render.world(render)
-        }, 1000 / 60)
+        }
+        Matter.Events.on(engine.current, 'collisionStart', CollisionEvent);
+        Matter.Events.on(runner, "afterTick", renderLoop);
+
         // unmount
         return () => {
             console.log('unmounting')
-          // destroy Matter
+            Matter.Runner.stop(runner)
+            Matter.Events.off(runner, "afterTick", renderLoop)
+            Matter.Events.off(engine.current, 'collisionStart', CollisionEvent)
             Render.stop(render)
             Composite.clear(engine.current.world, false);
             Engine.clear(engine.current)
             render.canvas.remove()
-        //   render.canvas = null
-        //   render.context = null
           render.textures = {}
         }
       }, [])

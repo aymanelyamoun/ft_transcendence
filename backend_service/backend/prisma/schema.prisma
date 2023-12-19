@@ -53,7 +53,7 @@ model GameRecord{
 }
 
 model Message{
-  id String @id @default(uuid())
+  id Int @id @default(autoincrement())
 
   // senderPic String;
 
@@ -75,6 +75,7 @@ model Conversation{
   members Member[]
   users User[]
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   messages Message[]@relation("conversation")
   lastMessage String?
 

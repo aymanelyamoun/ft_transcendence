@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { CONVERSATION_TYPE } from "@prisma/client";
 import { connect } from 'http2';
 
-const data = Array.from({length:2}).map(()=>{
+const data = Array.from({length:10}).map(()=>{
     return {
         profilePic: "some link",
         username: faker.helpers.unique(faker.person.firstName),
@@ -58,6 +58,9 @@ async function main() {
             await prisma.conversation.create({
                 data:{
                     type:CONVERSATION_TYPE.DIRECT,
+                    members:{
+                        create:[{userId:user.id}, {userId:friend.id}]
+                      },
                     users:{
                         connect:[
                             {id:user.id},

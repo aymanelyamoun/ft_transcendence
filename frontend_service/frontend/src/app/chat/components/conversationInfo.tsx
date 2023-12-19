@@ -19,7 +19,7 @@ import {
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-export const userId = "19b75c6f-bbe3-412f-b838-432cb1fad14c";
+export const userId = "082c419b-2a68-492a-85d5-a7a1ef7efd01";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -256,15 +256,16 @@ export const LstConversationStateContext = createContext(
   {} as ConversationIthemProps | undefined
 );
 
+export const ConversationListContextSet = createContext( {} as React.Dispatch<React.SetStateAction<ConversationIthemProps[]>>);
+
 export const ChatPage = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
-  const [ConversationList, setConversationList] = useState<
-    ConversationIthemProps[]
-  >([]);
+  const [ConversationList, setConversationList] = useState< ConversationIthemProps[] >([]);
   const [conversation, setConversation] = useState<ConversationIthemProps>();
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
   // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
 
+  console.log("conversationId:", conversation?.id);
   useEffect(() => {
     const fetchFun = async () => {
       await fetch(
@@ -281,8 +282,8 @@ export const ChatPage = () => {
           return res.json();
           // const data: Conversation[];
         })
-        .then((data) => {
-          setConversationList(data);
+        .then((data:ConversationIthemProps[]) => {
+          setConversationList(data.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()));
         });
     };
     fetchFun();
@@ -316,6 +317,7 @@ export const ChatPage = () => {
 
   return (
     <main className="main flex justify-center items-center h-full w-full ">
+      <ConversationListContextSet.Provider value={setConversationList}>
       <ConversationListContext.Provider value={ConversationList}>
         <LstConversationSetStateContext.Provider value={setConversation}>
           <LstConversationStateContext.Provider value={conversation}>
@@ -329,6 +331,7 @@ export const ChatPage = () => {
           </LstConversationStateContext.Provider>
         </LstConversationSetStateContext.Provider>
       </ConversationListContext.Provider>
+      </ConversationListContextSet.Provider>
     </main>
   );
 };

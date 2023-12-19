@@ -58,11 +58,12 @@ export class PrismaChatService{
             data:{
               message:message.message,
               conversation:{connect:{id:message.conversationId}},
-              sender:{connect:{id:message.from}}}
+              sender:{connect:{id:message.from}}
+            }
             });
           if (!newMessage) throw new NotFoundException("the message you are trying to send does not exist");
 
-          return newMessage;
+          return await this.prisma.message.findUnique({where:{id:newMessage.id}, include:{sender:{select:{profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
         }
 
         // channel DB:
@@ -607,7 +608,9 @@ export class PrismaChatService{
             return {
               id:conversation.id,
               type:conversation.type,
-              createdAt:conversation.createdAt.toISOString(),
+              // createdAt:conversation.createdAt.toISOString(),
+              updatedAt:conversation.udpatedAt,
+              createdAt:conversation.createdAt,
               channelId:conversation.channelId,
               lastMessage:conversation.lastMessage,
               profilePic:friend.profilePic,
@@ -663,7 +666,9 @@ export class PrismaChatService{
             return {
               id:conversation.id,
               type:conversation.type,
-              createdAt:conversation.createdAt.toISOString(),
+              // createdAt:conversation.createdAt.toISOString(),
+              updatedAt:conversation.udpatedAt,
+              createdAt:conversation.createdAt,
               channelId:conversation.channelId,
               lastMessage:conversation.lastMessage,
               profilePic:conversation.channel.channelPic,
@@ -684,7 +689,7 @@ export class PrismaChatService{
         // async getConversationMessages(conversationId:string, userData:user){
         async getConversationMessages(conversationId:string){
           // maybe send pics as well
-          const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}, include:{sender:{ select: {profilePic:true}}}});
+          const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}, include:{sender:{ select: {profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
           // const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
           // if (!conversation)
           if (!messages_)

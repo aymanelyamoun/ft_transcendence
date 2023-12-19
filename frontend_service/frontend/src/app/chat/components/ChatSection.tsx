@@ -2,11 +2,12 @@ import React, { createContext, useContext } from "react";
 import TypeMsg from "./TypeMsg";
 import { useState, useEffect, useRef } from "react";
 import {
+  ConversationListContextSet,
   LstConversationStateContext,
   MessagesContext,
 } from "./ConversationInfo";
 // import { v4 as uuidv4 } from "uuid";
-import { MessageProps } from "../../../../../../backend_service/backend/types/chatTypes";
+import { ConversationIthemProps, MessageProps } from "../../../../../../backend_service/backend/types/chatTypes";
 import avatar from "../../../../public/garou-kid.jpeg";
 import jake from "../../../../public/jakeWithHeadPhones.jpg";
 import Image from "next/image";
@@ -21,26 +22,40 @@ export const ConversationMessagesContextStat = createContext(
   {} as MessageProps[]
 );
 
+function createConversationListIthem(Message: MessageProps): ConversationIthemProps {
+  return {
+    id: Message.conversationId,
+    name: Message.sender.username,
+    profilePic: Message.sender.profilePic,
+    lastMessage: Message.message,
+    type: Message.conversation.type, // replace with actual type
+    createdAt: new Date(), // replace with actual creation date
+    updatedAt: new Date(), // replace with actual creation date
+    channelId: 'someChannelId', // replace with actual channel ID
+    title: 'someTitle', // replace with actual title
+  };
+}
+
+
 export const ConversationChatSection = () => {
   const messagesData = useContext(MessagesContext);
+  const setConversationList = useContext(ConversationListContextSet);
   const [messages, setMessages] = useState<MessageProps[]>([]);
+  let maxId = 0;
+  if (messages.length !== 0) {
+    maxId = messages.reduce((max, message) => Math.max(max, message.id), messages[0].id);
+}
   const conversation = useContext(LstConversationStateContext);
-  const [data, setData] = useState<string>("");
+  // const [data, setData] = useState<string>("");
 
-  const newMessage: MessageProps = {
-    // id: uuidv4(),
-    id: "1",
-    message: "",
-    senderId: userId,
-    conversationId: conversation?.id ?? "", // Provide a default value for conversationId
-    createdAt: new Date(),
-    sender: { profilePic: conversation?.profilePic ?? "" },
-  };
+  let newMessage: MessageProps;
+
+
 
   useEffect(() => {
     // new
     // set uuid
-    newMessage.id = "5";
+    // newMessage.id = "5";
     console.log("chat sockets");
     socket.connect();
 
@@ -50,19 +65,24 @@ export const ConversationChatSection = () => {
     });
 
     socket.on("rcvMessage", (data) => {
-      setData(data);
-      console.log("data:", data);
-      newMessage.message = data;
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      // setData(data);
+      // console.log("data:", data);
+      newMessage = data;
+      if (newMessage.conversationId === conversation?.id)
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+      setConversationList((prevConversationList) => [createConversationListIthem(newMessage), ...prevConversationList.filter((conversation) => {return conversation.id !== newMessage.conversationId})]
+      );
+
     });
     setMessages(messagesData);
     return () => {
       socket.off("rcvMessage");
       socket.disconnect();
     };
-  }, [data, messagesData]);
+  }, [messagesData]);
 
-  console.log("data:", data);
+  // console.log("data:", data);
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       <div className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">
@@ -76,7 +96,7 @@ export const ConversationChatSection = () => {
       </div>
       <ConversationMessagesContextSet.Provider value={setMessages}>
         <ConversationMessagesContextStat.Provider value={messages}>
-          <TypeMessage />
+          <TypeMessage maxId={maxId}/>
           {/* <TypeMsg
             userId={userId}
             conversationId={conversation?.id}
@@ -119,19 +139,20 @@ const MessageChat = ({
     </div>
   );
 };
-const TypeMessage = () => {
+const TypeMessage = ({maxId}:{maxId:number}) => {
   const [inputValue, setInputValue] = useState<string>("");
   const setMessages = useContext(ConversationMessagesContextSet);
   const messages = useContext(ConversationMessagesContextStat);
   const conversation = useContext(LstConversationStateContext);
 
   const newMessage: MessageProps = {
-    id: "1",
+    id: maxId + 1,
     message: inputValue,
     senderId: userId,
     conversationId: conversation?.id ?? "", // Provide a default value for conversationId
     createdAt: new Date(),
-    sender: { profilePic: conversation?.profilePic ?? "" },
+    sender: { profilePic: conversation?.profilePic ?? "" , username: conversation?.name ?? ""},
+    conversation: { type: conversation?.type ?? "" },
   };
 
   const sendMessage = () => {

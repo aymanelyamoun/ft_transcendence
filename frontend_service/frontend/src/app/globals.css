@@ -571,6 +571,59 @@ body {
   z-index: 100;
 }
 
+.alertOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 10, 39, 0.9);
+  /* background: transparent; */
+  z-index: 100;
+}
+
+.alertMessage{
+  text-align: center;
+  /* font-family: Poppins; */
+  /* font-size: 18px; */
+  font-style: normal;
+  /* font-weight: 175; */
+  /* line-height: normal; */
+  width: 329px;
+
+}
+
+.alertModal {
+
+  /* background: var(
+i    --linear-blue_purble,
+    linear-gradient(
+      170deg,
+      rgba(255, 255, 255, 0) -50.22%,
+      #040924 -9.3%,
+      #111534 -1.17%,
+      rgba(68, 71, 111, 0.96) 83.26%,
+      rgba(154, 155, 211, 0.9) 136.85%
+    )
+  ); */
+
+  border-radius: 10px;
+  border: 1px solid rgba(154, 155, 211, 0.20);
+  background: #0D1130; 
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 526px;
+  scrollbar-width: none;
+}
+
+.alertDismiss{
+  border-radius: 10px;
+  border: 1px solid #FC2B5D; 
+  width: 186px;
+  height: 40px;
+  flex-shrink: 0; 
+}
+
 .addChannelModal {
   background: var(
     --linear-blue_purble,
@@ -584,7 +637,7 @@ body {
     )
   );
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 526px;
+  width: 438px;
   scrollbar-width: none;
 }
 

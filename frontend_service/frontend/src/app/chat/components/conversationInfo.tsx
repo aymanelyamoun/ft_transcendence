@@ -7,7 +7,8 @@ import React, {
 } from "react";
 import Image, { StaticImageData } from "next/image";
 import avatar from "../../../../public/garou-kid.jpeg";
-import { MdPersonAddAlt1 } from "react-icons/md";
+import { MdDelete, MdPersonAddAlt1} from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 import { MdGroupAdd } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { FaRunning } from "react-icons/fa";
@@ -19,7 +20,7 @@ import {
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-export const userId = "09a7b8df-3f26-460a-9918-7dbf7ae9b520";
+export const userId = "075de2d6-2d66-4f7c-8781-b67dec515246";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -81,15 +82,15 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           <ButtonInfo width="10" hight="10">
             <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-12">
               <CostumeButton
-                bgColor="bg-transparent border-[#FC2B5D]"
+                bgColor="bg-transparent border-[#FEFFFF]"
                 color="#FC2B5D"
                 width="w-full"
                 hight="h-11"
               >
-                <p className=" text-light-red font-semibold font-poppins text-sm">
-                  Exit Channel
+                <p className=" text-[#FEFFFF] font-semibold font-poppins text-sm">
+                  Edit Channel
                 </p>
-                <FaRunning color="#FC2B5D" size={24} />
+                <FiEdit color="#FEFFFF" size={24} />
               </CostumeButton>
 
               <CostumeButton
@@ -105,15 +106,15 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
-                bgColor="bg-transparent border-[#FC2B5D]"
-                color="wthie"
+                bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
+                color="#FC2B5D"
                 width="w-full"
                 hight="h-11"
               >
-                <p className=" text-light-red font-semibold font-poppins text-sm">
-                  Exit Channel
+                <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
+                  Delete channel
                 </p>
-                <FaRunning color="#FC2B5D" size={24} />
+                <MdDelete color="#FEFFFF" size={24} />
               </CostumeButton>
             </div>
           </ButtonInfo>
@@ -333,7 +334,7 @@ export const ChatPage = () => {
   );
 };
 
-const CostumeButton = ({
+export const CostumeButton = ({
   bgColor,
   color,
   children,

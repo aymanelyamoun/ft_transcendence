@@ -14,13 +14,20 @@ import { HiMiniChatBubbleLeft } from "react-icons/hi2";
 import { Console } from "console";
 // import SearchBar from "./SearchBar";
 import {
+  ButtonInfo,
   ConversationListContext,
+  CostumeButton,
   LstConversationSetStateContext,
 } from "./ConversationInfo";
 
 export const IsChannelContext = createContext(false);
 
 import { userId, isAdmin } from "./ConversationInfo";
+import { AlertMessage } from "./AlertMessage";
+import CreateChannel from "./CreateChannel";
+import { FaRunning } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -252,21 +259,75 @@ export const ChatToggel = ({
   };
 
   return !isChannel ? (
+
+    //delete
+
+      // <AlertMessage message={"are you sure you want to delete groupName, all the messages will be lost"} type={"delete"}>
+      //   {/* children */}
+      //     <CostumeButton
+      //       bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
+      //       color="#FC2B5D"
+      //       width="w-[186px]"
+      //       hight="h-11"
+      //     >
+      //       <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
+      //         Delete channel
+      //       </p>
+      //       <MdDelete color="#FEFFFF" size={24} />
+      //     </CostumeButton>
+
+      // exit 
+
+      //   <AlertMessage message={"are you sure you want to exit groupName you can no longer send or see messages in this group"} type={"exit"}>
+      //      <CostumeButton
+      //       bgColor="bg-transparent border-[#FC2B5D]"
+      //       color="#FC2B5D"
+      //       width="w-[186px]"
+      //       hight="h-11"
+      //     >
+      //       <p className=" text-light-red font-semibold font-poppins text-sm">
+      //         Exit Channel
+      //       </p>
+      //       <FaRunning color="#FC2B5D" size={24} />
+      //     </CostumeButton> 
+
+      // </AlertMessage>
+      
+      // notify
+
+        <AlertMessage message={"now you are a friend with Spinoza"} type={"notify"}>
+           <CostumeButton
+            bgColor="bg-[#FEFFFF] border-[#FEFFFF]"
+            color="#FC2B5D"
+            width="w-[186px]"
+            hight="h-11"
+          >
+            <p className=" text-[#0D1130] font-semibold font-poppins text-sm">
+              OK
+            </p>
+            {/* <FaRunning color="#FC2B5D" size={24} /> */}
+          </CostumeButton> 
+
+
+      </AlertMessage>
+
+
+    // <CreateChannel/>
     // add space-evenly using tailwindcss
-    <div className="msgs flex justify-evenly">
-      <ChatButton onClick={handleChatClick}>
-        <HiMiniChatBubbleLeft size={22} />
-      </ChatButton>
+    // <div className="msgs flex justify-evenly">
+    //   <ChatButton onClick={handleChatClick}>
+    //     <HiMiniChatBubbleLeft size={22} />
+    //   </ChatButton>
 
-      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
+    //   <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
 
-      <ChatButton onClick={handleChannelClick}>
-        <HiMiniChatBubbleLeftRight
-          size={22}
-          color={`rgba(154, 155, 211, 0.5)`}
-        />
-      </ChatButton>
-    </div>
+    //   <ChatButton onClick={handleChannelClick}>
+    //     <HiMiniChatBubbleLeftRight
+    //       size={22}
+    //       color={`rgba(154, 155, 211, 0.5)`}
+    //     />
+    //   </ChatButton>
+    // </div>
   ) : (
     <div className="msgs flex justify-evenly">
       <ChatButton onClick={handleChatClick}>

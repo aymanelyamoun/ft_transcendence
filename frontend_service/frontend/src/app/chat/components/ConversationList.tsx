@@ -47,7 +47,7 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       />
       <div className="flex flex-col">
         <p className="friendsName">{conversationProps.name}</p>
-        <p className="text-xs font-thin">{"tmp message hi"}</p>
+        <p className="text-xs font-thin">{conversationProps.lastMessage}</p>
       </div>
     </li>
   );
@@ -67,34 +67,6 @@ export const ConversationList = ({
   // >;
 }) => {
   const ConversationListData = useContext(ConversationListContext);
-  // const [conversation, setConversation] = useState<Conversation[]>([]);
-
-  // const userId = "0e1d8b57-aef4-45e6-9cf8-b834b87d0788";
-  // const isAdmin = "false";
-
-  // useEffect(() => {
-  //   const fetchFun = async () => {
-  //     const res = await fetch(
-  //       `http://localhost:3001/api/channels/getUserConversationsDirect?userId=${userId}&isAdmin=${isAdmin}`,
-  //       {
-  //         method: "GET",
-  //         credentials: "include",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //       .then((res) => {
-  //         return res.json();
-  //         // const data: Conversation[];
-  //       })
-  //       .then((data) => {
-  //         setConversation(data);
-  //       });
-  //   };
-  //   fetchFun();
-  // }, []);
-
   if (!isChannel) {
     {
       return (

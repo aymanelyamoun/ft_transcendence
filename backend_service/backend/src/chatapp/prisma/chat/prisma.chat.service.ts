@@ -60,8 +60,10 @@ export class PrismaChatService{
               conversation:{connect:{id:message.conversationId}},
               sender:{connect:{id:message.from}}
             }
-            });
-          if (!newMessage) throw new NotFoundException("the message you are trying to send does not exist");
+          });
+          const updatedConversation = await this.prisma.conversation.update({where:{id:message.conversationId}, data:{lastMessage:message.message, 
+            messages:{connect:{id:newMessage.id}}}});
+          // if (!newMessage) throw new NotFoundException("the message you are trying to send does not exist");
 
           return await this.prisma.message.findUnique({where:{id:newMessage.id}, include:{sender:{select:{profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
         }
@@ -609,7 +611,7 @@ export class PrismaChatService{
               id:conversation.id,
               type:conversation.type,
               // createdAt:conversation.createdAt.toISOString(),
-              updatedAt:conversation.udpatedAt,
+              updatedAt:conversation.updatedAt,
               createdAt:conversation.createdAt,
               channelId:conversation.channelId,
               lastMessage:conversation.lastMessage,
@@ -667,7 +669,7 @@ export class PrismaChatService{
               id:conversation.id,
               type:conversation.type,
               // createdAt:conversation.createdAt.toISOString(),
-              updatedAt:conversation.udpatedAt,
+              updatedAt:conversation.updatedAt,
               createdAt:conversation.createdAt,
               channelId:conversation.channelId,
               lastMessage:conversation.lastMessage,

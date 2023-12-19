@@ -19,7 +19,7 @@ import {
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-export const userId = "082c419b-2a68-492a-85d5-a7a1ef7efd01";
+export const userId = "321e03ff-7ceb-4dd8-a543-de4178462b8d";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -283,7 +283,11 @@ export const ChatPage = () => {
           // const data: Conversation[];
         })
         .then((data:ConversationIthemProps[]) => {
-          setConversationList(data.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()));
+          setConversationList(data.sort((a, b) => {
+            const bDate = new Date(b.updatedAt);
+            const aDate = new Date(a.updatedAt);
+            return(bDate.getTime() - aDate.getTime())
+          }));
         });
     };
     fetchFun();

@@ -54,7 +54,7 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       />
       <div className="flex flex-col">
         <p className="friendsName">{conversationProps.name}</p>
-        <p className="text-xs font-thin">{"tmp message hi"}</p>
+        <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden ">{"tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."}</p>
       </div>
     </li>
   );
@@ -259,76 +259,21 @@ export const ChatToggel = ({
   };
 
   return !isChannel ? (
-
-    //delete
-
-      // <AlertMessage message={"are you sure you want to delete groupName, all the messages will be lost"} type={"delete"}>
-      //   {/* children */}
-      //     <CostumeButton
-      //       bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
-      //       color="#FC2B5D"
-      //       width="w-[186px]"
-      //       hight="h-11"
-      //     >
-      //       <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
-      //         Delete channel
-      //       </p>
-      //       <MdDelete color="#FEFFFF" size={24} />
-      //     </CostumeButton>
-      // </AlertMessage>
-
-      //  exit 
-
-      //   <AlertMessage message={"are you sure you want to exit groupName you can no longer send or see messages in this group"} type={"exit"}>
-      //      <CostumeButton
-      //       bgColor="bg-transparent border-[#FC2B5D]"
-      //       color="#FC2B5D"
-      //       width="w-[186px]"
-      //       hight="h-11"
-      //     >
-      //       <p className=" text-light-red font-semibold font-poppins text-sm">
-      //         Exit Channel
-      //       </p>
-      //       <FaRunning color="#FC2B5D" size={24} />
-      //     </CostumeButton> 
-
-      //  </AlertMessage>
-      
-      // notify
-
-        <AlertMessage message={"now you are a friend with Spinoza"} type={"notify"}>
-           <CostumeButton
-            bgColor="bg-[#FEFFFF] border-[#FEFFFF]"
-            color="#FC2B5D"
-            width="w-[186px]"
-            hight="h-11"
-          >
-            <p className=" text-[#0D1130] font-semibold font-poppins text-sm">
-              OK
-            </p>
-            {/* <FaRunning color="#FC2B5D" size={24} /> */}
-          </CostumeButton> 
-
-
-      </AlertMessage>
-
-
-    // <CreateChannel/>
     // add space-evenly using tailwindcss
-    // <div className="msgs flex justify-evenly">
-    //   <ChatButton onClick={handleChatClick}>
-    //     <HiMiniChatBubbleLeft size={22} />
-    //   </ChatButton>
+    <div className="msgs flex justify-evenly">
+      <ChatButton onClick={handleChatClick}>
+        <HiMiniChatBubbleLeft size={22} />
+      </ChatButton>
 
-    //   <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
+      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
 
-    //   <ChatButton onClick={handleChannelClick}>
-    //     <HiMiniChatBubbleLeftRight
-    //       size={22}
-    //       color={`rgba(154, 155, 211, 0.5)`}
-    //     />
-    //   </ChatButton>
-    // </div>
+      <ChatButton onClick={handleChannelClick}>
+        <HiMiniChatBubbleLeftRight
+          size={22}
+          color={`rgba(154, 155, 211, 0.5)`}
+        />
+      </ChatButton>
+    </div>
   ) : (
     <div className="msgs flex justify-evenly">
       <ChatButton onClick={handleChatClick}>

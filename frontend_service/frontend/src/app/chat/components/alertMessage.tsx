@@ -1,4 +1,7 @@
 import React from 'react'
+import { CostumeButton } from './ConversationInfo'
+import { FaRunning } from 'react-icons/fa'
+import { MdDelete } from 'react-icons/md'
 
 export const AlertMessage = ({message , type, children} : {message:string, type:string , children:React.ReactNode}) => {
 
@@ -15,13 +18,44 @@ export const AlertMessage = ({message , type, children} : {message:string, type:
                             <p className="font-poppins font-semibold"> Dismiss </p> 
                           </button> 
                           ) : type === 'exit' ? (
-                          children
+                            <CostumeButton
+                            bgColor="bg-transparent border-[#FC2B5D]"
+                            color="#FC2B5D"
+                            width="w-[186px]"
+                            hight="h-11"
+                          >
+                            <p className=" text-light-red font-semibold font-poppins text-sm">
+                              Exit Channel
+                            </p>
+                            <FaRunning color="#FC2B5D" size={24} />
+                          </CostumeButton> 
                      ) : type === 'delete' ? (
-                      children
+                      
+                      <CostumeButton
+                      bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
+                      color="#FC2B5D"
+                      width="w-[186px]"
+                      hight="h-11"
+                      >
+                      <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
+                        Delete channel
+                      </p>
+                      <MdDelete color="#FEFFFF" size={24} />
+                      </CostumeButton>
+
                      ) : type === 'confirm' ? (
                       children 
                      ) : type === 'notify' ? (
-                      children
+                      <CostumeButton
+                        bgColor="bg-[#FEFFFF] border-[#FEFFFF]"
+                        color="#FC2B5D"
+                        width="w-[186px]"
+                        hight="h-11"
+                      >
+                        <p className=" text-[#0D1130] font-semibold font-poppins text-sm">
+                          OK
+                        </p>
+                      </CostumeButton>
                      ) : null
                     }
               </div>

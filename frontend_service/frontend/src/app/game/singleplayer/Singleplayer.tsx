@@ -279,14 +279,15 @@ export default function Singleplayer (){
             Matter.Render.world(render)
         }
         Matter.Events.on(engine.current, 'collisionStart', CollisionEvent);
-        Matter.Events.on(runner, "afterTick", renderLoop);
+        Matter.Events.on(engine.current, "beforeUpdate", renderLoop);
         window.addEventListener('keydown', pressHandle);
         window.addEventListener('keyup', releaseHandle);
         return () => {
             window.removeEventListener('keydown', pressHandle);
             window.removeEventListener('keyup', releaseHandle);
             Matter.Events.off(engine.current, 'collisionStart', CollisionEvent);
-            Matter.Events.off(runner, "afterTick", renderLoop);
+            Matter.Events.off(engine.current, "beforeUpdate", renderLoop);
+            // Matter.Events.off(runner, "afterTick", renderLoop);
             Matter.Runner.stop(runner)
             console.log('Singleplayer unmount')
             Render.stop(render)

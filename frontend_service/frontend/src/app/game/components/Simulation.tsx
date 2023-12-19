@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import Matter, {Engine, Bodies, World, Render, Composite} from 'matter-js';
 
-var ballVelocity = { x: 5, y: 0 };
+var ballVelocity = { x: -8, y: 0 };
 
 export const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
     // add a pong game bodies
@@ -19,15 +19,7 @@ export const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
 }
 
 const collisionDetect = (engine: Matter.Engine, event: Matter.IEventCollision<Matter.Engine>) => {
-    const pairs = event.pairs;
-    // for (let i = 0, j = pairs.length; i != j; ++i) {
-    //   const pair = pairs[i];
-    //   console.log(pair.bodyA.label, pair.bodyB.label)
-    //     const ball = pair.bodyA.label === 'ball' ? pair.bodyA : pair.bodyB;
-    //     const paddle = ball === pair.bodyA ? pair.bodyB : pair.bodyA;
-    //   }
       ballVelocity.x *= -1;
-  
 }
 
 export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF THIS COMPONENT RELATIVE A W9

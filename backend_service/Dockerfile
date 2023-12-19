@@ -16,4 +16,5 @@ WORKDIR /backend
 # WORKDIR /
 
 ENTRYPOINT ./script.sh
+
 # CMD npx prisma migrate dev --name init && npx prisma db seed && npm run start:dev

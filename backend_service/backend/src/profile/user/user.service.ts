@@ -17,7 +17,11 @@ export class UserService {
     constructor (private readonly prisma: PrismaService){}
     async create(dto: CreateUserDto)
     {
-        try {
+        // console.log('|',dto.hashConfirm,"|",':', "|",dto.hash,"|")
+        // try {
+            if (dto.hashConfirm !== dto.hash)
+                throw new UnauthorizedException('the password and the confirm password are not the same');
+            delete dto.hashConfirm;
             const user = await this.prisma.user.findUnique({
                 where: {
                     email: dto.email,
@@ -41,11 +45,12 @@ export class UserService {
             });
             const { hash, ...result } = newUser;
             return result;
-        } catch (error) {
-            if (error instanceof ConflictException) 
-                throw new ConflictException('email duplicated');
-            throw new HttpException("user can't create account", HttpStatus.BAD_REQUEST);
-        }
+        // }catch (error) {
+        //     if (error instanceof ConflictException) 
+        //         throw new ConflictException('email duplicated');
+        // throw new UnauthorizedException('the password and the confirm password are not the same');
+        //    // throw new HttpException("user can't create account", HttpStatus.BAD_REQUEST);
+        // }
     }
     
     async findByEmail(email: string) 
@@ -189,20 +194,24 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async confirm(email: string, dto: ConfirmUserDto)
     {
-        console.log(dto.profilePic);
         const existingUser = await this.prisma.user.findUnique({
         where: { username: dto.username },
         });
         if (existingUser && existingUser.email !== email) {
-        throw new ConflictException(`Username ${dto.username} already exists`);
+            throw new ConflictException(`Username ${dto.username} already exists`);
         }
-        const user = await this.prisma.user.update({
-            where: { email: email },
-            data: {
-                ...dto,
-                hash: await bcrypt.hash(dto.hash, 10)
-            },
+        try { 
+            const user = await this.prisma.user.update({
+                where: { email: email },
+                data: {
+                    ...dto,
+                    hash: await bcrypt.hash(dto.hash, 10)
+                },
         })
+        }catch (error)
+        {
+            throw new Error('Internal server error')
+        }
     }
 
     async allFriend(userId: string)
@@ -220,7 +229,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
         }
         catch (error)
         {
-            return {error: 'Internal server error'}
+            throw new Error('Internal server error')
         }
     }
 
@@ -255,7 +264,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                 });
             });
         } catch (error) {
-            return { error: 'Internal server error' };
+            throw new Error('Internal server error')
         }
     }
     
@@ -355,19 +364,20 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     {
         const user = req['user'] as User;
         const userId = user.id;
-        const { username } = body;
+        let  { username } = body;
+        username = username.trim();
         if (user.username === username) {
-        throw new UnauthorizedException('New username is the same as the current username');
+            throw new UnauthorizedException('New username is the same as the current username');
         }
         const isUsernameTaken = await this.findByUsername(username);
         if (isUsernameTaken) {
-        throw new UnauthorizedException('Username is already taken');
+            throw new UnauthorizedException('Username is already taken');
         }
         await this.prisma.user.update({
             where: { id: userId },
             data: { username: username },
         });
-        return { message: 'Username updated successfully' };
+            return { message: 'Username updated successfully' };
     }
 
     async updateimage(@Req() req: Request, @Body() body)

@@ -19,16 +19,16 @@ export class UserController {
   @Patch('confirm')
   @UseGuards(JwtGuard)
   async confirm(@Req() req: Request, @Res() res: Response, @Body() dto: ConfirmUserDto) {
-    try {
+    // try {
       const user = req['user'] as User;
       if (!user) {
         throw new UnauthorizedException();
       }
       const confirm = await this.userService.confirm(user.email, dto);
       res.status(200).json({ message: 'User confirmed successfully', result: confirm });
-    } catch (error) {
-      res.status(500).json({ message: 'Error finding user' });
-    }
+    // } catch (error) {
+    //   res.status(500).json({ message: 'Error finding user' });
+    // }
   }
     
   @Get('profile')
@@ -36,7 +36,7 @@ export class UserController {
   async check(@Req() req: Request, @Res() res: Response)
   {
     try {
-      const user = await this.authGoogleService.check_token(req);
+      const user = req['user'] as User;;
       if (!user) {
         throw new UnauthorizedException();
       }

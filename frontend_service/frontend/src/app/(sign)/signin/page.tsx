@@ -60,8 +60,8 @@ export default function Signin() {
       });
       if (!res.ok) {
         const data = await res.json();
+        alert(data.message);
         console.log(data);
-        alert(data.error);
         return;
       }
       const resp = await res.json();
@@ -70,8 +70,8 @@ export default function Signin() {
         router.push("/confirmauth");
         return;
       }
-        alert("User Loged!"); 
       router.push("/profile/dashboard");
+      alert("User Loged!"); 
     }
     catch (error)
     {
@@ -85,10 +85,10 @@ export default function Signin() {
       [e.target.name]: e.target.value,
     });
   };
-  const data = useRef<FormInputs>({
-    email: "",
-    hash: "",
-  })
+  // const data = useRef<FormInputs>({
+  //   email: "",
+  //   hash: "",
+  // })
 
   const gradientStyle = {
     background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',

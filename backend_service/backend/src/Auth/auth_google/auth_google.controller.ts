@@ -47,6 +47,7 @@ export class AuthGoogleController
     async handleRedirect(@Req() req: Request, @Res() res: Response)
     {
       (req.user as any).isConfirmed2Fa = false;
+      console.log(req.user);
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
       res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
@@ -89,15 +90,7 @@ export class AuthGoogleController
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
-    
-  @Get('protected')
-  protectedRoute(@Req() request) {
-    const accessToken = this.authGoogleService.extractTokenFromHeader(request);
-    if (!accessToken) {
-      throw new UnauthorizedException('Access token not provided');
-    }
-    return { message: 'Protected route accessed' };
-  }
+
 
 @Get('check')
 @UseGuards(JwtGuard)
@@ -228,41 +221,36 @@ async logout(@Req() req: Request, @Res() res: Response)
     return res.status(200).json('User validate');
   }
 
-  @UseGuards(JwtGuard)
-  @Get('google/test')
-  getTestData() {
-    return { message: 'This is a protected route for testing JWT authentication.' };
-  }
-
 
     @Post('register')
     async registerUser(@Body() dto:CreateUserDto, @Res() res: Response)
     {
-      try {
+      // try {
         const data = await this.userService.create(dto);
         return res.status(200).send(data);
-      } catch (error)
-      {
-        console.error('Error in login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
+      // } catch (error)
+      // {
+      //   console.error('Error in login:', error);
+      //   res.status(500).json({ error: 'Internal Server Error' });
+      // }
     }
 
     @Post('login')
     async login(@Body() dto:LoginDto,@Req() req: Request, @Res() res: Response)
     {
-      try
-      {
+      // try
+      // {
         const data = await this.authGoogleService.login(dto);
         res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: false });
         res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: false });
-        res.json(data.user);
-      }
-      catch (error)
-      {
-        console.error('Error in login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
+        return res.status(200).send(data); 
+        //res.json(data.user);
+      // }
+      // catch (error)
+      // {
+      //   console.error('Error in login:', error);
+      //   res.status(500).json({ error: 'Internal Server Error' });
+      // }
     }
 
 }

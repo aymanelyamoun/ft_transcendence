@@ -1,13 +1,8 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { use } from "passport";
-// import { PrismaService } from "src/prisma.service";
-// import { UserDtetails } from "src/utils/types";
 import { Response, Request } from 'express';
-// import { UserService } from "src/user/user.service";
-// import { LoginDto } from "src/user/dto/auth.dto";
 import * as bcrypt from 'bcrypt';
-// import { PrismaService } from "backAuth/src/prisma.service";
 import { UserService } from "../../profile/user/user.service";
 import { LoginDto } from "../../profile/user/dto/auth.dto";
 import { UserDtetails } from "src/types/types";
@@ -28,6 +23,7 @@ async login(dto:LoginDto)
   try {
     const user = await this.validateUserlogin(dto);
     const payload = {
+      id: user.id,
       email: user.email,
       sub: user.username,
       isConfirmed2Fa: false,
@@ -39,7 +35,7 @@ async login(dto:LoginDto)
     }
   } catch (error)
   {
-    throw new UnauthorizedException();
+    throw new UnauthorizedException({message : "user can't log"});
   }
 }
 
@@ -58,10 +54,7 @@ async validateUserlogin(dto:LoginDto)
   }
 }
   
-  
-
-
-  async validateUser(details: UserDtetails, typ: LOG_TYPE)
+async validateUser(details: UserDtetails, typ: LOG_TYPE)
   {
     try {
       const user = await this.prisma.user.findUnique({
@@ -122,7 +115,7 @@ async validateUserlogin(dto:LoginDto)
       return (user);
   }
 
-    async generateJwt(payload) {
+  async generateJwt(payload) {
       return {
         backendTokens: {
            accessToken: await this.jwtService.signAsync(payload, {
@@ -138,40 +131,39 @@ async validateUserlogin(dto:LoginDto)
   }
 }
 
-
- extractTokenFromHeader(req: Request) {
-  let token = null;
-  if (req && req.cookies) {
-    token = req.cookies['access_token'];
-  }
-  return token ;
-}
+//  extractTokenFromHeader(req: Request) {
+//   let token = null;
+//   if (req && req.cookies) {
+//     token = req.cookies['access_token'];
+//   }
+//   return token ;
+// }
   
 
-  async check_token(req: Request) {
-  let payload;
-  try {
-    const token = this.extractTokenFromHeader(req);
-    payload = await this.jwtService.verifyAsync(token, {
-      secret: process.env.jwtSecretKey,
-    });
-  } catch (error) {
-    console.error('Error verifying token:', error);
-    return null;
-  }
+//   async check_token(req: Request) {
+//   let payload;
+//   try {
+//     const token = this.extractTokenFromHeader(req);
+//     payload = await this.jwtService.verifyAsync(token, {
+//       secret: process.env.jwtSecretKey,
+//     });
+//   } catch (error) {
+//     console.error('Error verifying token:', error);
+//     return null;
+//   }
 
-  if (!payload || !payload.email) {
-    console.error('Invalid payload structure');
-    return null;
-  }
+//   if (!payload || !payload.email) {
+//     console.error('Invalid payload structure');
+//     return null;
+//   }
     
-  const user = await this.findUserByEmail(payload.email);
-  if (!user) {
-    console.error('User not found for email:', payload.email);
-    return null;
-    }
-    return user;
-  }
+//   const user = await this.findUserByEmail(payload.email);
+//   if (!user) {
+//     console.error('User not found for email:', payload.email);
+//     return null;
+//     }
+//     return user;
+//   }
 
   generateTwoFactorAuthenticationSecret(username : string) {
     const secret = speakeasy.generateSecret({

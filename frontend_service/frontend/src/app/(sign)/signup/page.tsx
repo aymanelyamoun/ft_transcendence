@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
   username: string;
   email: string;
   hash: string;
+  hashConfirm: string;
   };
  
  export default function Signup()
@@ -51,6 +52,7 @@ import { useRouter } from 'next/navigation';
           username: data.current.username,
           email: data.current.email,
           hash: data.current.hash,
+          hashConfirm: data.current.hashConfirm
         }),
         headers: {
           "Content-Type": "application/json",
@@ -74,10 +76,12 @@ import { useRouter } from 'next/navigation';
     username: "",
     email: "",
     hash: "",
+    hashConfirm: "",
   })
-    const gradientStyle = {
-    background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',
-    };
+  
+  const gradientStyle = {
+  background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',
+  };
   
   return(
     <div
@@ -109,6 +113,16 @@ import { useRouter } from 'next/navigation';
                 style={{ background: 'rgba(154, 155, 211, 0)' }}
                 className="outline-none text-sm flex-1 max-w-full"
                 onChange={(e) => (data.current.hash = e.target.value)}
+              />     
+            </div>
+            <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
+              <input
+                type="password"
+                name="confirm password"
+                placeholder="confirm password"
+                style={{ background: 'rgba(154, 155, 211, 0)' }}
+                className="outline-none text-sm flex-1 max-w-full"
+                onChange={(e) => (data.current.hashConfirm = e.target.value)}
               />     
             </div>
           <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#999BD3] mb-7' onClick={register}>Sign up</Link>

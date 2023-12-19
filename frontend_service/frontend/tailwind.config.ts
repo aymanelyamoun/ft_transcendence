@@ -29,9 +29,8 @@ const config: Config = {
         "button-max": '12rem',
       },
       fontFamily: {
-        'poppins' : ['Poppins'],
-      }
-
+        poppins: ['Poppins', 'sans-serif'],
+      },
     },
   },
   plugins: [],

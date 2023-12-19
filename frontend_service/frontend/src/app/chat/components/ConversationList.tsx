@@ -14,13 +14,20 @@ import { HiMiniChatBubbleLeft } from "react-icons/hi2";
 import { Console } from "console";
 // import SearchBar from "./SearchBar";
 import {
+  ButtonInfo,
   ConversationListContext,
+  CostumeButton,
   LstConversationSetStateContext,
 } from "./ConversationInfo";
 
 export const IsChannelContext = createContext(false);
 
 import { userId, isAdmin } from "./ConversationInfo";
+import { AlertMessage } from "./AlertMessage";
+import CreateChannel from "./CreateChannel";
+import { FaRunning } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -47,7 +54,7 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       />
       <div className="flex flex-col">
         <p className="friendsName">{conversationProps.name}</p>
-        <p className="text-xs font-thin">{conversationProps.lastMessage}</p>
+        <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden ">{"tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."}</p>
       </div>
     </li>
   );

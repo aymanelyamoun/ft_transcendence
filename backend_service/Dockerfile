@@ -1,12 +1,10 @@
 From node:alpine
 
-# COPY backend/package*.json ./
 RUN apk update
 
 
 COPY backend backend
 WORKDIR /backend
-# RUN npm install
 # COPY script.sh script.sh
 
 # WORKDIR /backend/prisma

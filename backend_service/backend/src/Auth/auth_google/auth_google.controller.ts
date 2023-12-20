@@ -47,7 +47,7 @@ export class AuthGoogleController
     async handleRedirect(@Req() req: Request, @Res() res: Response)
     {
       (req.user as any).isConfirmed2Fa = false;
-      console.log(req.user);
+      // console.log(req.user);
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
       res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
@@ -152,7 +152,7 @@ async logout(@Req() req: Request, @Res() res: Response)
       );
     await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
     if (!isValidToken) {
-      return res.status(401).json('Invalid 2FA token');
+      return res.status(401).json({message : 'Two-factor authentication code is incorrect!'});
     }
     try
     {
@@ -188,11 +188,11 @@ async logout(@Req() req: Request, @Res() res: Response)
         secret: process.env.jwtSecretKey,
       });
       res.cookie('access_token', accessToken, { httpOnly: false });
-      return res.status(200).json('2FA disabled successfully');
+      return res.status(200).json({message : '2FA disabled successfully'});
     }
     catch (error)
     {
-      return res.status(500).json('Error disabling 2FA');
+      return res.status(500).json({message : 'Error disabling 2FA'});
     }
   }
 

@@ -29,6 +29,7 @@ model User{
   isFirstLog Boolean?
   isTwoFactorEnabled Boolean?
 
+
   userDMs Conversation[]
   gameRecords GameRecord[]
   channels UserChannel[]
@@ -45,6 +46,7 @@ model User{
 
   userMessages Message[]
 }
+
 
 model GameRecord{
   id String @id @default(uuid())

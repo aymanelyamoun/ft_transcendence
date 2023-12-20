@@ -35,7 +35,7 @@ async login(dto:LoginDto)
     }
   } catch (error)
   {
-    throw new UnauthorizedException({message : "user can't log"});
+    throw new UnauthorizedException({message : "the email or password is incorrect"});
   }
 }
 

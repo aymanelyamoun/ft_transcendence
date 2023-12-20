@@ -6,7 +6,18 @@ import { useRouter } from "next/navigation";
 import Loading from "../../components/Loading";
 import { useUser } from "../layout";
 import { json } from "stream/consumers";
+import { AlertMessage } from "@/app/components/alertMessage";
+
+let data: any;
 export default function Confirm() {
+
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isNotify, setIsNotify] = useState<boolean>(false);
+  const handleClick = () => {
+    setIsError(false);
+    setIsNotify(false);
+  }
+
   interface UserData {
     username: string;
     profilePic?: string;
@@ -57,26 +68,27 @@ export default function Confirm() {
         "Access-Control-Allow-Origin": "*",
       },
     });
-    const data = await res.json();
+    data = await res.json();
     console.log(data);
     if (!res.ok) {
       
-      alert(data.message);
+      setIsError(true);
       return;
     }
+    setIsNotify(true);
     window.location.href = "/profile/dashboard";    
-    alert("User confirmed!");
   
   };
   
   
   
   const handleConfirm = () => {
-    if (userData?.hash != '') {
+    // if (userData?.hash != '') {
       confirm();
-    } else {
-      alert("Password is required!");
-    }
+    // } else {
+    //   // alert("Password is required!");
+    //   <AlertMessage onClick={handleClick} message={data.message} type="error" />
+    // }
   };
   const gradientStyle = {
     background:
@@ -195,6 +207,8 @@ export default function Confirm() {
                  </Link>
                </div>
              </div>
+             {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={"User Confirmed!"} type="notify" /> : ""}
+
            </div>
          </div>
        {/* )}  */}

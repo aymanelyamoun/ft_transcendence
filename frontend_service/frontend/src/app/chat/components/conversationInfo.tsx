@@ -21,7 +21,7 @@ import {
 } from "../../../../../../backend_service/backend/types/chatTypes";
 import { SlOptions } from "react-icons/sl";
 
-export const userId = "03af010b-f22d-402c-b2a8-2a22bf55ebe0";
+export const userId = "43ed0726-e8e9-4e84-aa02-834fdf5e3950";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -138,7 +138,7 @@ const MemberIthem = ({
   const [selectedOption, setSelectedOption] = useState("public");
 
   return (
-    <div className="flex justify-between w-full  m-2 items-center ">
+    <div className="flex justify-between w-full  m-2 items-center relative">
       <div className="flex  justify-between items-center ">
         {/* <div className=""> */}
           <Image className="avatar-small mr-[10px]" src={avatar} alt={"avatar"} width={40}/>
@@ -150,14 +150,13 @@ const MemberIthem = ({
 
         !isOptions ? <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
         :
-        <div>
-          <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
-      <select className="optionsMenu fixed">
-        <option value="apple">Apple</option>
-        <option value="banana">Banana</option>
-        <option value="orange">Orange</option>
-      </select>
-
+        <div className="optionsMenu fixed mt-[149px] ml-[100px]">
+            <SlOptions className="cursor-pointer left-[88%] absolute" onClick={() => setIsOptions(!isOptions)} />
+            <select className="">
+                {/* <option value="apple">Apple</option>
+                  <option value="banana">Banana</option>
+                <option value="orange">Orange</option> */}
+            </select>
         </div>
 
       }
@@ -413,3 +412,4 @@ const ProfileInfos = ({
 };
 
 // export default conversationInfo;
+

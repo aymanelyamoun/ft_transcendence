@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useRef} from "react";
 import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
-import { addBodies } from '../components/Simulation';
 import { IoArrowBackCircle } from "react-icons/io5";
 
 const HEIGHT : number = 800;
@@ -38,6 +37,20 @@ const paddleSkin : Skin = {
     width: 20,
     height: 183, //px
 };
+
+
+const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
+    // add a pong game bodies
+    const ball = Bodies.circle(cw / 2, ch / 2, 10, { isStatic: false, restitution: 1,
+    render:{fillStyle: "white"}})
+    const paddleA = Bodies.rectangle(10, ch / 2, 15, 90, { isStatic: true,
+    render:{fillStyle: "white"}})
+    const paddleB = Bodies.rectangle(cw - 10, ch / 2, 15, 90, { isStatic: true,
+    render:{fillStyle: "white"}})
+    const wallTop = Bodies.rectangle(cw / 2, -10, cw, 20, { isStatic: true, render:{visible: false} })
+    const wallBottom = Bodies.rectangle(cw / 2, ch + 10, cw, 20, { isStatic: true, render:{visible: false} })
+    World.add(engine.world, [wallTop, wallBottom, paddleA, paddleB, ball])
+}
 
 function ballPrediction(engine : Engine)
 {
@@ -303,9 +316,9 @@ export default function Singleplayer (){
       }, [])
 
     return (
-        <div id="parentDiv" className="flex flex-col h-screen w-screen justify-center items-center gap-[5vh]">
-            <div id="TopBar" className="w-1/3 max-w-xs h-14 outline outline-2 bg-[#282C4E] rounded-b-lg">
-                <button className="absolute left-0 top-0 h-14 w-14 rounded-bl-lg">
+        <div id="parentDiv" className="flex flex-col h-full w-full justify-center items-center gap-[5vh]">
+            <div id="TopBar" className=" w-1/3 max-w-xs h-14 outline outline-2 bg-[#282C4E] rounded-b-lg">
+                <button className="absolute h-14 w-14 rounded-bl-lg left-0 top-0 ">
                     <IoArrowBackCircle className="h-14 w-14 text-white" onClick={() => redirectMenu()}/>
                 </button>
             </div>

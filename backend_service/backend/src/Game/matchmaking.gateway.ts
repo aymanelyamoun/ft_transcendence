@@ -48,4 +48,4 @@ export class MatchmakingGateway implements  OnGatewayConnection, OnGatewayDiscon
         this.gameService.removeFromQueue(client) // remove from queue if in queues
         console.log("user disconnected: ", (client['user'] ? client['user'].username : client.id));
     }
-    }
+}

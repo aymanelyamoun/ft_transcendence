@@ -1,6 +1,5 @@
 "use client";
 import React, {useRef, useState } from 'react';
-import Cookies from 'js-cookie';
 import './globals.css'
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import io from 'socket.io-client';     
@@ -19,8 +18,7 @@ const Matchmaking = ({setGameState, gameState}: GameMenuProps) => {
     setQueueTimer(0);
     setInQueue(true);
     if (!socketRef.current)
-      socketRef.current = io("http://localhost:3001/api/matchmaking",
-        {auth: {token: Cookies.get('access_token')}});
+      socketRef.current = io("http://localhost:3001/api/matchmaking", {withCredentials: true});
         INTERVAL.current = setInterval(() => {
         setQueueTimer(queueTimer => queueTimer + 1);
     }, 1000);

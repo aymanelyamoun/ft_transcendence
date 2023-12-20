@@ -13,7 +13,7 @@ import { PrismaChatService } from '../prisma/chat/prisma.chat.service';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
-@WebSocketGateway({cors : {origin : "http://localhost:3000", credentials: true}})
+@WebSocketGateway({namespace: "api/chat",cors : {origin : "http://localhost:3000", credentials: true}})
 export class ChatGateway implements OnModuleInit, OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService) {}
@@ -24,18 +24,18 @@ export class ChatGateway implements OnModuleInit, OnGatewayConnection {
   server: Server;
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
-      console.log("socket: ", socket.handshake.headers.cookie);
-      console.log('a socket has connected from chat gateway, Id: ', socket.id);
+      // console.log("socket: ", socket.handshake.headers.cookie);
+      // console.log('a socket has connected from chat gateway, Id: ', socket.id);
     });
     this.server.on('disconnect', (socket: Socket) => {
-      console.log('a socket has disconnected from chat gateway, Id: ', socket.id);
+      // console.log('a socket has disconnected from chat gateway, Id: ', socket.id);
     }
     );
   }
 
   handleConnection(client: Socket, ...args: any[]) {
     // console.log('chat server id = ', this.server) 
-    console.log("a socket has connected from chat gateway, client: ", client.id);
+    // console.log("a socket has connected from chat gateway, client: ", client.id);
   }
 
   @SubscribeMessage('userData')

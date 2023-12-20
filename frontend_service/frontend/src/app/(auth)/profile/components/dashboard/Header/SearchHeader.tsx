@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchModal from './SearchModal';
 import { BsSearch } from "react-icons/bs";
+import { Backend_URL } from '@/lib/Constants';
 
 
 const SearchInput = styled.input`
@@ -57,21 +58,54 @@ interface SearchHeaderProps {
 }
 
 
-const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch, onClose, searchUsers}) => {
+const SearchHeader = () => {
+    const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
     const [query, setQuery] = useState('');
     const [ShowModal, setShowModal] = useState(false);
     
     const handleSearch = (e: React.FormEvent) => {
         setShowModal(true);
+        // fetchUsers();
     };
+
+    const fetchUsers = async () => {
+        try {
+          const res = await fetch( Backend_URL + "user/all", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if (res.ok) {
+            const data = await res.json() as SearchU[];
+            console.log(data);
+            setSearchUsers(data);
+          }else {
+            alert("Error fetching data: ");
+            console.error("Error fetching data: ", res.statusText);
+          }
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        }
+      };
+
+      useEffect(() => {
+
+        fetchUsers();
+      }, []);
+
     
     return (
         <>
         <SearchHeaderContainer onClick={handleSearch}>
-            <SearchIcon />
+            <SearchIcon onClick={fetchUsers} />
         </SearchHeaderContainer>
         {ShowModal ? (
-            <SearchModal onSearch={onSearch} onClose={() => setShowModal(false)} searchUsers={searchUsers}/>
+            // <SearchModal onSearch={onSearch} onClose={() => setShowModal(false)} searchUsers={searchUsers}/>
+            <SearchModal onClose={setShowModal} searchUsers={SearchUsers} setSearchUsers={setSearchUsers}/>
         ) : null}
         </>
         // {showModal && <SearchModal onSearch={onSearch} onClose={() => setShowModal(false)} />}

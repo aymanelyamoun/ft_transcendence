@@ -64,7 +64,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
       if (res.ok) {
         const data = await res.json() as SearchU[];
         setFriendSearch(data);
-        console.log(SearchUsers);
       }
     } catch (error) {
       console.error("Err1or fetching data: ", error);

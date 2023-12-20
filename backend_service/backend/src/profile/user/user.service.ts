@@ -302,10 +302,12 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                     },
                 }
             })
-    //         if (!users || users.length === 0) {
-    //         throw new UnauthorizedException('No users found');
-    // }
-        return(users);
+            const blockedUsers = await this.BlockList(userloged);
+            const usersWithBlockedFlag = users.map((user) => ({
+                ...user,
+                isBlocked: blockedUsers.some((blockedUser) => blockedUser.id === user.id),
+            }));
+        return(usersWithBlockedFlag);
         } catch (error)
         {
             throw new UnauthorizedException('Internal server error');

@@ -8,12 +8,14 @@ import styled from 'styled-components';
 
 interface Friend {
   id: string;
-  name: string;
+  username: string;
   profilePic: string;
   title? : string;
+  online: boolean;
 }
 
   interface FriendsProps {
+    // onFriendItemClick: Friend | false;
     onFriendItemClick: any;
   }
 

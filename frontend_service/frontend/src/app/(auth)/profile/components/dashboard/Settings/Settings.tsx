@@ -57,6 +57,11 @@ const OpenBarContainer = styled.div`
     height: 10vh;
     transition: height 0.2s ease-in-out;
   }
+
+  &.svg {
+    font-size: 3rem;
+    color: aliceblue;
+  }
 `;
 
 const OpenedBar = styled.div`
@@ -78,6 +83,7 @@ const SettingSpan = styled.span`
     font-weight: 400;
     line-height: normal;
 `;
+
 
 
 const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
@@ -134,7 +140,7 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
           )}
           {/* <div className={styles['settings-container']}> */}
           <OpenBarContainer isOpen={open}>
-            <UilSetting />
+            <UilSetting/>
             <SettingSpan> Settings</SettingSpan>
           </OpenBarContainer>
           </SettingsContainer>

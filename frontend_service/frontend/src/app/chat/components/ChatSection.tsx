@@ -5,6 +5,7 @@ import {
   ConversationListContextSet,
   LstConversationStateContext,
   MessagesContext,
+  UserContext,
 } from "./ConversationInfo";
 // import { v4 as uuidv4 } from "uuid";
 import { ConversationIthemProps, MessageProps } from "../../../../../../backend_service/backend/types/chatTypes";
@@ -13,7 +14,7 @@ import jake from "../../../../public/jakeWithHeadPhones.jpg";
 import Image from "next/image";
 import { socket } from "../../../socket";
 
-import { userId, isAdmin } from "./ConversationInfo";
+import { isAdmin } from "./ConversationInfo";
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>
@@ -41,6 +42,8 @@ export const ConversationChatSection = () => {
   const messagesData = useContext(MessagesContext);
   const setConversationList = useContext(ConversationListContextSet);
   const [messages, setMessages] = useState<MessageProps[]>([]);
+  const userInfo = useContext(UserContext);
+
   let maxId = 0;
   if (messages.length !== 0) {
     maxId = messages.reduce((max, message) => Math.max(max, message.id), messages[0].id);
@@ -60,7 +63,7 @@ export const ConversationChatSection = () => {
     socket.connect();
 
     socket.on("connect", () => {
-      socket.emit("userData", { userId: userId, isAdmin: "false" });
+      socket.emit("userData", { userId: userInfo?.id, isAdmin: "false" });
       console.log("connected to server");
     });
 
@@ -111,6 +114,7 @@ export const ConversationChatSection = () => {
 };
 
 const Message = ({ message }: { message: MessageProps }) => {
+  const userId = useContext(UserContext)?.id;
   if (message.senderId === userId) {
     return <MessageChat message={message} type="sendMsg" />;
   }
@@ -144,6 +148,7 @@ const TypeMessage = ({maxId}:{maxId:number}) => {
   const setMessages = useContext(ConversationMessagesContextSet);
   const messages = useContext(ConversationMessagesContextStat);
   const conversation = useContext(LstConversationStateContext);
+  const userId = useContext(UserContext)?.id as string;
 
   const newMessage: MessageProps = {
     id: maxId + 1,

@@ -23,7 +23,12 @@ import {
   MessageProps,
 } from "../../../../../../backend_service/backend/types/chatTypes";
 
-export const userId = "047a9c1b-9832-4fb7-acc4-a54d52306ab2";
+// const authToken = Cookies.get('access_token');
+// console.log("authToken:", authToken);
+// const decodedToken = jwtDecode(authToken) as any;
+
+// console.log("decodedToken:", decodedToken);
+// export const userId = decodedToken.id;
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -32,10 +37,7 @@ export const isAdmin = false;
 
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
-  const authToken = Cookies.get('access_token');
-  console.log("authToken:", authToken);
-  const decodedToken = jwtDecode(authToken);
-  console.log("decodedToken:", decodedToken);
+
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
   //   return;
@@ -241,13 +243,56 @@ const ConversationInfoWrapper = ({
   );
 };
 
+interface User {
+  id: string;
+  email: string;
+  username: string;
+  profilePic?: string;
+  hash: string;
+  typeLog: string;
+  isTwoFactorEnabled: Boolean;
+  isConfirmed2Fa: Boolean;
+}
+
+export const UserContext = createContext<User | null>(null);
+
 const Conversation = () => {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/" + "auth/check", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+        }
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    checkAuthentication();
+  }, []);
+  if (!user) {
+    return <div>not authorized</div>;
+  }
+
   return (
+    <UserContext.Provider value={user}>
     <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
       <ConversationChatSection />
       {/* <ChatSection /> */}
       <ConversationInfo type="D"></ConversationInfo>
     </div>
+    </UserContext.Provider>
   );
 };
 
@@ -270,6 +315,7 @@ export const ChatPage = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [ConversationList, setConversationList] = useState< ConversationIthemProps[] >([]);
   const [conversation, setConversation] = useState<ConversationIthemProps>();
+  const userInfo = useContext(UserContext) as User;
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
   // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
 
@@ -277,7 +323,7 @@ export const ChatPage = () => {
   useEffect(() => {
     const fetchFun = async () => {
       await fetch(
-        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userId}&isAdmin=${isAdmin}`,
+        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userInfo.id}&isAdmin=${isAdmin}`,
         {
           method: "GET",
           credentials: "include",

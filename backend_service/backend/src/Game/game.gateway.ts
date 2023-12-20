@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthGoogleService } from 'src/Auth/auth_google/auth_google.service';
 import { GameInstance } from './game.instance';
 import { User } from '@prisma/client';
+import { parse } from "cookie"
 
 @WebSocketGateway({namespace: 'api/game', cors : {origin : '*'}, transports: ['websocket']})
 export class GameGateway implements  OnGatewayConnection, OnGatewayDisconnect{
@@ -18,8 +19,8 @@ export class GameGateway implements  OnGatewayConnection, OnGatewayDisconnect{
   async handleConnection(client: any, ...args: any[]) {
       try
       {
-        const token = client.handshake.auth.token;
-        const payload = await this.jwtService.verifyAsync(token, {
+        const token = parse(client.handshake.headers.cookie);
+        const payload = await this.jwtService.verifyAsync(token['access_token'], {
             secret : process.env.jwtSecretKey,
         });
         const user = await this.authGoogleService.findUserByEmail(payload.email);

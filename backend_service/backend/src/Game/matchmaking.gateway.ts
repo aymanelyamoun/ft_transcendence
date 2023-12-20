@@ -6,6 +6,7 @@ import { AuthGoogleService } from 'src/Auth/auth_google/auth_google.service';
 import { User } from '@prisma/client';
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { GameService } from './game.service';
+import { parse } from "cookie"
 
 
 @WebSocketGateway({namespace: 'api/matchmaking', cors : {origin : '*'}, transports: ['websocket']})
@@ -17,8 +18,8 @@ export class MatchmakingGateway implements  OnGatewayConnection, OnGatewayDiscon
     async handleConnection(client: any, ...args: any[]) {
         try
         {
-            const token = client.handshake.auth.token;
-            const payload = await this.jwtService.verifyAsync(token, {
+            const token = parse(client.handshake.headers.cookie);
+            const payload = await this.jwtService.verifyAsync(token['access_token'], {
                 secret : process.env.jwtSecretKey,
             });
             const user = await this.authGoogleService.findUserByEmail(payload.email);

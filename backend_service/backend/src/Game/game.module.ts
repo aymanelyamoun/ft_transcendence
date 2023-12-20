@@ -7,8 +7,6 @@ import { PrismaService } from 'src/chatapp/prisma/prisma.service';
 import { UserModule } from 'src/profile/user/user.module';
 import { UserService } from 'src/profile/user/user.service';
 import { MatchmakingGateway } from './matchmaking.gateway';
-// import { UserModule } from 'src/profile/user/user.module';
-// import { UserService } from 'src/profile/user/user.service';
 
 @Module({
   imports: [UserModule],

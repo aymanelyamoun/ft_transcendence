@@ -19,7 +19,22 @@ export const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
 }
 
 const collisionDetect = (engine: Matter.Engine, event: Matter.IEventCollision<Matter.Engine>) => {
-      ballVelocity.x *= -1;
+      // check if the ball collides with any of the paddles
+      const pairs = event.pairs;
+      const ball = engine.world.bodies[4];
+      const paddleA = engine.world.bodies[2];
+      const paddleB = engine.world.bodies[3];
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i];
+        if (pair.bodyA === ball && pair.bodyB === paddleA) {
+          ballVelocity.x = -ballVelocity.x;
+          Matter.Body.setVelocity(ball, ballVelocity);
+        }
+        if (pair.bodyA === ball && pair.bodyB === paddleB) {
+          ballVelocity.x = -ballVelocity.x;
+          Matter.Body.setVelocity(ball, ballVelocity);
+        }
+      }
 }
 
 export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF THIS COMPONENT RELATIVE A W9
@@ -39,29 +54,30 @@ export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF TH
             background: 'transparent'
           }
         })
-        const runner = Matter.Runner.create();
-        runner.isFixed = true;
+        const runner = Matter.Runner.create(
+          { isFixed: true,
+          delta: 1000 / 60 },
+        );
         Matter.Runner.run(runner, engine.current);
         addBodies(engine.current, cw, ch);
-        
         const CollisionEvent =  (event: Matter.IEventCollision<Matter.Engine>) => {collisionDetect(engine.current, event)}
         const ball = engine.current.world.bodies[4];
         const renderLoop = () => {
+            Matter.Composite.scale(engine.current.world, 1, 1, { x: 0, y: 0 });
             Matter.Body.setVelocity(ball, ballVelocity);
             render.canvas.style.width = '100%'
             render.canvas.style.height = '100%'
             render.canvas.style.background = 'transparent'
-            Matter.Composite.scale(engine.current.world, 1, 1, Matter.Vector.create(0, 0));
+
             Matter.Render.world(render)
         }
         Matter.Events.on(engine.current, 'collisionStart', CollisionEvent);
-        Matter.Events.on(runner, "afterTick", renderLoop);
-
+        Matter.Events.on(engine.current, "beforeUpdate", renderLoop);
         // unmount
         return () => {
             console.log('unmounting')
             Matter.Runner.stop(runner)
-            Matter.Events.off(runner, "afterTick", renderLoop)
+            Matter.Events.off(engine.current, "beforeUpdate", renderLoop)
             Matter.Events.off(engine.current, 'collisionStart', CollisionEvent)
             Render.stop(render)
             Composite.clear(engine.current.world, false);

@@ -4,7 +4,7 @@ import Image from "next/image";
 import sendIcon from "../../../../public/sendButton.png";
 import { KeyboardEvent } from "react";
 import { useState } from "react";
-import { MessageProps } from "../../../../../../backend_service/backend/types/chatTypes";
+import { MessageProps } from "../../../../../../../backend_service/backend/types/chatTypes";
 
 interface TypeMsgProps {
   sendMessage: (message: MessageProps) => void;

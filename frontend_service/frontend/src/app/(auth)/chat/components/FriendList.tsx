@@ -13,7 +13,7 @@ import FriendsChat from "./FriendsChat";
 import ChannelChat from "./ChannelChat";
 // import { Friend, friendsData } from '../../../../app/(notRoot)/page';
 import { Channel, channelsData } from "../page";
-import { Conversation } from "../../../../../../backend_service/backend/types/chatTypes";
+import { Conversation } from "../../../../../../../backend_service/backend/types/chatTypes";
 // import {
 //   Friend,
 //   friendsData,

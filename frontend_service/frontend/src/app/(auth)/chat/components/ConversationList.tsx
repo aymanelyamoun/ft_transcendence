@@ -1,13 +1,13 @@
 import React, { use, useContext } from "react";
-import { ConversationIthemProps } from "../../../../../../backend_service/backend/types/chatTypes";
+import { ConversationIthemProps } from "../../../../../../../backend_service/backend/types/chatTypes";
 import { useState, useEffect, createContext } from "react";
 import Image from "next/image";
 import msg from "../../../../public/msg_icon.png";
 import msgs from "../../../../public/msgs_icons.png";
 import msg2 from "../../../../public/msg2_icon.png";
 import msgs2 from "../../../../public/msgs2_icons.png";
-import avatar from "../../../../public/garou-kid.jpeg";
-import splitBar from "../../../../public/splitBar.png";
+import avatar from "../../../../../public/garou-kid.jpeg";
+import splitBar from "../../../../../public/splitBar.png";
 
 import { HiMiniChatBubbleLeftRight } from "react-icons/hi2";
 import { HiMiniChatBubbleLeft } from "react-icons/hi2";

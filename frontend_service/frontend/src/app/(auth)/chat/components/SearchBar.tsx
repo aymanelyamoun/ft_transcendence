@@ -5,7 +5,7 @@ import { NextPage } from "next";
 // import { Friend, friendsData } from '../../../../app/(notRoot)/page';
 // import { Friend, friendsData } from '../page';
 import { Channel, channelsData } from "../page";
-import { ConversationIthemProps } from "../../../../../../backend_service/backend/types/chatTypes";
+import { ConversationIthemProps } from "../../../../../../../backend_service/backend/types/chatTypes";
 // import { Friend, friendsData } from '../../../app/(notRoot)/chat/page';
 // import { Channel, channelsData } from '../../../app/(notRoot)/chat/page';
 // import { Friend, friendsData } from '../../../../app/(notRoot)/chat/page';

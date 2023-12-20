@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
-import AddFriend from '@/app/chat/components/AddFriend';
+import AddFriend from '@/app/(auth)/chat/components/AddFriend';
 import { IoMdPersonAdd } from "react-icons/io";
 import { Backend_URL } from '@/lib/Constants';
 import { CgUnblock } from "react-icons/cg";

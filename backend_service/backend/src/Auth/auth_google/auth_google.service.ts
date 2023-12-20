@@ -119,7 +119,7 @@ async validateUser(details: UserDtetails, typ: LOG_TYPE)
       return {
         backendTokens: {
            accessToken: await this.jwtService.signAsync(payload, {
-               expiresIn: '1m',
+               expiresIn: '1h',
                secret: process.env.jwtSecretKey ,
            }),
            refreshToken: await this.jwtService.signAsync(payload, {

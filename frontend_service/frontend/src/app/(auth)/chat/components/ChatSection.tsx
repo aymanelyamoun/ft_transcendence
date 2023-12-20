@@ -5,16 +5,16 @@ import {
   ConversationListContextSet,
   LstConversationStateContext,
   MessagesContext,
-  UserContext,
 } from "./ConversationInfo";
 // import { v4 as uuidv4 } from "uuid";
-import { ConversationIthemProps, MessageProps } from "../../../../../../backend_service/backend/types/chatTypes";
-import avatar from "../../../../public/garou-kid.jpeg";
+import { ConversationIthemProps, MessageProps } from "../../../../../../../backend_service/backend/types/chatTypes";
+import avatar from "../../../../../public/garou-kid.jpeg";
 import jake from "../../../../public/jakeWithHeadPhones.jpg";
 import Image from "next/image";
-import { socket } from "../../../socket";
+import { socket } from "../../../../socket";
 
 import { isAdmin } from "./ConversationInfo";
+import { UserContext } from "../page";
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>

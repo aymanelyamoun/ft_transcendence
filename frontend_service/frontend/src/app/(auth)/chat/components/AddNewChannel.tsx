@@ -1,8 +1,8 @@
 import React, { use } from "react";
 import { useEffect, useState, useRef } from "react";
-import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
-import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";
-import removeFriends from "../../../../public/removeFriends_Icon.png";
+import chooseFriendIcon from "../../../../../public/chooseFriendIcon.png";
+import notchoosenFriendIcon from "../../../../../public/notChoosenFriendIcon.png";
+import removeFriends from "../../../../../public/removeFriends_Icon.png";
 import { Friend, friendsData } from "../page";
 // import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
 // import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";

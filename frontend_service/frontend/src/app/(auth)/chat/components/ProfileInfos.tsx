@@ -1,7 +1,7 @@
 // "use client";
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import avatar from '../../../../public/garou-kid.jpeg';
+import avatar from '../../../../../public/garou-kid.jpeg';
 // import avatar from '../../../../public/garou-kid.jpeg';
 import FriendList from './FriendList';
 import AddFriend from './AddFriend';

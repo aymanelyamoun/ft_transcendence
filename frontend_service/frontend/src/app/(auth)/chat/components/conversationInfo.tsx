@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import Image, { StaticImageData } from "next/image";
-import avatar from "../../../../public/garou-kid.jpeg";
+import avatar from "../../../../../public/garou-kid.jpeg";
 import { MdDelete, MdPersonAddAlt1} from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { MdGroupAdd } from "react-icons/md";
@@ -21,7 +21,8 @@ import {
   ConversationIthemProps,
   MemberProps,
   MessageProps,
-} from "../../../../../../backend_service/backend/types/chatTypes";
+} from "../../../../../../../backend_service/backend/types/chatTypes";
+import { UserContext } from "../page";
 
 // const authToken = Cookies.get('access_token');
 // console.log("authToken:", authToken);
@@ -254,45 +255,17 @@ interface User {
   isConfirmed2Fa: Boolean;
 }
 
-export const UserContext = createContext<User | null>(null);
+
 
 const Conversation = () => {
-  const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const res = await fetch("http://localhost:3001/api/" + "auth/check", {
-            method: "GET",
-            mode: "cors",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          });
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-        }
 
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    checkAuthentication();
-  }, []);
-  if (!user) {
-    return <div>not authorized</div>;
-  }
 
   return (
-    <UserContext.Provider value={user}>
     <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
       <ConversationChatSection />
       {/* <ChatSection /> */}
       <ConversationInfo type="D"></ConversationInfo>
     </div>
-    </UserContext.Provider>
   );
 };
 

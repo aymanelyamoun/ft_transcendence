@@ -44,7 +44,7 @@ function ballPrediction(engine : Engine)
     const barB = engine.world.bodies[3];
     const ball = engine.world.bodies[4];
     const barHeight = barB.bounds.max.y - barB.bounds.min.y;
-    let timeToIntercept = (barB.position.x - ball.position.x) / ball.velocity.x;
+    let timeToIntercept = (barB.position.x - ball.position.x) / ballVelocity.x;
     let randDirection = Math.random() < 0.5 ? 1 : -1;
     PredictedBallY = ball.position.y + ball.velocity.y * timeToIntercept;
     predictOffset = Math.floor(Math.random() * (barHeight / 2)) * randDirection; // max offset 
@@ -53,11 +53,12 @@ function ballPrediction(engine : Engine)
 function botMove(engine : Engine)
 {
     const barB = engine.world.bodies[3];
+    const ball = engine.world.bodies[4];
     if (aiPredict)
     {
         let flooredPredictedY = Math.floor(PredictedBallY)
         let flooredBarY = Math.floor(barB.position.y)
-        const deadZone = 5;
+        const deadZone = 1;
         if (flooredPredictedY > flooredBarY + predictOffset + deadZone)
             aiDirection = 1
         else if (flooredPredictedY < flooredBarY + predictOffset - deadZone)
@@ -83,7 +84,6 @@ function botMove(engine : Engine)
 const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.Engine>) =>{
     event.pairs.forEach((pair: Matter.Pair) => {
       const { bodyA, bodyB } = pair;
-    //   console.log('bodyA label : [' + bodyA.label + ']', 'bodyB label : [' + bodyB.label + ']');
         const ball = engine.world.bodies[4];
         const paddle1 = engine.world.bodies[2];
         const paddle2 = engine.world.bodies[3];
@@ -267,8 +267,11 @@ export default function Singleplayer (){
           }
         })
         addBodies(engine.current, WIDTH, HEIGHT);
-        const runner = Matter.Runner.create();
-        runner.isFixed = true;
+        const runner = Matter.Runner.create({
+            delta: 1000 / 60,
+            isFixed: true,
+            enabled: true
+        });
         Matter.Runner.run(runner, engine.current);
         const CollisionEvent =  (event: Matter.IEventCollision<Matter.Engine>) => {collisionDetect(engine.current, event)}
         const renderLoop = () => {
@@ -279,15 +282,16 @@ export default function Singleplayer (){
             Matter.Render.world(render)
         }
         Matter.Events.on(engine.current, 'collisionStart', CollisionEvent);
-        Matter.Events.on(engine.current, "beforeUpdate", renderLoop);
+        // Matter.Events.on(engine.current, "beforeUpdate", renderLoop);
+        Matter.Events.on(runner, "beforeTick", renderLoop);
         window.addEventListener('keydown', pressHandle);
         window.addEventListener('keyup', releaseHandle);
         return () => {
             window.removeEventListener('keydown', pressHandle);
             window.removeEventListener('keyup', releaseHandle);
             Matter.Events.off(engine.current, 'collisionStart', CollisionEvent);
-            Matter.Events.off(engine.current, "beforeUpdate", renderLoop);
-            // Matter.Events.off(runner, "afterTick", renderLoop);
+            // Matter.Events.off(engine.current, "beforeUpdate", renderLoop);
+            Matter.Events.off(runner, "beforeTick", renderLoop);
             Matter.Runner.stop(runner)
             console.log('Singleplayer unmount')
             Render.stop(render)

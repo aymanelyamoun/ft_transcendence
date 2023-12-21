@@ -18,7 +18,10 @@ const Matchmaking = ({setGameState, gameState}: GameMenuProps) => {
     setQueueTimer(0);
     setInQueue(true);
     if (!socketRef.current)
-      socketRef.current = io("http://localhost:3001/api/matchmaking", {withCredentials: true});
+    {
+      socketRef.current = io("http://localhost:3001/api/chat", {withCredentials: true});
+      socketRef.current.emit('matchmaking')
+    }
         INTERVAL.current = setInterval(() => {
         setQueueTimer(queueTimer => queueTimer + 1);
     }, 1000);

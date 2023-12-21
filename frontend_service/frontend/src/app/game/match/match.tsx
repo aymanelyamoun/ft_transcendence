@@ -3,7 +3,6 @@ import React, {useRef, useEffect, useState} from "react";
 import './globals.css'
 import Matter, { Engine, Render, World, Bodies, Body, Composite, Bounds } from "matter-js";
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
-import Cookies from 'js-cookie';
 import { Socket, io } from "socket.io-client";
 
 // TO DO LIST:
@@ -166,7 +165,10 @@ const MatchScene = () => {
         if (matchID === null)
             window.location.href = '/';
         if (socketRef.current === null)
-            socketRef.current = io("http://localhost:3001/api/game", {withCredentials: true,auth: {matchID: matchID}});
+        {
+            socketRef.current = io("http://localhost:3001/api/chat", {withCredentials: true,});
+            socketRef.current.emit('joinMatch', matchID);
+        }
         socketRef.current.on('redirect', (destination : string , reason : string) => {
             alert(reason); 
             window.location.href = destination;
@@ -181,6 +183,10 @@ const MatchScene = () => {
             handleGameLoop(socketRef.current!, engine.current, render.current!);
         });
         return () => {
+            socketRef.current?.off('endGame');
+            socketRef.current?.off('updateFrames');
+            socketRef.current?.off('redirect');
+            socketRef.current?.off('startFriendGame');
             socketRef.current?.disconnect();
             socketRef.current = null;
             if (render.current !== null)

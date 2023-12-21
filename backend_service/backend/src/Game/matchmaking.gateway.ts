@@ -24,6 +24,7 @@ export class MatchmakingGateway implements  OnGatewayConnection, OnGatewayDiscon
             });
             const user = await this.authGoogleService.findUserByEmail(payload.email);
             client["user"] = user as User;
+            console.log("user connected: ", user)
             client.on('CancelQueue', () => {
                 this.gameService.removeFromQueue(client);
                 client.disconnect(true);

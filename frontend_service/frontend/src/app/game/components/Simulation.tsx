@@ -2,7 +2,6 @@
 import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import Matter, {Engine, Bodies, World, Render, Composite} from 'matter-js';
-import { get } from 'http';
 
 var BALLSPEED = 8;
 var ballVelocity = { x: BALLSPEED, y: BALLSPEED };
@@ -158,7 +157,6 @@ export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF TH
         Matter.Events.on(engine.current, "beforeUpdate", renderLoop);
         Matter.Runner.run(runner, engine.current);
         return () => {
-            console.log('unmounting')
             Matter.Runner.stop(runner)
             Matter.Events.off(engine.current, "beforeUpdate", renderLoop)
             Matter.Events.off(engine.current, 'collisionStart', CollisionEvent)

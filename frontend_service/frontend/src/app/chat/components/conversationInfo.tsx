@@ -21,7 +21,11 @@ import {
 } from "../../../../../../backend_service/backend/types/chatTypes";
 import { SlOptions } from "react-icons/sl";
 
-export const userId = "43ed0726-e8e9-4e84-aa02-834fdf5e3950";
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+
+
+export const userId = "2e7c4b42-efe4-4b5a-99eb-78d83e26c801";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -30,10 +34,12 @@ export const isAdmin = false;
 
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
+
+
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
-  //   return;
-  // }
+    //   return;
+    // }
   return (
     <>
       {conversationProps?.type === "DIRECT" ? (
@@ -137,29 +143,167 @@ const MemberIthem = ({
   const [isOptions, setIsOptions] = useState(false);
   const [selectedOption, setSelectedOption] = useState("public");
 
+
+
+
+  const options = [
+    { id: 1, label: 'mute', subOptions: ['5 min', '30 min', '1 hour'] },
+    { id: 2, label: 'kick' },
+    { id: 3, label: 'ban' },
+  ];
+
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
       <div className="flex  justify-between items-center ">
-        {/* <div className=""> */}
           <Image className="avatar-small mr-[10px]" src={avatar} alt={"avatar"} width={40}/>
-        {/* </div> */}
         <h3>{name}</h3>
       </div>
-      {/* <p>Admin</p> */}
       {
 
-        !isOptions ? <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
-        :
-        <div className="optionsMenu fixed mt-[149px] ml-[100px]">
-            <SlOptions className="cursor-pointer left-[88%] absolute" onClick={() => setIsOptions(!isOptions)} />
-            <select className="">
-                {/* <option value="apple">Apple</option>
-                  <option value="banana">Banana</option>
-                <option value="orange">Orange</option> */}
-            </select>
-        </div>
+        // !isOptions ? <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
+        // :
+        // <div className="optionsMenu absolute mt-[149px] ml-[114px] z-50">
+        //     <SlOptions className="cursor-pointer left-[88%] absolute" onClick={() => setIsOptions(!isOptions)} />
+        //     <select className="">
+        //         {/* <option value="apple">Apple</option>
+        //           <option value="banana">Banana</option>
+        //         <option value="orange">Orange</option> */}
+        //     </select>
+        // </div>
 
-      }
+
+// function MyMenu() {
+//   return (
+
+          // <Menu>
+          //   <Menu.Button>Options</Menu.Button>
+          //   <Menu.Items>
+          //     {links.map((link) => (
+          //       /* Use the `active` state to conditionally style the active item. */
+          //       <Menu.Item key={link.href} as={Fragment}>
+          //         {({ active }) => (
+          //           <a
+          //             href={link.href}
+          //             className={`${
+          //               active ? 'bg-blue-500 text-white' : 'bg-white text-black'
+          //             }`}
+          //           >
+          //             {link.label}
+          //           </a>
+          //         )}
+          //       </Menu.Item>
+          //     ))}
+          //   </Menu.Items>
+          // </Menu>
+
+/// bedore ading mute dropdown
+    //       <Menu>
+    //       <Menu.Button className=" cursor-pointer left-[95%] absolute ">
+    //         <SlOptions className=" " onClick={() => setIsOptions(!isOptions)} />
+    //       </Menu.Button>
+    //       <Transition
+    //     as={Fragment}
+    //     enter="transition duration-100 ease-out"
+    //     enterFrom="transform opacity-0 scale-95"
+    //     enterTo="transform opacity-100 scale-100"
+    //     leave="transition duration-75 ease-out"
+    //     leaveFrom="transform opacity-100 scale-100"
+    //     leaveTo="transform opacity-0 scale-95"
+    //   >
+    //     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50
+    //     ">
+    //       {optins.map((option) => (
+    //         <Menu.Item key={option.id}>
+    //           {({ active }) => (
+    //             <div
+    //               className={`${
+    //                 active ? 'bg-[#9A9BD326] text-white rounded-md' : 'text-white'
+    //               } block px-4 py-2 text-sm`}
+    //             >
+    //               {option.label}
+    //             </div>
+    //           )}
+    //         </Menu.Item>
+    //       ))}
+    //     </Menu.Items>
+    //   </Transition>
+    // </Menu>
+          
+  // )
+
+
+        // after adding mute dropdown
+
+        <Menu>
+        <Menu.Button className="cursor-pointer left-[95%] absolute">
+          <SlOptions className="" onClick={() => setIsOptions(!isOptions)} />
+        </Menu.Button>
+        <Transition
+          as={Fragment}
+          enter="transition duration-100 ease-out"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition duration-75 ease-out"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+            {options.map((option) => (
+              <Menu.Item key={option.id}>
+                {({ active }) => (
+                  <div
+                    className={`${
+                      active ? 'bg-[#9A9BD326] text-white rounded-md flex justify-between' : 'text-white flex justify-between'
+                    } block px-4 py-2 text-sm`}
+                  >
+                    {option.label}
+                    {option.subOptions && (
+                      <Menu as="div" className="relative">
+                        <Menu.Button className="pl-4 text-white">
+                          <span className="ml-2"> &gt; </span>
+                        </Menu.Button>
+                        <Transition
+                          as={Fragment}
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="origin-top-right absolute right-0 mr-[112px] mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                            {option.subOptions.map((subOption, index) => (
+                              <Menu.Item key={index}>
+                                {({ active }) => (
+                                  <div
+                                    className={`${
+                                      active
+                                        ? 'bg-[#9A9BD326] text-white rounded-md '
+                                        : 'text-white '
+                                    } block px-4 py-2 text-sm`}
+                                  >
+                                    {subOption}
+                                  </div>
+                                )}
+                              </Menu.Item>
+                            ))}
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    )}
+                  </div>
+                )}
+              </Menu.Item>
+            ))}
+          </Menu.Items>
+        </Transition>
+      </Menu>
+
+
+}
+
+
+      {/* } */}
     </div>
   );
 };

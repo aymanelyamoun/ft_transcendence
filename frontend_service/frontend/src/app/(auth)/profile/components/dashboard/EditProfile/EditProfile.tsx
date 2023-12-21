@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './EditProfile.module.css'
 import { RiEditBoxLine } from "react-icons/ri";
 import Link from 'next/link';
 import styled from 'styled-components';
+import EditProfileShow from './EditProfileShow';
 
 
 const EditProfileContainer = styled.div`
@@ -28,17 +29,26 @@ const EditProfileContainer = styled.div`
 `;
 
 const EditProfile = () => {
+  const [showEdit, setShowEdit] = useState<boolean>(false);
+  const handleEdit = () => {
+    { setShowEdit(true) }
+  }
+  useEffect(() => {
+    console.log(showEdit);
+  }, [showEdit]); 
   return (
-    <EditProfileContainer>
+    <>
+      {showEdit ? (<EditProfileShow />) : null}
+      <EditProfileContainer >
         <RiEditBoxLine />
-        <div className='edit-profile-text'>
-          <Link href="/update">
-            Edit Profile
-          </Link>
-          </div> {
-        }
-    </EditProfileContainer>
-  )
+        <div  className='edit-profile-text ' >
+          <button onClick={handleEdit} >
+          edit profile
+          </button>
+        </div>
+      </EditProfileContainer>
+    </>
+  );
 }
 
-export default EditProfile
+export default EditProfile;

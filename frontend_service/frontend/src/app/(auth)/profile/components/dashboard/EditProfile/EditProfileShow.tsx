@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { IoSettingsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import Loading from "../../components/Loading";
+import Loading from "../../../../../components/Loading";
 import Authorization from '@/utils/auth';
 import { AlertMessage } from '@/app/components/alertMessage';
 
@@ -12,7 +12,7 @@ import { AlertMessage } from '@/app/components/alertMessage';
 let data : any
 var notify : string
 
-export default function page() {
+export default function EditProfileShow() {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState<boolean>(false);
   const handleClick = () => {
@@ -128,10 +128,6 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
-
-
-  
-   
   const handlUpdateUsername = async () => {
     try
     {
@@ -151,6 +147,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (res.ok) {
           notify = "the Username is updated"
           setIsNotify(true);
+          setIsUsernameVisible(false);
         } else {
           setIsError(true);
         }
@@ -180,7 +177,8 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
       if (res.ok)
       {
         notify = "Password Updated Successfully"
-        setUserData(data.newupdat);
+        // setUserData(data.newupdat);
+        setIsPasswordVisible(false);
         setIsNotify(true);
       } else {
         setIsError(true);
@@ -210,6 +208,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (res.ok) {
           notify = "the code is coeerect and 2FA enabled successfully!"
           setIsNotify(true);
+          setIsTofaVisible(false);  
         } else {
           setIsError(true);
         }
@@ -233,6 +232,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
          if (res.ok) {
            notify = data.message
            setIsNotify(true)
+           setIsTofaVisible(false);  
          } else {
            setIsError(true)
          }
@@ -265,10 +265,10 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     }, [isChecked]);
   return (
     <div>
-    <div
+    {/* <div
       style={{ background: "#050A27" }}
       className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
-    >
+    > */}
       <div
         style={gradientStyle}
         className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
@@ -619,7 +619,7 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
         </div>
       </div>
-    </div>
+    {/* </div> */}
     {/* )}  */}
     </div>
   );

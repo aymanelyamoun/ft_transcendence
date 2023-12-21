@@ -91,7 +91,7 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
     const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
-        setOpen(!open);
+        setOpen(true);
         // if (onClick) {
         //     onClick();
         // }

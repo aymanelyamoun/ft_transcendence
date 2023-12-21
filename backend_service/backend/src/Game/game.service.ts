@@ -63,6 +63,16 @@ export class GameService {
         return false;
     }
 
+    inGameCheckByID(userID : string): boolean {
+        for (var i = 0; i < this.gameList.length; i++)
+        {
+            if (this.gameList[i].getPlayerOneInfo().playerData.id == userID
+            || this.gameList[i].getPlayerTwoInfo().playerData.id == userID)
+                return true;
+        }
+        return false;
+    }
+
     // stop game event
     stopGameEvent(playerSocket: Socket): boolean{
         for (var i = 0; i < this.gameList.length; i++)

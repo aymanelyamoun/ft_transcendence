@@ -31,8 +31,8 @@ const InfoName = styled.div`
 const AddGroupButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 3vw;
-  height: 3vh;
+  width: 45px;
+  height: 40px;
   cursor: pointer;
   align-items: center;
     background: rgba(154, 155, 211, 0.2);
@@ -47,8 +47,8 @@ const AddGroupButton = styled.button`
 const RemoveFriendButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 3vw;
-  height: 3vh;
+  width: 45px;
+  height: 40px;
   cursor: pointer;
   align-items: center;
   background: rgba(154, 155, 211, 0.2);
@@ -75,8 +75,8 @@ const ButtonContainer = styled.div`
 const BlockButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 3vw;
-  height: 3vh;
+  width: 45px;
+  height: 40px;
   cursor: pointer;
   align-items: center;
   background: rgba(154, 155, 211, 0.2);
@@ -90,8 +90,8 @@ const BlockButton = styled.button`
 const GameButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 3vw;
-  height: 3vh;
+  width: 45px;
+  height: 40px;
   cursor: pointer;
   align-items: center;
   background: rgba(154, 155, 211, 0.2);

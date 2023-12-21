@@ -6,10 +6,21 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import Loading from "../../components/Loading";
 import Authorization from '@/utils/auth';
+import { AlertMessage } from '@/app/components/alertMessage';
+
+
+let data : any
+var notify : string
 
 export default function page() {
-  // const isAuthenticated = Authorization();
-  // console.log("he check is ", isAuthenticated );
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isNotify, setIsNotify] = useState<boolean>(false);
+  const handleClick = () => {
+    setIsError(false);
+    setIsNotify(false);
+  }
+
+
   const [isUsernameVisible, setIsUsernameVisible] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isTofaVisible, setIsTofaVisible] = useState(false);
@@ -19,6 +30,7 @@ export default function page() {
   const [isToggleChecked, setIsToggleChecked] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  // const [notify, setNotify] = useState<string | null>(null);
   const [codeTwoFa, setCodeTwoFa] = useState<string | null>(null);
   const [image, setImage] = useState<string | null>(null);
 
@@ -84,11 +96,9 @@ export default function page() {
   
 const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0];
-
   if (file) {
     try {
       const reader = new FileReader();
-
       reader.onloadend = async () => {
         const profilePic = reader.result as string;
         const response = await fetch(Backend_URL + "user/update/image", {
@@ -101,15 +111,15 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
             "Access-Control-Allow-Origin": "*",
           },
         });
+        data = await response.json();
         if (response.ok) {
-          const data = await response.json();
+          notify = "Your new profile picture has been successfully updated"
           setUserData(data.newupdat);
-          alert("Image updated successfully");
+          setIsNotify(true);
         } else {
-          alert("Failed to update image");
+          setIsError(true);
         }
       };
-
       reader.readAsDataURL(file);
     } catch (error) {
       console.error("Error updating image:", error);
@@ -137,13 +147,12 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
           "Access-Control-Allow-Origin": "*",
         },
       });
-        const data = await res.json();
+         data = await res.json();
         if (res.ok) {
-          alert(data.message);
-          console.log("username Updated");
+          notify = "the Username is updated"
+          setIsNotify(true);
         } else {
-          alert(data.message);
-          console.error("Error Updating the username");
+          setIsError(true);
         }
     }
     catch (error) {
@@ -167,14 +176,15 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
         "Access-Control-Allow-Origin": "*",
       },
     });
-    const data = await res.json();
-    if (res.ok) {
-      alert(data.message);
-      console.log("Password Updated");
-    } else {
-      alert(data.message);
-      console.error("Error Updating the Password");
-    }
+      data = await res.json();
+      if (res.ok)
+      {
+        notify = "Password Updated Successfully"
+        setUserData(data.newupdat);
+        setIsNotify(true);
+      } else {
+        setIsError(true);
+      }
     }
     catch (error) {
       console.error("Error fetching:", error);
@@ -196,13 +206,12 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
             token: codeTwoFa,
           }),
         });
-        const data = await res.json();
+        data = await res.json();
         if (res.ok) {
-          alert(data);
-          console.log("Two-factor authentication code is correct!");
+          notify = "the code is coeerect and 2FA enabled successfully!"
+          setIsNotify(true);
         } else {
-          alert(data)
-          console.error("Two-factor authentication code is incorrect!");
+          setIsError(true);
         }
       } catch (error) {
         console.error("Error fetching:", error);
@@ -220,11 +229,12 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
              "Access-Control-Allow-Origin": "*",
            },
          });
-         const data = await res.json();
+          data = await res.json();
          if (res.ok) {
-           alert(data);
+           notify = data.message
+           setIsNotify(true)
          } else {
-           alert(data);
+           setIsError(true)
          }
        } catch (error) {
          console.error("Error fetching:", error);
@@ -605,6 +615,8 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
               )}
             </div>
           </div>
+          {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={notify as string} type="notify" /> : ""}
+
         </div>
       </div>
     </div>

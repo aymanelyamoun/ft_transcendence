@@ -1,6 +1,6 @@
 .profile-image {
     height: 13.7vh;
-    width: 7.9vw;
+    width: 13rem;
     margin: 30px 0; /* Adjust margin as needed */
     background-repeat: no-repeat;
     background-size: cover;
@@ -99,63 +99,30 @@
     justify-content: center;
 } */
 
-/* @media (min-width: 1300px) and (max-width: 1900px) {
-  .Sidebar {
-    grid-row-start: 1;
-    grid-row-end: 3;
+@media (max-width: 1300px) {
+  .profile-image {
+    width: 9rem;
+    position: relative;
+    bottom: 4vh;
+    /* margin: 15px 0; */
   }
+
+  /* .Sidebar {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 4vh;
+    transition: all 300ms ease;
+  } */
 
   .profile-header {
-    width: 60%;
-    margin-top: 30px;
-    padding-bottom: 8.215rem;
-  }
-
-  .wallet {
-    bottom: 20rem ;
-  }
-
-  .profile-image {
-    height: 160px;
-    width: 160px;
-    margin: 20px 0;
-  }
-
-  div span.username {
-    font-size: 20px;
-    padding-top: 0.5rem;
-  }
-
-  div span.user-id {
-    font-size: 14px;
-    padding-top: 0.5rem;
-  }
-
-  .settings {
-    bottom: 200px;
-  }
-
-  .settings span {
-    font-size: 14px;
-    margin-left: 8px;
-  }
-
-  .settings svg {
-    width: 30px;
-    height: 30px;
-  }
-
-  .sidebar-container {
-    padding-bottom: 480px;
-  }
-
-  .wallet svg {
-    width: 40px;
-    height: 40px;
-  }
-
-  .wallet span {
-    font-size: 16px;
+    width: 50%;
+    margin-top: 45px;
+    padding-bottom: 6.215rem;
   }
 }
 

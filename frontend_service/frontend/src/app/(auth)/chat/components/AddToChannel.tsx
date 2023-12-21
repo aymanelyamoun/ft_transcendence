@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import addToChannel from '../../../../public/addToChannelButton.png';
+import addToChannel from '../../../../../public/addToChannelButton.png';
 
 
 const AddToChannel = () => {

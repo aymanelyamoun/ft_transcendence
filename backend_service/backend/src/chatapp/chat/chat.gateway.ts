@@ -81,7 +81,6 @@ export class ChatGateway implements OnModuleInit, OnGatewayConnection {
   );
 }
 
-
   @SubscribeMessage('userData')
   subscribeUserData(client: Socket, data: userDataDto) {
     console.log('got user data: ', data);

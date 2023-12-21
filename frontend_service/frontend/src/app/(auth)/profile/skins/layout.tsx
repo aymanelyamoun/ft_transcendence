@@ -4,8 +4,6 @@ import SearchBar from '../components/skins/SearchBar/SearchBar'
 import { FaGoogleWallet } from 'react-icons/fa';
 import StatusBar from "../components/skins/StatusBar/StatusBar";
 import Table from "../components/skins/Table/Table";
-// import Paddle from "../components/skins/Paddle/Paddle";
-// import Ball from "../components/skins/Ball/Ball";
 
 export default async function RootLayout({
     children,

@@ -10,7 +10,34 @@ import { TmpUserService } from "../prisma/tmpUserAdd.service";
 @Injectable()
 export class GatewayService{
     constructor(private readonly prismaChat:PrismaChatService, private readonly tmpUserAddService:TmpUserService, ){}
+    connectedSocketsMap = new Map<string, Set<Socket> >();
     connectedSockets = new Set<ConnectedSocketInfo>();
+
+    addConnectedSocketToMap(connectedSocket:ConnectedSocketInfo){
+        if (!this.connectedSocketsMap.has(connectedSocket.userId))
+            this.connectedSocketsMap.set(connectedSocket.userId, new Set<Socket>());
+        this.connectedSocketsMap.get(connectedSocket.userId).add(connectedSocket.socket);
+        connectedSocket.socket.join(connectedSocket.userId);
+    }
+
+    userIsConnected(userId:string){
+        if (this.connectedSocketsMap.has(userId))
+        {
+            if (this.connectedSocketsMap.get(userId).size > 0)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+
+    removeConnectedSocketFromMap(connectedSocket:ConnectedSocketInfo){
+        this.connectedSocketsMap.get(connectedSocket.userId).delete(connectedSocket.socket);
+        connectedSocket.socket.leave(connectedSocket.userId);
+        if (this.connectedSocketsMap.get(connectedSocket.userId).size == 0)
+            this.connectedSocketsMap.delete(connectedSocket.userId);
+    }
 
     addConnectedSocket(connectedSocket:ConnectedSocketInfo){
         this.connectedSockets.add(connectedSocket);

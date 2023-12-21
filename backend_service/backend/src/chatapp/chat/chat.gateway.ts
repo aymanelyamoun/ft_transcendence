@@ -13,6 +13,7 @@ import { AuthGoogleService } from 'src/Auth/auth_google/auth_google.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { GameService } from 'src/Game/game.service';
+import { UserService } from 'src/profile/user/user.service';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
@@ -20,7 +21,7 @@ import { GameService } from 'src/Game/game.service';
 export class ChatGateway implements OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService, private readonly jwtService: JwtService,
-    @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+    @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService, private userService: UserService,
     private gameService : GameService) {}
 
   @WebSocketServer()
@@ -50,6 +51,10 @@ export class ChatGateway implements OnGatewayConnection {
     else 
     {
       console.log('connected ??? without session');
+      if (socket['user'] !== undefined){
+        if (!this.gatewayService.userIsConnected(socket['user'].id))
+          this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
+      }
       socket.disconnect(true);
     }
 
@@ -58,6 +63,32 @@ export class ChatGateway implements OnGatewayConnection {
   // })
   ;}
   
+  async emitFriendsStatus(userId:string){
+    const friends = await this.userService.allFriend(userId);
+    friends.forEach((friend)=>{
+      if (this.gatewayService.userIsConnected(friend.id))
+      {
+        const inGame = this.gameService.inGameCheckByID(friend.id);
+        if (inGame){
+          this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
+            socket.emit('friendStatus', {userId: userId, status: '2'});
+          });
+        }
+        else{
+          this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
+            socket.emit('friendStatus', {userId: userId, status: '1'});
+          });
+        }
+      }
+      else{
+        this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
+          socket.emit('friendStatus', {userId: userId, status: '0'});
+        });
+      }
+    });
+
+  }
+
   handleDisconnect(socket: Socket) {
     if (socket['user'] !== undefined)
     {
@@ -109,7 +140,6 @@ export class ChatGateway implements OnGatewayConnection {
     }
     this.gameService.MatchMaking(this.server, client);
   }
-
 
   @SubscribeMessage('userData')
   subscribeUserData(client: Socket, data: userDataDto) {

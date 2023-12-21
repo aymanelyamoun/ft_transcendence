@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "../../Auth/auth_google/utils/jwt.guard";
 import { UserService } from "./user.service";
 import { ConfirmUserDto } from "./dto/confirm.dto";
@@ -19,16 +19,16 @@ export class UserController {
   @Patch('confirm')
   @UseGuards(JwtGuard)
   async confirm(@Req() req: Request, @Res() res: Response, @Body() dto: ConfirmUserDto) {
-    try {
+    // try {
       const user = req['user'] as User;
       if (!user) {
         throw new UnauthorizedException();
       }
       const confirm = await this.userService.confirm(user.email, dto);
       res.status(200).json({ message: 'User confirmed successfully', result: confirm });
-    } catch (error) {
-      res.status(500).json({ message: 'Error finding user' });
-    }
+    // } catch (error) {
+    //   res.status(500).json({ message: 'Error finding user' });
+    // }
   }
     
   @Get('profile')
@@ -36,7 +36,7 @@ export class UserController {
   async check(@Req() req: Request, @Res() res: Response)
   {
     try {
-      const user = await this.authGoogleService.check_token(req);
+      const user = req['user'] as User;;
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -52,10 +52,10 @@ export class UserController {
   @UseGuards(JwtGuard)
   async all(@Req() req: Request, @Res() res: Response)
   {
-    console.log("heeeeeeere");
-    const users = await this.userService.allUsers();
+    const user = req['user'] as User;
+    const userid = user.id;
+    const users = await this.userService.allUsers(userid);
     res.status(200).send(users);
-    // return users
   }
   
   @Get('friends')
@@ -80,6 +80,7 @@ export class UserController {
   @UseGuards(JwtGuard)
   async SearchUser(@Param('username') username, @Res() res: Response, @Req() req: Request)
   {
+    console.log('ana wsalt');
     const users = await this.userService.Searchuser(username, req);
     res.status(200).send(users);
   }
@@ -106,6 +107,15 @@ export class UserController {
   async UpdateImage(@Res() res: Response, @Req() req: Request, @Body() body)
   {
     const data = await this.userService.updateimage(req, body);
+    return res.status(200).send(data);
+  }
+
+  @Get('notifications')
+  @UseGuards(JwtGuard)
+  async getNotifications(@Req() req: Request, @Res() res: Response)
+  {
+    const user = req['user'] as User;
+    const data = await this.userService.getNotifications(user.id);
     return res.status(200).send(data);
   }
 }

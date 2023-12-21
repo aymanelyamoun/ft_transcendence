@@ -24,6 +24,7 @@ export class GameGateway implements  OnGatewayConnection, OnGatewayDisconnect{
             secret : process.env.jwtSecretKey,
         });
         const user = await this.authGoogleService.findUserByEmail(payload.email);
+        console.log("user connected: ", user)
         client["user"] = user as User;
         this.gameService.clearFinishedGames();
         const inGame = this.gameService.inGameCheck(client);

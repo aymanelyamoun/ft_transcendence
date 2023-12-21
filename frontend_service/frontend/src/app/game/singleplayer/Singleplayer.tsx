@@ -57,27 +57,51 @@ function ballPrediction(engine : Engine)
     const barB = engine.world.bodies[3];
     const ball = engine.world.bodies[4];
     const barHeight = barB.bounds.max.y - barB.bounds.min.y;
+    const midBar = barHeight / 2;
     let timeToIntercept = (barB.position.x - ball.position.x) / ballVelocity.x;
-    let randDirection = Math.random() < 0.5 ? 1 : -1;
     PredictedBallY = ball.position.y + ball.velocity.y * timeToIntercept;
-    predictOffset = Math.floor(Math.random() * (barHeight / 2)) * randDirection; // max offset 
+    predictOffset = (Math.random() * 2 - 1) * midBar;
+
 }
+
+const checkClose = (predictedY : number, barB : Matter.Body, flooredBarY : number, aiDirection : number) : boolean => {
+    // check if predicted Y is on the bar
+    // const barHeight = barB.bounds.max.y - barB.bounds.min.y;
+    // const midBar = barHeight / 2;
+    // const barY = Math.floor(barB.position.y);
+    // const topBar = barY - midBar;
+    // const bottomBar = barY + midBar;
+    // if (predictedY < topBar && predictedY > bottomBar)
+    //     return true;
+    // loop throught paddle speed length and check if any of the points are on the bar
+    const barHeight = barB.bounds.max.y - barB.bounds.min.y;
+    const midBar = barHeight / 2;
+    let i = Math.floor(barB.position.y - midBar);
+    while (i < Math.floor(barB.position.y + midBar))
+    {
+        if (i == PredictedBallY)
+            return true;
+        i += aiDirection;
+    }
+    return false;
+}
+
 
 function botMove(engine : Engine)
 {
     const barB = engine.world.bodies[3];
-    const ball = engine.world.bodies[4];
     if (aiPredict)
     {
         let flooredPredictedY = Math.floor(PredictedBallY)
-        let flooredBarY = Math.floor(barB.position.y)
-        const deadZone = 1;
-        if (flooredPredictedY > flooredBarY + predictOffset + deadZone)
+        let flooredBarY = Math.floor(barB.position.y) + predictOffset
+        if (flooredPredictedY > flooredBarY)
             aiDirection = 1
-        else if (flooredPredictedY < flooredBarY + predictOffset - deadZone)
+        else if (flooredPredictedY < flooredBarY)
             aiDirection = -1
         else
             aiDirection = 0
+        if (checkClose(flooredPredictedY, barB, flooredBarY, aiDirection))
+            return;
         let newY = barB.position.y + (aiDirection * PADDLESPEED);
         let newBarPos = Matter.Vector.create(barB.position.x, newY)
         if (!wallWalk(newY, barB, engine))
@@ -91,7 +115,6 @@ function botMove(engine : Engine)
         let newBarPos = Matter.Vector.create(barB.position.x, newY)
         Matter.Body.setPosition(barB, newBarPos)
     }
-
 }
 
 const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.Engine>) =>{
@@ -127,7 +150,6 @@ const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.E
             ballVelocity.x = (ballVelocity.x / speed) * ballSpeed
             ballVelocity.y = (ballVelocity.y / speed) * ballSpeed
             ballVelocity = Vector.create(ballVelocity.x, ballVelocity.y)
-            console.log('calculated')
         }
         if ((bodyB == topWall || bodyB == bottomWall) && (bodyA == ball))
         {

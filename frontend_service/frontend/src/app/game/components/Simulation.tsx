@@ -4,9 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Matter, {Engine, Bodies, World, Render, Composite} from 'matter-js';
 import { get } from 'http';
 
-var PADDLESPEED = 8;
 var BALLSPEED = 8;
-var FIXEDSIZE = 800;
 var ballVelocity = { x: BALLSPEED, y: BALLSPEED };
 const getScale = (cw: number, ch: number, w: number, h: number) : number => {
     const scaleX = cw / w;
@@ -44,13 +42,16 @@ const collisionDetect = (engine: Matter.Engine, event: Matter.IEventCollision<Ma
       for (var i = 0; i < pairs.length; i++) {
         var pair = pairs[i];
         const relativeY = pair.collision.normal.y;
+        // create a random number between 2 and 3
+        const rand = Math.floor(Math.random() * 2) + 2;
         if (pair.bodyA === ball && pair.bodyB === paddleA) {
           ballVelocity.x = -ballVelocity.x;
-          ballVelocity.y = ballVelocity.y + relativeY * 2;
+
+          ballVelocity.y = ballVelocity.y + relativeY * rand;
         }
         if (pair.bodyA === ball && pair.bodyB === paddleB) {
           ballVelocity.x = -ballVelocity.x;
-          ballVelocity.y = ballVelocity.y + relativeY * 2;
+          ballVelocity.y = ballVelocity.y + relativeY * rand;
         }
         if (pair.bodyA === ball && pair.bodyB === topWall) {
           ballVelocity.y = -ballVelocity.y;
@@ -81,10 +82,10 @@ const aiMoveOne = (engine : Engine) => {
     // move the paddle to the ball position Y only if the ball is moving to the paddle
     if (ball.velocity.x < 0) {
       if (paddleA.position.y > ball.position.y) {
-        beforeMove(paddleA, { x: paddleA.position.x, y: paddleA.position.y - PADDLESPEED}, engine)
+        beforeMove(paddleA, { x: paddleA.position.x, y: paddleA.position.y - BALLSPEED}, engine)
       }
       if (paddleA.position.y < ball.position.y) {
-        beforeMove(paddleA, { x: paddleA.position.x, y: paddleA.position.y + PADDLESPEED}, engine)
+        beforeMove(paddleA, { x: paddleA.position.x, y: paddleA.position.y + BALLSPEED}, engine)
       }
     }
 } 
@@ -95,10 +96,10 @@ const aiMoveTwo = (engine : Engine) => {
     // move the paddle to the ball position Y only if the ball is moving to the paddle
     if (ball.velocity.x > 0) {
       if (paddleB.position.y > ball.position.y) {
-        beforeMove(paddleB, { x: paddleB.position.x, y: paddleB.position.y - PADDLESPEED}, engine)
+        beforeMove(paddleB, { x: paddleB.position.x, y: paddleB.position.y - BALLSPEED}, engine)
       }
       if (paddleB.position.y < ball.position.y) {
-        beforeMove(paddleB, { x: paddleB.position.x, y: paddleB.position.y + PADDLESPEED}, engine)
+        beforeMove(paddleB, { x: paddleB.position.x, y: paddleB.position.y + BALLSPEED}, engine)
       }
     }
 } 
@@ -136,12 +137,18 @@ export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF TH
         render.canvas.style.background = 'transparent'
         addBodies(engine.current, render.canvas.width, render.canvas.height);
         const ball = engine.current.world.bodies[4];
+        var oldWidth = render.canvas.width;
+        var oldHeight = render.canvas.height;
+        BALLSPEED = render.canvas.width * 0.01;
+        ballVelocity = { x: BALLSPEED, y: BALLSPEED - render.canvas.width * 0.005 };
         const renderLoop = () => {
-          // adjust speed of the ball and the paddle to the canvas size
-          const scale = getScale(FIXEDSIZE, FIXEDSIZE, render.canvas.width, render.canvas.height);
-          BALLSPEED = 18 * scale;
-          PADDLESPEED = 18 * scale;          
+          BALLSPEED = render.canvas.width * 0.01;
+          const scaleX = render.canvas.width / oldWidth;
+          const scaleY = render.canvas.height / oldHeight;
+          render.options.width = render.canvas.width;
+          render.options.height = render.canvas.height; 
           Matter.Body.setVelocity(ball, ballVelocity);
+          Matter.Composite.scale(engine.current.world, scaleX, scaleY, { x: 0, y: 0 });
           repositionBall(engine.current, render);
           aiMoveOne(engine.current);
           aiMoveTwo(engine.current);

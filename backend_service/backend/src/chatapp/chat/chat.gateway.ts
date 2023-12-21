@@ -14,7 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
-@WebSocketGateway({namespace:'/api/chat', cors : {origin : "http://localhost:3000", credentials: true}})
+@WebSocketGateway({namespace: "api/chat",cors : {origin : "http://localhost:3000", credentials: true}})
 export class ChatGateway implements OnModuleInit, OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService, private readonly jwtService: JwtService,

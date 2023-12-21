@@ -6,15 +6,14 @@ import { AuthGoogleService } from 'src/Auth/auth_google/auth_google.service';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
 import { UserModule } from 'src/profile/user/user.module';
 import { UserService } from 'src/profile/user/user.service';
-// import { UserModule } from 'src/profile/user/user.module';
-// import { UserService } from 'src/profile/user/user.service';
+import { MatchmakingGateway } from './matchmaking.gateway';
 
 @Module({
   imports: [UserModule],
-  providers: [GameService, GameGateway, JwtService,  // SessionSerializer,
+  providers: [GameService, GameGateway, MatchmakingGateway, JwtService,  // SessionSerializer,
   {
       provide: 'AUTH_SERVICE',
       useClass: AuthGoogleService,
-  }, PrismaService, UserService]
+  }, PrismaService, UserService] ,
 })
 export class GameModule {}

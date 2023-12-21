@@ -1,10 +1,7 @@
 'use client';
 import { useEffect, useRef} from "react";
-import Matter, {Engine, Bodies, World, Render, Composite, Vector} from 'matter-js';
-import { addBodies } from '../components/Simulation';
+import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
 import { IoArrowBackCircle } from "react-icons/io5";
-// import { collisionDetect } from './utils/collisions';
-
 
 const HEIGHT : number = 800;
 const WIDTH : number = 1500;
@@ -41,12 +38,26 @@ const paddleSkin : Skin = {
     height: 183, //px
 };
 
+
+const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
+    // add a pong game bodies
+    const ball = Bodies.circle(cw / 2, ch / 2, 10, { isStatic: false, restitution: 1,
+    render:{fillStyle: "white"}})
+    const paddleA = Bodies.rectangle(10, ch / 2, 15, 90, { isStatic: true,
+    render:{fillStyle: "white"}})
+    const paddleB = Bodies.rectangle(cw - 10, ch / 2, 15, 90, { isStatic: true,
+    render:{fillStyle: "white"}})
+    const wallTop = Bodies.rectangle(cw / 2, -10, cw, 20, { isStatic: true, render:{visible: false} })
+    const wallBottom = Bodies.rectangle(cw / 2, ch + 10, cw, 20, { isStatic: true, render:{visible: false} })
+    World.add(engine.world, [wallTop, wallBottom, paddleA, paddleB, ball])
+}
+
 function ballPrediction(engine : Engine)
 {
     const barB = engine.world.bodies[3];
     const ball = engine.world.bodies[4];
     const barHeight = barB.bounds.max.y - barB.bounds.min.y;
-    let timeToIntercept = (barB.position.x - ball.position.x) / ball.velocity.x;
+    let timeToIntercept = (barB.position.x - ball.position.x) / ballVelocity.x;
     let randDirection = Math.random() < 0.5 ? 1 : -1;
     PredictedBallY = ball.position.y + ball.velocity.y * timeToIntercept;
     predictOffset = Math.floor(Math.random() * (barHeight / 2)) * randDirection; // max offset 
@@ -55,11 +66,12 @@ function ballPrediction(engine : Engine)
 function botMove(engine : Engine)
 {
     const barB = engine.world.bodies[3];
+    const ball = engine.world.bodies[4];
     if (aiPredict)
     {
         let flooredPredictedY = Math.floor(PredictedBallY)
         let flooredBarY = Math.floor(barB.position.y)
-        const deadZone = 5;
+        const deadZone = 1;
         if (flooredPredictedY > flooredBarY + predictOffset + deadZone)
             aiDirection = 1
         else if (flooredPredictedY < flooredBarY + predictOffset - deadZone)
@@ -85,7 +97,6 @@ function botMove(engine : Engine)
 const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.Engine>) =>{
     event.pairs.forEach((pair: Matter.Pair) => {
       const { bodyA, bodyB } = pair;
-    //   console.log('bodyA label : [' + bodyA.label + ']', 'bodyB label : [' + bodyB.label + ']');
         const ball = engine.world.bodies[4];
         const paddle1 = engine.world.bodies[2];
         const paddle2 = engine.world.bodies[3];
@@ -116,6 +127,7 @@ const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.E
             ballVelocity.x = (ballVelocity.x / speed) * ballSpeed
             ballVelocity.y = (ballVelocity.y / speed) * ballSpeed
             ballVelocity = Vector.create(ballVelocity.x, ballVelocity.y)
+            console.log('calculated')
         }
         if ((bodyB == topWall || bodyB == bottomWall) && (bodyA == ball))
         {
@@ -141,8 +153,6 @@ const wallWalk = (newPos: number, paddleOne: Matter.Body, engine : Engine) : boo
     const topWall = engine.world.bodies[0];
     const bottomWall = engine.world.bodies[1];
     const paddleHeight = Math.abs(paddleOne.vertices[2].y - paddleOne.vertices[0].y);
-    // if (newPos - paddleHeight / 2 < topWall.bounds.max.y || newPos + paddleHeight / 2 > bottomWall.bounds.min.y)
-    //     return true;
     if (newPos - paddleHeight / 2 < topWall.position.y || newPos + paddleHeight / 2 > bottomWall.position.y)
         return true;
     return false;
@@ -257,10 +267,8 @@ const checkGoals = (engine: Matter.Engine, render : Render) => {
 }
 
 export default function Singleplayer (){
-    
+    const engine = useRef(Matter.Engine.create({ enableSleeping: false, gravity: { x: 0, y: 0 }}));
     useEffect(() => {
-        const engine = useRef(Matter.Engine.create({ enableSleeping: false, gravity: { x: 0, y: 0 }}));
-        console.log('Singleplayer')
         const render = Render.create({
           element: document.getElementById('SingleMatch') as HTMLElement,
           engine: engine.current,
@@ -272,23 +280,31 @@ export default function Singleplayer (){
           }
         })
         addBodies(engine.current, WIDTH, HEIGHT);
-        const runner = Matter.Runner.create();
-        runner.isFixed = true;
+        const runner = Matter.Runner.create({
+            delta: 1000 / 60,
+            isFixed: true,
+            enabled: true
+        });
         Matter.Runner.run(runner, engine.current);
-        Matter.Events.on(engine.current, 'collisionStart', (event) => {collisionDetect(engine.current, event)});
-        Matter.Events.on(runner, "afterTick", () => {
+        const CollisionEvent =  (event: Matter.IEventCollision<Matter.Engine>) => {collisionDetect(engine.current, event)}
+        const renderLoop = () => {
             checkGoals(engine.current, render);
             botMove(engine.current);
             handlePlayerMoves(engine.current);
             ballSpeed = ScaleAndRender(engine.current, render, ballVelocity, ballSpeed)
-            console.log('Ai Predict : ' + aiPredict, 'Ai Direction : ' + aiDirection)
             Matter.Render.world(render)
-        });
+        }
+        Matter.Events.on(engine.current, 'collisionStart', CollisionEvent);
+        // Matter.Events.on(engine.current, "beforeUpdate", renderLoop);
+        Matter.Events.on(runner, "beforeTick", renderLoop);
         window.addEventListener('keydown', pressHandle);
         window.addEventListener('keyup', releaseHandle);
         return () => {
             window.removeEventListener('keydown', pressHandle);
             window.removeEventListener('keyup', releaseHandle);
+            Matter.Events.off(engine.current, 'collisionStart', CollisionEvent);
+            // Matter.Events.off(engine.current, "beforeUpdate", renderLoop);
+            Matter.Events.off(runner, "beforeTick", renderLoop);
             Matter.Runner.stop(runner)
             console.log('Singleplayer unmount')
             Render.stop(render)
@@ -300,9 +316,9 @@ export default function Singleplayer (){
       }, [])
 
     return (
-        <div id="parentDiv" className="flex flex-col h-screen w-screen justify-center items-center gap-[5vh]">
-            <div id="TopBar" className="w-1/3 max-w-xs h-14 outline outline-2 bg-[#282C4E] rounded-b-lg">
-                <button className="absolute left-0 top-0 h-14 w-14 rounded-bl-lg">
+        <div id="parentDiv" className="flex flex-col h-full w-full justify-center items-center gap-[5vh]">
+            <div id="TopBar" className=" w-1/3 max-w-xs h-14 outline outline-2 bg-[#282C4E] rounded-b-lg">
+                <button className="absolute h-14 w-14 rounded-bl-lg left-0 top-0 ">
                     <IoArrowBackCircle className="h-14 w-14 text-white" onClick={() => redirectMenu()}/>
                 </button>
             </div>

@@ -94,7 +94,6 @@ body {
       /* transparent, */ rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  padding: 1rem; /* this was changed in merge from auth */
 }
 
 .main {

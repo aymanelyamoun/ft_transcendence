@@ -160,24 +160,17 @@ const MatchScene = () => {
     const render = useRef<Render>(null);
     const engine = useRef<Engine>(Matter.Engine.create());
     if (typeof window !== 'undefined') {
-        // useEffect(() => {
+        useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
-        const authToken = Cookies.get('access_token');
         const matchID = queryParams.get('matchID');
-        // check if MatchID and authToken are defined
-        if (matchID === null || authToken === undefined)
-        {
-            alert('MatchID is null or authToken is undefined');
+        if (matchID === null)
             window.location.href = '/';
-        }
         if (socketRef.current === null)
-            socketRef.current = io("http://localhost:3001/api/game",
-            {auth: {token: authToken, matchID: matchID}});
+            socketRef.current = io("http://localhost:3001/api/game", {withCredentials: true,auth: {matchID: matchID}});
         socketRef.current.on('redirect', (destination : string , reason : string) => {
             alert(reason); 
             window.location.href = destination;
         });
-        console.log('hna');
         socketRef.current.on('startFriendGame', (playersData : any) => {
             socketRef.current!.on('endGame', handleEndGame);
             document.addEventListener('keydown', (e) => 
@@ -187,7 +180,18 @@ const MatchScene = () => {
             engine.current.gravity.y = 0;
             handleGameLoop(socketRef.current!, engine.current, render.current!);
         });
-    }
+        return () => {
+            socketRef.current?.disconnect();
+            socketRef.current = null;
+            if (render.current !== null)
+                Render.stop(render.current);
+            if (engine.current !== null)
+                Matter.Engine.clear(engine.current);
+            document.removeEventListener('keydown', (e) => pressHandle(e, socketRef.current!));
+            document.removeEventListener('keyup', (e) => releaseHandle(e, socketRef.current!));
+        }
+    }, []);
+}
 
     return (
         // isLoaded ? (

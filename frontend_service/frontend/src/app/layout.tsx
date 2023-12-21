@@ -39,6 +39,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  
   return (
     <html lang="en">
       <head>
@@ -47,9 +48,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;500&display=swap" rel="stylesheet" />
 
       </head>
-        <body className="h-screen w-screen bg-[#050A27]">
-          {children}
-      </body>
+        <body className="h-screen w-screen bg-[#050A27]">{children}</body>
     </html>
   )
 }

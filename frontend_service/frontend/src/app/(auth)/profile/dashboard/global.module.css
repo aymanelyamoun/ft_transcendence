@@ -1,0 +1,12 @@
+.App
+  {
+    background: rgba(5, 10, 39, 1);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    z-index: auto; /* Lower the z-index value */
+  }
+  
+  

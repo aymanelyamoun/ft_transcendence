@@ -1,0 +1,262 @@
+.friends
+{
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 4;
+    grid-column-end: 5;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 4vh;
+    transition: all 300ms ease;
+}
+
+.friends-container
+{
+    background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
+    overflow: auto;
+    position: absolute;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 90%;
+    width: 85%;
+    border-radius: 10px;
+}
+/* &::-webkit-scrollbar {
+    display: none;
+} */
+
+.friends-container::-webkit-scrollbar {
+    display: none;
+}
+
+div span.friends-title {
+    color: aliceblue;
+    font-family: "Inter", sans-serif;
+    /* margin-top: 4rem; */
+    display: flex;
+    margin-left: 50px;
+    padding-top: 30px;
+    font-weight: 800;
+    font-size: 35px;
+    font-weight: bold;
+}
+.friendItem-container
+{
+    background: rgba(154, 155, 211, 0.2);
+    display: flex;
+    width: 94%;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    height: 80px;
+    margin: 15px 10px;
+    border-radius: 15px;
+    align-content: center;
+    /* justify-content: space-between; */
+    align-items: center;
+}
+
+.friendReqItem
+{
+    background: rgba(154, 155, 211, 0.2);
+    display: flex;
+    align-items: flex-start;
+    width: 94%;
+    box-sizing: border-box;
+    height: 80px;
+    border-bottom: 1px solid rgba(154, 155, 211, 0.2);
+    margin: 15px 10px;
+    border-radius: 15px;
+}
+
+.friend-image
+{
+    width: 3.4rem;
+    height: 3rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.friendReq-image
+{
+    width: 4.6rem;
+    height: 4.4rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    margin: 0.2rem;
+}
+.friend-name
+{
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: aliceblue;
+    align-self: flex-start;
+    position: relative;
+    top: 0.5vh;
+    margin: 0 0 0 0.5vw;
+}
+
+.friendReq-name
+{
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 19px;
+    font-weight: bold;
+    color: aliceblue;
+    position: relative;
+    top: 0.6vh;
+    left: 0.3vw;
+
+}
+
+.friendReqMess
+{
+    font-family: 'Inter', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.62rem;
+    font-weight: bold;
+    color: aliceblue;
+    position: relative;
+    top: 4vh;
+    left: -3vw;
+}
+
+.MoreIcon
+{
+    color: aliceblue;
+    width: 1.875rem;
+    height: 1.875rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    cursor: pointer;
+}
+
+.MoreIcon >svg
+{
+    width: 30px;
+    height: 30px;
+}
+
+.NotifIcon
+{
+    color: aliceblue;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 1rem;
+    top: 2rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    cursor: pointer;
+}
+
+.NotifIcon >svg
+{
+    width: 40px;
+    height: 40px;
+}
+
+.friendReqAccept
+{
+    color: aliceblue;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    margin-right: auto;
+    top: 1rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    cursor: pointer;
+}
+
+.friendReqAccept >svg
+{
+    width: 30px;
+    height: 30px;
+}
+
+.friendReqDecline
+{
+    color: aliceblue;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    margin-right: auto;
+    top: 1rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    cursor: pointer;
+}
+
+.friendReqDecline >svg
+{
+    width: 30px;
+    height: 30px;
+}
+
+.friendReqSent
+{
+    color: #FFF;
+    font-family: "Poppins", sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: normal;
+    text-transform: lowercase;
+    position: relative;
+    top: 2vh;
+    right: 1.3vw;
+}
+
+@media (min-width: 1300px) and (max-width: 1900px)
+{
+    .friends
+    {
+        grid-row-start: 1;
+        grid-row-end: 2;
+        grid-column-start: 3;
+        grid-column-end: 5;
+        padding-left: 3rem;
+    }
+
+    .friends-container
+    {
+        width: 90%;
+        height: 90%;
+    }
+
+    .friendItem-container
+    {
+        width: 92%;
+        margin: 15px 50px;
+    }
+}
+
+@media (max-width: 1300px)
+{
+    .friends
+    {
+        grid-row-start: 2;
+        grid-row-end: 3;
+        grid-column-start: 1;
+        grid-column-end: 9;
+        padding-left: 0rem;
+        top: 0vh;
+    }
+    .friends-container
+    {
+        width: 100%;
+        height: 97%;
+    }
+}

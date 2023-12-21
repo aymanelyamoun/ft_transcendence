@@ -389,7 +389,10 @@ body {
 
   width: 100%;
 }
-
+.avatar-small {
+  /* display: block; */
+  /* margin: 4.5vh auto 60px; */
+}
 .friendsPics {
   width: 48.827px;
   height: 45px;
@@ -854,22 +857,3 @@ i    --linear-blue_purble,
   margin-left: 21px;
   margin-bottom: 10px;
 }
-/* .channelType{
-  color: #FEFFFF;
-  font-family: Poppins;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  outline: none;
-  padding-left: 12px;
-
-} */
-
-/* .friendsAddChannel{
-  scrollbar-width: none;
-} */
-/* .searchBarBlur{
-
-
-} */

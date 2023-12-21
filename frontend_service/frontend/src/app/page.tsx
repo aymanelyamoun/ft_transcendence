@@ -1,13 +1,44 @@
-import Image from 'next/image'
-import { FaFacebook, FaLinkedinIn, FaGoogle, FaEnvelope, FaRegEnvelope } from 'react-icons/fa'
-import {MdLabelOutline} from 'react-icons/md'
+"use client";
+import Image from "next/image";
+import {
+  FaFacebook,
+  FaLinkedinIn,
+  FaGoogle,
+  FaEnvelope,
+  FaRegEnvelope,
+} from "react-icons/fa";
+import { MdLabelOutline } from "react-icons/md";
+import { socket } from "../socket";
+import { use, useEffect } from "react";
+
+const gradientStyle = {
+  background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',
+};
 
 export default function Home() {
-  
- const gradientStyle = {
-    background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',
-    };
-  
+  useEffect(() => {
+    socket.connect();
+
+    socket.on("connect", () => {
+      // socket.emit("userData", { userId: userId, isAdmin: "false" });
+      console.log("connected to server");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnected from server");
+    });
+
+    socket.on("message", (data) => {
+      console.log(data);
+    });
+
+    socket.on("pong", (data) => {
+      console.log(data);
+    });
+    return () => {
+      socket.disconnect();
+    }});
+
     return (
       <div style={{ background: '#050A27' }} className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen">
       <div style={gradientStyle} className='fixed top-8 left-1/4 transform -translate-x-1/2 -rotate-6 w-[200px] h-[423px] rounded-lg animate-pulse'></div>
@@ -19,7 +50,6 @@ export default function Home() {
     </div>
   );
 }
-
 
 /*<div className="w-2/5 bg-green-500 text-white rounded-tr-2xl rounded-br-2xl py-36 px-12">
   {/* sign up section 

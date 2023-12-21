@@ -1,10 +1,14 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { JoinChannel } from "./types/channel";
 import { ChatChannelAdminGuard } from "./chat.channel.guard";
 import { Role, Roles } from "./roles.decorator";
 import { PrismaChatService } from "../prisma/chat/prisma.chat.service";
+import { user } from "./types/user";
+
+
+
 
 @Controller('channels')
 export class ChannelController{
@@ -25,74 +29,97 @@ export class ChannelController{
     }
 
     @Patch('addUserToChannel')
-    async addUserToChannel(@Body() data:ChannelEditDto){
+    async addUserToChannel(@Query() data:ChannelEditDto){
         await this.prismaChatService.addUserToChannel(data);
     }
 
     @Post('deleteChannel')
-    async deleteChannel(@Body() deleteData:ChannelEditDto){
+    async deleteChannel(@Query() deleteData:ChannelEditDto){
         await this.prismaChatService.deleteChannel(deleteData);
     }
 
     @Patch('removeUserFromChannel')
-    async removeUserFromChannel(@Body() data:ChannelEditDto){
+    async removeUserFromChannel(@Query() data:ChannelEditDto){
         await this.prismaChatService.removeUserFromChannel(data);
     }
 
     @Patch('leaveChannel')
-    async leaveChannel(@Body() data:ChannelEditDto){
+    async leaveChannel(@Query() data:ChannelEditDto){
         await this.prismaChatService.leaveChannel(data);
     }
 
     @Patch('editChannel')
-    async editChannel(@Body() data:ChangeChannelDataDto){
+    async editChannel(@Query() data:ChangeChannelDataDto){
         await this.prismaChatService.editChannel(data);
     }
 
     @Patch('addAdmin')
-    async addAdminOnChannel(@Body()data:ChannelEditDto){
+    async addAdminOnChannel(@Query()data:ChannelEditDto){
         await this.prismaChatService.addAdminOnChannel(data);
     }
 
     @Patch('removeAdmin')
-    async removeAdminOnChannel(@Body()data:ChannelEditDto){
+    async removeAdminOnChannel(@Query()data:ChannelEditDto){
         await this.prismaChatService.removeAdminOnChannel(data);
     }
 
     @Patch('banUser')
-    async banUser(@Body()data:ChannelEditDto){
+    async banUser(@Query()data:ChannelEditDto){
         await this.prismaChatService.banUser(data);
     }
 
     @Patch('unbanUser')
-    async unbanUser(@Body()data:ChannelEditDto){
+    async unbanUser(@Query()data:ChannelEditDto){
         await this.prismaChatService.unbanUser(data);
     }
 
     @Get('/conversation/groupMembers')
-    async getChannelMembers(@Body() conversationInfo:ConversationInfoDto){
+    async getChannelMembers(@Query() conversationInfo:ConversationInfoDto){
         return await this.prismaChatService.getChannelMembers(conversationInfo);
     }
 
     @Get('getUserConversationsDirect')
-    async getUserConversationsDirect(@Body() userData:userDataDto){
-        return await this.prismaChatService.getUserConversationsDirect(userData);
+    async getUserConversationsDirect(@Query() userData:userDataDto){
+        const userData_ = this.getUserData(userData);
+        return await this.prismaChatService.getUserConversationsDirect(userData_);
+    }
+    
+    @Get('getUserConversationsIthemList')
+    async getUserConversationsIthemList(@Query() userData:userDataDto){
+        const userData_ = this.getUserData(userData);
+        return await this.prismaChatService.getConversationIthemList(userData_);
     }
 
     @Get('getUserConversationsChannelChat')
-    async getUserConversationsChannelChat(@Body() userData:userDataDto){
-        return await this.prismaChatService.getUserConversationsChannelChat(userData);
+    async getUserConversationsChannelChat(@Query() userData:userDataDto){
+        const userData_ = this.getUserData(userData);
+        return await this.prismaChatService.getUserConversationsChannelChat(userData_);
     }
 
     @Get('/conversation/:id')
-    async getConversationsMessages(@Param('id') id:string, @Body()userData:userDataDto){
-        return await this.prismaChatService.getConversationMessages(id, userData);
+    // async getConversationsMessages(@Param('id') id:string, @Body()userData:userDataDto){
+    async getConversationsMessages(@Param('id') id:string){
+        // const userData_ = this.getUserData(userData);
+        return await this.prismaChatService.getConversationMessages(id);
     }
+
+    @Get('/getConversationMembers/:id')
+    // async getConversationMembers(@Query() conversationInfo:ConversationInfoDto, @Param('id') id:string){
+    async getConversationMembers(@Param('id') id:string){
+        return await this.prismaChatService.getConversationMembers( id );
+    }
+
 
     // this one is just tmeporary it should be handeled in the user part
     @Get('friends/:id')
     async getFriends(@Param('id') id:string){
         return await this.prismaChatService.getFriends(id)
+    }
+    getUserData(userDataDto):user{
+        return {
+            userId:userDataDto.userId,
+            isAdmin:userDataDto.isAdmin === "true" ? true : false
+        }
     }
 }
 

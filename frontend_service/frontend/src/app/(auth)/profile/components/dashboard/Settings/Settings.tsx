@@ -11,14 +11,14 @@ import { useRouter } from "next/navigation";
 
 interface SettingsProps {
     isOpen?: boolean;
-    onClick: () => void;
+    // onClick: () => void;
 }
 
 const SettingsContainer = styled.div`
     color: aliceblue;
     position: relative;
     height: 2vh;
-    width: 13vw;
+    width: -webkit-fill-available;
     // top: 18vh;
     left: 0vw;
     margin: 1.56rem;
@@ -44,7 +44,7 @@ const OpenBarContainer = styled.div`
   position: relative;
   top: 0vh;
   left: 0vw;
-  gap: 0.9rem;
+  gap: 0.6rem;
   padding: 10px;
   border-radius: 5px;
   display: flex;
@@ -53,12 +53,12 @@ const OpenBarContainer = styled.div`
   transition: height 0.2s ease-in-out;
   overflow: hidden;
 
-  &.open {
+  open {
     height: 10vh;
     transition: height 0.2s ease-in-out;
   }
 
-  &.svg {
+  svg {
     font-size: 3rem;
     color: aliceblue;
   }
@@ -68,7 +68,7 @@ const OpenedBar = styled.div`
     position: absolute;
     bottom: 0.1vh;
     left: 0;
-    width: 13vw;
+    width: -webkit-fill-available;
     height: 13.5rem;
     background: rgba(5, 10, 39, 0.55);
     transition: height 0.3s ease-in-out; /* Smooth transition */
@@ -85,8 +85,7 @@ const SettingSpan = styled.span`
 `;
 
 
-
-const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
+const Settings: React.FC<SettingsProps> = ({ isOpen}) => {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
 
@@ -128,39 +127,23 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClick }) => {
         <SettingsContainer
           onClick={handleClick}
         >
+          {/* <div className={styles['settings-container']}> */}
+          <OpenBarContainer >
+            <UilSetting/>
+            <SettingSpan> Settings</SettingSpan>
+          </OpenBarContainer>
           {open && (
             <OpenedBar>
                 <div className={styles.otherBar}>
-                    <EditProfile />
+                    <EditProfile/>
                 </div>
                 <div className={styles.otherBar} onClick={ () => LogOutReq()}>
                     <LogOut />
                 </div>
             </OpenedBar>
           )}
-          {/* <div className={styles['settings-container']}> */}
-          <OpenBarContainer isOpen={open}>
-            <UilSetting/>
-            <SettingSpan> Settings</SettingSpan>
-          </OpenBarContainer>
           </SettingsContainer>
       );
 };
 
 export default Settings;
-
-// {open && (
-//     <OpenBarContent>
-//         <div className={styles.otherBar}>
-//             <EditProfile />
-//         </div>
-//         <div className={styles.otherBar}>
-//             <LogOut />
-//         </div>
-//     </OpenBarContent>
-//   )}
-//   {/* <div className={styles['settings-container']}> */}
-//   <OpenBarContainer isOpen={open}>
-//     <UilSetting />
-//     <span className={styles['setting-span']}> Settings</span>
-//   </OpenBarContainer>

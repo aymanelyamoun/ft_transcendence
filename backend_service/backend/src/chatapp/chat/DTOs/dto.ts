@@ -6,8 +6,10 @@ export class userDataDto {
     @IsNotEmpty()
     userId: string;
 
-    @IsBoolean()
-    isAdmin: Boolean = false;
+    // @IsBoolean()
+    @IsString()
+    @IsNotEmpty()
+    isAdmin: string = "false";
 
 }
 
@@ -33,6 +35,10 @@ export class CreateChannelDto{
     @IsNotEmpty()
     @IsString()
     channelName: string;
+
+    @IsNotEmpty()
+    @IsString()
+    channelPic:string;
     
     @IsNotEmpty()
     @IsString()

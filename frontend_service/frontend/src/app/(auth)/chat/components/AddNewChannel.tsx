@@ -1,8 +1,8 @@
-import React from "react";
+import React, { use } from "react";
 import { useEffect, useState, useRef } from "react";
-import chooseFriendIcon from "../../../public/chooseFriendIcon.png";
-import notchoosenFriendIcon from "../../../public/notChoosenFriendIcon.png";
-import removeFriends from "../../../public/removeFriends_Icon.png";
+import chooseFriendIcon from "../../../../../public/chooseFriendIcon.png";
+import notchoosenFriendIcon from "../../../../../public/notChoosenFriendIcon.png";
+import removeFriends from "../../../../../public/removeFriends_Icon.png";
 import { Friend, friendsData } from "../page";
 // import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
 // import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";
@@ -14,7 +14,7 @@ import AddChannelSearchBar from "./AddChannelSearchBar";
 
 
 
-const AddNewChannel = ( {setShowAddChannel} :{setShowAddChannel : React.Dispatch< React.SetStateAction<boolean> >}) => {
+const AddNewChannel = ( {setShowAddChannel, setGoToCreateChannel} :{setShowAddChannel : React.Dispatch< React.SetStateAction<boolean> >, setGoToCreateChannel:React.Dispatch< React.SetStateAction<boolean>>}) => {
 
   const activeChat = useRef<"friend" | "channel">("friend");
 
@@ -24,6 +24,7 @@ const AddNewChannel = ( {setShowAddChannel} :{setShowAddChannel : React.Dispatch
   const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
   const cancelAddChannel = useRef<HTMLDivElement>(null);
 
+  // const goToCreateChannel = useRef<boolean>(false);
 
   const handleSelectFriend = (friend: Friend) => {
     if (selectedFriends.includes(friend)) {
@@ -110,7 +111,7 @@ const AddNewChannel = ( {setShowAddChannel} :{setShowAddChannel : React.Dispatch
             ))}
           </div>
         </div>
-        <button className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
+        <button onClick={() => {setGoToCreateChannel(true); setShowAddChannel(false)}} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
           NEXT
         </button>
       </div>

@@ -80,7 +80,8 @@ div span.skins-title
   }
 
 
-@media (min-width: 1300px) and (max-width: 1900px) {
+/* @media (min-width: 1300px) and (max-width: 1900px) { */
+    @media (max-width: 1900px) {
     .Skins
     {
         padding-left: 3rem;
@@ -93,7 +94,7 @@ div span.skins-title
     {
         background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
         height: 77%;
-        width: 95%;
+        width: 90%;
         padding-bottom: 0px;
         border-radius: 15px;
         display: flex;
@@ -148,30 +149,40 @@ div span.skins-title
 @media (max-width: 1300px) {
     .Skins
     {
-        grid-row-start: 2;
-        grid-row-end: 3;
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
+        grid-column-start: 1;
+        grid-column-end: 9;
+        padding-left: 0rem;
+    }
+
+    .skins-container
+    {
+        width: 100%;
+    }
+    .Skins-rectangle
+    {
+        width: 14vw;
+        height: 13vh;
+        background-color: white;
+        position: absolute;
+        right: 5%;
+        bottom: 21%;
+        transform: rotate(22deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
     }
 
     .Skins-stick {
-        width: 129px;
-        height: 12px;
-        right: 3%;
-        bottom: 34%;
-    }
-
-    .Skins-rectangle
-    {
-        width: 98px;
-        height: 150px;
-        right:  15%;
-        bottom: 15%;
-    }
-
-    div span.skins-title
-    {
-        font-size: 20px;
+        width: 22vw;
+        height: 1vh;
+        background: rgba(186, 216, 239, 1);
+        position: absolute;
+        left: 79%;
+        bottom: 55%;
     }
 
     .Skins-circle

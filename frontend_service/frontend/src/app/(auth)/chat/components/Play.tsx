@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import addFriend from '../../../../public/playButton.png';
+import addFriend from '../../../../../public/playButton.png';
 // import addFriend from '../../../../public/playButton.png';
 
 const Play = () => {

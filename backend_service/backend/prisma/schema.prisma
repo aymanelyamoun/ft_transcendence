@@ -29,15 +29,17 @@ model User{
   isFirstLog Boolean?
   isTwoFactorEnabled Boolean?
 
+  totalXp Int @default(0)
 
   userDMs Conversation[]
-  gameRecords GameRecord[]
+  gameRecords GameRecord[] @relation("gameRecord")
   channels UserChannel[]
   channelBaned Channel[] @relation("channelBaned")
 
   notifications Notification[] @relation("userNotification")
 
   sendNotifications Notification[] @relation("senderNotification")
+  gameRecordsOponent GameRecord[] @relation("gameRecordOponent")
 
   memberConv Member[]
 
@@ -50,21 +52,29 @@ model User{
 
 model GameRecord{
   id String @id @default(uuid())
-  user User @relation(fields: [userId], references: [id])
+  user User @relation("gameRecord",fields: [userId], references: [id])
   userId String @unique
+
+  xp Int @default(0)
+  scoredGoals Int @default(0)
+  concededGoals Int @default(0)
+  oponent User @relation("gameRecordOponent",fields: [oponentId], references: [id])
+  oponentId String
 }
 
 model Message{
-  id String @id @default(uuid())
+  id Int @id @default(autoincrement())
 
-  sender User @relation(fields: [userId], references: [id])
-  userId String
+  // senderPic String;
+
+  sender User @relation(fields: [senderId], references: [id])
+  senderId String
 
   message String
 
   createdAt DateTime @default(now())
 
-  conversation Conversation @relation(fields: [conversationId], references: [id])
+  conversation Conversation @relation("conversation", fields: [conversationId], references: [id])
   conversationId String
 }
 
@@ -75,7 +85,9 @@ model Conversation{
   members Member[]
   users User[]
   createdAt DateTime @default(now())
-  messages Message[]
+  updatedAt DateTime @updatedAt
+  messages Message[]@relation("conversation")
+  lastMessage String?
 
   channel Channel? @relation(fields: [channelId], references: [id])
   channelId String? @unique
@@ -137,6 +149,7 @@ enum LOG_TYPE{
 model Channel{
   id String @id() @default(uuid())
   channelName String
+  channelPic String
   creator User @relation("channelCreator",fields: [creatorId], references: [id])
   creatorId String
   channelType String @default("public")

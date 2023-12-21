@@ -31,17 +31,33 @@ const SidebarRoot = styled.div`
   position: relative;
   top: 4vh;
   transition: all 300ms ease;
+
+  @media (max-width: 1300px) {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 9;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 4vh;
+    transition: all 300ms ease;
+  }
   `;
   
   const SidebarContainer = styled.div`
   background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
-  // padding-bottom: 26.2vh;
   height: 95%;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  // justify-content: center;
   align-items: center;
+  border-radius: 15px;
+
+  @media (max-width: 1300px) {
+    height: 88%;
+    width: 100%;
+  }
 `;
 
 const ProfileHeader = styled.div`
@@ -51,6 +67,11 @@ const ProfileHeader = styled.div`
   height: 40%;
   position: relative;
   top: 3vh;
+
+  @media (max-width: 1300px) {
+    width: 93%;
+    top: 1vh;
+  }
 `;
 
 const ProfileImage = styled.div`
@@ -72,6 +93,11 @@ font-size: 1.5rem;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
+
+@media (max-width: 1300px) {
+  position: relative;
+  bottom: 6vh;
+}
 `;
 
 const UserId = styled.span`
@@ -82,6 +108,11 @@ const UserId = styled.span`
   font-weight: 400;
   line-height: normal;
   margin-top: 2rem;
+
+  @media (max-width: 1300px) {
+    position: relative;
+    bottom: 6vh;
+  }
 `;
 
 const Wallet = styled.div`
@@ -95,6 +126,11 @@ const Wallet = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 1300px) {
+    top: -1.2vh;
+    left: -17vw;
+  }
 `;
 
 const WalletIcon = styled(FaGoogleWallet)`

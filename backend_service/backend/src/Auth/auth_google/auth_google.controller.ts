@@ -49,8 +49,8 @@ export class AuthGoogleController
       (req.user as any).isConfirmed2Fa = false;
       // console.log(req.user);
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
-      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
-      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
+      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
+      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly : false });
       const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
       if (user.isTwoFactorEnabled)
         return res.redirect('http://localhost:3000/confirmauth')
@@ -75,8 +75,8 @@ export class AuthGoogleController
       try{
       (req.user as any).isConfirmed2Fa = false;
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
-      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly: false });
-      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly: false });
+      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
+      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly : false });
       const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
       if (user.isTwoFactorEnabled)
         return res.redirect('http://localhost:3000/confirmauth')
@@ -163,7 +163,7 @@ async logout(@Req() req: Request, @Res() res: Response)
         expiresIn: '1h',
         secret: process.env.jwtSecretKey,
       });
-      res.cookie('access_token', accessToken, { httpOnly: false });
+      res.cookie('access_token', accessToken, { httpOnly : false });
       return res.status(200).json('2FA enabled successfully');
     }
     catch (error)
@@ -217,7 +217,7 @@ async logout(@Req() req: Request, @Res() res: Response)
       expiresIn: '1h',
       secret: process.env.jwtSecretKey,
     });
-    res.cookie('access_token', accessToken, { httpOnly: false });
+    res.cookie('access_token', accessToken, { httpOnly : false });
     return res.status(200).json('User validate');
   }
 
@@ -241,8 +241,8 @@ async logout(@Req() req: Request, @Res() res: Response)
       // try
       // {
         const data = await this.authGoogleService.login(dto);
-        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly: false });
-        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly: false });
+        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
+        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly : false });
         return res.status(200).send(data); 
         //res.json(data.user);
       // }

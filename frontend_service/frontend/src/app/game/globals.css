@@ -1,0 +1,32 @@
+/* add a media for .text-fit to resize every resolution */
+body {
+    background: #050A27;
+  }
+  
+  
+.buttonStart {
+  background: #383e6e;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  padding: 10px 21px;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Press', sans-serif;
+}
+
+.linear-main {
+  background: var(--linear-blue_purble, linear-gradient(170deg,
+  rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%,
+  #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%));
+  filter: brightness(1);
+}
+
+.linear-main:hover {
+  /* Darken the background on hover */
+  filter: brightness(0.9);
+}
+
+.blue-card {
+  background-color: rgba(40, 44, 78, 1);
+}

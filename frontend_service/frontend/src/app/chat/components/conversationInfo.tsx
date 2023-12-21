@@ -25,7 +25,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { MdArrowForwardIos } from "react-icons/md";
 
-export const userId = "2e7c4b42-efe4-4b5a-99eb-78d83e26c801";
+export const userId = "02b3e650-ec3b-432e-afcc-777a961dc6ee";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -141,17 +141,21 @@ const MemberIthem = ({
   isAdmin: boolean;
 }) => {
   const [isOptions, setIsOptions] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("public");
+  // const [selectedOption, setSelectedOption] = useState("public");
 
 
 
 
   const options = [
     { id: 1, label: 'mute', subOptions: ['5 min', '30 min', '1 hour'] },
-    { id: 2, label: 'kick' },
-    { id: 3, label: 'ban' },
+    { id: 2, label: 'kick' , acton: 'kick'},
+    { id: 3, label: 'ban' , action: 'ban'},
   ];
 
+  const handleOptionClick = (option: { id: number; label: string; subOptions?: string[]; }) => () => {
+    console.log('clicked', option);
+    // setSelectedOption(option.label);
+  };
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
       <div className="flex  justify-between items-center ">
@@ -254,7 +258,7 @@ const MemberIthem = ({
                   <div
                     className={`${
                       active ? 'bg-[#9A9BD326] text-white rounded-md flex justify-between' : 'text-white flex justify-between'
-                    } block px-4 py-2 text-sm`}
+                    } block px-4 py-2 text-sm cursor-pointer`}
                   >
                     {option.label}
                     {option.subOptions && (
@@ -274,14 +278,15 @@ const MemberIthem = ({
                         >
                           <Menu.Items className="origin-top-right absolute right-0 mr-[112px] mt-[140px] w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                             {option.subOptions.map((subOption, index) => (
-                              <Menu.Item key={index}>
+                              <Menu.Item key={index} >
                                 {({ active }) => (
                                   <div
                                     className={`${
                                       active
                                         ? 'bg-[#9A9BD326] text-white rounded-md '
                                         : 'text-white '
-                                    } block px-4 py-2 text-sm`}
+                                    } block px-4 py-2 text-sm cursor-pointer`}
+                                    onClick={handleOptionClick(option) }
                                   >
                                     {subOption}
                                   </div>

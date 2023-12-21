@@ -2,13 +2,15 @@
 // import AddChannelSearchBar from "../../../../../app/chat/components/AddChannelSearchBar";
 // import AddChannelSearchBar from "@/app/chat/components/AddChannelSearchBar";
 import SearchFriends from "../SearchFriends/SearchFriends";
-import React, {useState, useRef } from 'react'
+import React, {useState, useRef, useEffect } from 'react'
 import styled from 'styled-components';
 // import avatar from '../../../../../../public/garou-kid.jpeg';
 import avatar from "../../../../../../../public/garou-kid.jpeg";
 import jake from '../../../../../../../public/jakeWithHeadPhones.jpg';
 import { StaticImageData } from 'next/image'
 import ResultItem from './ResultItem';
+import { Backend_URL } from "@/lib/Constants";
+import { on } from "events";
 
 interface SearchU {
   id: number;
@@ -20,9 +22,9 @@ interface SearchU {
 }
 
 interface SearchModalProps {
-    onSearch: (query: string) => void;
-    onClose: () => void;
     searchUsers: SearchU[];
+    setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
+    onClose: (isOpen: boolean) => void;
 }
 
 
@@ -36,8 +38,7 @@ interface SearchModalProps {
   overflow-y: auto; // Scroll if needed
 `;
 
-
-const SearchModal: React.FC<SearchModalProps> = ({ onSearch, onClose, searchUsers }) => {
+const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers}) => {
     const [friendSearch, setFriendSearch] = useState<SearchU[]>(searchUsers);
     const cancelAddChannel = useRef<HTMLDivElement>(null);
     const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
@@ -45,17 +46,15 @@ const SearchModal: React.FC<SearchModalProps> = ({ onSearch, onClose, searchUser
 
     const handleCancelAddChannel = (event: any) => {
         if (cancelAddChannel.current && !cancelAddChannel.current.contains(event.target)) {
-            onClose();
+            onClose(false);
         }
     };
 
     return (
         <>
         <div onClick={handleCancelAddChannel} className=" addChannelOverlay flex justify-center items-center ">
-            <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModal flex justify-between rounded-[10px] ">
-                {/* <div className=" px-40 pt-4"> */}
+            <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModaloumad flex justify-between rounded-[10px] ">
                 <ResultList>
-                    {/* <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[750px] overflow-y-auto "> */}
                         <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch}/>
                         {friendSearch.map((friend) => (
                         <ResultItem key={friend.id}
@@ -64,10 +63,10 @@ const SearchModal: React.FC<SearchModalProps> = ({ onSearch, onClose, searchUser
                             profilePic={friend.profilePic}
                             isBlocked={friend.isBlocked}
                             group={friend.group}
-                            groupMembers={friend.groupMembers}          
+                            groupMembers={friend.groupMembers}
+                            setSearchUsers={setSearchUsers}    
                         />
                         ))}
-                     {/* </div> */}
                   </ResultList>
               </div>
           </div>

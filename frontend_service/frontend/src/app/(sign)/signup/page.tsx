@@ -6,8 +6,9 @@ import { FaFacebook, FaLinkedinIn, FaGoogle, FaEnvelope, FaRegEnvelope } from 'r
 import { MdLabelOutline } from 'react-icons/md'
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/navigation';
+import { AlertMessage } from '@/app/components/alertMessage';
 
-
+let response : any;
   type FormInputs = {
   username: string;
   email: string;
@@ -17,6 +18,13 @@ import { useRouter } from 'next/navigation';
  
  export default function Signup()
  {
+
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isNotify, setIsNotify] = useState<boolean>(false);
+  const handleClick = () => {
+    setIsError(false);
+    setIsNotify(false);
+  }
    const router = useRouter();
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -60,12 +68,12 @@ import { useRouter } from 'next/navigation';
         },
       });
       if (!res.ok) {
-        alert(res.statusText);
+        response = await res.json();
+        setIsError(true);
         return;
       }
+      setIsNotify(true);
       router.push("/signin");
-      const response = await res.json();
-      alert('user created');
     } catch (error)
     {
          console.error("Error in log function:", error);
@@ -137,6 +145,8 @@ import { useRouter } from 'next/navigation';
             </div>
               <Link href="/signin" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:bg-[#999BD3]'>Sign in</Link>
           </div>
+          {isError === true ? <AlertMessage onClick={handleClick} message={response.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={"User Created!"} type="notify" /> : ""}
+
           </div>
         </div>
     </div>

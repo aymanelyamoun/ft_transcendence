@@ -9,9 +9,9 @@ const EditProfileContainer = styled.div`
   position: relative;
   top: 0;
   right: 0;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 2.5rem;
   font-size: 1.5rem;
-  gap: 0.9rem;
+  gap: 0.6rem;
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -27,13 +27,17 @@ const EditProfileContainer = styled.div`
   }
 `;
 
+const EditSpan = styled.span`
+
+`;
+
 const EditProfile = () => {
   return (
     <EditProfileContainer>
         <RiEditBoxLine />
         <div className='edit-profile-text'>
           <Link href="/update">
-            Edit Profile
+            <EditSpan>Edit Profile</EditSpan>
           </Link>
           </div> {
         }

@@ -49,6 +49,7 @@ model User{
   userMessages Message[]
 }
 
+
 model GameRecord{
   id String @id @default(uuid())
   user User @relation("gameRecord",fields: [userId], references: [id])

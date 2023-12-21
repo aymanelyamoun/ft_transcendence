@@ -1,16 +1,27 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import AddFriend from '@/app/(auth)/chat/components/AddFriend';
 import { IoMdPersonAdd } from "react-icons/io";
 import { Backend_URL } from '@/lib/Constants';
 import { CgUnblock } from "react-icons/cg";
+import { BsFillPersonCheckFill } from "react-icons/bs";
+
+interface SearchU {
+    id: number;
+    username: string;
+    profilePic: string;
+    isBlocked: boolean;
+    group: boolean;
+    groupMembers?: string[];
+  }
 
 interface FriendComponentProps {
     id: number;
     username: string;
     isBlocked: boolean;
     profilePic: string;
+    setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
 const FriendImage = styled.div`
@@ -20,9 +31,6 @@ const FriendImage = styled.div`
     background-size: cover;
     background-position: 50% 50%;
     border-radius: 50%;
-// img{
-    
-// }
 `;
 
 const FriendName = styled.div`
@@ -62,6 +70,9 @@ const UnblockButton = styled.button`
 
 const FriendComponent: React.FC<FriendComponentProps> = (props) => {
 
+    const [UserAdded, setUserAdded] = useState<boolean>(false);
+    const [UserUnblocked, setUserUnblocked] = useState<boolean>(false);
+
     const SendRequest = async (props: FriendComponentProps) => {
         try {
             console.log(props.id);
@@ -76,6 +87,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             });
             if(response.ok){
                 alert("the request has been sent");
+                setUserAdded(true);
             }else {
                alert("the request has not been sent");
               }
@@ -84,6 +96,8 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         };
     };
 
+    
+    
     const UnblockFriend = async (props: FriendComponentProps) => {
         try {
             console.log(props.id);
@@ -97,6 +111,8 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
                 },
             });
             if(response.ok){
+                fetchIcon();
+                setUserUnblocked(true);
                 alert("the user has been unblocked");
             }else {
                alert("the user has not been unblocked");
@@ -105,6 +121,36 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             console.log(error);
         }
     };
+    
+    const fetchIcon = async () => {
+        try
+        {
+            const res = await fetch( Backend_URL + "user/all", {
+                method: "GET",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                },
+            });
+            if(res.ok){
+                const data = await res.json() as SearchU[];
+                props.setSearchUsers(data);
+                console.log(props.isBlocked);
+                // console.log(data);
+            }
+        }
+        catch(error)
+        {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchIcon();
+    }, [props.setSearchUsers]);
+
   return (
     <>
         <FriendImage>
@@ -113,13 +159,16 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         <FriendName>
             <span>{props.username}</span>
         </FriendName>
-        {props.isBlocked ? (
+        {props.isBlocked && !UserUnblocked ? (
         <UnblockButton onClick={() => UnblockFriend(props)}>
             <CgUnblock />
         </UnblockButton>
         ) : (
         <AddFriendButton onClick={() => SendRequest(props)}>
-            <IoMdPersonAdd />
+            {UserAdded ? (
+                <BsFillPersonCheckFill />
+            ) : (
+            <IoMdPersonAdd /> )}
         </AddFriendButton>
         )}
     </>

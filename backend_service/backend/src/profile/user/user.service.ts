@@ -17,8 +17,7 @@ export class UserService {
     constructor (private readonly prisma: PrismaService){}
     async create(dto: CreateUserDto)
     {
-        // console.log('|',dto.hashConfirm,"|",':', "|",dto.hash,"|")
-        // try {
+        try {
             if (dto.hashConfirm !== dto.hash)
                 throw new UnauthorizedException('the password and the confirm password are not the same');
             delete dto.hashConfirm;
@@ -45,12 +44,15 @@ export class UserService {
             });
             const { hash, ...result } = newUser;
             return result;
-        // }catch (error) {
-        //     if (error instanceof ConflictException) 
-        //         throw new ConflictException('email duplicated');
-        // throw new UnauthorizedException('the password and the confirm password are not the same');
-        //    // throw new HttpException("user can't create account", HttpStatus.BAD_REQUEST);
-        // }
+        }catch (error) {
+            if (error instanceof UnauthorizedException) {
+              throw new UnauthorizedException('the password and the confirm password are not the same');
+            } else if (error instanceof ConflictException) {
+                throw new ConflictException('Account already exist');
+            } else {
+                throw new UnauthorizedException("can't create this user");
+            }
+        }
     }
     
     async findByEmail(email: string) 
@@ -210,7 +212,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
         })
         }catch (error)
         {
-            throw new Error('Internal server error')
+            throw new UnauthorizedException("can't confirm this user");
         }
     }
 
@@ -300,10 +302,12 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                     },
                 }
             })
-    //         if (!users || users.length === 0) {
-    //         throw new UnauthorizedException('No users found');
-    // }
-        return(users);
+            const blockedUsers = await this.BlockList(userloged);
+            const usersWithBlockedFlag = users.map((user) => ({
+                ...user,
+                isBlocked: blockedUsers.some((blockedUser) => blockedUser.id === user.id),
+            }));
+        return(usersWithBlockedFlag);
         } catch (error)
         {
             throw new UnauthorizedException('Internal server error');
@@ -343,53 +347,84 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     }
     async updatepass(@Req() req: Request, dto: UpdatePassDto)
     {
-        const user = req['user'] as User;
-        const userId = user.id;
-        if (!await bcrypt.compare(dto.oldPass, user.hash))
-            throw new UnauthorizedException('the old password is incorrect');
-        if (dto.newPass !== dto.confirmPass)
-            throw new UnauthorizedException('the new password and the confirm password are not the same');
-        await this.prisma.user.update({
-            where: { id:  userId},
-            data: {
-                hash: await bcrypt.hash(dto.confirmPass, 10)
-            }
-        })
-        return { message: 'Password updated successfully' };
+        try {
+            const user = req['user'] as User;
+            const userId = user.id;
+            if (!await bcrypt.compare(dto.oldPass, user.hash))
+                throw new UnauthorizedException('the old password is incorrect');
+            if (dto.newPass !== dto.confirmPass)
+                throw new ConflictException('the new password and the confirm password are not the same');
+            await this.prisma.user.update({
+                where: { id:  userId},
+                data: {
+                    hash: await bcrypt.hash(dto.confirmPass, 10)
+                }
+            })
+            return { message: 'Password updated successfully' };
+        }catch (error)
+        {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException('the old password is incorrect');
+              } else if (error instanceof ConflictException) {
+                throw new ConflictException('the new password and the confirm password are not the same');
+              } else {
+                  throw new UnauthorizedException("can't update the password");
+              }
+        }
     }
 
     async updateusername(@Req() req: Request, @Body() body)
     {
-        const user = req['user'] as User;
-        const userId = user.id;
-        let  { username } = body;
-        username = username.trim();
-        if (user.username === username) {
-            throw new UnauthorizedException('New username is the same as the current username');
+        try {
+            const user = req['user'] as User;
+            const userId = user.id;
+            let  { username } = body;
+            username = username.trim();
+            if (user.username === username) {
+                throw new UnauthorizedException('New username is the same as the current username');
+            }
+            const isUsernameTaken = await this.findByUsername(username);
+            if (isUsernameTaken) {
+                throw new ConflictException('Username is already taken');
+            }
+            await this.prisma.user.update({
+                where: { id: userId },
+                data: { username: username },
+            });
+            return { message: 'Username updated successfully'};
+        }catch (error)
+        {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException('New username is the same as the current username');
+              } else if (error instanceof ConflictException) {
+                  throw new ConflictException('Username is already taken');
+              } else {
+                  throw new UnauthorizedException("can't update the username");
+              }
         }
-        const isUsernameTaken = await this.findByUsername(username);
-        if (isUsernameTaken) {
-            throw new UnauthorizedException('Username is already taken');
-        }
-        await this.prisma.user.update({
-            where: { id: userId },
-            data: { username: username },
-        });
-            return { message: 'Username updated successfully' };
     }
 
     async updateimage(@Req() req: Request, @Body() body)
     {
-        const user = req['user'] as User;
-        const userId = user.id;
-        const { pic } = body;
-        const newupdat = await this.prisma.user.update({
-            where: { id: userId },
-            data: { profilePic: pic },
-        });
-        if (!newupdat)
-            throw new UnauthorizedException("the pic profile can't modify");
-        return {message: 'Profile image updated successfully', newupdat}
+        try
+        {
+            const user = req['user'] as User;
+            const userId = user.id;
+            const { pic } = body;
+            const newupdat = await this.prisma.user.update({
+                where: { id: userId },
+                data: { profilePic: pic },
+            });
+            if (!newupdat)
+                throw new UnauthorizedException("the pic profile can't modify");
+            return {message: 'Profile image updated successfully', newupdat}
+        }catch (error)
+        {
+            if (error instanceof UnauthorizedException)
+                throw new UnauthorizedException('New username is the same as the current username');
+            else
+                throw new UnauthorizedException("can't update picture");                 
+        }
     }
 
 

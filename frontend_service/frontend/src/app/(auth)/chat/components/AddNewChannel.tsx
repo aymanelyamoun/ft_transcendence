@@ -12,19 +12,55 @@ import Image from "next/image";
 
 import AddChannelSearchBar from "./AddChannelSearchBar";
 
+interface Friend {
+  id: string;
+  username: string;
+  profilePic: string;
+  title?: string;
+  online: boolean;
+}
 
-
-const AddNewChannel = ( {setShowAddChannel, setGoToCreateChannel} :{setShowAddChannel : React.Dispatch< React.SetStateAction<boolean> >, setGoToCreateChannel:React.Dispatch< React.SetStateAction<boolean>>}) => {
-
+const AddNewChannel = ({
+  setShowAddChannel,
+  setGoToCreateChannel,
+}: {
+  setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
+  setGoToCreateChannel: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const activeChat = useRef<"friend" | "channel">("friend");
 
-  const [ChannelFriendSearch, setChannelFriendSearch] = useState<Friend[]>(friendsData);
+  const [ChannelFriendSearch, setChannelFriendSearch] =
+    useState<Friend[]>(friendsData);
   // const [showAddChannel, setShowAddChannel] = useState(false);
   const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
   const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
   const cancelAddChannel = useRef<HTMLDivElement>(null);
 
   // const goToCreateChannel = useRef<boolean>(false);
+
+  useEffect(() => {
+    const fetchFriendsListData = async () => {
+      fetch("http://localhost:3001/api/user/friends", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log("friends data: ", data);
+        });
+      {
+      }
+    };
+    fetchFriendsListData();
+    // .then
+  }, []);
 
   const handleSelectFriend = (friend: Friend) => {
     if (selectedFriends.includes(friend)) {
@@ -38,16 +74,25 @@ const AddNewChannel = ( {setShowAddChannel, setGoToCreateChannel} :{setShowAddCh
     setSelectedFriends([...selectedFriends, friend]);
   };
 
-
   const handleCancelAddChannel = (event: any) => {
-    if (cancelAddChannel.current && !cancelAddChannel.current.contains(event.target)) {
+    if (
+      cancelAddChannel.current &&
+      !cancelAddChannel.current.contains(event.target)
+    ) {
       setShowAddChannel(false);
     }
   };
 
   return (
-    <div onClick={handleCancelAddChannel} className=" addChannelOverlay flex justify-center items-center ">
-      <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModal felx justify-between rounded-[10px] ">
+    <div
+      onClick={handleCancelAddChannel}
+      className=" addChannelOverlay flex justify-center items-center "
+    >
+      <div
+        ref={cancelAddChannel}
+        id="AddchannelContainer"
+        className="addChannelModal felx justify-between rounded-[10px] "
+      >
         <div className=" px-4 pt-4">
           <div className="flex justify-between relative h-[73px] items-center">
             {selectedFriends.length > 0 && (
@@ -56,7 +101,7 @@ const AddNewChannel = ( {setShowAddChannel, setGoToCreateChannel} :{setShowAddCh
                   !addChannelSearch ? "max-w-[62%]" : "max-w-[25%]"
                 } flex gap-4 mb-[10px] p-2 rounded-[10px] overflow-x-scroll overflow-y-hidden`}
               >
-                {selectedFriends.map((friend) => (
+                {/* {selectedFriends.map((friend) => (
                   <div
                     key={friend.id}
                     className="flex-shrink-0 relative w-[45px] h-[45px] items-center justify-center"
@@ -80,13 +125,17 @@ const AddNewChannel = ( {setShowAddChannel, setGoToCreateChannel} :{setShowAddCh
                       width={45}
                     />
                   </div>
-                ))}
+                ))} */}
               </div>
             )}
-            <AddChannelSearchBar addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} />
+            <AddChannelSearchBar
+              addChannelSearch={addChannelSearch}
+              setAddChannelSearch={setAddChannelSearch}
+              setChannelFriendSearch={setChannelFriendSearch}
+            />
           </div>
           <div className="scrollbar rounded-t-[10px] h-[458px] overflow-y-auto ">
-            {ChannelFriendSearch.map((friend) => (
+            {/* {ChannelFriendSearch.map((friend) => (
               <li
                 onClick={() => handleSelectFriend(friend)}
                 key={friend.id}
@@ -108,10 +157,16 @@ const AddNewChannel = ( {setShowAddChannel, setGoToCreateChannel} :{setShowAddCh
                   className="shooseFriend"
                 />
               </li>
-            ))}
+            ))} */}
           </div>
         </div>
-        <button onClick={() => {setGoToCreateChannel(true); setShowAddChannel(false)}} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
+        <button
+          onClick={() => {
+            setGoToCreateChannel(true);
+            setShowAddChannel(false);
+          }}
+          className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]"
+        >
           NEXT
         </button>
       </div>

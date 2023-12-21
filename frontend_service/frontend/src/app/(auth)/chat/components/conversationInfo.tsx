@@ -21,26 +21,15 @@ import {
   ConversationIthemProps,
   MemberProps,
   MessageProps,
-<<<<<<< HEAD:frontend_service/frontend/src/app/chat/components/conversationInfo.tsx
 } from "../../../../../../backend_service/backend/types/chatTypes";
 import { SlOptions } from "react-icons/sl";
 
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { MdArrowForwardIos } from "react-icons/md";
-
-export const userId = "02b3e650-ec3b-432e-afcc-777a961dc6ee";
-=======
-} from "../../../../../../../backend_service/backend/types/chatTypes";
 import { UserContext } from "../page";
 
-// const authToken = Cookies.get('access_token');
-// console.log("authToken:", authToken);
-// const decodedToken = jwtDecode(authToken) as any;
-
-// console.log("decodedToken:", decodedToken);
-// export const userId = decodedToken.id;
->>>>>>> d643266bfe82f7fa4d89ef55dd1febdd96774ee4:frontend_service/frontend/src/app/(auth)/chat/components/conversationInfo.tsx
+export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
@@ -50,10 +39,6 @@ export const isAdmin = false;
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
 
-<<<<<<< HEAD:frontend_service/frontend/src/app/chat/components/conversationInfo.tsx
-
-=======
->>>>>>> d643266bfe82f7fa4d89ef55dd1febdd96774ee4:frontend_service/frontend/src/app/(auth)/chat/components/conversationInfo.tsx
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
     //   return;

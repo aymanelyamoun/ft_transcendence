@@ -27,7 +27,8 @@ import { AlertMessage } from "./AlertMessage";
 import CreateChannel from "./CreateChannel";
 import { FaRunning } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-
+import CreateChannelButton from "./CreateChannelButton";
+import AddNewChannel from "./AddNewChannel";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -54,7 +55,11 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       />
       <div className="flex flex-col">
         <p className="friendsName">{conversationProps.name}</p>
-        <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">{"tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."}</p>
+        <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">
+          {
+            "tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."
+          }
+        </p>
       </div>
     </li>
   );
@@ -77,7 +82,7 @@ export const ConversationList = ({
   if (!isChannel) {
     {
       return (
-        <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
+        <div className="friendsScroll h-full overflow-y-auto overflow-x-hidden ">
           <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
             {ConversationListData &&
               ConversationListData.map((conv) => {
@@ -140,6 +145,7 @@ export const Conversations = ({
   children: React.ReactNode;
 }) => {
   const [isChannel, setIsChannel] = useState<boolean>(false);
+
   // const [conversation, setConversation] = useState<ConversationIthemProps[]>(
   //   []
   // );
@@ -172,9 +178,11 @@ export const Conversations = ({
   //   };
   //   fetchFun();
   // }, []);
+  const [showAddChannel, setShowAddChannel] = useState(false);
+  const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
 
   return (
-    <div className="friendList w-full mr-12 relative">
+    <div className="friendList w-full h-full mr-12 relative">
       <IsChannelContext.Provider value={isChannel}>
         <ChatToggel setIsChannel={setIsChannel} />
         {/* <SearchBar
@@ -192,6 +200,13 @@ export const Conversations = ({
           // rowData={rowData}
           // setConversation={setConversationList}
         />
+        {isChannel ? <CreateChannelButton setShowAddChannel={setShowAddChannel}/> : <></>}
+        {showAddChannel ? <AddNewChannel
+                setShowAddChannel={setShowAddChannel}
+                setGoToCreateChannel={setGoToCreateChannel}
+              />
+            :
+            <></>}
         {/* {children} */}
       </IsChannelContext.Provider>
     </div>
@@ -255,7 +270,7 @@ export const ChatToggel = ({
       <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
 
       <ChatButton onClick={handleChannelClick}>
-        <HiMiniChatBubbleLeftRight size={22} color={`white`}/>
+        <HiMiniChatBubbleLeftRight size={22} color={`white`} />
       </ChatButton>
     </div>
   );

@@ -13,13 +13,10 @@ import jake from "../../../../public/jakeWithHeadPhones.jpg";
 import Image from "next/image";
 import { socket } from "../../../../socket";
 
-<<<<<<< HEAD:frontend_service/frontend/src/app/chat/components/ChatSection.tsx
 import { userId, isAdmin } from "./ConversationInfo";
-import sendIcon from "../../../../public/sendButton.png";
-=======
-import { isAdmin } from "./ConversationInfo";
+import sendIcon from "../../../../../public/sendButton.png";
+// import { isAdmin } from "./ConversationInfo";
 import { UserContext } from "../page";
->>>>>>> d643266bfe82f7fa4d89ef55dd1febdd96774ee4:frontend_service/frontend/src/app/(auth)/chat/components/ChatSection.tsx
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>

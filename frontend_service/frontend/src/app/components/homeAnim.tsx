@@ -36,7 +36,7 @@ const addBodies = (engine  : Matter.Engine) => {
     Matter.Composite.add(engine.world, [rect]);
   };
 export default function AnimationFX(){
-    const engine = useRef(Matter.Engine.create({gravity: {x: 0, y: 0.5}}));
+    const engine = useRef(Matter.Engine.create({gravity: {x: 0, y: 0.2}}));
     useEffect(() => {
         const cw = document.getElementById('matter-container')?.clientWidth as number
         const ch = document.getElementById('matter-container')?.clientHeight as number

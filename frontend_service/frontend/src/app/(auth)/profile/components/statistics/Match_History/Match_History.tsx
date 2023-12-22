@@ -79,7 +79,7 @@ const Match_History: React.FC<MatchProps> = (props) => {
             <span >Match History</span>
         </div>
         <ContainerList>
-            <MatchList matches={matches} UserProfileStyling={true}/>
+            <MatchList matches={matches} UserProfileStyling={UserProfileStyling}/>
         </ContainerList>
     </Container>
   )

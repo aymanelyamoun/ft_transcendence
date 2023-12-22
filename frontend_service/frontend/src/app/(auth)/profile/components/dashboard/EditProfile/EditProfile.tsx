@@ -39,8 +39,7 @@ const EditProfile = () => {
           <Link href="/update">
             <EditSpan>Edit Profile</EditSpan>
           </Link>
-          </div> {
-        }
+          </div>
     </EditProfileContainer>
   )
 }

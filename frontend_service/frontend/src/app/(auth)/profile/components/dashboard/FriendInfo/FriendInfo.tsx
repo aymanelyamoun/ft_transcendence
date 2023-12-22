@@ -108,11 +108,7 @@ const GameButton = styled.button`
 `;
 
 const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref) => {
-  const [ShowProfile, setShowProfile] = React.useState(false);
 
-  const handleShowProfile = () => {
-    setShowProfile(true);
-  }
   useEffect(() => {
     console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
 
@@ -166,9 +162,11 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
   return (
   <div className="addChannelOverlay flex justify-center items-center ">
     <div ref={ref} className={styles['info-container']}>
-      <div className={styles['info-picture']} onClick={handleShowProfile}>
+    <Link href={`/profile/FriendProfile`}>
+      <div className={styles['info-picture']}>
         <img src={props.profilePic} alt="" className={styles['info-picture']}/>
       </div>
+      </Link>
       <InfoName>
         <span >{props.username}</span>
       </InfoName>
@@ -186,12 +184,6 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
         <BsPersonFillSlash />
       </BlockButton>
       </ButtonContainer>
-      {ShowProfile && (
-        // <Link href={`/profile/${props.username}`}>
-        <Link href={`/profile/FriendProfile`}>
-          {/* <FriendProfile /> */}
-        </Link>
-      )}
     </div>
   </div>
   );

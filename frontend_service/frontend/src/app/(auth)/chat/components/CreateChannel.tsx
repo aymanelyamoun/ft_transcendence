@@ -22,6 +22,10 @@ import AddChannelSearchBar from "./AddChannelSearchBar";
 import { AlertMessage } from "./alertMessage";
 
 const CreateChannel = () => {
+
+  const [saveChannelName, setSaveChannelName] = useState<string>("");
+  const [channelName, setChannelName] = useState<boolean>(false);
+  const [savePassword, setSavePassword] = useState<string>("");
   const [password, setPassword] = useState<boolean>(false);
   const [allowTyping, setAllowTyping] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("public");
@@ -32,6 +36,8 @@ const CreateChannel = () => {
 
 
   const handleOptionChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
+    if (saveChannelName === "")
+      setChannelName(true);  
     setSelectedOption(event.target.value);
   };
 
@@ -43,25 +49,43 @@ const CreateChannel = () => {
   const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const passwordInput = document.getElementById("password") as HTMLInputElement;
     setPasswordMatch(event.target.value === passwordInput.value);
+    setSavePassword(event.target.value);
   };
 
   const handleCreateButton = () => {
-    if (!passwordMatch) {
-      setShowAlert(true);
-    }
-    else {
+
+    if (passwordMatch && saveChannelName !== ""){
       setShowNotify(true);
     }
-  }
+    else if (!passwordMatch)
+    setShowAlert(true);
+  
+    if(saveChannelName === "")
+        setChannelName(true);
 
+    // const channelData = {
+    //   channelName: saveChannelName,
+    //   type: selectedOption,
+    //   password: savePassword,
+
+    // };
+    }
+  // }
+  
+  console.log("saveChannelName: ", saveChannelName);
+  console.log("savePassword: ", savePassword);
+  console.log("notify after: ", showNotify);
+  
   return (
     <div className=" createChannelOverlay flex justify-center items-center ">
       <div
         id="AddchannelContainer"
         className="addChannelModal felx justify-between rounded-[10px] "
-      >
+        >
         <div className=" px-24 pt-4">
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
+            {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
+            {showNotify && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
             <div>
               <Image
                 className="channelImage"
@@ -74,15 +98,17 @@ const CreateChannel = () => {
                 className="channelName  placeholder-[#545781]"
                 type="text"
                 placeholder="Channel Name"
-              />
+                onChange={(e) => setSaveChannelName(e.target.value)}
+                />
             </div>
-            <div className="">
+            <div >
               <select value={selectedOption} onChange={handleOptionChange} className="channelType">
                 <option value="public">public</option>
                 <option value="private">private</option>
                 <option value="protected">protected</option>
               </select>
             </div>
+            {channelName && (<AlertMessage onClick={() => setChannelName(false)} message={"Please Enter Channel Name"} type={"error"}> </AlertMessage>)}
             { selectedOption === 'protected' &&
 
                 (!password ? (
@@ -91,7 +117,7 @@ const CreateChannel = () => {
                     <div
                       onClick={() => setPassword(true)}
                       className="passwordParameter absolute right-[3%] top-[18%]"
-                    >
+                      >
                       <Image src={passwordParameter} alt="password" />
                     </div>
                   </div>
@@ -103,7 +129,7 @@ const CreateChannel = () => {
                         <div
                           onClick={() => {setPassword(false); setAllowTyping(false) }}
                           className="passwordParameter absolute right-[3%] top-[18%]"
-                        >
+                          >
                           <Image src={passwordParameter} alt="password" />
                         </div>
                       </div>
@@ -120,14 +146,14 @@ const CreateChannel = () => {
                               type="checkbox"
                               value=""
                               className="sr-only peer"
-                            />
+                              />
                             <div
                               onClick={() => setAllowTyping(!allowTyping)}
                               className="w-9 h-5 bg-green-200 peer-focus:outline-none
                                       rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
                                       peer-checked:after:border-[#c2ff86] after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
                                         after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-[#c2ff86]"
-                            ></div>
+                                        ></div>
                           </label>
                         </div>
                       </div>
@@ -142,7 +168,7 @@ const CreateChannel = () => {
                               type="password"
                               id="password"
                               onChange={handlePasswordChange}
-                            />
+                              />
                           </div>
                           <div>
                             <div>
@@ -153,16 +179,14 @@ const CreateChannel = () => {
                               type="password"
                               id="confirmPassword"
                               onChange={handleConfirmPasswordChange}
-                            />
+                              />
                           </div>
                         </>
                       }
-                      {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
-                      {showNotify && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
                     </div>
                   </div>
                   )
-            )
+                  )
             }
           </div>
         </div>

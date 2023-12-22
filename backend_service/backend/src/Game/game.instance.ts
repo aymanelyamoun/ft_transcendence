@@ -336,6 +336,8 @@ export class GameInstance {
 
 
     startGame = () => {
+        this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerOne.playerData.id, status: '2'})
+        this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerTwo.playerData.id, status: '2'})
         console.log('Game started between ' + this.playerOne.playerData.username + ' and ' + this.playerTwo.playerData.username)
         this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('startFriendGame',
             [this.playerOne.playerData, this.playerTwo.playerData]);

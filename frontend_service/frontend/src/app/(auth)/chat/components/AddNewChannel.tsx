@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import chooseFriendIcon from "../../../../../public/chooseFriendIcon.png";
 import notchoosenFriendIcon from "../../../../../public/notChoosenFriendIcon.png";
 import removeFriends from "../../../../../public/removeFriends_Icon.png";
-import { Friend, friendsData } from "../page";
+// import { Friend, friendsData } from "../page";
 // import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
 // import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";
 // import removeFriends from "../../../../public/removeFriends_Icon.png";
@@ -11,7 +11,9 @@ import { Friend, friendsData } from "../page";
 import Image from "next/image";
 
 import AddChannelSearchBar from "./AddChannelSearchBar";
+import { channel } from "diagnostics_channel";
 
+import avatar from "../../../../../public/garou-kid.jpeg";
 interface Friend {
   id: string;
   username: string;
@@ -29,15 +31,19 @@ const AddNewChannel = ({
 }) => {
   const activeChat = useRef<"friend" | "channel">("friend");
 
-  const [ChannelFriendSearch, setChannelFriendSearch] =
-    useState<Friend[]>(friendsData);
-  // const [showAddChannel, setShowAddChannel] = useState(false);
-  const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
-  const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
-  const cancelAddChannel = useRef<HTMLDivElement>(null);
-
-  // const goToCreateChannel = useRef<boolean>(false);
-
+  const [channelFriends, setChannelFriends] =
+    useState<Friend[]>([]);
+    // const [showAddChannel, setShowAddChannel] = useState(false);
+    const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
+    const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
+    const cancelAddChannel = useRef<HTMLDivElement>(null);
+    const [ChannelFriendSearch, setChannelFriendSearch] = useState<Friend[]>([]);
+    
+    // to store friends list to reuse it in search bar if it nothisg is written in the search bar
+    // const [rowData, setRowData] = useState<Friend[]>([]);
+    
+    // const goToCreateChannel = useRef<boolean>(false);
+    
   useEffect(() => {
     const fetchFriendsListData = async () => {
       fetch("http://localhost:3001/api/user/friends", {
@@ -49,17 +55,15 @@ const AddNewChannel = ({
           "Access-Control-Allow-Origin": "*",
         },
       })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          console.log("friends data: ", data);
-        });
-      {
-      }
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setChannelFriends(data);
+        // setRowData(data);
+      });
     };
     fetchFriendsListData();
-    // .then
   }, []);
 
   const handleSelectFriend = (friend: Friend) => {
@@ -101,7 +105,7 @@ const AddNewChannel = ({
                   !addChannelSearch ? "max-w-[62%]" : "max-w-[25%]"
                 } flex gap-4 mb-[10px] p-2 rounded-[10px] overflow-x-scroll overflow-y-hidden`}
               >
-                {/* {selectedFriends.map((friend) => (
+                {selectedFriends.map((friend) => (
                   <div
                     key={friend.id}
                     className="flex-shrink-0 relative w-[45px] h-[45px] items-center justify-center"
@@ -119,23 +123,25 @@ const AddNewChannel = ({
                     </button>
                     <Image
                       className="rounded-full"
-                      src={friend.profilePic}
-                      alt={friend.name}
+                      // src={friend.profilePic}
+                      src={avatar}
+                      alt={friend.username}
                       height={45}
                       width={45}
                     />
                   </div>
-                ))} */}
+                ))}
               </div>
             )}
             <AddChannelSearchBar
               addChannelSearch={addChannelSearch}
               setAddChannelSearch={setAddChannelSearch}
               setChannelFriendSearch={setChannelFriendSearch}
+              friendsList={channelFriends}
             />
           </div>
           <div className="scrollbar rounded-t-[10px] h-[458px] overflow-y-auto ">
-            {/* {ChannelFriendSearch.map((friend) => (
+            {channelFriends.map((friend) => (
               <li
                 onClick={() => handleSelectFriend(friend)}
                 key={friend.id}
@@ -143,10 +149,10 @@ const AddNewChannel = ({
               >
                 <Image
                   className=" w-[45px] h-[45px] rounded-full"
-                  src={friend.profilePic}
-                  alt={friend.name}
+                  src={avatar}
+                  alt={friend.username}
                 />
-                <p className="friendsName">{friend.name}</p>
+                <p className="friendsName">{friend.username}</p>
                 <Image
                   src={
                     selectedFriends.includes(friend)
@@ -157,7 +163,7 @@ const AddNewChannel = ({
                   className="shooseFriend"
                 />
               </li>
-            ))} */}
+            ))}
           </div>
         </div>
         <button

@@ -530,13 +530,37 @@ export const ChatPage = () => {
   );
 };
 
+// export const CostumeButton = ({
+//   bgColor,
+//   color,
+//   children,
+//   width,
+//   hight,
+// }: {
+//   bgColor: string;
+//   color: string;
+//   width: string;
+//   hight: string;
+//   children: React.ReactNode;
+// }) => {
+//   return (
+//     <button
+//       className={`flex items-center justify-around ${bgColor} text-[${color}] p-2 ${width} ${hight} rounded-sm border-2`}
+//     >
+//       {children}
+//     </button>
+//   );
+// };
+
 export const CostumeButton = ({
+  onClick,
   bgColor,
   color,
   children,
   width,
   hight,
-}: {
+} : {
+  onClick: () => void
   bgColor: string;
   color: string;
   width: string;
@@ -545,7 +569,7 @@ export const CostumeButton = ({
 }) => {
   return (
     <button
-      className={`flex items-center justify-around ${bgColor} text-[${color}] p-2 ${width} ${hight} rounded-sm border-2`}
+      onClick={onClick} className={`flex items-center justify-around ${bgColor} text-[${color}] p-2 ${width} ${hight} rounded-sm border-2`}
     >
       {children}
     </button>

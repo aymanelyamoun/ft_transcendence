@@ -640,7 +640,8 @@ i    --linear-blue_purble,
     )
   );
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 438px;
+  /* width: 438px; */
+  width: 526px;
   scrollbar-width: none;
 }
 
@@ -817,7 +818,7 @@ i    --linear-blue_purble,
 
 .typePassword {
   width: 276px;
-  height: 215px;
+  /* height: 215px; */
   flex-shrink: 0;
   border-radius: 0px 0px 10px 10px;
   background: var(--light-status, rgba(154, 155, 211, 0.1));

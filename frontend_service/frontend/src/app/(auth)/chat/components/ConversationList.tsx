@@ -82,7 +82,6 @@ export const ConversationList = ({
   if (!isChannel) {
     {
       return (
-        <div className="friendsScroll h-full overflow-y-auto overflow-x-hidden ">
           <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
             {ConversationListData &&
               ConversationListData.map((conv) => {
@@ -103,12 +102,10 @@ export const ConversationList = ({
                 }
               })}
           </ul>
-        </div>
       );
     }
   }
   return (
-    <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
       <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
         {ConversationListData &&
           ConversationListData.map((conv) => {
@@ -129,7 +126,6 @@ export const ConversationList = ({
             }
           })}
       </ul>
-    </div>
   );
 };
 
@@ -180,35 +176,40 @@ export const Conversations = ({
   // }, []);
   const [showAddChannel, setShowAddChannel] = useState(false);
   const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
+  // const [showCreateChannel, setShowCreateChannel] = useState<boolean>(false);
 
   return (
     <div className="friendList w-full h-full mr-12 relative">
-      <IsChannelContext.Provider value={isChannel}>
-        <ChatToggel setIsChannel={setIsChannel} />
-        {/* <SearchBar
-          rowData={rowData}
-          // conversation={conversationList}
-          // setConversation={setConversationList}
-          // friendSearch={friendSearch}
-          // setFriendSearch={setFriendSearch}
-          // channelSearch={channelSearch}
-          // setChannelSearch={setChannelSearch}
-        /> */}
-        <ConversationList
-          isChannel={isChannel}
-          // conversationListData={conversationList}
-          // rowData={rowData}
-          // setConversation={setConversationList}
-        />
-        {isChannel ? <CreateChannelButton setShowAddChannel={setShowAddChannel}/> : <></>}
-        {showAddChannel ? <AddNewChannel
-                setShowAddChannel={setShowAddChannel}
-                setGoToCreateChannel={setGoToCreateChannel}
-              />
-            :
-            <></>}
-        {/* {children} */}
-      </IsChannelContext.Provider>
+          <IsChannelContext.Provider value={isChannel}>
+            <ChatToggel setIsChannel={setIsChannel} />
+        <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
+            {/* <div className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2"> */}
+                {/* <SearchBar
+                  rowData={rowData}
+                  // conversation={conversationList}
+                  // setConversation={setConversationList}
+                  // friendSearch={friendSearch}
+                  // setFriendSearch={setFriendSearch}
+                  // channelSearch={channelSearch}
+                  // setChannelSearch={setChannelSearch}
+                /> */}
+                <ConversationList
+                  isChannel={isChannel}
+                  // conversationListData={conversationList}
+                  // rowData={rowData}
+                  // setConversation={setConversationList}
+                />
+                {isChannel && <CreateChannelButton setShowAddChannel={setShowAddChannel}/>}
+                {showAddChannel && <AddNewChannel
+                        setShowAddChannel={setShowAddChannel}
+                        setGoToCreateChannel={setGoToCreateChannel}
+                      />
+                }
+                {goToCreateChannel && <CreateChannel/>}
+                {/* {children} */}
+              {/* </div> */}
+        </div>
+        </IsChannelContext.Provider>
     </div>
   );
 };

@@ -85,14 +85,10 @@ const Settings = () => {
     const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
-<<<<<<< HEAD
         setOpen(true);
         // if (onClick) {
         //     onClick();
         // }
-=======
-        setOpen(!open);
->>>>>>> c862bf19caa9804a96bd5c421ef9bab563c7fbc2
     };
 
     const LogOutReq = async () => {

@@ -10,11 +10,12 @@ import { AuthGoogleService } from 'src/Auth/auth_google/auth_google.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from 'src/profile/user/user.service';
+import { GameService } from 'src/Game/game.service';
 
 @Module({
   imports:[PrismaModule],
   controllers:[ChannelController],
-  providers: [ChatGateway,PrismaService,UserService, PrismaChatService, GatewayService, JwtService,  {
+  providers: [ChatGateway,PrismaService,UserService, PrismaChatService, GatewayService, JwtService, GameService,  {
     provide: 'AUTH_SERVICE',
     useClass: AuthGoogleService,
   }]

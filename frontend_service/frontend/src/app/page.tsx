@@ -43,13 +43,9 @@ export default function Home() {
 
     return (
       <div style={{ background: '#050A27' }} className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen">
-      <div style={gradientStyle} className='fixed top-8 left-1/4 transform -translate-x-1/2 -rotate-6  max-w-[200px] max-h-[423px] w-[19%] h-[43%] rounded-lg animate-pulse'></div>
-        <div style={{ background: '#9A9BD3'  } } className='fixed top-8 right-1/4 transform  translate-x-1/2 rotate-6 max-w-[30px] max-h-[323px] w-[3%] h-[33%] rounded-lg animate-pulse'></div>
-
-      <h2 className="text-white  font-bold mb-3 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-        PONG
-    </h2>
-
+      <div style={gradientStyle} className='fixed top-8 left-1/4 transform -translate-x-1/2 -rotate-6 w-[200px] h-[423px] rounded-lg animate-pulse'></div>
+          <div style={{ background: '#9A9BD3'  } } className='fixed top-8 right-1/4 transform  translate-x-1/2 rotate-6 w-[30px] h-[323px] rounded-lg animate-pulse'></div>
+      <h2  className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG </h2>
       <div className=' py-20'>
       <Link
       style={gradientStyle}

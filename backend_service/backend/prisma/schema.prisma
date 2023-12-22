@@ -53,7 +53,7 @@ model User{
 model GameRecord{
   id String @id @default(uuid())
   user User @relation("gameRecord",fields: [userId], references: [id])
-  userId String @unique
+  userId String
 
   xp Int @default(0)
   scoredGoals Int @default(0)

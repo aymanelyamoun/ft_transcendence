@@ -34,7 +34,6 @@ const paddleSkin : Skin = {
     height: 183, //px
 };
 
-
 const scaleToWindow  = (render: Render) => {
     const scaleX = ((window.innerWidth * PERCENTWIDTH) / 100) / WIDTH;
     const scaleY = ((window.innerHeight * PERCENTHEIGHT) / 100) / HEIGHT;
@@ -67,8 +66,8 @@ const handleEndGame = (endGameData : any) => {
     loser.style.border = '5px solid red';
     loser.style.borderRadius = '50%';
     setTimeout(() => {
-        window.location.href = '/';
-    }, 5000);
+        window.location.href = '/game';
+    }, 3000);
 }
 
 const handleGameLoop = (socketRef: Socket, engine: Engine, render: Render) => {
@@ -158,12 +157,11 @@ const MatchScene = () => {
     const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const render = useRef<Render>(null);
     const engine = useRef<Engine>(Matter.Engine.create());
-    if (typeof window !== 'undefined') {
         useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
         const matchID = queryParams.get('matchID');
         if (matchID === null)
-            window.location.href = '/';
+            window.location.href = '/game';
         if (socketRef.current === null)
         {
             socketRef.current = io("http://localhost:3001/api/chat", {withCredentials: true,});
@@ -197,7 +195,6 @@ const MatchScene = () => {
             document.removeEventListener('keyup', (e) => releaseHandle(e, socketRef.current!));
         }
     }, []);
-}
 
     return (
         // isLoaded ? (

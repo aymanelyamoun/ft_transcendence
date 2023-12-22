@@ -7,13 +7,14 @@ import { useState, useEffect } from 'react';
 import { Backend_URL } from '@/lib/Constants';
 import { FaUserAstronaut } from "react-icons/fa6";
 import styled from 'styled-components';
+import { SocketUseContext } from "../../../dashboard/page";
 
 interface Friend {
   id: string;
   username: string;
   profilePic: string;
   title? : string;
-  online: boolean;
+  status: string;
 }
 
   interface FriendsProps {
@@ -44,6 +45,7 @@ const NoFriendsIcon = styled.div`
 
 const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   const [FriendsList, setFriendsList] = useState<Friend[]>([]);
+  const socket = React.useContext(SocketUseContext);
 
   useEffect(() => {
     const fetchFriendsListData = async () => {
@@ -69,6 +71,11 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
     fetchFriendsListData();
 
   }, [setFriendsList]);
+
+  useEffect(() => {
+    socket.on("friend");
+  });
+
 
   return (
     <div className={styles['friends-list']}>

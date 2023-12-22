@@ -10,6 +10,8 @@ import SearchHeader from '../components/dashboard/Header/SearchHeader';
 import styled from 'styled-components';
 import Animation from '../components/dashboard/Animation/Animation';
 
+import { socket } from "../../../../socket"
+
 
 
 interface SearchU
@@ -45,6 +47,8 @@ const AppGlass = styled.div`
   }
 `;
 
+export const SocketUseContext = React.createContext(socket);
+
 
 function App() {
 
@@ -56,7 +60,12 @@ function App() {
     wallet: 0,
   });
 
- 
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+  }, []);
   
   // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
   // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
@@ -94,17 +103,19 @@ function App() {
   return (
     <>
       <div className="App">
-        <SearchDiv >
-          <SearchHeader />
-        </SearchDiv>
-        <AppGlass>
-          <Sidebar sidebar={SidebarInfo} ShowSettings={true}/>
-          <Skins />
-          <Animation />
-          <Statistics />
-          <Friends
-          />
-        </AppGlass>
+        <SocketUseContext.Provider value={socket}>
+          <SearchDiv >
+            <SearchHeader />
+          </SearchDiv>
+          <AppGlass>
+            <Sidebar sidebar={SidebarInfo} ShowSettings={true}/>
+            <Skins />
+            <Animation />
+            <Statistics />
+            <Friends
+            />
+          </AppGlass>
+        </SocketUseContext.Provider>
       </div>
     </>
   );

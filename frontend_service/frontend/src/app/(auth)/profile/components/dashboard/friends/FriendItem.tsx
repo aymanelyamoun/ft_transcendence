@@ -10,7 +10,7 @@ interface Friend {
   username: string;
   profilePic: string;
   title? : string;
-  online: boolean;
+  status: string;
 }
 
 interface FriendItemProps {

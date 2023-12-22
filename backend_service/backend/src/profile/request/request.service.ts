@@ -1,4 +1,4 @@
-import { tr } from "@faker-js/faker";
+ import { tr } from "@faker-js/faker";
 import { Injectable, NotFoundException, Req } from "@nestjs/common";
 import { NOTIF_TYPE, User } from "@prisma/client";
 import { PrismaService } from "src/chatapp/prisma/prisma.service";

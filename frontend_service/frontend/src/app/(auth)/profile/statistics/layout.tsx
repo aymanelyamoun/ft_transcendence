@@ -51,7 +51,7 @@ export default async function RootLayout({
               {/* <div className={`${styles['statistics']} ${styles['left-panel']}`}> */}
               <div className={styles['left-panel']}>
                 <Statistics />
-                <Match_History matches={matches_history}/>
+                <Match_History matches={matches_history} UserProfileStyling={false}/>
               </div>
               <div className={styles['right-panel']}>
                 <Global_Rating ratings={global_rating}/>

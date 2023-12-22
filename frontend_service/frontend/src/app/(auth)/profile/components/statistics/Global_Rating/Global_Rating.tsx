@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import styles from './Global_Rating.module.css'
 import Global_RatingList from './Global_RatingList';

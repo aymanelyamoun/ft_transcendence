@@ -36,6 +36,9 @@
     flex-direction: column;
     align-items: center; /* Center items horizontally within the container */
     height: fit-content;
+    position: relative;
+    top: 2vh;
+    cursor : pointer;
 }
 
 div span.info-name

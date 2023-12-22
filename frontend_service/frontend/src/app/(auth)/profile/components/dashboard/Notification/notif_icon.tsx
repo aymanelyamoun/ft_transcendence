@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import { IoMdNotifications } from "react-icons/io";
 import styles from "./Notification.module.css";

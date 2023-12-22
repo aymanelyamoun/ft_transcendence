@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import styles from './friends.module.css';
 import MoreIcon from './more_icon';
@@ -29,7 +31,9 @@ const MoreIconStyle = styled.div`
   background-color: #ccc;
   // background-color: #4CAF50;
 
-  ${friend => friend.online && `
+  ${(props) =>
+    props.online &&
+    `
     /* Green color if online is true */
     background-color: #4CAF50;
   `}

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { Suspense } from 'react'
 import styles from './friends.module.css'
 import FriendItem from './FriendItem';

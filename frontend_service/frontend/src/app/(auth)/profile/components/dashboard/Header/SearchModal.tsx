@@ -1,6 +1,5 @@
-// import AddChannelSearchBar from '@/app/chat/components/AddChannelSearchBar';
-// import AddChannelSearchBar from "../../../../../app/chat/components/AddChannelSearchBar";
-// import AddChannelSearchBar from "@/app/chat/components/AddChannelSearchBar";
+"use client"
+
 import SearchFriends from "../SearchFriends/SearchFriends";
 import React, {useState, useRef, useEffect } from 'react'
 import styled from 'styled-components';

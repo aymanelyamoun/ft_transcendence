@@ -40,6 +40,11 @@ export class ChatGateway implements OnGatewayConnection {
         socket["inGame"] = false;
         socket["inQueue"] = false;
         socket["inChat"] = false;
+
+        this.gatewayService.addConnectedSocketToMap({socket:socket, userId:user.id});
+        console.log("emmiting status userId", user.id);
+        this.server.emit('friendStatus', {userId: user.id, status: '1'});
+        // this.emitFriendsStatus(user.id);
         console.log('logged');
       }
       catch(error){
@@ -92,6 +97,7 @@ export class ChatGateway implements OnGatewayConnection {
   handleDisconnect(socket: Socket) {
     if (socket['user'] !== undefined)
     {
+      this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
       console.log(socket['user'].username ,' is disconnecting');
       if (socket['inGame'] == true)
       {

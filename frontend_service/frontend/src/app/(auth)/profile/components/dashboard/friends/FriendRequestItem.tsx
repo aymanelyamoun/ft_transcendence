@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect } from 'react'
 import styles from './friends.module.css'
 import { FcOk } from "react-icons/fc";
@@ -96,36 +98,6 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       console.log(error);
     }
   };
-
-  // return (
-  //   <div className={styles['friendReqItem']}>
-  //       <div className={styles['friendReq-image']}>
-  //           <img src={props.profilePic} alt="Profile" className="rounded-lg" />
-  //       </div>
-  //       <div className={styles['friendReq-name']}>
-  //           <span className={styles['friendReq-name']}>{props.title}</span>
-  //       </div>
-  //       <div className={styles['friendReqSent']}>
-  //               <span className={styles['friendReqSent']}>{props.discription}</span>
-  //       {officiallyFriends ? (
-  //         <HanshakeButton>
-  //           <PiHandshakeBold />
-  //         </HanshakeButton>
-  //       ) : (
-  //         NotFriends ? (
-  //           <NoFriendsButton>
-  //             <FaHandshakeAltSlash />
-  //           </NoFriendsButton>
-  //         ) : (
-  //           <div>
-  //             <button className={styles['friendReqAccept']} onClick={() => fetchAcceptRequest(props)}><FcOk /></button>
-  //             <button className={styles['friendReqDecline']} onClick={() => fetchRefuseRequest(props)}><FcCancel /></button>
-  //           </div>
-  //         )
-  //       )}
-  //               </div>
-  //   </div>
-  // );
   return (
     <div className={styles['friendReqItem']}>
         <div className={styles['friendReq-image']}>

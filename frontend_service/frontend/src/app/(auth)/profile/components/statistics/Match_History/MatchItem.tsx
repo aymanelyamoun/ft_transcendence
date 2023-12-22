@@ -1,6 +1,8 @@
+"use client"
 import React, { useState } from 'react'
 import styles from './Match_History.module.css'
 import MatchXp from './MatchXp';
+import styled from 'styled-components';
 
 interface Match {
     id: string;
@@ -10,16 +12,47 @@ interface Match {
     player2_score: number;
     result: string;
     xp: number;
+    UserProfileStyling: boolean;
 }
 
 interface MatchListProps {
     matches: Match[];
 }
 
+const matchItemContainer = styled.div`
+background: rgba(154, 155, 211, 0.20);
+border-radius: 15px;
+display: flex;
+align-items: center;
+width: 50vw;
+box-sizing: border-box;
+height: 7vh;
+border-bottom: 1px solid rgba(154, 155, 211, 0.2);
+margin: 30px 10px;
+flex-direction: row;
+flex-wrap: nowrap
+`;
+
+const UserProfileContainer = styled.div`
+background: rgba(154, 155, 211, 0.20);
+border-radius: 15px;
+display: flex;
+align-items: center;
+width: 60vw;
+box-sizing: border-box;
+height: 7vh;
+border-bottom: 1px solid rgba(154, 155, 211, 0.2);
+margin: 30px 10px;
+flex-direction: row;
+flex-wrap: nowrap
+`;
+
 const MatchItem: React.FC<Match> = (props) => {
-    
+    const UserProfileStyling = props.UserProfileStyling;
+
+    const ItemContainer = UserProfileStyling ? matchItemContainer : UserProfileContainer;
   return (
-    <div className={styles['matchItem-container']}>
+    <ItemContainer>
         <div className={styles['matchItem-player1']}>
             <img src={props.player1_profile} alt="Profile" className="rounded-lg" />
         </div>
@@ -38,7 +71,7 @@ const MatchItem: React.FC<Match> = (props) => {
         <div className={styles['matchItem-xp']}>
             <MatchXp matchXp={props.xp} />
         </div>
-    </div>
+    </ItemContainer>
   )
 };
 

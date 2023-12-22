@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import styles from './Table.module.css';
 import SkinComp from '../SkinComp/SkinComp';

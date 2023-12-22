@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchModal from './SearchModal';
@@ -28,7 +30,6 @@ margin-top: 0.5rem;
 padding: 0.8rem;
 border: 1px solid rgba(40, 44, 78, 1);
 background-color: rgba(40, 44, 78, 1);
-cursor: pointer;
 `;
 
 const SearchIcon = styled(BsSearch)`
@@ -62,9 +63,11 @@ const SearchHeader = () => {
     const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
     const [query, setQuery] = useState('');
     const [ShowModal, setShowModal] = useState(false);
+    const [isLoading, setisLoading] = useState(false);
     
     const handleSearch = (e: React.FormEvent) => {
         setShowModal(true);
+        setisLoading(true);
         // fetchUsers();
     };
 
@@ -81,7 +84,6 @@ const SearchHeader = () => {
           });
           if (res.ok) {
             const data = await res.json() as SearchU[];
-            console.log(data);
             setSearchUsers(data);
           }else {
             alert("Error fetching data: ");
@@ -89,7 +91,8 @@ const SearchHeader = () => {
           }
         } catch (error) {
           console.error("Error fetching data: ", error);
-        }
+        } finally {
+          setisLoading(false); }
       };
 
       useEffect(() => {
@@ -101,15 +104,17 @@ const SearchHeader = () => {
     return (
         <>
         <SearchHeaderContainer onClick={handleSearch}>
-            <SearchIcon onClick={fetchUsers} />
+            <SearchIcon onClick={fetchUsers}/>
         </SearchHeaderContainer>
-        {ShowModal ? (
-            // <SearchModal onSearch={onSearch} onClose={() => setShowModal(false)} searchUsers={searchUsers}/>
-            <SearchModal onClose={setShowModal} searchUsers={SearchUsers} setSearchUsers={setSearchUsers}/>
-        ) : null}
-        </>
-        // {showModal && <SearchModal onSearch={onSearch} onClose={() => setShowModal(false)} />}
-    );
+        {ShowModal && !isLoading && (
+        <SearchModal
+          onClose={() => setShowModal(false)}
+          searchUsers={SearchUsers}
+          setSearchUsers={setSearchUsers}
+        />
+      )}
+    </>
+  );
 };
 
 export default SearchHeader;

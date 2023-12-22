@@ -9,11 +9,6 @@ import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
 import { useRouter } from "next/navigation";
 
-interface SettingsProps {
-    isOpen?: boolean;
-    // onClick: () => void;
-}
-
 const SettingsContainer = styled.div`
     color: aliceblue;
     position: relative;
@@ -85,22 +80,20 @@ const SettingSpan = styled.span`
 `;
 
 
-const Settings: React.FC<SettingsProps> = ({ isOpen}) => {
+const Settings = () => {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
+<<<<<<< HEAD
         setOpen(true);
         // if (onClick) {
         //     onClick();
         // }
+=======
+        setOpen(!open);
+>>>>>>> c862bf19caa9804a96bd5c421ef9bab563c7fbc2
     };
-
-    React.useEffect(() => {
-        if (isOpen) {
-            setOpen(true);
-        }
-    }, [isOpen]);
 
     const LogOutReq = async () => {
         try {

@@ -16,6 +16,7 @@ import { GameService } from 'src/Game/game.service';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
+  
 @WebSocketGateway({namespace: "api/chat",cors : {origin : "http://localhost:3000", credentials: true}})
 export class ChatGateway implements OnGatewayConnection {
 
@@ -23,10 +24,16 @@ export class ChatGateway implements OnGatewayConnection {
     @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
     private gameService : GameService) {}
 
+  async getUserData (client : Socket) : Promise<User> {
+    const cookies =  parse(client.handshake.headers.cookie);
+    const payload = await this.jwtService.verifyAsync(cookies['access_token'], {
+      secret : process.env.jwtSecretKey,
+    });
+    const user = await this.authGoogleService.findUserByEmail(payload.email);
+    return user as User;
+  } 
   @WebSocketServer()
   server: Server;
- 
-
   async handleConnection(socket: Socket, ...args: any[]) {
     if (socket.handshake.headers.cookie !== typeof undefined) {
       try {
@@ -39,7 +46,6 @@ export class ChatGateway implements OnGatewayConnection {
         socket["inGame"] = false;
         socket["inQueue"] = false;
         socket["inChat"] = false;
-        console.log('logged');
       }
       catch(error){
         console.log('catched expired token');
@@ -52,14 +58,12 @@ export class ChatGateway implements OnGatewayConnection {
       console.log('connected ??? without session');
       socket.disconnect(true);
     }
-
-  // this.server.on('disconnect', (socket: Socket) => {
+    ;}
     
-  // })
-  ;}
-  
-  handleDisconnect(socket: Socket) {
-    if (socket['user'] !== undefined)
+    handleDisconnect(socket: Socket) {
+      if (socket['user'] === undefined || socket['user'] === null)
+      socket.emit('redirect', '/', 'You are not logged in from line 56');
+    else if (socket['user'].username !== null && socket['user'].username !== undefined)
     {
       console.log(socket['user'].username ,' is disconnecting');
       if (socket['inGame'] == true)
@@ -76,24 +80,27 @@ export class ChatGateway implements OnGatewayConnection {
         // chat.gateway.ts code
       }
     }
-    else
-      socket.emit('redirect', '/', 'You are not logged in');
   }
   
   @SubscribeMessage('joinMatch')
-  joinMatch(client: Socket, matchID: string) {
+  async joinMatch(client: Socket, matchID: string) {
+    
+    client["user"] = await this.getUserData(client) as User;
     client['inGame'] = true;
     this.gameService.clearFinishedGames();
     const inGame = this.gameService.inGameCheck(client);
     if (inGame)
       return ;
-    if (matchID)
+    if (client['user'] === undefined || client['user'] === null)
+      client.emit('redirect', '/', 'You are not logged in from line 84');
+    if (matchID && client['user'] && client['user'].username)
       this.gameService.GameEvent(this.server, client,matchID);
   }
 
 
   @SubscribeMessage('matchmaking')
-  matchmaking(client: Socket) {
+  async matchmaking(client: Socket) {
+    client["user"] = await this.getUserData(client) as User;
     client['inQueue'] = true;
     client.on('CancelQueue', () => {
       this.gameService.removeFromQueue(client);
@@ -106,6 +113,11 @@ export class ChatGateway implements OnGatewayConnection {
         client.emit('CancelQueue')
         client.disconnect(true);
         return ;
+    }
+    if (client['user'] === undefined || client['user'] === null)
+    {
+      client.emit('redirect', '/', 'You are not logged in from line 107');
+      return ;
     }
     this.gameService.MatchMaking(this.server, client);
   }

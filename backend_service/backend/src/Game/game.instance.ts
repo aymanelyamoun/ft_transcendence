@@ -1,7 +1,9 @@
 import { Paddle, Canvas, Player, Ball, GameInfo, EndGameState} from './interfaces/game.interface';
 import { Engine, Body, World, Bodies, Vector, Events, Matter, Composite, Runner } from "matter-js";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Server, Socket } from 'socket.io';
+import { User } from '@prisma/client';
+import { PrismaService } from 'src/chatapp/prisma/prisma.service';
 
 
 const HEIGHT : number = 800;
@@ -23,6 +25,7 @@ export class GameInstance {
     public gameInfo: GameInfo;
     private gameOver: boolean = false;
     public gameEnded: boolean = false;
+    private readonly prisma: PrismaService;
 
     constructor(playerOneSocket: Socket, playerTwoSocket: Socket, roomNumber: string, serverIO: Server) {
         this.engine = Engine.create();
@@ -184,16 +187,74 @@ export class GameInstance {
         });
     }
 
-    endGame = (state : EndGameState) => {
+    async endGame (state : EndGameState) : Promise<void> {
         this.gameOver = true;
         this.gameEnded = true;
         if (state.reason == 'score')
         {
             const winner = (this.playerOne.score == this.gameInfo.winScore) 
             ? '1' : '2';
-            this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
-                winner: winner,
-            });
+            var loserData : User;
+            var winnerData : User;
+            if (winner == '1')
+            {
+                winnerData = this.playerOne.playerData;
+                loserData = this.playerTwo.playerData;
+            }
+            else
+            {
+                winnerData = this.playerTwo.playerData;
+                loserData = this.playerOne.playerData;
+            }
+            try {
+                this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
+                    winner: winner,
+                });
+                const prismaService = new PrismaService();
+                await prismaService.gameRecord.create({
+                    data: {
+                        user:{connect:{id: winnerData.id}},
+                        scoredGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                        concededGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                        xp:  25,
+                        oponent:{connect:{id: loserData.id}},
+                        // oponentId: loserData.id,
+                    },
+                });
+            
+                await prismaService.gameRecord.create({
+                    data: {
+                        user: {connect:{id: loserData.id}},
+                        scoredGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                        concededGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                        xp: loserData.totalXp - 35 > 0 ? -35 : loserData.totalXp * -1,
+                        oponent:{connect:{id: winnerData.id}},
+                    },
+                });
+                await prismaService.user.update({
+                    where: {
+                        id: winnerData.id,
+                    },
+                    data: {
+                        totalXp: winnerData.totalXp + 25,
+                        wallet: {
+                            increment: 10,
+                        },
+                    },
+                });
+                await prismaService.user.update({
+                    where: {
+                        id: loserData.id,
+                    },
+                    data: {
+                        totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
+                    },
+                });
+                console.log('database updated')
+        }
+            catch (error) {
+                console.log("error : ",error.message);
+            }
         }
         else if (state.reason == 'disconnect')
         {

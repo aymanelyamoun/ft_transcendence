@@ -2,7 +2,7 @@
 import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import Matter, {Engine, Bodies, World, Render, Composite} from 'matter-js';
-import Simulation from '@/app/game/components/Simulation';
+import Simulation from '@/app/(auth)/game/components/Simulation';
 
 
 interface GameMenuProps {

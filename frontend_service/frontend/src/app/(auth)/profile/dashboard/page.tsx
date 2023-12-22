@@ -38,6 +38,11 @@ const AppGlass = styled.div`
   grid-template-columns: 2rem 30rem auto 40rem 2rem;
   grid-template-rows: repeat(3, 1fr);
   z-index: auto;
+
+  @media screen and (max-width: 1300px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
 `;
 
 

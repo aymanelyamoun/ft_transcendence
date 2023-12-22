@@ -10,9 +10,9 @@ const EditProfileContainer = styled.div`
   position: relative;
   top: 0;
   right: 0;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 2.5rem;
   font-size: 1.5rem;
-  gap: 0.9rem;
+  gap: 0.6rem;
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -26,6 +26,10 @@ const EditProfileContainer = styled.div`
     transition: all 0.3s ease-in-out;
     background: rgba(52, 65, 139, 0.55);
   }
+`;
+
+const EditSpan = styled.span`
+
 `;
 
 const EditProfile = () => {
@@ -49,6 +53,16 @@ const EditProfile = () => {
       </EditProfileContainer>
     </>
   );
+
+  //       <div className='edit-profile-text'>
+  //         <Link href="/update">
+  //           <EditSpan>Edit Profile</EditSpan>
+  //         </Link>
+  //         </div> {
+  //       }
+  //   </EditProfileContainer>
+  // )
+
 }
 
 export default EditProfile;

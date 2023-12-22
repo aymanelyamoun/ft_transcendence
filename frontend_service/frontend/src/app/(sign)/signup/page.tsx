@@ -96,8 +96,10 @@ let response : any;
     style={{ background: "#050A27" }}
     className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
   >
-      <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG</h2>
-      <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 w-[30px] h-[323px] rounded-lg'></div>
+      {/* <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG</h2> */}
+      <h2 className="text-white shadow-2xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3">PONG</h2>
+      
+      <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 max-w-[30px] max-h-[323px] w-[3%] h-[33%] rounded-lg'></div>
       <div
         style={gradientStyle}
         className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"

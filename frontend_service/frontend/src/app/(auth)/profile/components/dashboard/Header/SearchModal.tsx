@@ -38,7 +38,6 @@ interface SearchModalProps {
   overflow-y: auto; // Scroll if needed
 `;
 
-
 const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers}) => {
     const [friendSearch, setFriendSearch] = useState<SearchU[]>(searchUsers);
     const cancelAddChannel = useRef<HTMLDivElement>(null);
@@ -54,7 +53,7 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
     return (
         <>
         <div onClick={handleCancelAddChannel} className=" addChannelOverlay flex justify-center items-center ">
-            <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModal flex justify-between rounded-[10px] ">
+            <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModaloumad flex justify-between rounded-[10px] ">
                 <ResultList>
                         <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch}/>
                         {friendSearch.map((friend) => (

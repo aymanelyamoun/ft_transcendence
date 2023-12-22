@@ -1,15 +1,15 @@
 import React from 'react'
-import msgs from '../../../../public/msgs_icons.png'
-import msgs2 from '../../../../public/msgs2_icons.png'
-import msg from '../../../../public/msg_icon.png'
-import msg2 from '../../../../public/msg2_icon.png'
+import msgs from '../../../../../public/msgs_icons.png'
+import msgs2 from '../../../../../public/msgs2_icons.png'
+import msg from '../../../../../public/msg_icon.png'
+import msg2 from '../../../../../public/msg2_icon.png'
 // import msgs from '../../../../public/msgs_icons.png'
 // import msgs2 from '../../../../public/msgs2_icons.png'
 // import msg from '../../../../public/msg_icon.png'
 // import msg2 from '../../../../public/msg2_icon.png'
 import Image, { StaticImageData } from 'next/image'
 // import { Channel, channelsData} from '../../../../app/(notRoot)/chat/page';
-import { Channel, channelsData} from '../page';
+import { Channel,} from '../page';
 import { useState } from 'react';
 
 interface ChannelChatProps {

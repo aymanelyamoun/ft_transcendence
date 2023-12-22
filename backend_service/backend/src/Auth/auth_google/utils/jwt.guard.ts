@@ -18,7 +18,7 @@ export class JwtGuard implements CanActivate{
             });
             const user = await this.authGoogleService.findUserByEmail(payload.email);
             if (!user)
-            throw new UnauthorizedException();
+                throw new UnauthorizedException();
             request['user'] = user;
             request['isConfirmed2Fa'] = payload.isConfirmed2Fa;
         }

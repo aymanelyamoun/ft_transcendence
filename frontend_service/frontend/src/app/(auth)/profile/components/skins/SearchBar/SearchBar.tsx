@@ -1,11 +1,29 @@
 "use client";
 import React, { useState } from 'react';
 import styles from './SearchBar.module.css';
-import { BsSearch } from "react-icons/bs";
+import styled from 'styled-components';
+import { IoSearch } from "react-icons/io5";
 
 interface SearchBarState {
   searchTerm: string;
 }
+
+// const SearchIcon = styled.div`
+// position: absolute;
+// top: 23vh;
+// left: 24.37vw;
+// z-index: 999;
+
+//   svg {
+//     font-size: 2rem;
+//     color: Black;
+//   }
+
+//   focus: {
+//     color: black;
+//     cursor: pointer;
+//     z-index: -1;
+// `;
 
 const SearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,25 +38,29 @@ const SearchBar: React.FC = () => {
     // TODO: Implement search functionality using the searchTerm
   };
 
+
   return (
+    <>
+      {/* <SearchIcon> */}
+        {/* <IoSearch /> */}
+      {/* </SearchIcon> */}
     <form className={styles.searchContainer} onSubmit={handleSubmit}>
       <div className={styles.searchBoxContainer}>
         <input
           id="search-box"
           type="text"
           className={styles.searchBox}
-          name="q"
           placeholder="Search..."
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <label htmlFor="search-box">
           <span className={styles.searchIconContainer}>
+            Search
           </span>
-        </label>
       </div>
-      <button type="submit" id="search-submit">Search</button>
+      {/* <button type="submit" id="search-submit">Search</button> */}
     </form>
+        </>
   );
 };
 

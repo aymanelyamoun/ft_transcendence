@@ -98,22 +98,37 @@ export class ChatGateway implements OnGatewayConnection {
     if (socket['user'] !== undefined)
     {
       this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
-      console.log(socket['user'].username ,' is disconnecting');
-      if (socket['inGame'] == true)
-      {
-        this.gameService.stopGameEvent(socket)
+      if (this.gatewayService.userIsConnected(socket['user'].id)){
+
+        if (this.gameService.inGameCheckByID(socket['user'].id))
+          this.server.emit('friendStatus', {userId: socket['user'].id, status: '2'});
+        else
+        this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
       }
-      else if (socket['inQueue'] == true)
-      {
-        this.gameService.removeFromQueue(socket) // remove from queue if in queues
-        console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
-      }
-      else if (socket['inChat'] == true)
-      {
-        // chat.gateway.ts code
-      }
+      else
+        this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
+      // console.log(socket['user'].username ,' is disconnecting');
+      // if (socket['inGame'] == true)
+      // {
+      //   console.log("user is in game");
+      //   this.gameService.stopGameEvent(socket)
+      // }
+      // else if (socket['inQueue'] == true)
+      // {
+      //   console.log("user is in queue");
+      //   this.gameService.removeFromQueue(socket) // remove from queue if in queues
+      //   console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
+      // }
+      // else if (socket['inChat'] == true)
+      // {
+      //   console.log("user is in chat");
+      //   // chat.gateway.ts code
+      // }
+      // else
+      //   this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'}); 
     }
     else
+      console.log("user is now disconnected(need to emit): ", socket.id);
       socket.emit('redirect', '/', 'You are not logged in');
   }
   

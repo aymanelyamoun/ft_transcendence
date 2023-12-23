@@ -48,8 +48,37 @@ export const ConversationInfo = ({ type }: { type: string }) => {
     //   return;
     // }
 
-  const handleEditChannel = () => {
-
+  const handleExitChannel = () => {
+    setExitChannel(true);
+    const channelData = {
+      channelId: conversationProps?.id,
+      userId:conversationProps ,
+      // here i should add the selected friends
+    };
+    useEffect(() => {
+      const fetchFun = async () => {
+        await fetch(
+          `http://localhost:3001/api/channels/leaveChannel`,
+          {
+            method: "PAtCH",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+          });
+      };
+      fetchFun();
+    }), [editChannel];
+    
+    
+    
   }
 
 

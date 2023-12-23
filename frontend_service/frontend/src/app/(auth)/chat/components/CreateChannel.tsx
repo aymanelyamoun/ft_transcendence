@@ -127,7 +127,8 @@ const CreateChannel = ({
         .catch((error) => {
           console.error("Error during fetch:", error);
         });
-        setChannelCreated(false);
+        
+        // setChannelCreated(false);
     }
   // }
   
@@ -143,7 +144,7 @@ const CreateChannel = ({
         <div className=" px-24 pt-4">
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
-            {showNotify && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
+            {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setChannelCreated(false);}} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
             {notCreated && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
             <div>
               <Image

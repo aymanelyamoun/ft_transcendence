@@ -132,7 +132,7 @@ export class ChannelEditDto{
     @IsString()
     userId:string;
 
-
+    // @IsNotEmpty()
     @IsString()
     userId2?:string;
 }

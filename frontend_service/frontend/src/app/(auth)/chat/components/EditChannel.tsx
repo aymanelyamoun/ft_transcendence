@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
 import { AlertMessage } from './alertMessage';
@@ -22,6 +22,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
 
+  const cancelEditChannel = useRef<HTMLDivElement>(null);
 
   const handleOptionChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
     if (saveChannelName === "")
@@ -113,10 +114,20 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         
   }
 
+  const handleCancelAddChannel = (event: any) => {
+    if (
+      cancelEditChannel.current &&
+      !cancelEditChannel.current.contains(event.target)
+    ) {
+      setEditChannel(false);
+    }
+  };
+
   return (
     <div className=" editChannelOverlay flex justify-center items-center ">
       <div
         className="editChannelModal felx justify-between rounded-[10px] "
+        ref={cancelEditChannel}
         >
         <div className=" px-4 pt-4">
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}

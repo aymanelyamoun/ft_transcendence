@@ -39,10 +39,21 @@ export const isAdmin = false;
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
 
+  const setEditChannel = useContext(setShowEditChannelContext);
+  const setExitChannel = useContext(setShowExitChannelContext);
+  const setDeleteChannel = useContext(setShowDeleteChannelContext);
+  const editChannel = useContext(showEditChannelContext);
+  console.log("editChannel :        ", editChannel);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
     //   return;
     // }
+
+  const handleEditChannel = () => {
+
+  }
+
+
   return (
     <>
       {conversationProps?.type === "DIRECT" ? (
@@ -54,24 +65,27 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           <ButtonInfo width="10" hight="10">
             <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10 mx-12">
               <CostumeButton
+                onClick={() => console.log("add friend")}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-20"
                 hight="h-11"
-              >
+                >
                 <MdPersonAddAlt1 color="#1C2041" size={24} />
               </CostumeButton>
 
               <CostumeButton
+                onClick={() => console.log("add friends")}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-20"
                 hight="h-11"
-              >
+                >
                 <MdGroupAdd color="#1C2041" size={24} />
               </CostumeButton>
 
               <CostumeButton
+                onClick={() => console.log("play game")}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-44"
@@ -92,11 +106,12 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           <ButtonInfo width="10" hight="10">
             <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-12">
               <CostumeButton
+                onClick={() => setEditChannel(true)}
                 bgColor="bg-transparent border-[#FEFFFF]"
                 color="#FC2B5D"
                 width="w-full"
                 hight="h-11"
-              >
+                >
                 <p className=" text-[#FEFFFF] font-semibold font-poppins text-sm">
                   Edit Channel
                 </p>
@@ -104,11 +119,12 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
+                onClick={() => setExitChannel(true)}
                 bgColor="bg-transparent border-[#FC2B5D]"
                 color="wthie"
                 width="w-full"
                 hight="h-11"
-              >
+                >
                 <p className=" text-light-red font-semibold font-poppins text-sm">
                   Exit Channel
                 </p>
@@ -116,11 +132,12 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
+                onClick={() => setDeleteChannel(true)}
                 bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
                 color="#FC2B5D"
                 width="w-full"
                 hight="h-11"
-              >
+                >
                 <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
                   Delete channel
                 </p>
@@ -445,6 +462,15 @@ export const LstConversationStateContext = createContext(
   {} as ConversationIthemProps | undefined
 );
 
+
+export const showEditChannelContext = createContext({} as boolean);
+export const setShowEditChannelContext = createContext({} as React.Dispatch<React.SetStateAction<boolean>>);
+export const showExitChannelContext = createContext({} as boolean);
+export const setShowExitChannelContext = createContext({} as React.Dispatch<React.SetStateAction<boolean>>);
+export const showDeleteChannelContext = createContext({} as boolean);
+export const setShowDeleteChannelContext = createContext({} as React.Dispatch<React.SetStateAction<boolean>>);
+
+
 export const ConversationListContextSet = createContext( {} as React.Dispatch<React.SetStateAction<ConversationIthemProps[]>>);
 
 export const ChatPage = () => {
@@ -454,6 +480,10 @@ export const ChatPage = () => {
   const userInfo = useContext(UserContext) as User;
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
   // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
+
+  const [showEditChannel, setShowEditChannel] = useState(false);
+  const [showExitChannel, setShowExitChannel] = useState(false);
+  const [showDeleteChannel, setShowDeleteChannel] = useState(false);
 
   console.log("conversationId:", conversation?.id);
   useEffect(() => {
@@ -512,19 +542,29 @@ export const ChatPage = () => {
   return (
     <main className="main flex justify-center items-center h-full w-full ">
       <ConversationListContextSet.Provider value={setConversationList}>
-      <ConversationListContext.Provider value={ConversationList}>
-        <LstConversationSetStateContext.Provider value={setConversation}>
-          <LstConversationStateContext.Provider value={conversation}>
-            <div className="h-full basis-1/4 flex">
-              <Conversations> {/* <ConversationList /> */}</Conversations>
-              {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
-            </div>
-            <MessagesContext.Provider value={messages}>
-              <Conversation />
-            </MessagesContext.Provider>
-          </LstConversationStateContext.Provider>
-        </LstConversationSetStateContext.Provider>
-      </ConversationListContext.Provider>
+        <ConversationListContext.Provider value={ConversationList}>
+          <LstConversationSetStateContext.Provider value={setConversation}>
+            <LstConversationStateContext.Provider value={conversation}>
+              <setShowEditChannelContext.Provider value={setShowEditChannel}>
+                <showEditChannelContext.Provider value={showEditChannel}>
+                  <setShowExitChannelContext.Provider value={setShowExitChannel}>
+                    <showExitChannelContext.Provider value={showExitChannel}>
+                      <setShowDeleteChannelContext.Provider value={setShowDeleteChannel}>
+                          <div className="h-full basis-1/4 flex">
+                            <Conversations> {/* <ConversationList /> */}</Conversations>
+                            {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
+                          </div>
+                          <MessagesContext.Provider value={messages}>
+                            <Conversation />
+                          </MessagesContext.Provider>
+                        </setShowDeleteChannelContext.Provider>
+                    </showExitChannelContext.Provider>
+                  </setShowExitChannelContext.Provider>
+                </showEditChannelContext.Provider>
+              </setShowEditChannelContext.Provider>
+            </LstConversationStateContext.Provider>
+          </LstConversationSetStateContext.Provider>
+        </ConversationListContext.Provider>
       </ConversationListContextSet.Provider>
     </main>
   );

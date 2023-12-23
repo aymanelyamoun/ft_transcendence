@@ -18,6 +18,12 @@ import {
   ConversationListContext,
   CostumeButton,
   LstConversationSetStateContext,
+  setShowDeleteChannelContext,
+  setShowEditChannelContext,
+  setShowExitChannelContext,
+  showDeleteChannelContext,
+  showEditChannelContext,
+  showExitChannelContext,
 } from "./ConversationInfo";
 
 export const IsChannelContext = createContext(false);
@@ -31,6 +37,7 @@ import CreateChannelButton from "./CreateChannelButton";
 import AddNewChannel from "./AddNewChannel";
 import { Friend} from "../page";
 import EditChannel from "./EditChannel";
+import { AlertMessage } from "./alertMessage";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -145,7 +152,16 @@ export const Conversations = ({
   // >;
   children: React.ReactNode;
 }) => {
+
+    // states
   const [isChannel, setIsChannel] = useState<boolean>(false);
+  const editChannel = useContext(showEditChannelContext);
+  const exitChannel = useContext(showExitChannelContext);
+  const deletChannel = useContext(showDeleteChannelContext);
+    // setstates
+  const setEditChannel = useContext(setShowEditChannelContext);
+  const setExitChannel = useContext(setShowExitChannelContext);
+  const setDeleteChannel = useContext(setShowDeleteChannelContext);
 
   // const [conversation, setConversation] = useState<ConversationIthemProps[]>(
   //   []
@@ -209,15 +225,17 @@ export const Conversations = ({
                 />
                 {/* {isChannel && <CreateChannelButton setShowAddChannel={setShowAddChannel}/>} */}
 
-                { showAddChannel && <EditChannel/> }
-                {/* {showAddChannel && <AddNewChannel
+                {showAddChannel && <AddNewChannel
                         setShowAddChannel={setShowAddChannel}
                         setGoToCreateChannel={setGoToCreateChannel}
                         selectedFriends={selectedFriends}
                         setSelectedFriends={setSelectedFriends}
-                      />
-                }
-                {goToCreateChannel && <CreateChannel selectedFriends={selectedFriends} setChannelCreated={setGoToCreateChannel}/>} */}
+                        />
+                      }
+                    {goToCreateChannel && <CreateChannel selectedFriends={selectedFriends} setChannelCreated={setGoToCreateChannel}/>}
+                    { editChannel && <EditChannel setEditChannel={setEditChannel} /> }
+                    { exitChannel && <AlertMessage onClick={() => setExitChannel(false)}  message={"are you sure you want to exit groupName you can no longer send or see messages in this group"} type={"exit"} /> }
+                    { deletChannel &&<AlertMessage onClick={() => setDeleteChannel(false)}  message={"are you sure you want to delete groupName, all the messages will be lost"} type={"delete"}/>  }
 
                 {/* {children} */}
               {/* </ul> */}

@@ -6,7 +6,7 @@ import passwordParameter from "../../../../../public/passwordParameterIcon.png";
 
 
 
-const EditChannel = () => {
+const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
   // selectedOption need to be intialized with the channel type by fetching it from the backend
@@ -109,7 +109,7 @@ const EditChannel = () => {
       // .catch((error) => {
       //   console.error("Error during fetch:", error);
       // });
-      // setChannelCreated(false);
+      setEditChannel(false);
   }
 
   return (
@@ -158,72 +158,81 @@ const EditChannel = () => {
                     </div>
                   </div>
                 ) : (
-                  <div>
-                    <div className="fixPasswordBg">
-                      <div className="setPassWord relative">
-                        password
-                        <div
-                          onClick={() => {setPassword(false); setAllowTyping(false) }}
-                          className="passwordParameter absolute right-[3%] top-[18%]"
-                          >
-                          <Image src={passwordParameter} alt="password" />
+                    <div>
+                      <div className="fixPasswordBg">
+                        <div className="setPassWord relative">
+                          password
+                          <div
+                            onClick={() => {setPassword(false); setAllowTyping(false) }}
+                            className="passwordParameter absolute right-[3%] top-[18%]"
+                            >
+                            <Image src={passwordParameter} alt="password" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className={`typePassword ${(!allowTyping || selectedOption !== 'protected') ? 'h-[55px]' : 'h-[215px]'}`}>
-                      <div className="flex justify-between">
-                        <p className="requiredPasswordText items-end">
-                          {" "}
-                          required password
-                        </p>
-                        <div className="mt-[15px] mr-[10px]">
-                          <label className="relative inline-flex items-center mb-5 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              value=""
-                              className="sr-only peer"
-                              />
-                            <div
-                              onClick={() => setAllowTyping(!allowTyping)}
-                              className="w-9 h-5 bg-green-200 peer-focus:outline-none
-                                      rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-                                      peer-checked:after:border-[#c2ff86] after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
-                                        after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-[#c2ff86]"
-                                        ></div>
-                          </label>
+                      <div className={`typePassword ${(!allowTyping || selectedOption !== 'protected') ? 'h-[55px]' : 'h-[215px]'}`}>
+                        <div className="flex justify-between">
+                          <p className="requiredPasswordText items-end">
+                            {" "}
+                            required password
+                          </p>
+                          <div className="mt-[15px] mr-[10px]">
+                            <label className="relative inline-flex items-center mb-5 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                value=""
+                                className="sr-only peer"
+                                />
+                              <div
+                                onClick={() => setAllowTyping(!allowTyping)}
+                                className="w-9 h-5 bg-green-200 peer-focus:outline-none
+                                        rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+                                        peer-checked:after:border-[#c2ff86] after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300
+                                          after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-[#c2ff86]"
+                                          ></div>
+                            </label>
+                          </div>
                         </div>
+                        { (allowTyping && selectedOption === 'protected')  && 
+                          <>
+                            <div>
+                              <div>
+                                <p className="password">password</p>
+                              </div>
+                              <input
+                                className="passwordInput pl-[12px]"
+                                type="password"
+                                id="password"
+                                onChange={handlePasswordChange}
+                                />
+                            </div>
+                            <div>
+                              <div>
+                                <p className="password mt-[15px]">confirm password</p>
+                              </div>
+                              <input
+                                className="passwordInput pl-[12px]"
+                                type="password"
+                                id="confirmPassword"
+                                onChange={handleConfirmPasswordChange}
+                                />
+                            </div>
+                          </>
+                        }
                       </div>
-                      { (allowTyping && selectedOption === 'protected')  && 
-                        <>
-                          <div>
-                            <div>
-                              <p className="password">password</p>
-                            </div>
-                            <input
-                              className="passwordInput pl-[12px]"
-                              type="password"
-                              id="password"
-                              onChange={handlePasswordChange}
-                              />
-                          </div>
-                          <div>
-                            <div>
-                              <p className="password mt-[15px]">confirm password</p>
-                            </div>
-                            <input
-                              className="passwordInput pl-[12px]"
-                              type="password"
-                              id="confirmPassword"
-                              onChange={handleConfirmPasswordChange}
-                              />
-                          </div>
-                        </>
-                      }
                     </div>
-                  </div>
                   )
                   )
             }
+            <div className="passWord relative mt-[15px]">
+              Adminsator
+              <div
+                onClick={() => setPassword(true)}
+                className="passwordParameter absolute right-[3%] top-[18%]"
+                >
+                <Image src={passwordParameter} alt="password" />
+              </div>
+              </div>
           </div>
         </div>
         <button onClick={handleCreateButton} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">

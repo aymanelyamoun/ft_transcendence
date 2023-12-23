@@ -21,6 +21,7 @@ export class GameService {
             {
                 if (this.friendRooms[i][1].length == 2)
                 {
+                    console.log('room is full of ' + this.friendRooms[i][1][0]['user'].username + ' and ' + this.friendRooms[i][1][1]['user'].username)
                     playerSocket.emit('redirect', '/', 'You are not allowed to join this room');
                     playerSocket.disconnect(true);
                     return ;

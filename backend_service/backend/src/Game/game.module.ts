@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { GameService } from './game.service';
-import { GameGateway } from './game.gateway';
+// import { GameGateway } from './game.gateway';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGoogleService } from 'src/Auth/auth_google/auth_google.service';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
 import { UserModule } from 'src/profile/user/user.module';
 import { UserService } from 'src/profile/user/user.service';
-import { MatchmakingGateway } from './matchmaking.gateway';
+// import { MatchmakingGateway } from './matchmaking.gateway';
 
 @Module({
   imports: [UserModule],
-  providers: [GameService, GameGateway, MatchmakingGateway, JwtService,  // SessionSerializer,
+  providers: [GameService, JwtService,  // SessionSerializer,
   {
       provide: 'AUTH_SERVICE',
       useClass: AuthGoogleService,

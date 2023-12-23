@@ -63,6 +63,17 @@ export class ChannelController{
         await this.prismaChatService.removeAdminOnChannel(data);
     }
 
+    @Get('/search/all')
+    async getAllChannels(){
+        return await this.prismaChatService.getAllChannels();
+    }
+
+    @Get('/search/:filter')
+    async getChannel(@Param('filter') filter:string){
+        // cons
+        return await this.prismaChatService.getFilteredChannels(filter);
+    }
+
     @Patch('banUser')
     async banUser(@Query()data:ChannelEditDto){
         await this.prismaChatService.banUser(data);

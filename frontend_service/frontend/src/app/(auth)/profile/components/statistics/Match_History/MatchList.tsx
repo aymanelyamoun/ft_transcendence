@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import styles from './Match_History.module.css'
 import { match } from 'assert';
@@ -15,9 +16,13 @@ interface Match {
 
 interface MatchListProps {
   matches: Match[];
+  UserProfileStyling: boolean;
 }
 
-const MatchList: React.FC<MatchListProps> = ({ matches }) => {
+const MatchList: React.FC<MatchListProps> = (props) => {
+
+  const matches = props.matches;
+  const UserProfileStyling = props.UserProfileStyling;
   return (
     <div className={styles['match-list']}>
       <ul>
@@ -31,6 +36,7 @@ const MatchList: React.FC<MatchListProps> = ({ matches }) => {
             player2_score={match.player2_score}
             result={match.result}
             xp={match.xp}
+            UserProfileStyling={UserProfileStyling}
           />
         ))}
       </ul>

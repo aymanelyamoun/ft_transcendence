@@ -1,8 +1,11 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchModal from './SearchModal';
 import { BsSearch } from "react-icons/bs";
 import { Backend_URL } from '@/lib/Constants';
+import { SearchU } from '../interfaces';
 
 
 const SearchInput = styled.input`
@@ -28,7 +31,6 @@ margin-top: 0.5rem;
 padding: 0.8rem;
 border: 1px solid rgba(40, 44, 78, 1);
 background-color: rgba(40, 44, 78, 1);
-cursor: pointer;
 `;
 
 const SearchIcon = styled(BsSearch)`
@@ -41,16 +43,6 @@ cursor: pointer;
 
 // `;
 
-interface SearchU
-{
-    id: number;
-    username: string;
-    profilePic: string;
-    isBlocked: boolean; 
-    group: boolean;
-    groupMembers?: string[];
-}
-
 interface SearchHeaderProps {
     onSearch : (query: string) => void;
     onClose: () => void;
@@ -60,11 +52,14 @@ interface SearchHeaderProps {
 
 const SearchHeader = () => {
     const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
+    const [ChannelFriendSearch, setChannelFriendSearch] = useState<SearchU[]>([]);
     const [query, setQuery] = useState('');
     const [ShowModal, setShowModal] = useState(false);
+    const [isLoading, setisLoading] = useState(false);
     
     const handleSearch = (e: React.FormEvent) => {
         setShowModal(true);
+        setisLoading(true);
         // fetchUsers();
     };
 
@@ -81,7 +76,6 @@ const SearchHeader = () => {
           });
           if (res.ok) {
             const data = await res.json() as SearchU[];
-            console.log(data);
             setSearchUsers(data);
           }else {
             alert("Error fetching data: ");
@@ -89,27 +83,57 @@ const SearchHeader = () => {
           }
         } catch (error) {
           console.error("Error fetching data: ", error);
-        }
+        } finally {
+          setisLoading(false); }
       };
 
+      const fetchChannel = async (channelName: string) => {
+        try {
+          console.log("fetching channel entered");
+          const res = await fetch( Backend_URL+"channels/"+channelName, {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if (res.ok) {
+            const data = await res.json() as SearchU[];
+            console.log("requested search channels : ",data);
+            setChannelFriendSearch(data);
+          }
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally {
+          setisLoading(false);
+        }
+      };
+    
       useEffect(() => {
 
         fetchUsers();
+        fetchChannel('all');
       }, []);
 
     
     return (
         <>
         <SearchHeaderContainer onClick={handleSearch}>
-            <SearchIcon onClick={fetchUsers} />
+            <SearchIcon onClick={fetchUsers}/>
         </SearchHeaderContainer>
-        {ShowModal ? (
-            // <SearchModal onSearch={onSearch} onClose={() => setShowModal(false)} searchUsers={searchUsers}/>
-            <SearchModal onClose={setShowModal} searchUsers={SearchUsers} setSearchUsers={setSearchUsers}/>
-        ) : null}
-        </>
-        // {showModal && <SearchModal onSearch={onSearch} onClose={() => setShowModal(false)} />}
-    );
+        {ShowModal && !isLoading && (
+        <SearchModal
+          onClose={() => setShowModal(false)}
+          searchUsers={SearchUsers}
+          setSearchUsers={setSearchUsers}
+          ChannelFriendSearch={ChannelFriendSearch}       
+          setChannelFriendSearch={setChannelFriendSearch}
+        />
+      )}
+    </>
+  );
 };
 
 export default SearchHeader;

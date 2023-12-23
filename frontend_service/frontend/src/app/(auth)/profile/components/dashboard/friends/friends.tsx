@@ -14,6 +14,7 @@ interface Friend {
   username: string;
   profilePic: string;
   title? : string;
+  status: string;
 }
 
 

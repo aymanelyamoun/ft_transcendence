@@ -116,16 +116,16 @@ export class ChatGateway implements OnGatewayConnection {
       console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
     }
     // else{
-        this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
-        if (this.gatewayService.userIsConnected(socket['user'].id)){
+    this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
+    if (this.gatewayService.userIsConnected(socket['user'].id)){
 
-          if (this.gameService.inGameCheckByID(socket['user'].id))
-            this.server.emit('friendStatus', {userId: socket['user'].id, status: '2'});
-          else
-          this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
-        }
-        else
-          this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
+      if (this.gameService.inGameCheckByID(socket['user'].id))
+        this.server.emit('friendStatus', {userId: socket['user'].id, status: '2'});
+      else
+      this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
+    }
+    else
+      this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
     // }
 
   }

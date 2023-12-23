@@ -16,6 +16,7 @@ import { JoinChannelDto } from "src/chatapp/chat/DTOs/dto";
 import { user } from "src/chatapp/chat/types/user";
 import { ConversationInfo } from "src/chatapp/chat/types/conversation";
 import { ConversationIthemProps, MessageProps } from "types/chatTypes";
+import { channel } from "diagnostics_channel";
 
 @Injectable()
 export class PrismaChatService{
@@ -136,6 +137,44 @@ export class PrismaChatService{
           if (userIsAdmin) {
             await this.prisma.userChannel.delete({where:{userId_channelId:{userId: data.userId2, channelId:data.channelId}}});
           }
+        }
+
+        async getAllChannels(){
+          const channels = await this.prisma.channel.findMany({where:{
+            OR:[
+              {channelType:"public"},
+              {channelType:"protected"},
+            ],
+          }, include:{members:{select:{user:{select:{profilePic:true}}}}, creator:{select:{id:true, }}}});
+          return channels.map((channel)=>{
+            return{
+              ...channel,
+              group:true,
+            }
+          });
+          return channels;
+        }
+
+        async getFilteredChannels(filter:string){
+          const channels = await this.prisma.channel.findMany({where:{
+            AND:[
+              {
+                OR:[
+                  {channelType:"public"},
+                  {channelType:"protected"},
+                ]
+              },
+              {channelName:{startsWith:filter}},
+            ]
+            
+          }, include:{members:{select:{user:{select:{profilePic:true}}}}, creator:{select:{id:true, }}}});
+          return channels.map((channel)=>{
+            return{
+              ...channel,
+              group:true,
+            }
+          });
+          return channels;
         }
 
         // async changeChannel(data:ChangeChannelData){

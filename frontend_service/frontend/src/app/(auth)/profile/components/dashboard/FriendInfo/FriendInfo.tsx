@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
@@ -6,6 +8,9 @@ import { IoPersonRemoveSharp } from "react-icons/io5";
 import { IoGameController } from "react-icons/io5";
 import { BsPersonFillSlash } from "react-icons/bs";
 import { Backend_URL } from '@/lib/Constants';
+import Sidebar from '../sidebar/sidebar';
+import FriendProfile from '../../../FriendProfile/page';
+import Link from 'next/link';
 
 interface FriendInfoProps {
   id: string;
@@ -22,7 +27,7 @@ const InfoName = styled.div`
   color: aliceblue;
   position: relative;
   right: 0.5rem;
-  bottom: 6vh;
+  bottom: 4vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,8 +36,8 @@ const InfoName = styled.div`
 const AddGroupButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 45px;
-  height: 40px;
+  width: 60px;
+  height: 50px;
   cursor: pointer;
   align-items: center;
     background: rgba(154, 155, 211, 0.2);
@@ -47,8 +52,8 @@ const AddGroupButton = styled.button`
 const RemoveFriendButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 45px;
-  height: 40px;
+  width: 60px;
+  height: 50px;
   cursor: pointer;
   align-items: center;
   background: rgba(154, 155, 211, 0.2);
@@ -75,8 +80,8 @@ const ButtonContainer = styled.div`
 const BlockButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 45px;
-  height: 40px;
+  width: 60px;
+  height: 50px;
   cursor: pointer;
   align-items: center;
   background: rgba(154, 155, 211, 0.2);
@@ -90,8 +95,8 @@ const BlockButton = styled.button`
 const GameButton = styled.button`
   border-radius: 0.5rem;
   position: relative;
-  width: 45px;
-  height: 40px;
+  width: 60px;
+  height: 50px;
   cursor: pointer;
   align-items: center;
   background: rgba(154, 155, 211, 0.2);
@@ -103,6 +108,7 @@ const GameButton = styled.button`
 `;
 
 const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref) => {
+
   useEffect(() => {
     console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
 
@@ -156,11 +162,13 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
   return (
   <div className="addChannelOverlay flex justify-center items-center ">
     <div ref={ref} className={styles['info-container']}>
+    <Link href={`/profile/FriendProfile`}>
       <div className={styles['info-picture']}>
         <img src={props.profilePic} alt="" className={styles['info-picture']}/>
       </div>
+      </Link>
       <InfoName>
-        <span >Snouae</span>
+        <span >{props.username}</span>
       </InfoName>
       <ButtonContainer>
         <AddGroupButton>

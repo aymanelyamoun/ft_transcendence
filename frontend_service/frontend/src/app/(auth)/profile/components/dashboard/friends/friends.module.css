@@ -18,8 +18,8 @@
     position: absolute;
     justify-content: space-between;
     box-sizing: border-box;
-    height: 90%;
-    width: 85%;
+    height: 95%;
+    width: 96%;
     border-radius: 10px;
 }
 /* &::-webkit-scrollbar {

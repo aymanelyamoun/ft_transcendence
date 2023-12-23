@@ -1,4 +1,6 @@
-import React, {useEffect, useState} from 'react'
+"use client"
+
+import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import AddFriend from '@/app/(auth)/chat/components/AddFriend';
@@ -6,31 +8,38 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { Backend_URL } from '@/lib/Constants';
 import { CgUnblock } from "react-icons/cg";
 import { BsFillPersonCheckFill } from "react-icons/bs";
+import FriendInfo from '../FriendInfo/FriendInfo';
+import Link from 'next/link';
+import { SearchU } from '../interfaces';
 
-interface SearchU {
-    id: number;
-    username: string;
-    profilePic: string;
-    isBlocked: boolean;
-    group: boolean;
-    groupMembers?: string[];
-  }
+// interface SearchU {
+//     id: string;
+//     username: string;
+//     profilePic: string;
+//     isBlocked: boolean;
+//     group: boolean;
+//     groupMembers?: string[];
+//   }
 
 interface FriendComponentProps {
-    id: number;
-    username: string;
+    id: string;
+    username?: string;
     isBlocked: boolean;
-    profilePic: string;
+    profilePic?: string;
     setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
 const FriendImage = styled.div`
     width: 3.4rem;
     height: 3rem;
+    position: relative;
+    bottom: 0.2rem;
+    right: 0.4rem;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
     border-radius: 50%;
+    pointer: cursor;
 `;
 
 const FriendName = styled.div`
@@ -137,7 +146,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             if(res.ok){
                 const data = await res.json() as SearchU[];
                 props.setSearchUsers(data);
-                console.log(props.isBlocked);
+                // console.log(props.isBlocked);
                 // console.log(data);
             }
         }
@@ -151,11 +160,14 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         fetchIcon();
     }, [props.setSearchUsers]);
 
+    {console.log('pic: ', props.profilePic);}
   return (
     <>
+        <Link href={`/profile/FriendProfile`}>
         <FriendImage>
             <img src={props.profilePic} alt="Profile" className="rounded-full" />
         </FriendImage>
+        </Link>
         <FriendName>
             <span>{props.username}</span>
         </FriendName>

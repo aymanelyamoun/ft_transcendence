@@ -163,6 +163,7 @@ export default function Confirm() {
                          (prev) =>
                            ({
                              username: e.target.value,
+                             hash: prev?.hash || undefined,
                              profilePic: prev?.profilePic || undefined,
                            } as UserData)
                        )

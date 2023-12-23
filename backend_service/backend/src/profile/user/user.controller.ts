@@ -47,7 +47,6 @@ export class UserController {
     }
   }
 
-
   @Get('all')
   @UseGuards(JwtGuard)
   async all(@Req() req: Request, @Res() res: Response)
@@ -80,19 +79,19 @@ export class UserController {
   @UseGuards(JwtGuard)
   async SearchUser(@Param('username') username, @Res() res: Response, @Req() req: Request)
   {
-    console.log('ana wsalt');
     const users = await this.userService.Searchuser(username, req);
     res.status(200).send(users);
   }
 
+  
   @Patch('update/password')
   @UseGuards(JwtGuard)
   async UpdatePass(@Res() res: Response, @Req() req: Request, @Body() dto:UpdatePassDto)
   {
-      const data = await this.userService.updatepass(req, dto);
-      return res.status(200).send(data);
+    const data = await this.userService.updatepass(req, dto);
+    return res.status(200).send(data);
   }
-
+  
   
   @Patch('update/username')
   @UseGuards(JwtGuard)
@@ -109,7 +108,7 @@ export class UserController {
     const data = await this.userService.updateimage(req, body);
     return res.status(200).send(data);
   }
-
+  
   @Get('notifications')
   @UseGuards(JwtGuard)
   async getNotifications(@Req() req: Request, @Res() res: Response)
@@ -117,5 +116,38 @@ export class UserController {
     const user = req['user'] as User;
     const data = await this.userService.getNotifications(user.id);
     return res.status(200).send(data);
+  }
+
+  @Get('profil/:username')
+  @UseGuards(JwtGuard)
+  async profileUser(@Param('username') username, @Res() res:  Response, @Req() req: Request)
+  {
+     const profile = await this.userService.getProfileUser(username);
+     res.status(200).send(profile);
+  }
+
+  @Get('history')
+  @UseGuards(JwtGuard)
+  async history(@Res() res:  Response, @Req() req: Request)
+  {
+     const historyGame = await this.userService.getGames(req);
+     res.status(200).send(historyGame);
+  }
+
+
+  @Get('globalRating')
+  @UseGuards(JwtGuard)
+  async globalRating(@Res() res:  Response, @Req() req: Request)
+  {
+     const profile = await this.userService.getGlobalRating();
+     res.status(200).send(profile);
+  }
+
+  @Get('winsLoses')
+  @UseGuards(JwtGuard)
+  async totalWinsLoses(@Res() res:  Response, @Req() req: Request)
+  {
+    const total = await this.userService.getTotalWinsLoses(req);
+    res.status(200).send(total);
   }
 }

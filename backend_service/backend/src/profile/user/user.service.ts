@@ -2,14 +2,13 @@ import { Body, ConflictException, HttpException, HttpStatus, Injectable, NotFoun
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/user.dto';
 import { ConfirmUserDto } from './dto/confirm.dto';
-// import { Request, Response } from 'express';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
-import { use } from 'passport';
 import { Request, Response, NextFunction } from 'express';
 import { LOG_TYPE, User } from '@prisma/client';
-import { tr } from '@faker-js/faker';
-import { NotFoundError } from 'rxjs';
 import { UpdatePassDto } from './dto/updatepass.dto';
+import { tr } from '@faker-js/faker';
+import { request } from 'http';
+
 
 @Injectable()
 export class UserService {
@@ -445,6 +444,116 @@ If any of them had an id equal to userloged, the condition would not be satisfie
             });
             return notifications;
         } catch (error) {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async getProfileUser(username: string)
+    {
+        try
+        {
+            const profile = await this.prisma.user.findUnique({
+                where : {
+                    username: username,
+                },
+                include: {
+                    gameRecords:{
+                        include: {
+                            oponent : {
+                                select:{
+                                    profilePic : true,
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            return (profile);
+
+        }catch (error)
+        {
+             throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async getGames(@Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userId = user.id;
+            const games = await this.prisma.gameRecord.findMany({
+                where : {userId : userId},
+                // orderBy: {
+                //     createdAt: 'desc', 
+                //   },
+                include : {
+                    oponent : {
+                        select : {
+                            profilePic : true,
+                        }
+                    }
+                }
+            })
+            return games;
+        }
+            catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+    async getGlobalRating()
+    {
+        try
+        {
+            const ranks =  await this.prisma.user.findMany({
+                orderBy : {
+                    totalXp : 'desc'
+                },
+                select : {
+                    username : true,
+                    totalXp : true,
+                    profilePic : true,
+                    title : true,
+                }
+            })
+            return ranks;
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async getTotalWinsLoses(@Req() req : Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const id = user.id;
+            const wins = await this.prisma.gameRecord.count({
+                where : {userId : id,
+                xp: {
+                    gt: 0,
+                  },
+                },
+            })
+            const losses = await this.prisma.gameRecord.count({
+                where : {userId : id,
+                xp: {
+                    lte: 0,
+                    },
+                },
+            })
+            const total =  wins + losses;
+            return { wins, losses, total};
+        }
+        catch (error)
+        {
             throw new UnauthorizedException('Internal server error');
         }
     }

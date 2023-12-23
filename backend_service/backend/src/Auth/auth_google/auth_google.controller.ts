@@ -37,7 +37,7 @@ export class AuthGoogleController
       private readonly jwtService: JwtService,
     ){}
     @Get('google/login')
-     @UseGuards(GoogleAuthGuard)
+    @UseGuards(GoogleAuthGuard)
     handleLogin()
     {
     }

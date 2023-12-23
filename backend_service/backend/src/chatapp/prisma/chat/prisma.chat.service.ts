@@ -155,6 +155,28 @@ export class PrismaChatService{
           return channels;
         }
 
+        async getFilteredChannels(filter:string){
+          const channels = await this.prisma.channel.findMany({where:{
+            AND:[
+              {
+                OR:[
+                  {channelType:"public"},
+                  {channelType:"protected"},
+                ]
+              },
+              {channelName:{startsWith:filter}},
+            ]
+            
+          }, include:{members:{select:{user:{select:{profilePic:true}}}}, creator:{select:{id:true, }}}});
+          return channels.map((channel)=>{
+            return{
+              ...channel,
+              group:true,
+            }
+          });
+          return channels;
+        }
+
         // async changeChannel(data:ChangeChannelData){
         //   const requestedChannel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{creator:true}});
         //   if (!requestedChannel) throw new ForbiddenException("channel does not exits");

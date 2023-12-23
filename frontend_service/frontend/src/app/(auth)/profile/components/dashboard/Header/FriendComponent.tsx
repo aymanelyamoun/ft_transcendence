@@ -10,7 +10,7 @@ import { CgUnblock } from "react-icons/cg";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import FriendInfo from '../FriendInfo/FriendInfo';
 import Link from 'next/link';
-import { SearchU } from '../SearchFriends/SearchFriends';
+import { SearchU } from '../interfaces';
 
 // interface SearchU {
 //     id: string;
@@ -160,6 +160,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         fetchIcon();
     }, [props.setSearchUsers]);
 
+    {console.log('pic: ', props.profilePic);}
   return (
     <>
         <Link href={`/profile/FriendProfile`}>

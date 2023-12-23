@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import SearchModal from './SearchModal';
 import { BsSearch } from "react-icons/bs";
 import { Backend_URL } from '@/lib/Constants';
+import { SearchU } from '../interfaces';
 
 
 const SearchInput = styled.input`
@@ -41,18 +42,6 @@ cursor: pointer;
 // const SearchModal = styled.div`
 
 // `;
-
-interface SearchU
-{
-  id: string;
-  username?: string;
-  channelName?:string;
-  profilePic?: string;
-  channelPic?: string;
-  isBlocked: boolean;
-  group: boolean;
-  Members?: string[];
-}
 
 interface SearchHeaderProps {
     onSearch : (query: string) => void;

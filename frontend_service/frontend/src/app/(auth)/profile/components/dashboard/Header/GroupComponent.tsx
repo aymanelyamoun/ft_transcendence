@@ -4,7 +4,9 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import { MdGroupAdd } from "react-icons/md";
-import { SearchU } from '../SearchFriends/SearchFriends'
+// import { SearchU } from '../SearchFriends/SearchFriends'
+import { SearchU } from '../interfaces';
+import { GroupComponentProps } from '../interfaces';
 
 
 // interface SearchU {
@@ -18,18 +20,7 @@ import { SearchU } from '../SearchFriends/SearchFriends'
 //   Members?: string[];
 // }
 
-interface GroupComponentProps {
-  id: string;
-  channelName?:string;
-  profilePic?: string;
-  channelPic?: string;
-  Members?: {
-        user: {
-                profilePic: string;
-    };
-}[];
-  setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
-}
+
 
 const FriendImage = styled.div`
     width: 3.4rem;
@@ -90,7 +81,7 @@ const GroupPictureItem = styled.div`
 `;
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
-  console.log("members: ",props.Members)
+  // console.log("members: ",props.members)
   return (
     <>
     <FriendImage>
@@ -101,7 +92,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     </FriendName>
     <GroupPictures>
         <GroupPictureItem>
-            {props.Members?.map((member) => (
+            {props.members?.map((member) => (
               console.log("member profile pic: ",member.user.profilePic),
                 <img src={member.user.profilePic} alt="Profile" className="rounded-full" />
             ))}

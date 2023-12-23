@@ -27,6 +27,10 @@ const MoreIconStyle = styled.div`
 
   
   const ContainerStatus = styled.div<{ status: string }>`
+  position: relative;
+  top: 1.4vh;
+  right: 0.7vw;
+  
   ${({ status }) =>
   status === '2' &&
   `

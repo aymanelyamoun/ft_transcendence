@@ -11,6 +11,7 @@ import { Backend_URL } from '@/lib/Constants';
 import SearchHeader from '../Header/SearchHeader';
 import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
+import { SearchU } from '../interfaces';
 
 const SearchContainer = styled.div`
   position: relative;
@@ -24,24 +25,24 @@ const SearchContainer = styled.div`
   margin-left: auto;
 `;
 
-export interface SearchU {
-  creator: {
-      id: string;
-  };
-  members: {
-      user: {
-          profilePic: string;
-      };
-  }[];
+// export interface SearchU {
+//   creator: {
+//       id: string;
+//   };
+//   members: {
+//       user: {
+//           profilePic: string;
+//       };
+//   }[];
 
-  id: string;
-  channelName: string;
-  channelPic: string;
-  creatorId: string;
-  channelType: string;
-  hash: string;
+//   id: string;
+//   channelName: string;
+//   channelPic: string;
+//   creatorId: string;
+//   channelType: string;
+//   hash: string;
 
-}
+// }
 
 interface FriendListProps {
   // setFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
@@ -96,7 +97,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
   const fetchChannel = async (channelName: string) => {
     try {
       console.log("fetching channel entered");
-      const res = await fetch( Backend_URL+"channels/"+channelName, {
+      const res = await fetch( Backend_URL+"channels/search/"+channelName, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -121,8 +122,9 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
     username = username.trim();
     if (username)
     {
+      console.log("searching for : ",username)
       Searchusers('search/'+username);
-      // fetchChannel(username);
+      fetchChannel(username);
     }
       
     else

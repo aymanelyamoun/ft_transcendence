@@ -10,18 +10,8 @@ import { StaticImageData } from 'next/image'
 import ResultItem from './ResultItem';
 import { Backend_URL } from "@/lib/Constants";
 import { on } from "events";
-import { SearchU } from "../SearchFriends/SearchFriends";
-
-// interface SearchU {
-//     id: string;
-//     username?: string;
-//     channelName?:string;
-//     profilePic?: string;
-//     channelPic?: string;
-//     isBlocked: boolean;
-//     group: boolean;
-//     Members?: string[];
-// }
+import { SearchU } from "../interfaces";
+// import { SearchU } from "../SearchFriends/SearchFriends";
 
 interface SearchModalProps {
     searchUsers: SearchU[];
@@ -53,6 +43,7 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
         }
     };
 
+    // console.log("channelFriendSearch ++ : ", ChannelFriendSearch);
     return (
         <>
         <div onClick={handleCancelAddChannel} className=" addChannelOverlay flex justify-center items-center ">
@@ -62,11 +53,13 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
                         {[...friendSearch, ...ChannelFriendSearch].map((friend) => (
                         <ResultItem key={friend.id}
                             id={friend.id}
+                            username={friend.username}
+                            profilePic={friend.profilePic}
                             channelName={friend.channelName}
                             channelPic={friend.channelPic}
                             isBlocked={friend.isBlocked}
                             group={friend.group}
-                            Members={friend.Members}
+                            members={friend.members}
                             setSearchUsers={setSearchUsers}
                             setChannelFriendSearch={setChannelFriendSearch} 
                         />

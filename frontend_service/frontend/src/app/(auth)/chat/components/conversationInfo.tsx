@@ -29,8 +29,8 @@ import { Menu, Transition } from '@headlessui/react'
 import { MdArrowForwardIos } from "react-icons/md";
 import { UserContext } from "../page";
 
-export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
-export const isAdmin = false;
+// export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
+// export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
 // import { CONVERSATION_TYPE } from "../../../../../../backend_service/backend/types/chatTypes";
@@ -43,43 +43,47 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
   const editChannel = useContext(showEditChannelContext);
+  const userInfo = useContext(UserContext);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
     //   return;
     // }
 
-  const handleExitChannel = () => {
-    setExitChannel(true);
-    const channelData = {
-      channelId: conversationProps?.id,
-      userId:conversationProps ,
-      // here i should add the selected friends
-    };
-    useEffect(() => {
-      const fetchFun = async () => {
-        await fetch(
-          `http://localhost:3001/api/channels/leaveChannel`,
-          {
-            method: "PAtCH",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            console.log(data);
-          });
-      };
-      fetchFun();
-    }), [editChannel];
+  // const handleExitChannel = () => {
+  //   setExitChannel(true);
+  //   const channelData = {
+  //     channelId: conversationProps.channelId,
+  //     userId:  userInfo?.id,
+  //     // here i should add the selected friends
+  //   };
+  //     const fetchFun = async () => {
+  //       await fetch(
+  //         `http://localhost:3001/api/channels/leaveChannel`,
+  //         {
+  //           method: "PATCH",
+  //           mode: "cors",
+  //           credentials: "include",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             "Access-Control-Allow-Origin": "*",
+  //           },
+  //           body: JSON.stringify(channelData),
+  //         }
+  //       )
+  //       .then((res) => {
+  //         if (!res.ok) {
+  //           throw new Error("Network response was not ok");
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error during fetch:", error);
+  //       });
+  //     };
+  //     fetchFun();
     
     
     
-  }
+  // }
 
 
   return (
@@ -517,6 +521,8 @@ export const ChatPage = () => {
   console.log("conversationId:", conversation?.id);
   useEffect(() => {
     const fetchFun = async () => {
+      const isAdmin = true; // Replace true with your desired value
+
       await fetch(
         `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userInfo.id}&isAdmin=${isAdmin}`,
         {
@@ -531,7 +537,7 @@ export const ChatPage = () => {
           return res.json();
           // const data: Conversation[];
         })
-        .then((data:ConversationIthemProps[]) => {
+        .then((data: ConversationIthemProps[]) => {
           setConversationList(data.sort((a, b) => {
             const bDate = new Date(b.updatedAt);
             const aDate = new Date(a.updatedAt);

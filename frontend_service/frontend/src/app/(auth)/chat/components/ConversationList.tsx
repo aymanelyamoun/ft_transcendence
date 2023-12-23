@@ -18,6 +18,7 @@ import {
   ConversationListContext,
   CostumeButton,
   LstConversationSetStateContext,
+  LstConversationStateContext,
   setShowDeleteChannelContext,
   setShowEditChannelContext,
   setShowExitChannelContext,
@@ -35,7 +36,7 @@ import { FaRunning } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import CreateChannelButton from "./CreateChannelButton";
 import AddNewChannel from "./AddNewChannel";
-import { Friend} from "../page";
+import { Friend, UserContext} from "../page";
 import EditChannel from "./EditChannel";
 import { AlertMessage } from "./alertMessage";
 
@@ -158,11 +159,15 @@ export const Conversations = ({
   const editChannel = useContext(showEditChannelContext);
   const exitChannel = useContext(showExitChannelContext);
   const deleteChannel = useContext(showDeleteChannelContext);
+
+  const userInfo = useContext(UserContext);
+
     // setstates
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
-
+  
+  const conversationProps = useContext(LstConversationStateContext);
 
   // const [conversation, setConversation] = useState<ConversationIthemProps[]>(
   //   []
@@ -200,6 +205,42 @@ export const Conversations = ({
   const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
   // const [showCreateChannel, setShowCreateChannel] = useState<boolean>(false);
 
+  console.log("conversationProps.channelId: ----------", conversationProps?.channelId);
+  console.log("userInfo?.id: ----------", userInfo?.id);
+  const handleExitChannel = () => {
+    // const channelData = {
+    //   channelId: conversationProps.channelId,
+    //   userId:  userInfo?.id,
+    // };
+      const fetchFun = async () => {
+        await fetch(
+          `http://localhost:3001/api/channels/leaveChannel?channelId=${conversationProps?.channelId}&userId=${userInfo?.id}`,
+          {
+            method: "PATCH",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            // body: JSON.stringify(channelData),
+          }
+        )
+        .then((res) => {
+          console.log("res: ", res);
+          if (!res.ok) {
+            throw new Error("Network response was not ok");
+          }
+          setExitChannel(false);
+        })
+        .catch((error) => {
+          console.error("Error during fetch:", error);
+        });
+      };
+      fetchFun();
+    };
+    
+
   console.log("goToCreateChannel", goToCreateChannel);
 
   return (
@@ -235,7 +276,7 @@ export const Conversations = ({
                       }
                     {goToCreateChannel && <CreateChannel selectedFriends={selectedFriends} setChannelCreated={setGoToCreateChannel}/>}
                     { editChannel && <EditChannel setEditChannel={setEditChannel} /> }
-                    { exitChannel && <AlertMessage onClick={() => setExitChannel(false)}  message={"are you sure you want to exit groupName you can no longer send or see messages in this group"} type={"exit"} /> }
+                    { exitChannel && <AlertMessage onClick={handleExitChannel}  message={"are you sure you want to exit groupName you can no longer send or see messages in this group"} type={"exit"} /> }
                     { deleteChannel &&<AlertMessage onClick={() => setDeleteChannel(false)}  message={"are you sure you want to delete groupName, all the messages will be lost"} type={"delete"}/>  }
 
                 {/* {children} */}

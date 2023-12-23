@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import FriendComponent from './FriendComponent'
 import GroupComponent from './GroupComponent'
-
+import { SearchU } from '../SearchFriends/SearchFriends'
 
 // interface SearchU {
 //   id: number;
@@ -14,23 +14,39 @@ import GroupComponent from './GroupComponent'
 //   group: boolean;
 //   groupMembers?: StaticImageData[];
 // }
-interface SearchU {
-  id: number;
-  username: string;
-  profilePic: string;
-  isBlocked: boolean;
-  group: boolean;
-  groupMembers?: string[];
-}
+// interface SearchU {
+//   id: string;
+//   channelName?:string;
+//   username?: string;
+//   profilePic?: string;
+//   channelPic?: string;
+//   isBlocked: boolean;
+//   group: boolean;
+//   Members?: string[];
+// }
 
 interface ResultItemProps {
-    id: number;
-    username: string;
-    profilePic: string;
-    isBlocked: boolean;
-    group: boolean;
-    groupMembers?: string[];
-    setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
+  creator: {
+    id: string;
+  };
+  members: {
+    user: {
+      profilePic: string;
+    };
+  }[];
+  
+  id: string;
+  username?: string;
+  profilePic?: string;
+  channelName: string;
+  channelPic: string;
+  creatorId: string;
+  channelType: string;
+  hash: string;
+  isBlocked: boolean;
+  group: boolean;
+  setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
+  setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
   }
 
   const ItemContainer = styled.div`
@@ -51,7 +67,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
   return (
     <ItemContainer>
       {props.group ? (
-        <GroupComponent id={props.id} username={props.username} profilePic={props.profilePic} groupMembers={props.groupMembers}/>
+        <GroupComponent id={props.id} channelName={props.channelName} channelPic={props.channelPic} Members={props.members} setChannelFriendSearch={props.setChannelFriendSearch}/>
       ) : (
         <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked} setSearchUsers={props.setSearchUsers}/>
       )}

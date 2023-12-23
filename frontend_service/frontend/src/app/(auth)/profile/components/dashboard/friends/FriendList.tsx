@@ -72,9 +72,29 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
 
   }, [setFriendsList]);
 
+  // console
   useEffect(() => {
-    socket.on("friend");
+    socket.on("friendStatus", (data: any) => {
+      console.log("Friend status changed");
+      // console.log(data);
+      // FriendsList.forEach((friend) => {
+      //   if (friend.id === data.id) {
+      //     friend.status = data.status;
+      //   }
+      // });
+      // console.log("setting friends list");
+      setFriendsList((prev) => {
+        return prev.map((friend) => {
+          if (friend.id === data.userId) {
+            friend.status = data.status;
+          }
+          return friend;
+        });
+      });
+    });
   });
+
+  console.log("friend list: ", FriendsList);
 
 
   return (

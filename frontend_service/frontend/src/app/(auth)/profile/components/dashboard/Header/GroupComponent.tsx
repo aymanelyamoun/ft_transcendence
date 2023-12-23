@@ -4,12 +4,31 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import { MdGroupAdd } from "react-icons/md";
+import { SearchU } from '../SearchFriends/SearchFriends'
+
+
+// interface SearchU {
+//   id: string;
+//   username?: string;
+//   channelName?:string;
+//   profilePic?: string;
+//   channelPic?: string;
+//   isBlocked: boolean;
+//   group: boolean;
+//   Members?: string[];
+// }
 
 interface GroupComponentProps {
-    id: number;
-    username: string;
-    profilePic: string;
-    groupMembers?: string[];
+  id: string;
+  channelName?:string;
+  profilePic?: string;
+  channelPic?: string;
+  Members?: {
+        user: {
+                profilePic: string;
+    };
+}[];
+  setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
 const FriendImage = styled.div`
@@ -71,18 +90,20 @@ const GroupPictureItem = styled.div`
 `;
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
+  console.log("members: ",props.Members)
   return (
     <>
     <FriendImage>
-    <img src={props.profilePic} alt="Profile" className="rounded-full" />
+    <img src={props.channelPic} alt="Profile" className="rounded-full" />
     </FriendImage>
     <FriendName>
-            <span>{props.username}</span>
+            <span>{props.channelName}</span>
     </FriendName>
     <GroupPictures>
         <GroupPictureItem>
-            {props.groupMembers?.map((member) => (
-                <img src={member} alt="Profile" className="rounded-full" />
+            {props.Members?.map((member) => (
+              console.log("member profile pic: ",member.user.profilePic),
+                <img src={member.user.profilePic} alt="Profile" className="rounded-full" />
             ))}
         </GroupPictureItem>
       </GroupPictures>

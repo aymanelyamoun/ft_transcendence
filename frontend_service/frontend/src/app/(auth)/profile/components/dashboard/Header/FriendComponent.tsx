@@ -10,21 +10,22 @@ import { CgUnblock } from "react-icons/cg";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import FriendInfo from '../FriendInfo/FriendInfo';
 import Link from 'next/link';
+import { SearchU } from '../SearchFriends/SearchFriends';
 
-interface SearchU {
-    id: string;
-    username: string;
-    profilePic: string;
-    isBlocked: boolean;
-    group: boolean;
-    groupMembers?: string[];
-  }
+// interface SearchU {
+//     id: string;
+//     username: string;
+//     profilePic: string;
+//     isBlocked: boolean;
+//     group: boolean;
+//     groupMembers?: string[];
+//   }
 
 interface FriendComponentProps {
     id: string;
-    username: string;
+    username?: string;
     isBlocked: boolean;
-    profilePic: string;
+    profilePic?: string;
     setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
@@ -145,7 +146,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             if(res.ok){
                 const data = await res.json() as SearchU[];
                 props.setSearchUsers(data);
-                console.log(props.isBlocked);
+                // console.log(props.isBlocked);
                 // console.log(data);
             }
         }

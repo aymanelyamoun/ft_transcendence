@@ -37,20 +37,19 @@ export class AuthGoogleController
       private readonly jwtService: JwtService,
     ){}
     @Get('google/login')
-    @UseGuards(GoogleAuthGuard)
+    @UseGuards(AuthGuard('google'))
     handleLogin()
     {
     }
 
     @Get('google/redirect')
-    @UseGuards(GoogleAuthGuard)
+    @UseGuards(AuthGuard('google'))
     async handleRedirect(@Req() req: Request, @Res() res: Response)
     {
       (req.user as any).isConfirmed2Fa = false;
       // console.log(req.user);
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
-      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly : false });
       const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
       if (user.isTwoFactorEnabled)
         return res.redirect('http://localhost:3000/confirmauth')
@@ -61,22 +60,19 @@ export class AuthGoogleController
     }
     
     @Get('42/login')
-    @UseGuards(IntraAuthGuard)
+    @UseGuards(AuthGuard('42'))
     handleLogin42()
     {
-      
-      return {msg: "42 Login"}
     }
     
     @Get('google/redirect42')
-    @UseGuards(IntraAuthGuard)
+    @UseGuards(AuthGuard('42'))
     async handleRedirect42(@Req() req: Request, @Res() res: Response)
     {
       try{
       (req.user as any).isConfirmed2Fa = false;
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
-      res.cookie('refresh_token', jwtResult.backendTokens.refreshToken, { httpOnly : false });
       const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
       if (user.isTwoFactorEnabled)
         return res.redirect('http://localhost:3000/confirmauth')
@@ -114,7 +110,7 @@ async check(@Req() req: Request, @Res() res: Response)
 @UseGuards(JwtGuard)
 async logout(@Req() req: Request, @Res() res: Response)
 {
-  res.cookie('access_token', '', {expires: new Date()})
+
   res.clearCookie('access_token');
   res.status(200).json({ message: 'Logout successful' });
 }
@@ -242,7 +238,6 @@ async logout(@Req() req: Request, @Res() res: Response)
       // {
         const data = await this.authGoogleService.login(dto);
         res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
-        res.cookie('refresh_token', data.backendTokens.backendTokens.refreshToken, { httpOnly : false });
         return res.status(200).send(data); 
         //res.json(data.user);
       // }

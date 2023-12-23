@@ -195,9 +195,14 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async confirm(email: string, dto: ConfirmUserDto)
     {
+        console.log(dto.confirmPass);
+        console.log(dto.hash);
+        if (dto.confirmPass !== dto.hash)
+            throw new UnauthorizedException('the password and the confirm password are not the same');
         const existingUser = await this.prisma.user.findUnique({
-        where: { username: dto.username },
+             where: { username: dto.username },
         });
+        delete dto.confirmPass;
         if (existingUser && existingUser.email !== email) {
             throw new ConflictException(`Username ${dto.username} already exists`);
         }

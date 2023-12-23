@@ -1,5 +1,6 @@
-// Sidebar.tsx
-import React from 'react';
+"use client"
+
+import React, { useEffect } from 'react';
 import styles from './sidebar.module.css'; // Update the import if needed
 declare module '@iconscout/react-unicons';
 import picture from '../../../imgs/aoumad.jpeg';
@@ -14,10 +15,12 @@ interface SidebarInfo {
   profilePic: string;
   title: string;
   wallet: number;
+  // ShowSettings: boolean,
 }
 
 interface SidebarProps {
   sidebar: SidebarInfo;
+  ShowSettings: boolean;
   // onSidebarItemClick: (id: string) => void;
 }
 
@@ -144,6 +147,11 @@ const WalletValue = styled.span`
 `;
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
+
+  const { ShowSettings } = props; // Destructure the props object to get the ShowSettings property
+  useEffect (() => {
+    console.log(ShowSettings);
+  },[]);
   return (
         <SidebarRoot>
         <SidebarContainer>
@@ -160,7 +168,8 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             <WalletIcon />
             <WalletValue>{props.sidebar.wallet}</WalletValue>
         </Wallet>
-        <Settings />
+        {ShowSettings ? <Settings /> : null}
+        {/* <Settings /> */}
         </SidebarContainer>
     </SidebarRoot>
   );

@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import styles from "./skins.module.css"; // Update the import if needed
 

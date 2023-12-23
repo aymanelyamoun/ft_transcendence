@@ -7,9 +7,9 @@ export class userDataDto {
     userId: string;
 
     // @IsBoolean()
-    @IsString()
-    @IsNotEmpty()
-    isAdmin: string = "false";
+    // @IsString()
+    // @IsNotEmpty()
+    // isAdmin: string = "false";
 
 }
 
@@ -40,7 +40,7 @@ export class CreateChannelDto{
     @IsString()
     channelPic:string;
     
-    @IsNotEmpty()
+    // @IsNotEmpty()
     @IsString()
     password?: string;
 
@@ -51,9 +51,9 @@ export class CreateChannelDto{
     @IsNotEmpty()
     admines?: string[]
 
-    @IsNotEmpty()
-    @IsString()
-    creator: string
+    // @IsNotEmpty()
+    // @IsString()
+    // creator: string
 
 
     @IsNotEmpty()
@@ -77,9 +77,9 @@ export class ChangeChannelDataDto{
     @IsString()
     channelId: string;
     
-    @IsNotEmpty()
-    @IsString()
-    userId: string
+    // @IsNotEmpty()
+    // @IsString()
+    // userId: string
 
     removeAdmins?: user[];
     addAdmins?: user[];
@@ -94,9 +94,9 @@ export class JoinChannelDto{
     @IsString()
     password?: string;
 
-    @IsNotEmpty()
-    @IsString()
-    userId:string;
+    // @IsNotEmpty()
+    // @IsString()
+    // userId:string;
 }
 
 // export class channelDeleteDto{
@@ -128,23 +128,18 @@ export class ChannelEditDto{
     @IsString()
     channelId:string;
 
-    @IsNotEmpty()
-    @IsString()
-    userId:string;
-
-    @IsNotEmpty()
     @IsString()
     userId2?:string;
 }
 
 export class ConversationInfoDto{
     @IsNotEmpty()
-    @IsNumber()
+    @IsString()
     conversationId:string;
 
-    @IsNotEmpty()
-    @IsString()
-    userId:string;
+    // @IsNotEmpty()
+    // @IsString()
+    // userId:string;
 
 }
 

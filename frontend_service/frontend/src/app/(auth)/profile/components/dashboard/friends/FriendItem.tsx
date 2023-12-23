@@ -1,14 +1,18 @@
+"use client"
+
 import React from 'react';
 import styles from './friends.module.css';
 import MoreIcon from './more_icon';
 import styled from 'styled-components';
+import { FaGamepad } from "react-icons/fa6";
+import { BsCircleFill } from "react-icons/bs";
 
 interface Friend {
   id: string;
   username: string;
   profilePic: string;
   title? : string;
-  online: boolean;
+  status: string;
 }
 
 interface FriendItemProps {
@@ -21,28 +25,82 @@ const MoreIconStyle = styled.div`
   margin-righ: auto;
   `;
 
-  const OnlineStatus = styled.div`
+  
+  const ContainerStatus = styled.div<{ status: string }>`
+  position: relative;
+  top: 1.4vh;
+  right: 0.7vw;
+  
+  ${({ status }) =>
+  status === '2' &&
+  `
+    svg {
+      color: green;
+    }
+  `}
+
+${({ status }) =>
+  status === '0' &&
+  `
+    svg {
+      color: grey;
+    }
+  `}
+
+${({ status }) =>
+  status === '1' &&
+  `
+    svg {
+      color: green;
+    }
+  `}
+  `;
+  
+  const IconContainer = styled.div<{ status: string }>`
   border-radius: 20px;
   width: 15px;
   height: 15px;
-  position: absolute;
-  background-color: #ccc;
-  // background-color: #4CAF50;
+  // position: absolute;
+   
+  ${({ status }) =>
+    status === '2' &&
+    `
+      svg {
+        color: green;
+      }
+    `}
 
-  ${friend => friend.online && `
-    /* Green color if online is true */
-    background-color: #4CAF50;
-  `}
+  ${({ status }) =>
+    status === '0' &&
+    `
+      svg {
+        color: grey;
+      }
+    `}
+
+  ${({ status }) =>
+    status === '1' &&
+    `
+      svg {
+        color: green;
+      }
+    `}
 `;
 
-const FriendItem: React.FC<FriendItemProps> = ({friend, onFriendItemClick}) => {
+  const FriendItem: React.FC<FriendItemProps> = ({friend, onFriendItemClick}) => {
+    
+  // const IconContainer = friend.status === "2" ? <FaGamepad color="green" /> : (friend.status === "0" ? <BsCircleFill color="grey"/> : <BsCircleFill color="green"/>);
+
+  const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);
   return (
     <div className={styles['friendItem-container']}
     >
       <div className={styles['friend-image']}>
         <img src={friend.profilePic} alt="Profile" className="rounded-full" />
-        <OnlineStatus online={friend.online}></OnlineStatus>
       </div>
+      <ContainerStatus status={friend.status}>
+      <IconContainer status={friend.status}></IconContainer>
+      </ContainerStatus>
       <div className={styles['friend-name']}>
         <span className={styles['friend-name']}>{friend.username}</span>
       </div>

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { Suspense } from 'react'
 import styles from './friends.module.css'
 import FriendItem from './FriendItem';
@@ -5,13 +7,14 @@ import { useState, useEffect } from 'react';
 import { Backend_URL } from '@/lib/Constants';
 import { FaUserAstronaut } from "react-icons/fa6";
 import styled from 'styled-components';
+import { SocketUseContext } from "../../../dashboard/page";
 
 interface Friend {
   id: string;
   username: string;
   profilePic: string;
   title? : string;
-  online: boolean;
+  status: string;
 }
 
   interface FriendsProps {
@@ -42,6 +45,7 @@ const NoFriendsIcon = styled.div`
 
 const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   const [FriendsList, setFriendsList] = useState<Friend[]>([]);
+  const socket = React.useContext(SocketUseContext);
 
   useEffect(() => {
     const fetchFriendsListData = async () => {
@@ -67,6 +71,31 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
     fetchFriendsListData();
 
   }, [setFriendsList]);
+
+  // console
+  useEffect(() => {
+    socket.on("friendStatus", (data: any) => {
+      console.log("Friend status changed");
+      // console.log(data);
+      // FriendsList.forEach((friend) => {
+      //   if (friend.id === data.id) {
+      //     friend.status = data.status;
+      //   }
+      // });
+      // console.log("setting friends list");
+      setFriendsList((prev) => {
+        return prev.map((friend) => {
+          if (friend.id === data.userId) {
+            friend.status = data.status;
+          }
+          return friend;
+        });
+      });
+    });
+  });
+
+  console.log("friend list: ", FriendsList);
+
 
   return (
     <div className={styles['friends-list']}>

@@ -4,11 +4,13 @@ import React, { useEffect, useState, ReactNode} from 'react';
 import Sidebar from '../components/dashboard/sidebar/sidebar';
 import Skins from '../components/dashboard/skins/skins';
 import Friends from '../components/dashboard/friends/friends';
-import Achievement from '../components/dashboard/achievements/achievement';
 import Statistics from '../components/dashboard/statistics/statistics';
 import { Backend_URL } from '@/lib/Constants';
 import SearchHeader from '../components/dashboard/Header/SearchHeader';
 import styled from 'styled-components';
+import Animation from '../components/dashboard/Animation/Animation';
+
+import { socket } from "../../../../socket"
 
 
 
@@ -35,7 +37,7 @@ const AppGlass = styled.div`
   overflow: hidden;
   grid-column-start: 1;
   grid-column-end: 5;
-  grid-template-columns: 2rem 30rem auto 40rem 2rem;
+  grid-template-columns: 2rem 30rem auto 35rem 2rem;
   grid-template-rows: repeat(3, 1fr);
   z-index: auto;
 
@@ -44,6 +46,8 @@ const AppGlass = styled.div`
     grid-template-rows: repeat(4, 1fr);
   }
 `;
+
+export const SocketUseContext = React.createContext(socket);
 
 
 function App() {
@@ -56,7 +60,12 @@ function App() {
     wallet: 0,
   });
 
- 
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+  }, []);
   
   // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
   // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
@@ -94,16 +103,19 @@ function App() {
   return (
     <>
       <div className="App">
-        <SearchDiv >
-          <SearchHeader />
-        </SearchDiv>
-        <AppGlass>
-          <Sidebar sidebar={SidebarInfo} />
-          <Skins />
-          <Statistics />
-          <Friends
-          />
-        </AppGlass>
+        <SocketUseContext.Provider value={socket}>
+          <SearchDiv >
+            <SearchHeader />
+          </SearchDiv>
+          <AppGlass>
+            <Sidebar sidebar={SidebarInfo} ShowSettings={true}/>
+            <Skins />
+            <Animation />
+            <Statistics />
+            <Friends
+            />
+          </AppGlass>
+        </SocketUseContext.Provider>
       </div>
     </>
   );

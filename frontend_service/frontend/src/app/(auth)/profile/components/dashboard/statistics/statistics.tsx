@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import StatisticsChart from '../StatisticsChart/StatisticsChart';
 import StatisticsPie from '../StatisticsPie/StatisticsPie';

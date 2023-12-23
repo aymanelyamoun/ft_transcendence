@@ -19,4 +19,4 @@ nodes:
 	npm install --prefix frontend_service/frontend
 	npm install --prefix backend_service/backend
 
-rebuild: clear build up
+rebuild: down clear up nodes

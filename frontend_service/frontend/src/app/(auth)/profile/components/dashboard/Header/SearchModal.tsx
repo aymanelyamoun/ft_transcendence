@@ -1,6 +1,5 @@
-// import AddChannelSearchBar from '@/app/chat/components/AddChannelSearchBar';
-// import AddChannelSearchBar from "../../../../../app/chat/components/AddChannelSearchBar";
-// import AddChannelSearchBar from "@/app/chat/components/AddChannelSearchBar";
+"use client"
+
 import SearchFriends from "../SearchFriends/SearchFriends";
 import React, {useState, useRef, useEffect } from 'react'
 import styled from 'styled-components';
@@ -11,19 +10,14 @@ import { StaticImageData } from 'next/image'
 import ResultItem from './ResultItem';
 import { Backend_URL } from "@/lib/Constants";
 import { on } from "events";
-
-interface SearchU {
-  id: number;
-  username: string;
-  profilePic: string;
-  isBlocked: boolean;
-  group: boolean;
-  groupMembers?: string[];
-}
+import { SearchU } from "../interfaces";
+// import { SearchU } from "../SearchFriends/SearchFriends";
 
 interface SearchModalProps {
     searchUsers: SearchU[];
     setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
+    setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
+    ChannelFriendSearch: SearchU[];
     onClose: (isOpen: boolean) => void;
 }
 
@@ -38,11 +32,10 @@ interface SearchModalProps {
   overflow-y: auto; // Scroll if needed
 `;
 
-const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers}) => {
+const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers, ChannelFriendSearch, setChannelFriendSearch}) => {
     const [friendSearch, setFriendSearch] = useState<SearchU[]>(searchUsers);
     const cancelAddChannel = useRef<HTMLDivElement>(null);
     const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
-    const [ChannelFriendSearch, setChannelFriendSearch] = useState<SearchU[]>(searchUsers);
 
     const handleCancelAddChannel = (event: any) => {
         if (cancelAddChannel.current && !cancelAddChannel.current.contains(event.target)) {
@@ -50,21 +43,25 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
         }
     };
 
+    // console.log("channelFriendSearch ++ : ", ChannelFriendSearch);
     return (
         <>
         <div onClick={handleCancelAddChannel} className=" addChannelOverlay flex justify-center items-center ">
             <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModaloumad flex justify-between rounded-[10px] ">
                 <ResultList>
                         <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch}/>
-                        {friendSearch.map((friend) => (
+                        {[...friendSearch, ...ChannelFriendSearch].map((friend) => (
                         <ResultItem key={friend.id}
                             id={friend.id}
                             username={friend.username}
                             profilePic={friend.profilePic}
+                            channelName={friend.channelName}
+                            channelPic={friend.channelPic}
                             isBlocked={friend.isBlocked}
                             group={friend.group}
-                            groupMembers={friend.groupMembers}
-                            setSearchUsers={setSearchUsers}    
+                            members={friend.members}
+                            setSearchUsers={setSearchUsers}
+                            setChannelFriendSearch={setChannelFriendSearch} 
                         />
                         ))}
                   </ResultList>

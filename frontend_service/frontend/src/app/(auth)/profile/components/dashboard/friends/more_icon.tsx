@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import { IoMdMore } from 'react-icons/io';
 import styles from './friends.module.css';

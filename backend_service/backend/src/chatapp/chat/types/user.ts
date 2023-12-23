@@ -1,6 +1,6 @@
 export type user = {
     userId: string,
-    isAdmin: Boolean,
+    // isAdmin: Boolean,
 }
 
 export type member = {

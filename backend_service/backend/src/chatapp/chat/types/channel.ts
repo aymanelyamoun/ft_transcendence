@@ -6,7 +6,7 @@ export type ChannelData = {
     password?: string;
     type: string;
     admines?: string[];
-    creator: string;
+    // creator: string;
     members?: user[];
 }
 
@@ -15,7 +15,7 @@ export type ChangeChannelData = {
     password?: string;
     type: string;
     channelId: string;
-    userId: string
+    // userId: string
     removeAdmins?: user[];
     addAdmins?: user[];
 }
@@ -23,7 +23,7 @@ export type ChangeChannelData = {
 export type JoinChannel = {
     channelId: string,
     password?: string,
-    userId:string,
+    // userId:string,
 }
 
 // export type DeleteChannel = {
@@ -40,6 +40,6 @@ export type JoinChannel = {
 
 export type ChannelEdit = {
     channelId:string,
-    userId:string,
+    // userId:string,
     userId2?:string,
 }

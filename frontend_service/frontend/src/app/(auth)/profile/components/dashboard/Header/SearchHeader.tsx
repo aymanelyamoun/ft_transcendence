@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import SearchModal from './SearchModal';
 import { BsSearch } from "react-icons/bs";
 import { Backend_URL } from '@/lib/Constants';
+import { SearchU } from '../interfaces';
 
 
 const SearchInput = styled.input`
@@ -42,16 +43,6 @@ cursor: pointer;
 
 // `;
 
-interface SearchU
-{
-    id: number;
-    username: string;
-    profilePic: string;
-    isBlocked: boolean; 
-    group: boolean;
-    groupMembers?: string[];
-}
-
 interface SearchHeaderProps {
     onSearch : (query: string) => void;
     onClose: () => void;
@@ -61,6 +52,7 @@ interface SearchHeaderProps {
 
 const SearchHeader = () => {
     const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
+    const [ChannelFriendSearch, setChannelFriendSearch] = useState<SearchU[]>([]);
     const [query, setQuery] = useState('');
     const [ShowModal, setShowModal] = useState(false);
     const [isLoading, setisLoading] = useState(false);
@@ -95,9 +87,34 @@ const SearchHeader = () => {
           setisLoading(false); }
       };
 
+      const fetchChannel = async (channelName: string) => {
+        try {
+          console.log("fetching channel entered");
+          const res = await fetch( Backend_URL+"channels/"+channelName, {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if (res.ok) {
+            const data = await res.json() as SearchU[];
+            console.log("requested search channels : ",data);
+            setChannelFriendSearch(data);
+          }
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally {
+          setisLoading(false);
+        }
+      };
+    
       useEffect(() => {
 
         fetchUsers();
+        fetchChannel('all');
       }, []);
 
     
@@ -111,6 +128,8 @@ const SearchHeader = () => {
           onClose={() => setShowModal(false)}
           searchUsers={SearchUsers}
           setSearchUsers={setSearchUsers}
+          ChannelFriendSearch={ChannelFriendSearch}       
+          setChannelFriendSearch={setChannelFriendSearch}
         />
       )}
     </>

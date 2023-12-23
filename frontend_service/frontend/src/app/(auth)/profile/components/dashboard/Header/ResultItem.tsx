@@ -5,7 +5,9 @@ import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import FriendComponent from './FriendComponent'
 import GroupComponent from './GroupComponent'
-
+import { SearchU } from '../interfaces'
+import { ResultItemProps } from '../interfaces'
+// import { SearchU } from '../SearchFriends/SearchFriends'
 
 // interface SearchU {
 //   id: number;
@@ -14,24 +16,18 @@ import GroupComponent from './GroupComponent'
 //   group: boolean;
 //   groupMembers?: StaticImageData[];
 // }
-interface SearchU {
-  id: number;
-  username: string;
-  profilePic: string;
-  isBlocked: boolean;
-  group: boolean;
-  groupMembers?: string[];
-}
+// interface SearchU {
+//   id: string;
+//   channelName?:string;
+//   username?: string;
+//   profilePic?: string;
+//   channelPic?: string;
+//   isBlocked: boolean;
+//   group: boolean;
+//   Members?: string[];
+// }
 
-interface ResultItemProps {
-    id: number;
-    username: string;
-    profilePic: string;
-    isBlocked: boolean;
-    group: boolean;
-    groupMembers?: string[];
-    setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
-  }
+
 
   const ItemContainer = styled.div`
   background: rgba(154, 155, 211, 0.2);
@@ -48,10 +44,12 @@ interface ResultItemProps {
     `;
 
 const ResultItem: React.FC<ResultItemProps> = (props) => {
+  // console.log("members", props.members);
+
   return (
     <ItemContainer>
       {props.group ? (
-        <GroupComponent id={props.id} username={props.username} profilePic={props.profilePic} groupMembers={props.groupMembers}/>
+        <GroupComponent id={props.id} channelName={props.channelName} channelPic={props.channelPic} members={props.members} setChannelFriendSearch={props.setChannelFriendSearch}/>
       ) : (
         <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked} setSearchUsers={props.setSearchUsers}/>
       )}

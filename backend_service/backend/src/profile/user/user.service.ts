@@ -226,7 +226,11 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
             if (!user)
                 throw new Error('User not found');
-            return user.friends;
+            return user.friends.map((friend) => ({
+                ...friend,
+                status:"0",
+            }));
+            // return user.friends;
         }
         catch (error)
         {

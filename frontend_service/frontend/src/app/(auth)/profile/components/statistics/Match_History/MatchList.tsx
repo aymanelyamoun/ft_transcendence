@@ -36,7 +36,7 @@ const MatchList: React.FC<MatchListProps> = (props) => {
             player2_score={match.player2_score}
             result={match.result}
             xp={match.xp}
-            UserProfileStyling={true}
+            UserProfileStyling={UserProfileStyling}
           />
         ))}
       </ul>

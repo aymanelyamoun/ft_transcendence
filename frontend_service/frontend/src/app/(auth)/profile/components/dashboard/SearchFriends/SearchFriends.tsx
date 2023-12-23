@@ -10,6 +10,8 @@ import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
 import SearchHeader from '../Header/SearchHeader';
 import ResultItem from '../Header/ResultItem';
+import { channel } from 'diagnostics_channel';
+import { SearchU } from '../interfaces';
 
 const SearchContainer = styled.div`
   position: relative;
@@ -23,6 +25,24 @@ const SearchContainer = styled.div`
   margin-left: auto;
 `;
 
+// export interface SearchU {
+//   creator: {
+//       id: string;
+//   };
+//   members: {
+//       user: {
+//           profilePic: string;
+//       };
+//   }[];
+
+//   id: string;
+//   channelName: string;
+//   channelPic: string;
+//   creatorId: string;
+//   channelType: string;
+//   hash: string;
+
+// }
 
 interface FriendListProps {
   // setFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
@@ -32,15 +52,17 @@ interface FriendListProps {
   setFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
-interface SearchU
-{
-    id: number;
-    username: string;
-    profilePic: string;
-    isBlocked: boolean;
-    group: boolean;
-    groupMembers?: string[];
-}
+// interface SearchU
+// {
+//   id: string;
+//   username?: string;
+//   channelName?:string;
+//   profilePic?: string;
+//   channelPic?: string;
+//   isBlocked: boolean;
+//   group: boolean;
+//   Members?: string[];
+// }
 
 
 const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
@@ -53,6 +75,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
 
   const Searchusers = async (username: string) => {
     try {
+      console.log("fetching user entered");
       const res = await fetch( Backend_URL+"user/"+username, {
         method: "GET",
         mode: "cors",
@@ -71,14 +94,45 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
     }
   };
 
+  const fetchChannel = async (channelName: string) => {
+    try {
+      console.log("fetching channel entered");
+      const res = await fetch( Backend_URL+"channels/search/"+channelName, {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json() as SearchU[];
+        console.log("requested search channels : ",data);
+        setChannelFriendSearch(data);
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
    let username : string = e.target.value;
     username = username.trim();
     if (username)
+    {
+      console.log("searching for : ",username)
       Searchusers('search/'+username);
+      fetchChannel(username);
+    }
+      
     else
+    {
+
       Searchusers('all');
+      fetchChannel('all');
+    }
     setSearchText(e.target.value);
   };
 

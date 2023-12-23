@@ -45,24 +45,14 @@ const EditProfile = () => {
       {showEdit ? (<EditProfileShow />) : null}
       <EditProfileContainer >
         <RiEditBoxLine />
-        <div  className='edit-profile-text ' >
-          <button onClick={handleEdit} >
-          edit profile
-          </button>
-        </div>
-      </EditProfileContainer>
+        <div className='edit-profile-text'>
+          <Link href="/update">
+            <EditSpan>Edit Profile</EditSpan>
+          </Link>
+          </div>
+    </EditProfileContainer>
     </>
-  );
-
-  //       <div className='edit-profile-text'>
-  //         <Link href="/update">
-  //           <EditSpan>Edit Profile</EditSpan>
-  //         </Link>
-  //         </div> {
-  //       }
-  //   </EditProfileContainer>
-  // )
-
+  )
 }
 
 export default EditProfile;

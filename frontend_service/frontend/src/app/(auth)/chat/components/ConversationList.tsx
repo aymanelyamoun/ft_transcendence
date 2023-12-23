@@ -23,12 +23,14 @@ import {
 export const IsChannelContext = createContext(false);
 
 import { userId, isAdmin } from "./ConversationInfo";
-import { AlertMessage } from "./AlertMessage";
+// import { AlertMessage } from "./AlertMessage";
 import CreateChannel from "./CreateChannel";
 import { FaRunning } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import CreateChannelButton from "./CreateChannelButton";
 import AddNewChannel from "./AddNewChannel";
+import { Friend} from "../page";
+import EditChannel from "./EditChannel";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -67,11 +69,13 @@ const ConversationIthem = (props: ConversationIthemProps) => {
 
 export const ConversationList = ({
   isChannel,
+  setShowAddChannel,
 }: // rowData,
 // conversation,
 // setConversation,
 {
   isChannel: boolean;
+  setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
   // rowData: Conversation[];
   // conversation: ConversationIthemProps[];
   // setConversation: React.Dispatch<
@@ -125,6 +129,7 @@ export const ConversationList = ({
               );
             }
           })}
+          {isChannel && <CreateChannelButton setShowAddChannel={setShowAddChannel}/>}
       </ul>
   );
 };
@@ -148,7 +153,7 @@ export const Conversations = ({
 
   // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
   // const isAdmin = "false";
-
+  const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
   const [rowData, setRowData] = useState<ConversationIthemProps[]>([]);
 
   // useEffect(() => {
@@ -178,12 +183,14 @@ export const Conversations = ({
   const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
   // const [showCreateChannel, setShowCreateChannel] = useState<boolean>(false);
 
+  console.log("goToCreateChannel", goToCreateChannel);
+
   return (
     <div className="friendList w-full h-full mr-12 relative">
           <IsChannelContext.Provider value={isChannel}>
             <ChatToggel setIsChannel={setIsChannel} />
         <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
-            {/* <div className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2"> */}
+            {/* <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2"> */}
                 {/* <SearchBar
                   rowData={rowData}
                   // conversation={conversationList}
@@ -195,19 +202,25 @@ export const Conversations = ({
                 /> */}
                 <ConversationList
                   isChannel={isChannel}
+                  setShowAddChannel={setShowAddChannel}
                   // conversationListData={conversationList}
                   // rowData={rowData}
                   // setConversation={setConversationList}
                 />
-                {isChannel && <CreateChannelButton setShowAddChannel={setShowAddChannel}/>}
-                {showAddChannel && <AddNewChannel
+                {/* {isChannel && <CreateChannelButton setShowAddChannel={setShowAddChannel}/>} */}
+
+                { showAddChannel && <EditChannel/> }
+                {/* {showAddChannel && <AddNewChannel
                         setShowAddChannel={setShowAddChannel}
                         setGoToCreateChannel={setGoToCreateChannel}
+                        selectedFriends={selectedFriends}
+                        setSelectedFriends={setSelectedFriends}
                       />
                 }
-                {goToCreateChannel && <CreateChannel/>}
+                {goToCreateChannel && <CreateChannel selectedFriends={selectedFriends} setChannelCreated={setGoToCreateChannel}/>} */}
+
                 {/* {children} */}
-              {/* </div> */}
+              {/* </ul> */}
         </div>
         </IsChannelContext.Provider>
     </div>

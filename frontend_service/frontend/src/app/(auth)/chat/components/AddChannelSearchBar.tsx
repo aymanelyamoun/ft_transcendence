@@ -7,14 +7,7 @@ import { BsSearch } from "react-icons/bs";
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 // import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 
-
-interface Friend {
-  id: string;
-  username: string;
-  profilePic: string;
-  title?: string;
-  online: boolean;
-}
+import { Friend} from "../page";
 
 interface FriendListProps {
   // setFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;

@@ -65,7 +65,7 @@ export class ChangeChannelDataDto{
     @IsString()
     channelName: string;
     
-    @IsNotEmpty()
+    @IsNotEmpty()j
     @IsString()
     password?: string;
 

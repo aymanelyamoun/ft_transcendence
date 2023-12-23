@@ -14,20 +14,18 @@ import AddChannelSearchBar from "./AddChannelSearchBar";
 import { channel } from "diagnostics_channel";
 
 import avatar from "../../../../../public/garou-kid.jpeg";
-interface Friend {
-  id: string;
-  username: string;
-  profilePic: string;
-  title?: string;
-  online: boolean;
-}
+import { Friend} from "../page";
 
 const AddNewChannel = ({
   setShowAddChannel,
   setGoToCreateChannel,
+  selectedFriends,
+  setSelectedFriends,
 }: {
   setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
   setGoToCreateChannel: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedFriends: Friend[];
+  setSelectedFriends: React.Dispatch<React.SetStateAction<Friend[]>>;
 }) => {
   const activeChat = useRef<"friend" | "channel">("friend");
 
@@ -35,7 +33,7 @@ const AddNewChannel = ({
     useState<Friend[]>([]);
     // const [showAddChannel, setShowAddChannel] = useState(false);
     const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
-    const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
+    // const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
     const cancelAddChannel = useRef<HTMLDivElement>(null);
     const [ChannelFriendSearch, setChannelFriendSearch] = useState<Friend[]>([]);
     
@@ -65,7 +63,8 @@ const AddNewChannel = ({
     };
     fetchFriendsListData();
   }, []);
-
+  
+  // console.log("channelFriends : ", channelFriends);
   const handleSelectFriend = (friend: Friend) => {
     if (selectedFriends.includes(friend)) {
       setSelectedFriends(

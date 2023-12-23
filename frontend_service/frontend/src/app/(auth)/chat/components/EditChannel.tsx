@@ -1,46 +1,27 @@
-import React, { useContext } from "react";
-import { useEffect, useState, useRef } from "react";
-
-import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
-import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";
-import removeFriends from "../../../../public/removeFriends_Icon.png";
-// import { Friend, friendsData } from "../../../app/(notRoot)/chat/page";
-import { Friend, UserContext} from "../page";
-
-// import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
-// import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";
-// import removeFriends from "../../../../public/removeFriends_Icon.png";
-// import { Friend, friendsData } from "../../../../app/(notRoot)/chat/page";
-
+import React, { useState } from 'react'
 import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
+import { AlertMessage } from './alertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
-// import channleImage from "../../../../public/group_pic.jpg";
-// import passwordParameter from "../../../../public/passwordParameterIcon.png";
 
-import AddChannelSearchBar from "./AddChannelSearchBar";
-import { AlertMessage } from "./alertMessage";
 
-const CreateChannel = ({
-  selectedFriends,
-  setChannelCreated
-}:{
-  selectedFriends: Friend[],
-  setChannelCreated:React.Dispatch<React.SetStateAction<boolean>>
-}) => {
+
+const EditChannel = () => {
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
+  // selectedOption need to be intialized with the channel type by fetching it from the backend
+  const [selectedOption, setSelectedOption] = useState<string>("public");
   const [channelName, setChannelName] = useState<boolean>(false);
+
+
   const [savePassword, setSavePassword] = useState<string>("");
   const [password, setPassword] = useState<boolean>(false);
   const [allowTyping, setAllowTyping] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>("public");
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
-  
-  const creatorInfo = useContext(UserContext);
+
 
   const handleOptionChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
     if (saveChannelName === "")
@@ -52,7 +33,7 @@ const CreateChannel = ({
     const confirmPasswordInput = document.getElementById("confirmPassword") as HTMLInputElement;
     setPasswordMatch(event.target.value === confirmPasswordInput.value);
   };
-  
+
   const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const passwordInput = document.getElementById("password") as HTMLInputElement;
     setPasswordMatch(event.target.value === passwordInput.value);
@@ -61,91 +42,87 @@ const CreateChannel = ({
 
   const handleCreateButton = () => {
 
-      if (passwordMatch && saveChannelName !== ""){
-        setShowNotify(true);
-      }
-      else if (!passwordMatch)
-      setShowAlert(true);
-    
-      if(saveChannelName === "")
-          setChannelName(true);
-
-      const members = selectedFriends.map((friend) => ({
-        userId: friend.id,
-        isAdmin: false,
-      }));
-
-      const channelData = {
-        channelName: saveChannelName,
-        channelPic: "some link",
-        creator: creatorInfo?.id,
-        type: selectedOption,
-        password: savePassword,
-        members: members,
-        admines: [creatorInfo],
-        // here i should add the selected friends
-      };
-
-        console.log("channelData : ", channelData);
-        // fetch("http://localhost:3001/api/channels/createChannel", {
-        //   method: "POST",
-        //   mode: "cors",
-        //   credentials: "include",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //     "Access-Control-Allow-Origin": "*",
-        //   },
-        //   body: JSON.stringify(channelData),
-        // })
-        //   .then((res) => {
-        //     return res.json();
-        //   })
-        //   .then((data) => {
-        //     console.log("data : ", data);
-        //   });
-        fetch("http://localhost:3001/api/channels/createChannel", {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify(channelData),
-        })
-        .then((res) => {
-          if (!res.ok) {
-            setNotCreated(true);
-            throw new Error("Network response was not ok");
-          }
-          // console.log("res: ", res);
-          // return res.json();
-        })
-        // .then((data) => {
-        //   console.log("data: ", data);
-        // })
-        .catch((error) => {
-          console.error("Error during fetch:", error);
-        });
-        setChannelCreated(false);
+    if (passwordMatch && saveChannelName !== ""){
+      setShowNotify(true);
     }
-  // }
+    else if (!passwordMatch)
+    setShowAlert(true);
   
-  console.log("saveChannelName: ", saveChannelName);
-  console.log("savePassword: ", savePassword);
-  console.log("notify after: ", showNotify);
-  
+    if(saveChannelName === "")
+        setChannelName(true);
+
+    // const members = selectedFriends.map((friend) => ({
+    //   userId: friend.id,
+    //   isAdmin: false,
+    // }));
+
+    // const channelData = {
+    //   channelName: saveChannelName,
+    //   channelPic: "some link",
+    //   creator: creatorInfo?.id,
+    //   type: selectedOption,
+    //   password: savePassword,
+    //   members: members,
+    //   admines: [creatorInfo],
+      // here i should add the selected friends
+    // };
+
+      // console.log("channelData : ", channelData);
+
+      // fetch("http://localhost:3001/api/channels/createChannel", {
+      //   method: "POST",
+      //   mode: "cors",
+      //   credentials: "include",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //   },
+      //   body: JSON.stringify(channelData),
+      // })
+      //   .then((res) => {
+      //     return res.json();
+      //   })
+      //   .then((data) => {
+      //     console.log("data : ", data);
+      //   });
+      // fetch("http://localhost:3001/api/channels/createChannel", {
+      //   method: "POST",
+      //   mode: "cors",
+      //   credentials: "include",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //   },
+      //   body: JSON.stringify(channelData),
+      // })
+      // .then((res) => {
+      //   if (!res.ok) {
+      //     setNotCreated(true);
+      //     throw new Error("Network response was not ok");
+      //   }
+      //   // console.log("res: ", res);
+      //   // return res.json();
+      // })
+      // // .then((data) => {
+      // //   console.log("data: ", data);
+      // // })
+      // .catch((error) => {
+      //   console.error("Error during fetch:", error);
+      // });
+      // setChannelCreated(false);
+  }
+
   return (
-    <div className=" createChannelOverlay flex justify-center items-center ">
+    <div className=" editChannelOverlay flex justify-center items-center ">
       <div
-        className="addChannelModal felx justify-between rounded-[10px] "
+        className="editChannelModal felx justify-between rounded-[10px] "
         >
-        <div className=" px-24 pt-4">
-          <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
+        <div className=" px-4 pt-4">
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
             {showNotify && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
             {notCreated && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
-            <div>
+          <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
+          <div>
               <Image
                 className="channelImage"
                 src={channleImage}
@@ -160,14 +137,14 @@ const CreateChannel = ({
                 onChange={(e) => setSaveChannelName(e.target.value)}
                 />
             </div>
-            <div >
+            <div>
               <select value={selectedOption} onChange={handleOptionChange} className="channelType">
                 <option value="public">public</option>
                 <option value="private">private</option>
                 <option value="protected">protected</option>
               </select>
             </div>
-            {channelName && (<AlertMessage onClick={() => setChannelName(false)} message={"Please Enter Channel Name"} type={"error"}> </AlertMessage>)}
+              {channelName && (<AlertMessage onClick={() => setChannelName(false)} message={"Please Enter Channel Name"} type={"error"}> </AlertMessage>)}
             { selectedOption === 'protected' &&
 
                 (!password ? (
@@ -250,10 +227,11 @@ const CreateChannel = ({
           </div>
         </div>
         <button onClick={handleCreateButton} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
-          CREATE
+          EDIT
         </button>
       </div>
     </div>
-  );
-};
-export default CreateChannel;
+  )
+}
+
+export default EditChannel

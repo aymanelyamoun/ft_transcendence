@@ -153,15 +153,16 @@ export const Conversations = ({
   children: React.ReactNode;
 }) => {
 
-    // states
   const [isChannel, setIsChannel] = useState<boolean>(false);
+    // states
   const editChannel = useContext(showEditChannelContext);
   const exitChannel = useContext(showExitChannelContext);
-  const deletChannel = useContext(showDeleteChannelContext);
+  const deleteChannel = useContext(showDeleteChannelContext);
     // setstates
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
+
 
   // const [conversation, setConversation] = useState<ConversationIthemProps[]>(
   //   []
@@ -235,7 +236,7 @@ export const Conversations = ({
                     {goToCreateChannel && <CreateChannel selectedFriends={selectedFriends} setChannelCreated={setGoToCreateChannel}/>}
                     { editChannel && <EditChannel setEditChannel={setEditChannel} /> }
                     { exitChannel && <AlertMessage onClick={() => setExitChannel(false)}  message={"are you sure you want to exit groupName you can no longer send or see messages in this group"} type={"exit"} /> }
-                    { deletChannel &&<AlertMessage onClick={() => setDeleteChannel(false)}  message={"are you sure you want to delete groupName, all the messages will be lost"} type={"delete"}/>  }
+                    { deleteChannel &&<AlertMessage onClick={() => setDeleteChannel(false)}  message={"are you sure you want to delete groupName, all the messages will be lost"} type={"delete"}/>  }
 
                 {/* {children} */}
               {/* </ul> */}

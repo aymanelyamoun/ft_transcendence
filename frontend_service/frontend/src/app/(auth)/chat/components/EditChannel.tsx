@@ -10,7 +10,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
   // selectedOption need to be intialized with the channel type by fetching it from the backend
-  const [selectedOption, setSelectedOption] = useState<string>("public");
+  const [selectedOption, setSelectedOption] = useState<string>("protected");
   const [channelName, setChannelName] = useState<boolean>(false);
 
 
@@ -42,14 +42,20 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
 
   const handleCreateButton = () => {
 
+    console.log("handleCreateButton ============================");
     if (passwordMatch && saveChannelName !== ""){
+      console.log("channel edited successfully =========================");
       setShowNotify(true);
     }
-    else if (!passwordMatch)
+    if (!passwordMatch){
+      console.log("password confirmation does not match =========================");
     setShowAlert(true);
+    }
   
-    if(saveChannelName === "")
+    if(saveChannelName === ""){
+      console.log("please enter channel name =========================");
         setChannelName(true);
+    }
 
     // const members = selectedFriends.map((friend) => ({
     //   userId: friend.id,
@@ -109,7 +115,8 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
       // .catch((error) => {
       //   console.error("Error during fetch:", error);
       // });
-      setEditChannel(false);
+      if (saveChannelName !== "" && passwordMatch)
+        setEditChannel(false);
   }
 
   return (
@@ -119,8 +126,8 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         >
         <div className=" px-4 pt-4">
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
-            {showNotify && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
-            {notCreated && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
+            {showNotify && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Has Been Edited Successfully"} type={'notify'}> </AlertMessage>)}
+            {notCreated && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Not Edited"} type={'error'}> </AlertMessage>)}
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
           <div>
               <Image
@@ -236,7 +243,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
           </div>
         </div>
         <button onClick={handleCreateButton} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
-          EDIT
+          Edit
         </button>
       </div>
     </div>

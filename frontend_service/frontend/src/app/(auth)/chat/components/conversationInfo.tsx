@@ -43,7 +43,6 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
   const editChannel = useContext(showEditChannelContext);
-  console.log("editChannel :        ", editChannel);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
     //   return;
@@ -131,7 +130,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 <FaRunning color="#FC2B5D" size={24} />
               </CostumeButton>
 
-              <CostumeButton
+              <CostumeButton 
                 onClick={() => setDeleteChannel(true)}
                 bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
                 color="#FC2B5D"
@@ -481,9 +480,10 @@ export const ChatPage = () => {
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
   // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
 
-  const [showEditChannel, setShowEditChannel] = useState(false);
-  const [showExitChannel, setShowExitChannel] = useState(false);
-  const [showDeleteChannel, setShowDeleteChannel] = useState(false);
+  const [showEditChannel, setShowEditChannel] = useState<boolean>(false);
+  const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
+  const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
+
 
   console.log("conversationId:", conversation?.id);
   useEffect(() => {
@@ -550,6 +550,7 @@ export const ChatPage = () => {
                   <setShowExitChannelContext.Provider value={setShowExitChannel}>
                     <showExitChannelContext.Provider value={showExitChannel}>
                       <setShowDeleteChannelContext.Provider value={setShowDeleteChannel}>
+                        <showDeleteChannelContext.Provider value={showDeleteChannel}>
                           <div className="h-full basis-1/4 flex">
                             <Conversations> {/* <ConversationList /> */}</Conversations>
                             {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
@@ -557,7 +558,8 @@ export const ChatPage = () => {
                           <MessagesContext.Provider value={messages}>
                             <Conversation />
                           </MessagesContext.Provider>
-                        </setShowDeleteChannelContext.Provider>
+                        </showDeleteChannelContext.Provider>
+                      </setShowDeleteChannelContext.Provider>
                     </showExitChannelContext.Provider>
                   </setShowExitChannelContext.Provider>
                 </showEditChannelContext.Provider>

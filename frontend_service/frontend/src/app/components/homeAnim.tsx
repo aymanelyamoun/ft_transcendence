@@ -63,8 +63,9 @@ export default function AnimationFX(){
             Matter.Composite.clear(engine.current.world, false);
             Matter.Engine.clear(engine.current);
             render.canvas.remove();
+            element.remove();
             render.textures = {};
         };
     }, []);
-    return (<div id='matter' className='flex absolute ' style={{ width: '100%', height: '100%' }} />)
+    return (<div id='matter' className='flex absolute' style={{ width: '100%', height: '100%' }} />)
 }

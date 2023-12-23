@@ -46,8 +46,8 @@ export default function ConfirmAuth() {
       const data = await res.json();
       if (res.ok) {
         alert("Two-factor authentication code is correct!");
-       // router.push("/profile/dashboard");
-       window.location.href = "/profile/dashboard";
+       router.push("/profile/dashboard");
+      //  window.location.href = "/profile/dashboard";
       } else {
         if (userData?.isTwoFactorEnabled)
           alert("Two-factor authentication code is incorrect!");

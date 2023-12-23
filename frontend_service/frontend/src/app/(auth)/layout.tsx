@@ -8,6 +8,7 @@ import { redirect, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Confirm from "./confirm/page";
 import ConfirmAuth from "./confirmauth/page";
+import Navbar from "./game/components/Navbar";
 
 
 interface User {
@@ -97,6 +98,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           <Confirm /> // Replace with your component for 2FA confirmation
         ) : (
           <> 
+            <Navbar />
             {children}
           </>
         )

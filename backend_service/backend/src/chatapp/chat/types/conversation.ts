@@ -1,4 +1,4 @@
 export type ConversationInfo = {
     conversationId:string,
-    userId:string,
+    // userId:string,
 }

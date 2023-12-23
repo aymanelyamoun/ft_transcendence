@@ -11,41 +11,35 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
-#     networks:
-#       - all_connect
-#     volumes:
-#       - ./postgres_data:/var/lib/postgresql/data
-#   backend:
-#     # image: backend
-#     depends_on:
-#       - postgres
-#     # command: sh -c "npm run start:dev"
-#     build: ./backend_service
-#     ports:
-#       - "3001:3001"
-#       - "5555:5555"
-#     networks:
-#       - all_connect
-#     volumes:
-#       - ./backend_service/backend:/backend
-#       - /backend/node_modules
-#   frontend:
-#     depends_on:
-#       - backend
-#     build: ./frontend_service
-#     ports:
-#       - "3000:3000"
-#     networks:
-#       - all_connect
-#     volumes:
-#       - ./frontend_service/frontend:/frontend
-#       - /frontend/node_modules
-# networks:
-#   all_connect:
-#     driver: bridge
-
-#     volumes:
-#       - my_postgres_data_auth:/var/lib/postgresql/data  
-
-# volumes:
-#   my_postgres_data_auth:
+    networks:
+      - all_connect
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+  backend:
+    # image: backend
+    depends_on:
+      - postgres
+    # command: sh -c "npm run start:dev"
+    build: ./backend_service
+    ports:
+      - "3001:3001"
+      - "5555:5555"
+    networks:
+      - all_connect
+    volumes:
+      - ./backend_service/backend:/backend
+      - /backend/node_modules
+  frontend:
+    depends_on:
+      - backend
+    build: ./frontend_service
+    ports:
+      - "3000:3000"
+    networks:
+      - all_connect
+    volumes:
+      - ./frontend_service/frontend:/frontend
+      - /frontend/node_modules
+networks:
+  all_connect:
+    driver: bridge

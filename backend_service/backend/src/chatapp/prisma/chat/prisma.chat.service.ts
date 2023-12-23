@@ -1,4 +1,4 @@
-import { ConsoleLogger, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConsoleLogger, ForbiddenException, Injectable, NotFoundException, Req } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { Conversation,Prisma, User } from "@prisma/client";
 // import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "chatapp/server_chatapp/chat/types/channel";
@@ -11,7 +11,7 @@ import { NOTIF_TYPE } from "@prisma/client";
 import { CONVERSATION_TYPE } from "@prisma/client";
 import { title } from "process";
 import { MessageInfo } from "src/chatapp/chat/types/message";
-import { ChangeChannelData, ChannelData, ChannelEdit } from "src/chatapp/chat/types/channel";
+import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "src/chatapp/chat/types/channel";
 import { JoinChannelDto } from "src/chatapp/chat/DTOs/dto";
 import { user } from "src/chatapp/chat/types/user";
 import { ConversationInfo } from "src/chatapp/chat/types/conversation";
@@ -71,11 +71,12 @@ export class PrismaChatService{
 
         // channel DB:
 
-        async createChannel(data:ChannelData){
+        async createChannel(data:ChannelData, @Req() req:Request){
 
           console.log("getting to create the channel");
+          const user = req['user'] as User;
         
-          data.members = await this.filterUsersToAdd(data.creator, data.members);
+          data.members = await this.filterUsersToAdd(user.id, data.members);
           console.log("new members: ", data.members)
 
           // add default for data.member.isAdmin to be false
@@ -87,15 +88,21 @@ export class PrismaChatService{
             data: {
               channelName: data.channelName,
               channelPic: data.channelPic,
-              creator: {connect:{id:data.creator}},
+              creator: {connect:{id:user.id}},
               channelType: data.type,
               // later on use hashing service
               hash: hash,
               members: {
-                create: data.members.map((member) => ({
-                  user: { connect: { id: member.userId } },
-                  isAdmin: member.isAdmin.valueOf(), // Convert Boolean wrapper object to primitive boolean
-                })),
+                create: data.members.map((member) => {
+                  if (member.userId === user.id) {
+                    return({
+                      user: { connect: { id: member.userId } },
+                      isAdmin: true,
+                    })
+                  }
+                  return({
+                    user: { connect: { id: member.userId } },
+                })}),
               },
               
             },
@@ -119,24 +126,30 @@ export class PrismaChatService{
           console.log("the created channel:", channel);
         }
 
-        async deleteChannel(data:ChannelEdit){
+        async deleteChannel(data:ChannelEdit, @Req() req:Request){
+          const user = req['user'] as User;
+
           const requestedChannel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{creator:true}});
           if (!requestedChannel) throw new ForbiddenException("channel does not exits");
           const {creator} = (await requestedChannel);
-          if (creator.id === data.userId)
+          if (creator.id === user.id)
           {
             await this.prisma.channel.delete({where:{id:data.channelId}})
           }
         }
 
-        async removeUserFromChannel(data: ChannelEdit) {
+        async removeUserFromChannel(data: ChannelEdit, @Req() req: Request) {
+          const user = req['user'] as User;
+
           const requestedChannel = await this.prisma.channel.findUnique({ where: { id: data.channelId } });
           if (!requestedChannel) throw new ForbiddenException("channel does not exist");
 
-          const userIsAdmin = await this.userIsAdmin(data.userId, data.channelId);
+          const userIsAdmin = await this.userIsAdmin(user.id, data.channelId);
           if (userIsAdmin) {
             await this.prisma.userChannel.delete({where:{userId_channelId:{userId: data.userId2, channelId:data.channelId}}});
           }
+          else
+            throw new ForbiddenException("you are not an admin on this channel");
         }
 
         async getAllChannels(){
@@ -155,7 +168,9 @@ export class PrismaChatService{
           return channels;
         }
 
-        async getFilteredChannels(filter:string){
+        async getFilteredChannels(filter:string, @Req() req: Request){
+          const user = req['user'] as User;
+          const loggedUserId = user.id;
           const channels = await this.prisma.channel.findMany({where:{
             AND:[
               {
@@ -164,7 +179,13 @@ export class PrismaChatService{
                   {channelType:"protected"},
                 ]
               },
-              {channelName:{startsWith:filter}},
+              {channelName:{
+                startsWith:filter,
+                mode:"insensitive",
+              },
+              members:{none:{userId:loggedUserId}},
+              banedUsers:{none:{id:loggedUserId}},
+            },
             ]
             
           }, include:{members:{select:{user:{select:{profilePic:true}}}}, creator:{select:{id:true, }}}});
@@ -192,9 +213,17 @@ export class PrismaChatService{
         //   } 
         // }
 
-        async editChannel(data: ChangeChannelData) {
+        async editChannel(data: ChangeChannelData, @Req() req: Request) {
+          const user = req['user'] as User;
           // Filter the admins to add and remove
-          const addAdmins = await this.filterAddAdmins(data);
+
+          const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{creator:true}})
+
+          if (!channel) throw new NotFoundException("channel does not exist");
+
+          if (channel.creator.id !== user.id) throw new ForbiddenException("you are not the creator of this channel");
+
+          const addAdmins = await this.filterAddAdmins(data, req);
           const removeAdmins = await this.filterToDelete(data);
 
           // Start a transaction
@@ -223,29 +252,33 @@ export class PrismaChatService{
           return transaction;
         }
 
-
-        async leaveChannel(data:ChannelEdit){
+        async leaveChannel(data:ChannelEdit, @Req() req:Request){
+          const user = req['user'] as User;
           // const user = this.prisma.user.findUnique({where:{id:data.userId}});
-          const userInChannel = await this.prisma.userChannel.findUnique({where:{userId_channelId:{userId: data.userId, channelId:data.channelId}}});
+          const userInChannel = await this.prisma.userChannel.findUnique({where:{userId_channelId:{userId: user.id, channelId:data.channelId}}});
           console.log("userInChannel: ", userInChannel);
           if (!userInChannel) throw new NotFoundException('user does not exist');
 
-          await this.prisma.userChannel.delete({where:{userId_channelId:{userId: data.userId, channelId:data.channelId}}});
+          await this.prisma.userChannel.delete({where:{userId_channelId:{userId: user.id, channelId:data.channelId}}});
         }
 
-        async joinChannel(channelData:JoinChannelDto){
+        async joinChannel(channelData:JoinChannel, @Req() req:Request){
+          const loggedUser = req['user'] as User;
+
           const requestedChannel = await this.getChannelWithProp(channelData.channelId);
           console.log("requested channel: ", requestedChannel);
           // const userIsBanned = (await requestedChannel).banedUsers.some((user)=> user.id === channelData.userId);
-          const userIsBanned = requestedChannel.banedUsers.some((user)=> user.id === channelData.userId);
+          const userIsBanned = requestedChannel.banedUsers.some((user)=> user.id === loggedUser.id);
 
           if (userIsBanned) throw new ForbiddenException("you are banned from this channel");
+
+          // test when the pass is empty
 
           const correctPass = await bcrypt.compare(channelData.password, requestedChannel.hash);
 
           if (correctPass)
           {
-            const joinedchannel =  await this.addChannelToUser(channelData.userId, channelData.channelId);
+            const joinedchannel =  await this.addChannelToUser(loggedUser.id, channelData.channelId);
             console.log("has joined channel: ",joinedchannel);
           }
           else
@@ -254,8 +287,9 @@ export class PrismaChatService{
 
         }
 
-        async addUserToChannel(data:ChannelEdit){
-          console.log(data);
+        async addUserToChannel(data:ChannelEdit, @Req() req:Request){
+          const loggedUser = req['user'] as User;
+
           const channel = this.getChannelWithProp(data.channelId);
 
           if (!channel)
@@ -266,8 +300,8 @@ export class PrismaChatService{
           if (!user)
             throw new NotFoundException("the channel you are asking does not exist");
 
-          const isFriendOf = await this.isFriendOf(data.userId, data.userId2);
-          const isAdmin = await this.isAdminOnChannel(data.userId, data.channelId);
+          const isFriendOf = await this.isFriendOf(loggedUser.id, data.userId2);
+          const isAdmin = await this.isAdminOnChannel(loggedUser.id, data.channelId);
 
           if (isAdmin && isFriendOf){
             console.log("adding user to the channel");
@@ -294,8 +328,10 @@ export class PrismaChatService{
 
         }
 
-        async addAdminOnChannel(data: ChannelEdit) {
-          const admin = await this.prisma.userChannel.findUnique({ where: { userId_channelId: { userId: data.userId, channelId: data.channelId,}, }, });
+        async addAdminOnChannel(data: ChannelEdit, @Req() req: Request) {
+          const user = req['user'] as User;
+
+          const admin = await this.prisma.userChannel.findUnique({ where: { userId_channelId: { userId: user.id, channelId: data.channelId,}, }, });
           if (!admin || !admin.isAdmin) throw new ForbiddenException("This admin doesn't exist for the channel");
 
           const user2 = await this.prisma.userChannel.findUnique({ where: { userId_channelId: { userId: data.userId2, channelId: data.channelId,}, }, });
@@ -304,9 +340,10 @@ export class PrismaChatService{
           await this.prisma.userChannel.update({where:{userId_channelId:{userId:data.userId2, channelId:data.channelId}}, data:{isAdmin:true}});
         }
 
-        async removeAdminOnChannel(data: ChannelEdit) {
-          // think if you would like admins to remove their adimin privilages
-          const admin = await this.prisma.userChannel.findUnique({ where: { userId_channelId: { userId: data.userId, channelId: data.channelId,}, }, });
+        async removeAdminOnChannel(data: ChannelEdit, @Req() req: Request) {
+          const user = req['user'] as User;
+
+          const admin = await this.prisma.userChannel.findUnique({ where: { userId_channelId: { userId: user.id, channelId: data.channelId,}, }, });
           if (!admin || !admin.isAdmin) throw new ForbiddenException("This admin doesn't exist for the channel");
 
           const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{members:true, creator:true}})
@@ -321,9 +358,10 @@ export class PrismaChatService{
           // const user2 = await this.prisma.userChannel.findUnique({ where: { userId_channelId: { userId: data.userId2, channelId: data.channelId,}, }, });
         }
 
-        async banUser(data: ChannelEdit) {
+        async banUser(data: ChannelEdit, @Req() req: Request) {
 
-          const { channelId, userId, userId2 } = data;
+          const user = req['user'] as User;
+          const { channelId, userId2 } = data;
 
           // Fetch the channel
           const channel = await this.prisma.channel.findUnique({
@@ -335,7 +373,7 @@ export class PrismaChatService{
           }
 
           // Check if the user is an admin
-          const isAdmin = await this.userIsAdmin(userId, channelId);
+          const isAdmin = await this.userIsAdmin(user.id, channelId);
 
           if (!isAdmin) {
             throw new ForbiddenException("Only admins can ban users");
@@ -357,8 +395,9 @@ export class PrismaChatService{
           return updatedChannel;
         }
 
-        async unbanUser(data: ChannelEdit) {
-          const { channelId, userId, userId2 } = data;
+        async unbanUser(data: ChannelEdit, @Req() req: Request) {
+          const user = req['user'] as User;
+          const { channelId, userId2 } = data;
 
           // Fetch the channel
           const channel = await this.prisma.channel.findUnique({
@@ -370,7 +409,7 @@ export class PrismaChatService{
           }
 
           // Check if the user is an admin
-          const isAdmin = await this.userIsAdmin(userId, channelId);
+          const isAdmin = await this.userIsAdmin(user.id, channelId);
 
           if (!isAdmin) {
             throw new ForbiddenException("Only admins can unban users");
@@ -389,8 +428,18 @@ export class PrismaChatService{
           return updatedChannel;
         }
 
-        async getChannelMembers(conversationInfo:ConversationInfo){
-          const {members} = await this.prisma.conversation.findUnique({where:{id:conversationInfo.conversationId}, include:{members:true}});
+        async getChannelMembers(conversationInfo:ConversationInfo, @Req() req:Request){
+          const user = req['user'] as User;
+
+          const conversation = await this.prisma.conversation.findUnique({where:{id:conversationInfo.conversationId}, include:{members:true}});
+          // add is a member
+          if (!conversation)
+            throw new NotFoundException("this conversation does not exist");
+
+          if (!conversation.members.some((member)=>{return(member.userId === user.id)}))
+            throw new ForbiddenException("you are not a member of this conversation");
+
+          const {members} = conversation;
           console.log("members: ",members);
           return members;
         }
@@ -491,12 +540,13 @@ export class PrismaChatService{
               !blockedByUsers.includes(toCheck.userId);
           });
 
-          newList.push({userId:cratorUserId, isAdmin:true});
+          newList.push({userId:cratorUserId});
           console.log("New List: ", newList);
           return newList;
         }
 
-        async filterAddAdmins(data: ChangeChannelData) {
+        async filterAddAdmins(data: ChangeChannelData, @Req() req: Request) {
+          const user = req['user'] as User;
           // If there are no admins to add, return an empty array
 
           const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{banedUsers:true}});
@@ -520,8 +570,8 @@ export class PrismaChatService{
 
             // Check if the user is banned, blocked, blocked by someone, or already an admin
             const isBanned = channel.banedUsers.some((checkedUser)=> checkedUser.id === user.id);
-            const isBlocked = user.blockedUsers.some(blockedUser => blockedUser.id === data.userId);
-            const isBlockedBy = user.blockedByUsers.some(blockedByUser => blockedByUser.id === data.userId);
+            const isBlocked = user.blockedUsers.some(blockedUser => blockedUser.id === user.id);
+            const isBlockedBy = user.blockedByUsers.some(blockedByUser => blockedByUser.id === user.id);
             // async userIsAdmin(userId: string, channelId: string): Promise<boolean> {
             const isAdmin = await this.userIsAdmin(user.id, data.channelId);
 
@@ -591,11 +641,14 @@ export class PrismaChatService{
           return memberIn
         }
 
-        async getConversationMembers(conversationId:string){
-          console.log("conversationId: ", conversationId);
+        async getConversationMembers(conversationId:string, @Req() req:Request){
+          const user = req['user'] as User;
+
+          // console.log("conversationId: ", conversationId);
           const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:{
             select:{
               user:{select:{
+                id:true,
                 profilePic:true,
                 username:true,
               }}             
@@ -604,6 +657,9 @@ export class PrismaChatService{
 
           if (!conversation)
             throw new NotFoundException("this conversation does not exist");
+
+          if (!conversation.members.some((member)=>{return(member.user.id === user.id)}))
+            throw new ForbiddenException("you are not a member of this conversation");
 
           const {members} = conversation;
           if (!members)
@@ -625,10 +681,13 @@ export class PrismaChatService{
           return conversations;
         }
 
-        async getUserConversationsDirect(userData:user){
+        async getUserConversationsDirect(@Req() req:Request){
+          const user = req['user'] as User;
+
+
           const conversations = await this.prisma.conversation.findMany({
             where:{
-              users:{some:{id:userData.userId}},
+              users:{some:{id:user.id}},
               type: CONVERSATION_TYPE.DIRECT,
             },
             include:{
@@ -645,7 +704,7 @@ export class PrismaChatService{
             }
           ); 
           const conversationIthem: ConversationIthemProps[] = conversations.map((conversation) => {
-            const friend = conversation.users[0].id === userData.userId ? conversation.users[1] : conversation.users[0];
+            const friend = conversation.users[0].id === user.id ? conversation.users[1] : conversation.users[0];
             return {
               id:conversation.id,
               type:conversation.type,
@@ -690,10 +749,12 @@ export class PrismaChatService{
         //   return conversationIthem;
         // }
 
-        async getUserConversationsChannelChat(userData:user){
+        async getUserConversationsChannelChat(@Req() req:Request){
+          const user = req['user'] as User;
+
           const conversations = await this.prisma.conversation.findMany({
             where:{
-              users:{some:{id:userData.userId},},
+              users:{some:{id:user.id},},
               type: CONVERSATION_TYPE.CHANNEL_CHAT,
               
             },
@@ -720,16 +781,26 @@ export class PrismaChatService{
           return conversationIthem;
         }
 
-        async getConversationIthemList(userData:user){
-          const DMs = await this.getUserConversationsDirect(userData);
-          const channelChats = await this.getUserConversationsChannelChat(userData);
+        async getConversationIthemList(@Req() req:Request){
+          const user = req['user'] as User;
+
+          const DMs = await this.getUserConversationsDirect(req);
+          const channelChats = await this.getUserConversationsChannelChat(req);
 
           return [...DMs, ...channelChats];
         }
 
         // async getConversationMessages(conversationId:string, userData:user){
-        async getConversationMessages(conversationId:string){
-          // maybe send pics as well
+        async getConversationMessages(conversationId:string, @Req() req:Request){
+          const user = req['user'] as User;
+
+          const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:true}});
+          if (!conversation)
+            throw new NotFoundException("this conversation does not exist");
+
+          if (!conversation.members.some((member)=>{return(member.userId === user.id)}))
+            throw new ForbiddenException("you are not a member of this conversation");
+
           const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}, include:{sender:{ select: {profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
           // const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
           // if (!conversation)

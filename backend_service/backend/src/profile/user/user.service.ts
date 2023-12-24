@@ -195,8 +195,8 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async confirm(email: string, dto: ConfirmUserDto)
     {
-        console.log(dto.confirmPass);
-        console.log(dto.hash);
+       // console.log(dto.confirmPass);
+       // console.log(dto.hash);
         if (dto.confirmPass !== dto.hash)
             throw new UnauthorizedException('the password and the confirm password are not the same');
         const existingUser = await this.prisma.user.findUnique({
@@ -462,7 +462,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     {
         try
         {
-            console.log('wsalna han',username)
+            //console.log('wsalna han',username)
             const profile = await this.prisma.user.findUnique({
                 where : {
                     username: username,
@@ -484,8 +484,8 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                     }
                 }
             })
-            console.log('jdsfkljdgkfhdfjkhgkhdfgdfjkghdfjkhgdfjk');
-            console.log('ana hna : ',profile);
+          //  console.log('jdsfkljdgkfhdfjkhgkhdfgdfjkghdfjkhgdfjk');
+           // console.log('ana hna : ',profile);
 
             if (profile.gameRecords.length == 0)
                 profile.gameRecords = null;

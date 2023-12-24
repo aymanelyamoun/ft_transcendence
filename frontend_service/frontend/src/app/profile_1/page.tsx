@@ -41,7 +41,7 @@ useEffect(() => {
     };
 
   checkAuthentication();
-  console.log(userData)
+  // console.log(userData)
   },[]);
 
   return (

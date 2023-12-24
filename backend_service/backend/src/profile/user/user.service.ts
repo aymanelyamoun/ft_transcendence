@@ -462,6 +462,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     {
         try
         {
+            console.log('wsalna han',username)
             const profile = await this.prisma.user.findUnique({
                 where : {
                     username: username,
@@ -469,6 +470,11 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                 include: {
                     gameRecords:{
                         include: {
+                            user : {
+                                select:{
+                                    profilePic : true,
+                                }
+                            },
                             oponent : {
                                 select:{
                                     profilePic : true,
@@ -478,7 +484,11 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                     }
                 }
             })
-            console.log(profile);
+            console.log('jdsfkljdgkfhdfjkhgkhdfgdfjkghdfjkhgdfjk');
+            console.log('ana hna : ',profile);
+
+            if (profile.gameRecords.length == 0)
+                profile.gameRecords = null;
             return (profile);
 
         }catch (error)

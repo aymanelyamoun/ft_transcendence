@@ -122,6 +122,7 @@ export class UserController {
   @UseGuards(JwtGuard)
   async profileUser(@Param('username') username, @Res() res:  Response, @Req() req: Request)
   {
+    // console.log('wsalna han',username)
      const profile = await this.userService.getProfileUser(username);
      res.status(200).send(profile);
   }

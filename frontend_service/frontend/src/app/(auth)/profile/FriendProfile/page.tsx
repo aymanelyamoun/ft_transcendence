@@ -111,14 +111,15 @@ const page: React.FC<pageProps> = () => {
               const parseData = await res.json();
               console.log('parseData');
               // console.log(parseData);
-              setSidebarInfo({
-                id: parseData.id,
-                username: parseData.username,
-                title: parseData.title,
-                profilePic: parseData.profilePic,
-                wallet: parseData.wallet,
-                gameRecords : parseData.gameRecords,
-                });
+              setSidebarInfo(
+                parseData
+                // id: parseData.id,
+                // username: parseData.username,
+                // title: parseData.title,
+                // profilePic: parseData.profilePic,
+                // wallet: parseData.wallet,
+                // gameRecords : parseData.gameRecords,
+                );
                 setIsLoading(true);
                 
                 // console.log(SidebarInfo);

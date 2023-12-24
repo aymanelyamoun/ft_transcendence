@@ -10,6 +10,8 @@ interface MatchListProps {
     scoredGoals: number;
     concededGoals: number;
     UserProfileStyling: boolean;
+    opponnetProfilePic?: string;
+    userProfilePic?: string;
 }
 
 const matchItemContainer = styled.div`
@@ -50,11 +52,11 @@ const MatchItem: React.FC<MatchListProps> = (props) => {
   return (
     <ItemContainer>
         <div className={styles['matchItem-player1']}>
-            <img src={aoumad.src} alt="Profile" className="rounded-lg" />
+            <img src={match.userProfilePic} alt="Profile" className="rounded-lg" />
         </div>
         <span className={styles['matchItem-vs']}>vs</span>
         <div className={styles['matchItem-player2']}>
-            <img src={aoumad.src} alt="Profile" className="rounded-lg" />
+            <img src={match.opponnetProfilePic} alt="Profile" className="rounded-lg" />
         </div>
         <div className={styles['matchItem-result']}>
             <span className={styles['matchItem-result']}>{"Win"}</span>

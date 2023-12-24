@@ -6,6 +6,12 @@ export interface Match {
         xp: number;
         scoredGoals: number;
         concededGoals: number;
+        user : {    
+            profilePic: string;
+        };
+        oponent : {
+            profilePic: string;
+        };
     }[]
 }
 

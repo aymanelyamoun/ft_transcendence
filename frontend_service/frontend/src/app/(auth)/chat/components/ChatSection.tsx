@@ -48,7 +48,7 @@ export const ConversationChatSection = () => {
 
   let maxId = 0;
   if (messages.length !== 0) {
-    maxId = messages.reduce((max, message) => Math.max(max, message.id), messages[0].id);
+    maxId = messages.reduce((max, message) => Math.max(max, message.id), messages[0]?.id);
 }
   const conversation = useContext(LstConversationStateContext);
   // const [data, setData] = useState<string>("");

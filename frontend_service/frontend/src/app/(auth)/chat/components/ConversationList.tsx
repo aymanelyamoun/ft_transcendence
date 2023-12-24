@@ -214,7 +214,7 @@ export const Conversations = ({
     // };
       const fetchFun = async () => {
         await fetch(
-          `http://localhost:3001/api/channels/leaveChannel?channelId=${conversationProps?.channelId}&userId=${userInfo?.id}`,
+          `http://localhost:3001/api/channels/leaveChannel?channelId=${conversationProps?.channelId}&userId2=${"some_random_id"}`,
           {
             method: "PATCH",
             mode: "cors",

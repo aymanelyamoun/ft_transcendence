@@ -795,17 +795,21 @@ export class PrismaChatService{
           const user = req['user'] as User;
 
           const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:true}});
+          console.log("conversation not found");
           if (!conversation)
             throw new NotFoundException("this conversation does not exist");
+          console.log("conversation is found");
 
           if (!conversation.members.some((member)=>{return(member.userId === user.id)}))
             throw new ForbiddenException("you are not a member of this conversation");
+          console.log("is member in conversation")
 
           const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}, include:{sender:{ select: {profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
           // const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
           // if (!conversation)
           if (!messages_)
             return new NotFoundException("conversation not found");
+          console.log("messages: ", messages_);
           return messages_;
         }
 

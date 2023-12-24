@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import Image, { StaticImageData } from "next/image";
 import avatar from "../../../../../public/garou-kid.jpeg";
-import { MdDelete, MdPersonAddAlt1} from "react-icons/md";
+import { MdDelete, MdPersonAddAlt1 } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { MdGroupAdd } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
@@ -15,7 +15,7 @@ import { FaRunning } from "react-icons/fa";
 import ChatSection, { ConversationChatSection } from "./ChatSection";
 import { jwtDecode } from "jwt-decode";
 import { Conversations } from "./ConversationList";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 import {
   ConversationIthemProps,
@@ -24,8 +24,8 @@ import {
 } from "../../../../../../backend_service/backend/types/chatTypes";
 import { SlOptions } from "react-icons/sl";
 
-import { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
+import { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
 import { MdArrowForwardIos } from "react-icons/md";
 import { UserContext } from "../page";
 
@@ -46,8 +46,8 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   const userInfo = useContext(UserContext);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
-    //   return;
-    // }
+  //   return;
+  // }
 
   // const handleExitChannel = () => {
   //   setExitChannel(true);
@@ -80,11 +80,8 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   //       });
   //     };
   //     fetchFun();
-    
-    
-    
-  // }
 
+  // }
 
   return (
     <>
@@ -102,7 +99,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 color="white"
                 width="w-20"
                 hight="h-11"
-                >
+              >
                 <MdPersonAddAlt1 color="#1C2041" size={24} />
               </CostumeButton>
 
@@ -112,7 +109,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 color="white"
                 width="w-20"
                 hight="h-11"
-                >
+              >
                 <MdGroupAdd color="#1C2041" size={24} />
               </CostumeButton>
 
@@ -143,7 +140,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 color="#FC2B5D"
                 width="w-full"
                 hight="h-11"
-                >
+              >
                 <p className=" text-[#FEFFFF] font-semibold font-poppins text-sm">
                   Edit Channel
                 </p>
@@ -156,20 +153,20 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 color="wthie"
                 width="w-full"
                 hight="h-11"
-                >
+              >
                 <p className=" text-light-red font-semibold font-poppins text-sm">
                   Exit Channel
                 </p>
                 <FaRunning color="#FC2B5D" size={24} />
               </CostumeButton>
 
-              <CostumeButton 
+              <CostumeButton
                 onClick={() => setDeleteChannel(true)}
                 bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
                 color="#FC2B5D"
                 width="w-full"
                 hight="h-11"
-                >
+              >
                 <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
                   Delete channel
                 </p>
@@ -195,27 +192,29 @@ const MemberIthem = ({
   const [isOptions, setIsOptions] = useState(false);
   // const [selectedOption, setSelectedOption] = useState("public");
 
-
-
-
   const options = [
-    { id: 1, label: 'mute', subOptions: ['5 min', '30 min', '1 hour'] },
-    { id: 2, label: 'kick' , acton: 'kick'},
-    { id: 3, label: 'ban' , action: 'ban'},
+    { id: 1, label: "mute", subOptions: ["5 min", "30 min", "1 hour"] },
+    { id: 2, label: "kick", acton: "kick" },
+    { id: 3, label: "ban", action: "ban" },
   ];
 
-  const handleOptionClick = (option: { id: number; label: string; subOptions?: string[]; }) => () => {
-    console.log('clicked', option);
-    // setSelectedOption(option.label);
-  };
+  const handleOptionClick =
+    (option: { id: number; label: string; subOptions?: string[] }) => () => {
+      console.log("clicked", option);
+      // setSelectedOption(option.label);
+    };
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
       <div className="flex  justify-between items-center ">
-          <Image className="avatar-small mr-[10px]" src={avatar} alt={"avatar"} width={40}/>
+        <Image
+          className="avatar-small mr-[10px]"
+          src={avatar}
+          alt={"avatar"}
+          width={40}
+        />
         <h3>{name}</h3>
       </div>
       {
-
         // !isOptions ? <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
         // :
         // <div className="optionsMenu absolute mt-[149px] ml-[114px] z-50">
@@ -227,139 +226,136 @@ const MemberIthem = ({
         //     </select>
         // </div>
 
+        // function MyMenu() {
+        //   return (
 
-// function MyMenu() {
-//   return (
+        // <Menu>
+        //   <Menu.Button>Options</Menu.Button>
+        //   <Menu.Items>
+        //     {links.map((link) => (
+        //       /* Use the `active` state to conditionally style the active item. */
+        //       <Menu.Item key={link.href} as={Fragment}>
+        //         {({ active }) => (
+        //           <a
+        //             href={link.href}
+        //             className={`${
+        //               active ? 'bg-blue-500 text-white' : 'bg-white text-black'
+        //             }`}
+        //           >
+        //             {link.label}
+        //           </a>
+        //         )}
+        //       </Menu.Item>
+        //     ))}
+        //   </Menu.Items>
+        // </Menu>
 
-          // <Menu>
-          //   <Menu.Button>Options</Menu.Button>
-          //   <Menu.Items>
-          //     {links.map((link) => (
-          //       /* Use the `active` state to conditionally style the active item. */
-          //       <Menu.Item key={link.href} as={Fragment}>
-          //         {({ active }) => (
-          //           <a
-          //             href={link.href}
-          //             className={`${
-          //               active ? 'bg-blue-500 text-white' : 'bg-white text-black'
-          //             }`}
-          //           >
-          //             {link.label}
-          //           </a>
-          //         )}
-          //       </Menu.Item>
-          //     ))}
-          //   </Menu.Items>
-          // </Menu>
+        /// bedore ading mute dropdown
+        //       <Menu>
+        //       <Menu.Button className=" cursor-pointer left-[95%] absolute ">
+        //         <SlOptions className=" " onClick={() => setIsOptions(!isOptions)} />
+        //       </Menu.Button>
+        //       <Transition
+        //     as={Fragment}
+        //     enter="transition duration-100 ease-out"
+        //     enterFrom="transform opacity-0 scale-95"
+        //     enterTo="transform opacity-100 scale-100"
+        //     leave="transition duration-75 ease-out"
+        //     leaveFrom="transform opacity-100 scale-100"
+        //     leaveTo="transform opacity-0 scale-95"
+        //   >
+        //     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50
+        //     ">
+        //       {optins.map((option) => (
+        //         <Menu.Item key={option.id}>
+        //           {({ active }) => (
+        //             <div
+        //               className={`${
+        //                 active ? 'bg-[#9A9BD326] text-white rounded-md' : 'text-white'
+        //               } block px-4 py-2 text-sm`}
+        //             >
+        //               {option.label}
+        //             </div>
+        //           )}
+        //         </Menu.Item>
+        //       ))}
+        //     </Menu.Items>
+        //   </Transition>
+        // </Menu>
 
-/// bedore ading mute dropdown
-    //       <Menu>
-    //       <Menu.Button className=" cursor-pointer left-[95%] absolute ">
-    //         <SlOptions className=" " onClick={() => setIsOptions(!isOptions)} />
-    //       </Menu.Button>
-    //       <Transition
-    //     as={Fragment}
-    //     enter="transition duration-100 ease-out"
-    //     enterFrom="transform opacity-0 scale-95"
-    //     enterTo="transform opacity-100 scale-100"
-    //     leave="transition duration-75 ease-out"
-    //     leaveFrom="transform opacity-100 scale-100"
-    //     leaveTo="transform opacity-0 scale-95"
-    //   >
-    //     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50
-    //     ">
-    //       {optins.map((option) => (
-    //         <Menu.Item key={option.id}>
-    //           {({ active }) => (
-    //             <div
-    //               className={`${
-    //                 active ? 'bg-[#9A9BD326] text-white rounded-md' : 'text-white'
-    //               } block px-4 py-2 text-sm`}
-    //             >
-    //               {option.label}
-    //             </div>
-    //           )}
-    //         </Menu.Item>
-    //       ))}
-    //     </Menu.Items>
-    //   </Transition>
-    // </Menu>
-          
-  // )
-
+        // )
 
         // after adding mute dropdown
 
         <Menu>
-        <Menu.Button className="cursor-pointer left-[95%] absolute">
-          <SlOptions className="" onClick={() => setIsOptions(!isOptions)} />
-        </Menu.Button>
-        <Transition
-          as={Fragment}
-          enter="transition duration-100 ease-out"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition duration-75 ease-out"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-            {options.map((option) => (
-              <Menu.Item key={option.id}>
-                {({ active }) => (
-                  <div
-                    className={`${
-                      active ? 'bg-[#9A9BD326] text-white rounded-md flex justify-between' : 'text-white flex justify-between'
-                    } block px-4 py-2 text-sm cursor-pointer`}
-                  >
-                    {option.label}
-                    {option.subOptions && (
-                      <Menu as="div" className="relative flex items-center">
-                        <Menu.Button className="pl-4 text-white ">
-                        <MdArrowForwardIos />
-                          {/* <span className="ml-2"> &gt; </span> */}
-                        </Menu.Button>
-                        <Transition
-                          as={Fragment}
-                          enter="transition duration-100 ease-out"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition duration-75 ease-out"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="origin-top-right absolute right-0 mr-[112px] mt-[140px] w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                            {option.subOptions.map((subOption, index) => (
-                              <Menu.Item key={index} >
-                                {({ active }) => (
-                                  <div
-                                    className={`${
-                                      active
-                                        ? 'bg-[#9A9BD326] text-white rounded-md '
-                                        : 'text-white '
-                                    } block px-4 py-2 text-sm cursor-pointer`}
-                                    onClick={handleOptionClick(option) }
-                                  >
-                                    {subOption}
-                                  </div>
-                                )}
-                              </Menu.Item>
-                            ))}
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
-                    )}
-                  </div>
-                )}
-              </Menu.Item>
-            ))}
-          </Menu.Items>
-        </Transition>
-      </Menu>
-
-
-}
-
+          <Menu.Button className="cursor-pointer left-[95%] absolute">
+            <SlOptions className="" onClick={() => setIsOptions(!isOptions)} />
+          </Menu.Button>
+          <Transition
+            as={Fragment}
+            enter="transition duration-100 ease-out"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition duration-75 ease-out"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+              {options.map((option) => (
+                <Menu.Item key={option.id}>
+                  {({ active }) => (
+                    <div
+                      className={`${
+                        active
+                          ? "bg-[#9A9BD326] text-white rounded-md flex justify-between"
+                          : "text-white flex justify-between"
+                      } block px-4 py-2 text-sm cursor-pointer`}
+                    >
+                      {option.label}
+                      {option.subOptions && (
+                        <Menu as="div" className="relative flex items-center">
+                          <Menu.Button className="pl-4 text-white ">
+                            <MdArrowForwardIos />
+                            {/* <span className="ml-2"> &gt; </span> */}
+                          </Menu.Button>
+                          <Transition
+                            as={Fragment}
+                            enter="transition duration-100 ease-out"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition duration-75 ease-out"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
+                          >
+                            <Menu.Items className="origin-top-right absolute right-0 mr-[112px] mt-[140px] w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                              {option.subOptions.map((subOption, index) => (
+                                <Menu.Item key={index}>
+                                  {({ active }) => (
+                                    <div
+                                      className={`${
+                                        active
+                                          ? "bg-[#9A9BD326] text-white rounded-md "
+                                          : "text-white "
+                                      } block px-4 py-2 text-sm cursor-pointer`}
+                                      onClick={handleOptionClick(option)}
+                                    >
+                                      {subOption}
+                                    </div>
+                                  )}
+                                </Menu.Item>
+                              ))}
+                            </Menu.Items>
+                          </Transition>
+                        </Menu>
+                      )}
+                    </div>
+                  )}
+                </Menu.Item>
+              ))}
+            </Menu.Items>
+          </Transition>
+        </Menu>
+      }
 
       {/* } */}
     </div>
@@ -396,23 +392,22 @@ const MemberList = ({}: {}) => {
     if (conversation?.id !== undefined) fetchFun();
   }, [conversation, isSet]);
 
-
   // console.log("isSet:", isSet);
   // console.log("members:", members);
   return (
     <>
       <MemberSeparator />
-        {isSet &&
-          members.map((member) => {
-            return (
-              <MemberIthem
-                imgUrl="some/url"
-                name={member.user.username}
-                isAdmin={true}
-              />
-            );
-          })}
-        {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
+      {isSet &&
+        members.map((member) => {
+          return (
+            <MemberIthem
+              imgUrl="some/url"
+              name={member.user.username}
+              isAdmin={true}
+            />
+          );
+        })}
+      {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
     </>
   );
 };
@@ -467,11 +462,7 @@ interface User {
   isConfirmed2Fa: Boolean;
 }
 
-
-
 const Conversation = () => {
-
-
   return (
     <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
       <ConversationChatSection />
@@ -494,20 +485,28 @@ export const LstConversationStateContext = createContext(
   {} as ConversationIthemProps | undefined
 );
 
-
 export const showEditChannelContext = createContext({} as boolean);
-export const setShowEditChannelContext = createContext({} as React.Dispatch<React.SetStateAction<boolean>>);
+export const setShowEditChannelContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
 export const showExitChannelContext = createContext({} as boolean);
-export const setShowExitChannelContext = createContext({} as React.Dispatch<React.SetStateAction<boolean>>);
+export const setShowExitChannelContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
 export const showDeleteChannelContext = createContext({} as boolean);
-export const setShowDeleteChannelContext = createContext({} as React.Dispatch<React.SetStateAction<boolean>>);
+export const setShowDeleteChannelContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
 
-
-export const ConversationListContextSet = createContext( {} as React.Dispatch<React.SetStateAction<ConversationIthemProps[]>>);
+export const ConversationListContextSet = createContext(
+  {} as React.Dispatch<React.SetStateAction<ConversationIthemProps[]>>
+);
 
 export const ChatPage = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
-  const [ConversationList, setConversationList] = useState< ConversationIthemProps[] >([]);
+  const [ConversationList, setConversationList] = useState<
+    ConversationIthemProps[]
+  >([]);
   const [conversation, setConversation] = useState<ConversationIthemProps>();
   const userInfo = useContext(UserContext) as User;
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
@@ -516,7 +515,6 @@ export const ChatPage = () => {
   const [showEditChannel, setShowEditChannel] = useState<boolean>(false);
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
-
 
   console.log("conversationId:", conversation?.id);
   useEffect(() => {
@@ -538,17 +536,21 @@ export const ChatPage = () => {
           // const data: Conversation[];
         })
         .then((data: ConversationIthemProps[]) => {
-          setConversationList(data.sort((a, b) => {
-            const bDate = new Date(b.updatedAt);
-            const aDate = new Date(a.updatedAt);
-            return(bDate.getTime() - aDate.getTime())
-          }));
+          setConversationList(
+            data.sort((a, b) => {
+              const bDate = new Date(b.updatedAt);
+              const aDate = new Date(a.updatedAt);
+              return bDate.getTime() - aDate.getTime();
+            })
+          );
         });
     };
     fetchFun();
   }, []);
 
   useEffect(() => {
+    // console.log("conversation?.id:", conversation?.id);
+    if (conversation?.id === undefined) return;
     const fetchFun = async () => {
       await fetch(
         `http://localhost:3001/api/channels/conversation/${conversation?.id}`,
@@ -564,7 +566,8 @@ export const ChatPage = () => {
           return res.json();
         })
         .then((data) => {
-          setMessages(data);
+          // console.log("MESSAGESSSS data:", data);
+          if (data) setMessages(data);
         })
         .catch((err) => {
           console.log(err);
@@ -582,12 +585,21 @@ export const ChatPage = () => {
             <LstConversationStateContext.Provider value={conversation}>
               <setShowEditChannelContext.Provider value={setShowEditChannel}>
                 <showEditChannelContext.Provider value={showEditChannel}>
-                  <setShowExitChannelContext.Provider value={setShowExitChannel}>
+                  <setShowExitChannelContext.Provider
+                    value={setShowExitChannel}
+                  >
                     <showExitChannelContext.Provider value={showExitChannel}>
-                      <setShowDeleteChannelContext.Provider value={setShowDeleteChannel}>
-                        <showDeleteChannelContext.Provider value={showDeleteChannel}>
+                      <setShowDeleteChannelContext.Provider
+                        value={setShowDeleteChannel}
+                      >
+                        <showDeleteChannelContext.Provider
+                          value={showDeleteChannel}
+                        >
                           <div className="h-full basis-1/4 flex">
-                            <Conversations> {/* <ConversationList /> */}</Conversations>
+                            <Conversations>
+                              {" "}
+                              {/* <ConversationList /> */}
+                            </Conversations>
                             {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
                           </div>
                           <MessagesContext.Provider value={messages}>
@@ -636,8 +648,8 @@ export const CostumeButton = ({
   children,
   width,
   hight,
-} : {
-  onClick: () => void
+}: {
+  onClick: () => void;
   bgColor: string;
   color: string;
   width: string;
@@ -646,7 +658,8 @@ export const CostumeButton = ({
 }) => {
   return (
     <button
-      onClick={onClick} className={`flex items-center justify-around ${bgColor} text-[${color}] p-2 ${width} ${hight} rounded-sm border-2`}
+      onClick={onClick}
+      className={`flex items-center justify-around ${bgColor} text-[${color}] p-2 ${width} ${hight} rounded-sm border-2`}
     >
       {children}
     </button>
@@ -684,4 +697,3 @@ const ProfileInfos = ({
 };
 
 // export default conversationInfo;
-

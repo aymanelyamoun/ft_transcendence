@@ -7,7 +7,10 @@ import {
   MessagesContext,
 } from "./ConversationInfo";
 // import { v4 as uuidv4 } from "uuid";
-import { ConversationIthemProps, MessageProps } from "../../../../../../../backend_service/backend/types/chatTypes";
+import {
+  ConversationIthemProps,
+  MessageProps,
+} from "../../../../../../../backend_service/backend/types/chatTypes";
 import avatar from "../../../../../public/garou-kid.jpeg";
 import jake from "../../../../public/jakeWithHeadPhones.jpg";
 import Image from "next/image";
@@ -25,7 +28,9 @@ export const ConversationMessagesContextStat = createContext(
   {} as MessageProps[]
 );
 
-function createConversationListIthem(Message: MessageProps): ConversationIthemProps {
+function createConversationListIthem(
+  Message: MessageProps
+): ConversationIthemProps {
   return {
     id: Message.conversationId,
     name: Message.sender.username,
@@ -34,11 +39,10 @@ function createConversationListIthem(Message: MessageProps): ConversationIthemPr
     type: Message.conversation.type, // replace with actual type
     createdAt: new Date(), // replace with actual creation date
     updatedAt: new Date(), // replace with actual creation date
-    channelId: 'someChannelId', // replace with actual channel ID
-    title: 'someTitle', // replace with actual title
+    channelId: "someChannelId", // replace with actual channel ID
+    title: "someTitle", // replace with actual title
   };
 }
-
 
 export const ConversationChatSection = () => {
   const messagesData = useContext(MessagesContext);
@@ -48,14 +52,12 @@ export const ConversationChatSection = () => {
 
   let maxId = 0;
   if (messages.length !== 0) {
-    maxId = messages.reduce((max, message) => Math.max(max, message.id), messages[0]?.id);
-}
+    maxId = messages.reduce((max, message) => Math.max(max, message.id),messages[0].id );
+  }
   const conversation = useContext(LstConversationStateContext);
   // const [data, setData] = useState<string>("");
 
   let newMessage: MessageProps;
-
-
 
   useEffect(() => {
     // new
@@ -76,9 +78,12 @@ export const ConversationChatSection = () => {
       if (newMessage.conversationId === conversation?.id)
         setMessages((prevMessages) => [...prevMessages, newMessage]);
 
-      setConversationList((prevConversationList) => [createConversationListIthem(newMessage), ...prevConversationList.filter((conversation) => {return conversation.id !== newMessage.conversationId})]
-      );
-
+      setConversationList((prevConversationList) => [
+        createConversationListIthem(newMessage),
+        ...prevConversationList.filter((conversation) => {
+          return conversation.id !== newMessage.conversationId;
+        }),
+      ]);
     });
     setMessages(messagesData);
     return () => {
@@ -101,7 +106,7 @@ export const ConversationChatSection = () => {
       </div>
       <ConversationMessagesContextSet.Provider value={setMessages}>
         <ConversationMessagesContextStat.Provider value={messages}>
-          <TypeMessage maxId={maxId}/>
+          <TypeMessage maxId={maxId} />
           {/* <TypeMsg
             userId={userId}
             conversationId={conversation?.id}
@@ -133,19 +138,21 @@ const MessageChat = ({
   return (
     <div className={type}>
       <div className="">
-      <Image
-        className={`rounded-full ${type == "rcvMsg" ? 'float-left' : 'float-right'} mr-[10px] mt-[4px] border-[1.5px] border-[#202345]`}
-        src={avatar}
-        alt="profile pic"
-        width={43}
-        height={43}
-      />
-      <p className="ml-2 mt-2 mb-2 text-[#FFFFFF]"> {message.message} </p>
+        <Image
+          className={`rounded-full ${
+            type == "rcvMsg" ? "float-left" : "float-right"
+          } mr-[10px] mt-[4px] border-[1.5px] border-[#202345]`}
+          src={avatar}
+          alt="profile pic"
+          width={43}
+          height={43}
+        />
+        <p className="ml-2 mt-2 mb-2 text-[#FFFFFF]"> {message.message} </p>
       </div>
     </div>
   );
 };
-const TypeMessage = ({maxId}:{maxId:number}) => {
+const TypeMessage = ({ maxId }: { maxId: number }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const setMessages = useContext(ConversationMessagesContextSet);
   const messages = useContext(ConversationMessagesContextStat);
@@ -158,13 +165,20 @@ const TypeMessage = ({maxId}:{maxId:number}) => {
     senderId: userId,
     conversationId: conversation?.id ?? "", // Provide a default value for conversationId
     createdAt: new Date(),
-    sender: { profilePic: conversation?.profilePic ?? "" , username: conversation?.name ?? ""},
+    sender: {
+      profilePic: conversation?.profilePic ?? "",
+      username: conversation?.name ?? "",
+    },
     conversation: { type: conversation?.type ?? "" },
   };
 
   const sendMessage = () => {
     newMessage.message = inputValue;
-    socket.emit("messageTo", {from: userId, conversationId: conversation?.id, message: inputValue});
+    socket.emit("messageTo", {
+      from: userId,
+      conversationId: conversation?.id,
+      message: inputValue,
+    });
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setInputValue("");
   };
@@ -176,8 +190,7 @@ const TypeMessage = ({maxId}:{maxId:number}) => {
       setInputValue("");
     }
   };
-  
-  
+
   const handleClick = () => {
     sendMessage();
     setInputValue("");
@@ -193,7 +206,7 @@ const TypeMessage = ({maxId}:{maxId:number}) => {
         placeholder="Type Something ..."
         className="typeMsg"
       />
-       <Image
+      <Image
         onClick={handleClick}
         className="sendIcon"
         src={sendIcon}

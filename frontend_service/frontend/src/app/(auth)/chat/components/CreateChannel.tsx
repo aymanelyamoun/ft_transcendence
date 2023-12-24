@@ -78,9 +78,9 @@ const CreateChannel = ({
       const channelData = {
         channelName: saveChannelName,
         channelPic: "some link",
-        creator: creatorInfo?.id,
-        type: selectedOption,
         password: savePassword,
+        type: selectedOption,
+        // creator: creatorInfo?.id,
         members: members,
         admines: [creatorInfo],
         // here i should add the selected friends
@@ -118,7 +118,6 @@ const CreateChannel = ({
             setNotCreated(true);
             throw new Error("Network response was not ok");
           }
-          // console.log("res: ", res);
           // return res.json();
         })
         // .then((data) => {
@@ -145,7 +144,7 @@ const CreateChannel = ({
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
             {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setChannelCreated(false);}} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
-            {notCreated && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
+            {notCreated && (<AlertMessage onClick={() => {setNotCreated(false); setChannelCreated(false);}} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
             <div>
               <Image
                 className="channelImage"

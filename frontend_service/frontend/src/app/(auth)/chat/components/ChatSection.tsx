@@ -147,7 +147,7 @@ const MessageChat = ({
           width={43}
           height={43}
         />
-        <p className="ml-2 mt-2 mb-2 text-[#FFFFFF]"> {message.message} </p>
+        <p className="ml-2 mt-12 mb-2 text-[#FFFFFF]"> {message.message} </p>
       </div>
     </div>
   );

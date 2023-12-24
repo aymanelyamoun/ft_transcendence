@@ -41,7 +41,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
     setSavePassword(event.target.value);
   };
 
-  const handleCreateButton = () => {
+  const handleEditButton = () => {
     if (passwordMatch && saveChannelName !== ""){
       setShowNotify(true);
     }
@@ -51,6 +51,41 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
   
     if(saveChannelName === ""){
         setChannelName(true);
+
+
+      // here i should fetch the channelName and channelPic and channelType and else ... from the backend
+
+      const channelData = {
+        channelName: saveChannelName,
+        channelPic: "some link",
+        password: savePassword,
+        type: selectedOption,
+        // creator: creatorInfo?.id,
+        // here i should add the selected friends
+      };
+      console.log("channelData of Delete: ", channelData);
+      const fetchFun = async () => {
+        await fetch("http://localhost:3001/api/channels/deleteChannel", {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(channelData),
+        })
+          .then((res) => {
+            console.log("res: ", res);
+            if (!res.ok) {
+              throw new Error("Network response was not ok");
+            }
+            setEditChannel(false);
+          })
+          .catch((error) => {
+            console.error("Error during fetch:", error);
+          });
+      };
+      fetchFun();
     }
 
     // const members = selectedFriends.map((friend) => ({
@@ -247,7 +282,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
               </div>
           </div>
         </div>
-        <button onClick={handleCreateButton} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
+        <button onClick={handleEditButton} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">
           Edit
         </button>
       </div>

@@ -121,6 +121,11 @@ export class ChannelController{
         return await this.prismaChatService.getConversationMembers( id , req);
     }
 
+    @Get("/channelInfos/:id")
+    async getChannelInfo(@Param('id') channelId:string, @Req() req:Request){
+        return await this.prismaChatService.getChannelInfos(channelId, req);
+    }
+
 
     // this one is just tmeporary it should be handeled in the user part
     @Get('friends/:id')

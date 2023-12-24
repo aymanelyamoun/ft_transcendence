@@ -124,11 +124,11 @@ export class UserService {
     async allUsers(userloged: string) {
         try {
             const users = await this.prisma.user.findMany({
-                select: {
-                    id: true,
-                    username: true,
-                    profilePic: true,
-                },
+                // select: {
+                //     id: true,
+                //     username: true,
+                //     profilePic: true,
+                // },
             //     where: {
             //         id: { not: userloged },
             //     AND:{
@@ -478,6 +478,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                     }
                 }
             })
+            console.log(profile);
             return (profile);
 
         }catch (error)

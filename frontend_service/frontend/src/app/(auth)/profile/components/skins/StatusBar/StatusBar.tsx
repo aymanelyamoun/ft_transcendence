@@ -8,8 +8,8 @@ import Link from 'next/link'
 
 interface StatusBarProps {
     Table: ReactNode;
-    // Paddle: ReactNode;
-    // Ball: ReactNode;
+    Paddle: ReactNode;
+    Ball: ReactNode;
 }
 
 const StatusBar = (props: StatusBarProps) => {
@@ -44,8 +44,8 @@ const StatusBar = (props: StatusBarProps) => {
             </ul>
             <div className={styles.content}>
                 {table && props.Table} {/* Render Table content if 'table' state is true */}
-                {/* {paddle && props.Paddle} Render Paddle content if 'paddle' state is true */}
-                {/* {ball && props.Ball} Render Ball content if 'ball' state is true */}
+                {paddle && props.Paddle}
+                {ball && props.Ball}
             </div>
         </div>
     );

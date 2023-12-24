@@ -21,6 +21,7 @@ interface SidebarInfo {
 interface SidebarProps {
   sidebar: SidebarInfo;
   ShowSettings: boolean;
+  setShowEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   // onSidebarItemClick: (id: string) => void;
 }
 
@@ -149,9 +150,11 @@ const WalletValue = styled.span`
 const Sidebar: React.FC<SidebarProps> = (props) => {
 
   const { ShowSettings } = props; // Destructure the props object to get the ShowSettings property
+  const setShowEditProfile = props.setShowEditProfile;
   useEffect (() => {
     console.log(ShowSettings);
   },[]);
+
   return (
         <SidebarRoot>
         <SidebarContainer>
@@ -168,7 +171,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             <WalletIcon />
             <WalletValue>{props.sidebar.wallet}</WalletValue>
         </Wallet>
-        {ShowSettings ? <Settings /> : null}
+        {ShowSettings ? <Settings setShowEditProfile={setShowEditProfile}/> : null}
         {/* <Settings /> */}
         </SidebarContainer>
     </SidebarRoot>

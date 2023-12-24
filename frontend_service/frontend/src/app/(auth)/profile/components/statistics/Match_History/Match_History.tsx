@@ -4,21 +4,9 @@ import React, { useRef, useState, useEffect } from 'react';
 import styles from './Match_History.module.css'
 import MatchList from './MatchList';
 import styled from 'styled-components';
+import { Match } from './match_history_interfaces';
+import { MatchProps } from './match_history_interfaces';
 
-interface Match {
-    id: string;
-    player1_profile: string;
-    player2_profile: string;
-    player1_score: number;
-    player2_score: number;
-    result: string;
-    xp: number;
-}
-
-interface MatchProps {
-    matches: Match[];
-    UserProfileStyling: boolean;
-}
 
 const MatchesUserProfiles = styled.div`
 background: var(--linear-blue_purble, linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%));
@@ -72,6 +60,11 @@ const Match_History: React.FC<MatchProps> = (props) => {
     const ContainerList = UserProfileStyling
     ? MatchListUser
     : MatchListStandard;
+
+    useEffect(() => {
+        console.log("abababab" + props.matches);
+      },[]);
+
   return (
     // <div className={styles['matchesClassName']}>
     <Container>

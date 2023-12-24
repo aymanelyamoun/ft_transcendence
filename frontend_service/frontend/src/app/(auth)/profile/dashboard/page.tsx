@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, ReactNode} from 'react';
+import React, { useEffect, useState, ReactNode, useRef} from 'react';
 import Sidebar from '../components/dashboard/sidebar/sidebar';
 import Skins from '../components/dashboard/skins/skins';
 import Friends from '../components/dashboard/friends/friends';
@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import Animation from '../components/dashboard/Animation/Animation';
 
 import { socket } from "../../../../socket"
+import EditProfileShow from '../components/dashboard/EditProfile/EditProfileShow';
 
 
 
@@ -52,6 +53,8 @@ export const SocketUseContext = React.createContext(socket);
 
 function App() {
 
+  const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
+  const EditRef = useRef<HTMLDivElement>(null);
   const [SidebarInfo, setSidebarInfo] = useState({
     id: "",
     username: "",
@@ -98,17 +101,33 @@ function App() {
     // fetchReqData();
     // fetchUsers();
   }, []);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (EditRef.current && !EditRef.current.contains(event.target as Node))
+    {
+      // Click outside the FriendInfo component, hide it
+      setShowEditProfile(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [])
   
 
   return (
     <>
+            {ShowEditProfile && <EditProfileShow EditRef={EditRef}/>}
       <div className="App">
         <SocketUseContext.Provider value={socket}>
           <SearchDiv >
             <SearchHeader />
           </SearchDiv>
           <AppGlass>
-            <Sidebar sidebar={SidebarInfo} ShowSettings={true}/>
+            <Sidebar sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
             <Skins />
             <Animation />
             <Statistics />

@@ -10,10 +10,10 @@ import Skin_black from './../../../imgs/skin_black.svg';
 const Table: React.FC = () => {
   return (
     <div className={styles.Table}>
-      <SkinComp svgImage={Skin_yellow} skinName="Snouae rfe3 ta7di" WalletValue={215} />
-      <SkinComp svgImage={Skin_purple} skinName="Anas senior frontend" WalletValue={215} />
-      <SkinComp svgImage={Skin_green} skinName="Levi Ait Ackerman" WalletValue={215} />
-      <SkinComp svgImage={Skin_black} skinName="Ayman fih Depression" WalletValue={215} />
+      <SkinComp svgImage={Skin_yellow} skinName="Snouae rfe3 ta7di" />
+      <SkinComp svgImage={Skin_purple} skinName="Anas senior frontend" />
+      <SkinComp svgImage={Skin_green} skinName="Levi Ait Ackerman" />
+      <SkinComp svgImage={Skin_black} skinName="Ayman fih Depression" />
     </div>
   );
 };

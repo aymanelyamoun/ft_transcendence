@@ -131,10 +131,11 @@ export class PrismaChatService{
 
           const requestedChannel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{creator:true}});
           if (!requestedChannel) throw new ForbiddenException("channel does not exits");
-          const {creator} = (await requestedChannel);
+          const {creator} = (requestedChannel);
           if (creator.id === user.id)
           {
-            await this.prisma.channel.delete({where:{id:data.channelId}})
+            await this.prisma.userChannel.deleteMany({where:{channelId: requestedChannel.id}});
+            await this.prisma.channel.delete({where:{id:requestedChannel.id}})
           }
         }
 
@@ -258,6 +259,17 @@ export class PrismaChatService{
           const userInChannel = await this.prisma.userChannel.findUnique({where:{userId_channelId:{userId: user.id, channelId:data.channelId}}});
           console.log("userInChannel: ", userInChannel);
           if (!userInChannel) throw new NotFoundException('user does not exist');
+
+          // remove the user from the conversation 
+          const conversation = await this.getChannelConversation(data.channelId);
+
+          await this.prisma.conversation.update({where:{id:conversation.id}, data:{users:{disconnect:{id:user.id}}}});
+
+          const memberId = await this.prisma.member.findFirst({where:{AND:[{userId:user.id}, {conversationId:conversation.id}]}});
+
+          await this.prisma.conversation.update({where:{id:conversation.id}, data:{members:{delete
+            
+            :{id:memberId.id}}}});
 
           await this.prisma.userChannel.delete({where:{userId_channelId:{userId: user.id, channelId:data.channelId}}});
         }
@@ -795,17 +807,21 @@ export class PrismaChatService{
           const user = req['user'] as User;
 
           const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:true}});
+          console.log("conversation not found");
           if (!conversation)
             throw new NotFoundException("this conversation does not exist");
+          console.log("conversation is found");
 
           if (!conversation.members.some((member)=>{return(member.userId === user.id)}))
             throw new ForbiddenException("you are not a member of this conversation");
+          console.log("is member in conversation")
 
           const messages_ = await this.prisma.message.findMany({where:{conversationId:conversationId}, include:{sender:{ select: {profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
           // const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{messages:true}})
           // if (!conversation)
           if (!messages_)
             return new NotFoundException("conversation not found");
+          console.log("messages: ", messages_);
           return messages_;
         }
 
@@ -820,6 +836,27 @@ export class PrismaChatService{
 
           // Return the channelInfoWithoutHash object which doesn't include the hash property
           return channelInfoWithoutHash;
+        }
+
+
+        async getChannelInfos(channelId: string, @Req() req: Request) {
+          const user = req['user'] as User;
+
+          const channelData = await this.prisma.channel.findUnique({
+            where: {id: channelId},
+            select:{
+              creator:{select:{id:true, username:true, profilePic:true}},
+              channelName:true,
+              channelPic:true,
+              channelType:true,
+            }
+            // include: {creator: true}
+          });
+
+          if (!channelData) throw new NotFoundException("channel does not exist");
+
+          return channelData;
+
         }
 
     // this one is just tmeporary it should be handeled in the user part

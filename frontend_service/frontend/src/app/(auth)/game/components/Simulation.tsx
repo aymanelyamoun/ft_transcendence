@@ -115,7 +115,7 @@ export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF TH
     useEffect(() => {
         const cw = document.getElementById('ParentSim')?.clientWidth as number
         const ch = document.getElementById('ParentSim')?.clientHeight as number
-        const element = document.getElementById('Scene') as HTMLElement
+        const element = document.getElementById('Scene') as HTMLElement;
         const render = Render.create({
           element: element,
           engine: engine.current,

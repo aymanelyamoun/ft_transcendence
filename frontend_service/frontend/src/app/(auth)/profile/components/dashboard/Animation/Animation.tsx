@@ -1,4 +1,4 @@
-import Simulation from '@/app/game/components/Simulation';
+import Simulation from '@/app/(auth)/game/components/Simulation';
 import React from 'react'
 import styled from 'styled-components'
 
@@ -23,7 +23,7 @@ height: 113%;
 const Animation = () => {
   return (
     <AnimationContainer id='ParentSim' className='relative flex flex-col justify-center items-center '>
-        < Simulation />
+      <Simulation />
     </AnimationContainer>
   )
 }

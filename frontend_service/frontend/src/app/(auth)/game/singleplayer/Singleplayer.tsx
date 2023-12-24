@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useRef} from "react";
 import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
-import { IoArrowBackCircle } from "react-icons/io5";
+import * as Skins from '../utils/Skins';
+
 
 const HEIGHT : number = 800;
 const WIDTH : number = 1500;
@@ -12,7 +13,6 @@ const BALLRADIUS : number = 10;
 const BALLSPEED : number = 12;
 const PERCENTWIDTH : number = 100;
 const PERCENTHEIGHT : number = 70;
-const backgroundImg : string = '/GameAssets/Gbackground.png';
 var aiPredict : boolean = false;
 var aiDirection : number = Math.random() < 0.5 ? 1 : -1;
 var PredictedBallY : number = 0;
@@ -22,22 +22,6 @@ var ballVelocity : Matter.Vector = Vector.create(-5, 0);
 var PADDLESPEED : number = 6;
 var PADDLEMOVE : number = 0;
 const maxSpin = 1;
-interface Skin {
-    path: string;
-    width: number;
-    height: number;
-}
-const ballSkin : Skin = {
-    path: '/GameAssets/newBall.png',
-    width: 20,
-    height: 20,
-};
-const paddleSkin : Skin = {
-    path: '/GameAssets/OPaddle.png',
-    width: 20,
-    height: 183, //px
-};
-
 
 const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
     // add a pong game bodies
@@ -58,10 +42,17 @@ function ballPrediction(engine : Engine)
     const ball = engine.world.bodies[4];
     const barHeight = barB.bounds.max.y - barB.bounds.min.y;
     const midBar = barHeight / 2;
-    let timeToIntercept = (barB.position.x - ball.position.x) / ballVelocity.x;
-    console.log('ball velocity when predicting: ', ballVelocity.x, ballVelocity.y)
-    PredictedBallY = ball.position.y + ball.velocity.y * timeToIntercept;
-    predictOffset = (Math.random() * 2 - 1) * midBar;
+    const x0 = ball.position.x;
+    const y0 = ball.position.y;
+    const vy = ball.velocity.y;
+    const speed = Math.sqrt(ball.velocity.x ** 2 + vy ** 2);
+    const distanceToTarget = Math.abs(barB.position.x - x0);
+    const timeToReachTarget = distanceToTarget / speed;
+    let revDir = 1;
+    if (ball.velocity.y > 0)
+        revDir = -1;
+    PredictedBallY = y0 + vy * timeToReachTarget;
+    // predictOffset = Math.random() * midBar * revDir;
 }
 
 function botMove(engine : Engine)
@@ -79,8 +70,6 @@ function botMove(engine : Engine)
             aiDirection = -1
         else
             aiDirection = 0
-        // if (checkClose(flooredPredictedY, barB, flooredBarY, aiDirection))
-        //     return;
         if (aiDirection == 0)
             return;
         let i = 0;
@@ -92,8 +81,6 @@ function botMove(engine : Engine)
             checkY += aiDirection;
             i++;
         }
-
-        console.log('ball velocity when moving: ', ballVelocity.x, ballVelocity.y)
         let newY = barB.position.y + (aiDirection * i);
         let newBarPos = Matter.Vector.create(barB.position.x, newY)
         if (!wallWalk(newY, barB, engine))
@@ -152,15 +139,10 @@ const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.E
         {
             setTimeout(function() {
                 ballPrediction(engine);
-            }, 1)
+            }, 100)
         }
         Matter.Body.setVelocity(ball, ballVelocity);
     });
-}
-
-const redirectMenu = () => {
-    // if (window.confirm('Are you sure you want to leave the game? You will lose your match.')) 
-    window.location.href = '/game'; 
 }
 
 const wallWalk = (newPos: number, paddleOne: Matter.Body, engine : Engine) : boolean => {
@@ -189,7 +171,7 @@ const scaleToWindow  = (render: Render, actualWidth : number, actualHeight : num
     const scaledHeight = actualHeight * scale;
     render.canvas.width = scaledWidth;
     render.canvas.height = scaledHeight;
-    render.canvas.style.backgroundImage = `url(${backgroundImg})`;
+    render.canvas.style.backgroundImage = `url(${Skins.defaultTable.path})`;
     render.canvas.style.backgroundPosition = 'center';
     render.canvas.style.backgroundSize = 'cover';
     render.canvas.style.borderRadius = '10px';
@@ -220,6 +202,7 @@ function ScaleAndRender  (engine: Matter.Engine, render: Matter.Render,
         engine.world.bodies.forEach((body: Matter.Body) => {
             if ((i === 2 || i === 3) && body.render.sprite !== undefined) {
                 const sprite = body.render.sprite as any;
+                const paddleSkin = Skins.defaultPaddle;
                 sprite.texture = paddleSkin.path;
                 const vertices = body.vertices;
                 const bodyWidth = Math.abs(vertices[1].x - vertices[0].x);
@@ -249,7 +232,7 @@ const releaseHandle = (e: KeyboardEvent) => {
 
 const checkGoals = (engine: Matter.Engine, render : Render) => {
     const ball = engine.world.bodies[4];
-    if (ball.position.x < 0)
+    if (ball.position.x + ball.circleRadius! < 0)
     {
         let score = parseInt(document.getElementById('scoreTwo')!.innerHTML);
         score++;
@@ -263,7 +246,7 @@ const checkGoals = (engine: Matter.Engine, render : Render) => {
         aiPredict = false;
         aiDirection = Math.random() < 0.5 ? 1 : -1;
     }
-    else if (ball.position.x > render.canvas.width)
+    else if (ball.position.x - ball.circleRadius! > render.canvas.width)
     {
         let score = parseInt(document.getElementById('scoreOne')!.innerHTML);
         score++;
@@ -309,7 +292,6 @@ export default function Singleplayer (){
             Matter.Render.world(render)
         }
         Matter.Events.on(engine.current, 'collisionStart', CollisionEvent);
-        // Matter.Events.on(engine.current, "beforeUpdate", renderLoop);
         Matter.Events.on(runner, "beforeTick", renderLoop);
         window.addEventListener('keydown', pressHandle);
         window.addEventListener('keyup', releaseHandle);
@@ -317,10 +299,8 @@ export default function Singleplayer (){
             window.removeEventListener('keydown', pressHandle);
             window.removeEventListener('keyup', releaseHandle);
             Matter.Events.off(engine.current, 'collisionStart', CollisionEvent);
-            // Matter.Events.off(engine.current, "beforeUpdate", renderLoop);
             Matter.Events.off(runner, "beforeTick", renderLoop);
             Matter.Runner.stop(runner)
-            console.log('Singleplayer unmount')
             Render.stop(render)
             Composite.clear(engine.current.world, false);
             Engine.clear(engine.current)
@@ -330,12 +310,8 @@ export default function Singleplayer (){
       }, [])
 
     return (
-        <div id="parentDiv" className="flex flex-col h-full w-full justify-center items-center gap-[5vh]">
-            <div id="TopBar" className=" w-1/3 max-w-xs h-14 outline outline-2 bg-[#282C4E] rounded-b-lg">
-                <button className="absolute h-14 w-14 rounded-bl-lg left-0 top-0 ">
-                    <IoArrowBackCircle className="h-14 w-14 text-white" onClick={() => redirectMenu()}/>
-                </button>
-            </div>
+        <div id="parentDiv" className="flex flex-col h-full w-full items-center gap-[5vh] mt-[5vh]">
+            {/* <Navbar /> */}
             <div id="SingleMatch" className="flex flex-col items-center" />
             <div id="scoreDisplay" className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 ">
                 <img id="playerOneImage" className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" />

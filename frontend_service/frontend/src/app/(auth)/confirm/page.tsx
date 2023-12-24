@@ -80,8 +80,7 @@ export default function Confirm() {
       return;
     }
     setIsNotify(true);
-    window.location.href = "/profile/dashboard";    
-  
+    router.push("/profile/dashboard");
   };
   
   

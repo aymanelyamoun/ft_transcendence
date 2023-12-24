@@ -28,6 +28,9 @@ model User{
   typeLog LOG_TYPE?
   isFirstLog Boolean?
   isTwoFactorEnabled Boolean?
+  table String @default("default")
+  paddle String @default("default")
+  ball String @default("default")
 
   totalXp Int @default(0)
 

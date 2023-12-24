@@ -26,6 +26,7 @@ export class GatewayService{
         if (this.connectedSocketsMap.has(userId))
         {
             console.log("--------a connected user : ", userId);
+            console.log("size: ", this.connectedSocketsMap.get(userId).size)
             if (this.connectedSocketsMap.get(userId).size > 0)
                 return true;
             else

@@ -43,27 +43,28 @@ export class ChatGateway implements OnGatewayConnection {
         socket["inQueue"] = false;
         socket["inChat"] = false;
 
+        console.log("------- ADDING CONNECTED SOCKET TO MAP --------")
         this.gatewayService.addConnectedSocketToMap({socket:socket, userId:socket['user'].id});
-        console.log("emmiting status userId", socket['user'].id);
+        // console.log("emmiting status userId", socket['user'].id);
         this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
         // this.gatewayService.addConnectedSocketToMap({socket:socket, userId:user.id});
         // console.log("emmiting status userId", user.id);
         // this.server.emit('friendStatus', {userId: user.id, status: '1'});
-        console.log("userId: " , socket['user'].id, " is now connected");
+        // console.log("userId: " , socket['user'].id, " is now connected");
         await this.emitFriendsStatus(socket['user'].id);
       }
       catch(error){
         socket.emit('redirect', '/', 'Your session has expired');
-        socket.disconnect(true);
+        // socket.disconnect(true);
       }
     }
     else 
     {
-      if (socket['user'] !== undefined){
-        if (!this.gatewayService.userIsConnected(socket['user'].id))
-          this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
-      }
-      socket.disconnect(true);
+      // if (socket['user'] !== undefined){
+      //   if (!this.gatewayService.userIsConnected(socket['user'].id))
+      //     this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
+      // }
+      // socket.disconnect(true);
     }
     }
     
@@ -71,28 +72,29 @@ export class ChatGateway implements OnGatewayConnection {
   // ;}
   
   async emitFriendsStatus(userId:string){
-    console.log("emmiting status userId", userId);
+    // console.log("emmiting status userId", userId);
     const friends = await this.userService.allFriend(userId);
     friends.forEach((friend)=>{
       if (this.gatewayService.userIsConnected(friend.id))
       {
         const inGame = this.gameService.inGameCheckByID(friend.id);
         if (inGame){
-          this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
-            socket.emit('friendStatus', {userId: userId, status: '2'});
+          console.log("emmiting status userId is in game: ", userId);
+          this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
+            socket.emit('friendStatus', {userId: friend.id, status: '2'});
           });
         }
         else{
           console.log("emmiting status userId is logged: ", userId);
-          this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
-            socket.emit('friendStatus', {userId: userId, status: '1'});
+          this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
+            socket.emit('friendStatus', {userId: friend.id, status: '1'});
           });
         }
       }
       else{
         console.log("emmiting status userId is not logged: ", userId);
-        this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
-          socket.emit('friendStatus', {userId: userId, status: '0'});
+        this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
+          socket.emit('friendStatus', {userId: friend.id, status: '0'});
         });
       }
     });
@@ -120,6 +122,7 @@ export class ChatGateway implements OnGatewayConnection {
       console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
     }
     // else{
+      console.log("------- REMOVING CONNECTED SOCKET TO MAP --------")
     this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
     if (this.gatewayService.userIsConnected(socket['user'].id)){
 

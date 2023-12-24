@@ -45,10 +45,8 @@ flex-wrap: nowrap
 const MatchItem: React.FC<MatchListProps> = (props) => {
     const match = props;
     const UserProfileStyling = props.UserProfileStyling;
-    useEffect(() => { 
-        console.log('Simple useEffect');
-      }, []);
     const ItemContainer = UserProfileStyling ? matchItemContainer : UserProfileContainer;
+
   return (
     <ItemContainer>
         <div className={styles['matchItem-player1']}>
@@ -59,7 +57,11 @@ const MatchItem: React.FC<MatchListProps> = (props) => {
             <img src={match.opponnetProfilePic} alt="Profile" className="rounded-lg" />
         </div>
         <div className={styles['matchItem-result']}>
-            <span className={styles['matchItem-result']}>{"Win"}</span>
+            {match.scoredGoals > match.concededGoals ? (
+                <span className={styles['matchItem-result']}>Win</span>
+            ) : (
+                <span className={styles['matchItem-result']}>Lose</span>
+            )}
         </div>
         <div className={styles['matchItem-scores']}>
             <span className={styles['matchItem-scores']}>{match.scoredGoals}</span>

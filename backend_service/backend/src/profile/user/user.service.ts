@@ -549,28 +549,31 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     }
 
 
-    async getTotalWinsLoses(@Req() req : Request)
+    async getTotalWinsLoses(username: string)
     {
         try
         {
-            const user = req['user'] as User;
-            const id = user.id;
+           const user = await this.findByUsername(username);
+           if (!user)
+                throw new UnauthorizedException('Internal server error');
             const wins = await this.prisma.gameRecord.count({
-                where : {userId : id,
+                where : {userId : user.id,
                 xp: {
                     gt: 0,
                   },
                 },
             })
-            const losses = await this.prisma.gameRecord.count({
-                where : {userId : id,
+            const loses = await this.prisma.gameRecord.count({
+                where : {userId : user.id,
                 xp: {
                     lte: 0,
                     },
                 },
             })
-            const total =  wins + losses;
-            return { wins, losses, total};
+             const totalGames =  wins + loses;
+             console.log('wins : ',wins);
+             console.log('losses : ',loses);
+            return { wins : wins, loses : loses, totalGames  : totalGames};
         }
         catch (error)
         {

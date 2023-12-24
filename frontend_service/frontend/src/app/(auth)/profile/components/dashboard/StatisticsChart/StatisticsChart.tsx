@@ -4,10 +4,14 @@ import React from 'react';
 import * as echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import styles from './StatisticsChart.module.css';
+import { StatisticsInterface } from '../interfaces';
 
-interface StatisticsChartProps {}
+interface StatisticsChartProps {
+    statistics: StatisticsInterface;
+}
 
-const StatisticsChart: React.FC<StatisticsChartProps> = () => {
+const StatisticsChart: React.FC<StatisticsChartProps> = (props) => {
+    const statistics = props.statistics;
   const option = {
     color: ['var(--blue 500)'],
 

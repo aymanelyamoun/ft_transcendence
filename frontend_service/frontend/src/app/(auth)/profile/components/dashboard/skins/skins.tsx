@@ -1,6 +1,8 @@
 "use client"
 import React from 'react';
-import styles from "./skins.module.css"; // Update the import if needed
+import styles from "./skins.module.css";
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Skins: React.FC = () => {
   return (

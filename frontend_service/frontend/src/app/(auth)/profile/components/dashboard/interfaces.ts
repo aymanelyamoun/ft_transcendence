@@ -53,3 +53,10 @@ export interface SearchU {
       }[];
         setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
       }
+
+export interface StatisticsInterface
+{
+  wins: number;
+  loses: number;
+  totalGames: number;
+}

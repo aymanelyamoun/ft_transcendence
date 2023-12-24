@@ -1,9 +1,8 @@
 'use client';
 import { useEffect, useRef} from "react";
 import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
-import { IoArrowBackCircle } from "react-icons/io5";
-import Link from "next/link";
-import Navbar from "../components/Navbar";
+import * as Skins from '../utils/Skins';
+
 
 const HEIGHT : number = 800;
 const WIDTH : number = 1500;
@@ -14,7 +13,6 @@ const BALLRADIUS : number = 10;
 const BALLSPEED : number = 12;
 const PERCENTWIDTH : number = 100;
 const PERCENTHEIGHT : number = 70;
-const backgroundImg : string = '/GameAssets/Gbackground.png';
 var aiPredict : boolean = false;
 var aiDirection : number = Math.random() < 0.5 ? 1 : -1;
 var PredictedBallY : number = 0;
@@ -24,24 +22,6 @@ var ballVelocity : Matter.Vector = Vector.create(-5, 0);
 var PADDLESPEED : number = 6;
 var PADDLEMOVE : number = 0;
 const maxSpin = 1;
-
-interface Skin {
-    path: string;
-    width: number;
-    height: number;
-}
-const ballSkin : Skin = {
-    path: '/GameAssets/newBall.png',
-    width: 20,
-    height: 20,
-};
-
-const paddleSkin : Skin = {
-    path: '/GameAssets/OPaddle.png',
-    width: 20,
-    height: 183, //px
-};
-
 
 const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
     // add a pong game bodies
@@ -191,7 +171,7 @@ const scaleToWindow  = (render: Render, actualWidth : number, actualHeight : num
     const scaledHeight = actualHeight * scale;
     render.canvas.width = scaledWidth;
     render.canvas.height = scaledHeight;
-    render.canvas.style.backgroundImage = `url(${backgroundImg})`;
+    render.canvas.style.backgroundImage = `url(${Skins.defaultTable.path})`;
     render.canvas.style.backgroundPosition = 'center';
     render.canvas.style.backgroundSize = 'cover';
     render.canvas.style.borderRadius = '10px';
@@ -222,6 +202,7 @@ function ScaleAndRender  (engine: Matter.Engine, render: Matter.Render,
         engine.world.bodies.forEach((body: Matter.Body) => {
             if ((i === 2 || i === 3) && body.render.sprite !== undefined) {
                 const sprite = body.render.sprite as any;
+                const paddleSkin = Skins.defaultPaddle;
                 sprite.texture = paddleSkin.path;
                 const vertices = body.vertices;
                 const bodyWidth = Math.abs(vertices[1].x - vertices[0].x);

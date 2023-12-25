@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './SkinComp.module.css';
 import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
@@ -8,8 +8,8 @@ interface SkinProps {
   svgImage: any;
   Name: string;
   Type: string;
-  active: boolean;
-  onClick: () => void;
+  active: string;
+  setActiveSkin: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SkinImg = styled.div`
@@ -17,9 +17,9 @@ position: relative;
   top: 7vh;
 `;
 
-const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, onClick }) => {
+const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, setActiveSkin }) => {
 
-  const SendSkin = async (Name: string, Type: string, onFetchComplete: () => void) => {
+  const SendSkin = async (Name: string, Type: string) => {
     console.log("skin body: ", Name, Type);
     try {
     const response = await fetch(`${Backend_URL}user/skins`, {
@@ -34,10 +34,7 @@ const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, onClick }
     });
     if (response.ok)
     {
-      console.log("active before: ", active);
-      onFetchComplete();
-      console.log("active after: ", active);
-      // setactive(Name);
+      setActiveSkin(Name);
     }
     // const body = await response.text();
     // console.log("skin body: ", response);
@@ -52,8 +49,11 @@ const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, onClick }
     alert(error);
   }
   }
+  // useEffect(() => {
+  //   console.log("active: ", active);
+  // },[setActiveSkin]);
   return (
-    <div className={`${styles.SkinComp} ${active ? styles.active : ''}`} onClick={() => SendSkin(Name, Type, onClick)}>
+    <div className={`${styles.SkinComp} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
       <SkinImg>
         <img src={svgImage.src} alt={Name} />
       </SkinImg>

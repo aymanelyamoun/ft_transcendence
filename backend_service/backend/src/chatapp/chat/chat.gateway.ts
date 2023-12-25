@@ -42,7 +42,7 @@ export class ChatGateway implements OnGatewayConnection {
         socket["inGame"] = false;
         socket["inQueue"] = false;
         socket["inChat"] = false;
-
+        
         console.log("------- ADDING CONNECTED SOCKET TO MAP --------")
         this.gatewayService.addConnectedSocketToMap({socket:socket, userId:socket['user'].id});
         // console.log("emmiting status userId", socket['user'].id);
@@ -68,6 +68,14 @@ export class ChatGateway implements OnGatewayConnection {
     }
     }
     
+
+    @SubscribeMessage("getFriendStatus")
+    async getFriendStatus(client: Socket)
+    {
+      const user = await this.getUserData(client) as User;
+      await this.emitFriendsStatus(user.id);
+    }
+
   // })
   // ;}
   

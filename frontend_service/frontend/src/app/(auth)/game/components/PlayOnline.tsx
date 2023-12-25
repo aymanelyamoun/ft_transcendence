@@ -3,6 +3,7 @@ import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import Matter, {Engine, Bodies, World, Render, Composite} from 'matter-js';
 import Simulation from '@/app/(auth)/game/components/Simulation';
+import { socket } from '@/socket';
 
 
 interface GameMenuProps {
@@ -11,10 +12,16 @@ interface GameMenuProps {
 }
 export default function PlayOnline({setGameState, gameState}: GameMenuProps) {
     // add a matter js simulation in the background of scene
-
+    useEffect(() => {
+        socket.connect();
+        console.log('socket connected');
+        return () => {
+            socket.disconnect();
+        }
+    }, [])
     return (
         <button id='ParentSim' className='relative linear-main rounded-lg bg-gradient-to-br w-[54vw] h-[80vh] text-white flex flex-col justify-center items-center'
-        onClick={() => {setGameState('playing')}}>
+        onClick={() => {setGameState('playing'); }}>
             <Simulation/>
             <div className='w-[70%] h-[60%] bg-[#9A9BD380] mx-auto rounded-xl'>
                 <div className='flex flex-row h-full w-full relative'>

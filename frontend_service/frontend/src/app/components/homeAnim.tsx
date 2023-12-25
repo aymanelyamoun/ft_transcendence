@@ -126,9 +126,7 @@ export default function AnimationFX(){
         const mouseConstraint = Matter.MouseConstraint.create(engine.current, {
             mouse: mouse,
             constraint: {
-                render: {
-                    visible: false,
-                },
+                render: {visible: false,},
                 stiffness: 0.2,
             },
         });
@@ -161,25 +159,23 @@ export default function AnimationFX(){
                 Matter.Body.setPosition(engine.current.world.bodies[3], {x: cw + wallWidth / 2, y: ch / 2});
                 // print world bounds
             }
-            function frameUpdate() {
-                ballProtect(engine.current);
-            }
+            function frameUpdate() {ballProtect(engine.current);}
             Matter.Runner.run(runner, engine.current);
             window.addEventListener('resize', handleResize);
             Matter.Events.on(engine.current, 'beforeUpdate', frameUpdate);
             Matter.Events.on(mouseConstraint, "mousemove", (e) => magnetize(e, mouseConstraint, engine.current));
             Matter.Render.run(render);
             return () => {
-            Matter.Events.off(engine.current, 'beforeUpdate', frameUpdate);
-            Matter.Events.off(mouseConstraint, "mousemove", (e) => magnetize(e, mouseConstraint, engine.current));
-            window.removeEventListener('resize', handleResize);
-            Matter.Render.stop(render);
-            Matter.Runner.stop(runner);
-            Matter.Composite.clear(engine.current.world, false);
-            Matter.Engine.clear(engine.current);
-            render.canvas.remove();
-            render.textures = {};
-        };
+                Matter.Events.off(engine.current, 'beforeUpdate', frameUpdate);
+                Matter.Events.off(mouseConstraint, "mousemove", (e) => magnetize(e, mouseConstraint, engine.current));
+                window.removeEventListener('resize', handleResize);
+                Matter.Render.stop(render);
+                Matter.Runner.stop(runner);
+                Matter.Composite.clear(engine.current.world, false);
+                Matter.Engine.clear(engine.current);
+                render.canvas.remove();
+                render.textures = {};
+            };
     }, []);
     return (<div id='matter' className='flex absolute'/>)
 }

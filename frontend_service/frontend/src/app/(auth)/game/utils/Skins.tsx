@@ -69,3 +69,40 @@ export const defaultPaddle : SkinInterface = {
     height: 183,
     path: '/GameAssets/defaultPaddle.png',
 };
+
+export const getBallSkin = (skin : string) => {
+    switch (skin) {
+        case 'redBall':
+            return redBall;
+        case 'basketBall':
+            return basketBall;
+        case 'footBall':
+            return footBall;
+        default:
+            return defaultBall;
+    }
+};
+
+export const getPaddleSkin = (skin : string) => {
+    switch (skin) {
+        case 'redPaddle':
+            return redPaddle;
+        case 'greenPaddle':
+            return greenPaddle;
+        case 'bluePaddle':
+            return bluePaddle;
+        default:
+            return defaultPaddle;
+    }
+};
+
+export const getTableSkin = (skin : string) => {
+    switch (skin) {
+        case 'redTable':
+            return redTable;
+        case 'beachTable':
+            return beachTable;
+        default:
+            return defaultTable;
+    }
+};

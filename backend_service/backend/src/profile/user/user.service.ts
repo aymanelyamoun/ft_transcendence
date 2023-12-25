@@ -585,23 +585,23 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     {
         try
         {
-            // console.log("skins data : ", body);
+            console.log("skins data : ", body);
             const user = req['user'] as User;
             const userid = user.id;
             if ( body.Type == "ball")
                 return  await this.prisma.user.update({
                     where : {id : userid},
-                    data: { ball:  body.Name }
+                    data: { ball:  body.Name}
                 })
             else if ( body.Type == "paddle")
                 return  await this.prisma.user.update({
                     where : {id : userid},
-                    data: { paddle:  body.Name }
+                    data: { paddle:  body.Name}
                 })
             else if ( body.Type == "table")
                 return  await this.prisma.user.update({
                     where : {id : userid},
-                    data: { table:  body.Name }
+                    data: { table:  body.Name}
                 })
         }
         catch (error)

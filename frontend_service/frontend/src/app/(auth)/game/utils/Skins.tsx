@@ -72,11 +72,11 @@ export const defaultPaddle : SkinInterface = {
 
 export const getBallSkin = (skin : string) => {
     switch (skin) {
-        case 'redBall':
+        case 'redball':
             return redBall;
-        case 'basketBall':
+        case 'basketball':
             return basketBall;
-        case 'footBall':
+        case 'mikaza':
             return footBall;
         default:
             return defaultBall;
@@ -85,11 +85,11 @@ export const getBallSkin = (skin : string) => {
 
 export const getPaddleSkin = (skin : string) => {
     switch (skin) {
-        case 'redPaddle':
+        case 'bong':
             return redPaddle;
-        case 'greenPaddle':
+        case 'greeny':
             return greenPaddle;
-        case 'bluePaddle':
+        case 'potto':
             return bluePaddle;
         default:
             return defaultPaddle;
@@ -98,9 +98,9 @@ export const getPaddleSkin = (skin : string) => {
 
 export const getTableSkin = (skin : string) => {
     switch (skin) {
-        case 'redTable':
+        case 'kazino':
             return redTable;
-        case 'beachTable':
+        case 'beach':
             return beachTable;
         default:
             return defaultTable;

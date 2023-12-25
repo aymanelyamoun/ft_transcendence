@@ -516,7 +516,9 @@ export const ChatPage = () => {
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
 
-  console.log("conversationId:", conversation?.id);
+
+
+  // console.log("conversationId:", conversation?.id);
   useEffect(() => {
     const fetchFun = async () => {
       const isAdmin = true; // Replace true with your desired value

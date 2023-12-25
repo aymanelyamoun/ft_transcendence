@@ -1,16 +1,28 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
 import { AlertMessage } from './alertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
+import { ConversationListContext, LstConversationStateContext } from './ConversationInfo';
 
+interface channelInfos{
+  id: number;
+  channelName: string;
+  channelPic: string;
+  type: string;
+  password: string;
+  creator: string;
+  members: string[];
+  admines: string[];
+
+}
 
 
 const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
   // selectedOption need to be intialized with the channel type by fetching it from the backend
-  const [selectedOption, setSelectedOption] = useState<string>("protected");
+  const [selectedOption, setSelectedOption] = useState<string>("public");
   const [channelName, setChannelName] = useState<boolean>(false);
 
 
@@ -22,7 +34,11 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
 
+  const conversationProps = useContext(LstConversationStateContext);
+
   const cancelEditChannel = useRef<HTMLDivElement>(null);
+
+  const [conversationInfo, setConversationInfo] = useState<channelInfos | null>(null);
 
   const handleOptionChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
     if (saveChannelName === "")
@@ -41,93 +57,128 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
     setSavePassword(event.target.value);
   };
 
-  const handleEditButton = () => {
-    if (passwordMatch && saveChannelName !== ""){
-      setShowNotify(true);
-    }
-    if (!passwordMatch){
-    setShowAlert(true);
-    }
+  useEffect(() => {
+    const channelId = conversationProps.channelId;
+    console.log("channelId ??????????: ", channelId);
+    fetch(`http://localhost:3001/api/channels/channelInfos/${channelId}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+    .then((res) => {
+        console.log("res: ", res);
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("data??????????: ", data);
+        setConversationInfo(data);
+        const channelType = conversationInfo?.type;
+        setSelectedOption(channelType ?? "");
+      })
+      .catch((error) => {
+        console.error("Error during fetch:", error);
+      });
+  }, [selectedOption]);
   
+  console.log("conversationInfo ????????????????? : ", conversationInfo);
+    // setSelectedOption(data.type);
+
+    console.log("selectedOption ????????????????? : ", selectedOption);
+
+
+
+  const handleEditButton = () => {
+
+    if (!passwordMatch){
+      setShowAlert(true);
+    }
+    
     if(saveChannelName === ""){
-        setChannelName(true);
+      setChannelName(true);
 
-
+      
       // here i should fetch the channelName and channelPic and channelType and else ... from the backend
 
-      const channelData = {
-        channelName: saveChannelName,
-        channelPic: "some link",
-        password: savePassword,
-        type: selectedOption,
-        // creator: creatorInfo?.id,
-        // here i should add the selected friends
-      };
-      console.log("channelData of Delete: ", channelData);
-      const fetchFun = async () => {
-        await fetch("http://localhost:3001/api/channels/deleteChannel", {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify(channelData),
-        })
-          .then((res) => {
-            console.log("res: ", res);
-            if (!res.ok) {
-              throw new Error("Network response was not ok");
-            }
-            setEditChannel(false);
-          })
-          .catch((error) => {
-            console.error("Error during fetch:", error);
-          });
-      };
-      fetchFun();
+          // }
+      // const channelData = {
+      //   channelName: saveChannelName,
+      //   channelPic: "some link",
+      //   password: savePassword,
+      //   type: selectedOption,
+      //   // creator: creatorInfo?.id,
+      //   // here i should add the selected friends
+      // };
+      // console.log("channelData of Delete: ", channelData);
+      // const fetchPostFun = async () => {
+      //   await fetch("http://localhost:3001/api/channels/deleteChannel", {
+        //     method: "PATCH",
+        //     credentials: "include",
+        //     headers: {
+          //       "Content-Type": "application/json",
+      //       "Access-Control-Allow-Origin": "*",
+      //     },
+      //     body: JSON.stringify(channelData),
+      //   })
+      //     .then((res) => {
+        //       console.log("res: ", res);
+      //       if (!res.ok) {
+        //         throw new Error("Network response was not ok");
+        //       }
+        //       setEditChannel(false);
+      //     })
+      //     .catch((error) => {
+        //       console.error("Error during fetch:", error);
+      //     });
+      // };
+      // fetchPostFun();
     }
-
+    
     // const members = selectedFriends.map((friend) => ({
     //   userId: friend.id,
     //   isAdmin: false,
     // }));
 
     // const channelData = {
-    //   channelName: saveChannelName,
-    //   channelPic: "some link",
-    //   creator: creatorInfo?.id,
-    //   type: selectedOption,
-    //   password: savePassword,
-    //   members: members,
-    //   admines: [creatorInfo],
+      //   channelName: saveChannelName,
+      //   channelPic: "some link",
+      //   creator: creatorInfo?.id,
+      //   type: selectedOption,
+      //   password: savePassword,
+      //   members: members,
+      //   admines: [creatorInfo],
       // here i should add the selected friends
-    // };
-
+      // };
+      
       // console.log("channelData : ", channelData);
-
+      
       // fetch("http://localhost:3001/api/channels/createChannel", {
+        //   method: "POST",
+        //   mode: "cors",
+        //   credentials: "include",
+        //   headers: {
+          //     "Content-Type": "application/json",
+          //     "Access-Control-Allow-Origin": "*",
+          //   },
+          //   body: JSON.stringify(channelData),
+          // })
+          //   .then((res) => {
+            //     return res.json();
+            //   })
+            //   .then((data) => {
+              //     console.log("data : ", data);
+              //   });
+              // fetch("http://localhost:3001/api/channels/createChannel", {
       //   method: "POST",
       //   mode: "cors",
       //   credentials: "include",
       //   headers: {
-      //     "Content-Type": "application/json",
-      //     "Access-Control-Allow-Origin": "*",
-      //   },
-      //   body: JSON.stringify(channelData),
-      // })
-      //   .then((res) => {
-      //     return res.json();
-      //   })
-      //   .then((data) => {
-      //     console.log("data : ", data);
-      //   });
-      // fetch("http://localhost:3001/api/channels/createChannel", {
-      //   method: "POST",
-      //   mode: "cors",
-      //   credentials: "include",
-      //   headers: {
-      //     "Content-Type": "application/json",
+        //     "Content-Type": "application/json",
       //     "Access-Control-Allow-Origin": "*",
       //   },
       //   body: JSON.stringify(channelData),
@@ -144,20 +195,23 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
       // //   console.log("data: ", data);
       // // })
       // .catch((error) => {
-      //   console.error("Error during fetch:", error);
-      // });
+        //   console.error("Error during fetch:", error);
+        // });
         
-  }
-
+        if (passwordMatch && saveChannelName !== ""){
+          setShowNotify(true);
+        }
+      }
+      
   const handleCancelAddChannel = (event: any) => {
     if (
       cancelEditChannel.current &&
       !cancelEditChannel.current.contains(event.target)
-    ) {
-      setEditChannel(false);
-    }
+      ) {
+        setEditChannel(false);
+      }
   };
-
+  
   return (
     <div className=" editChannelOverlay flex justify-center items-center ">
       <div

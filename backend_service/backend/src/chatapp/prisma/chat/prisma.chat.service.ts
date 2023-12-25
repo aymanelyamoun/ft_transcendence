@@ -134,8 +134,21 @@ export class PrismaChatService{
           const {creator} = (requestedChannel);
           if (creator.id === user.id)
           {
-            await this.prisma.userChannel.deleteMany({where:{channelId: requestedChannel.id}});
-            await this.prisma.channel.delete({where:{id:requestedChannel.id}})
+            // const removeBannedUsers = this.prisma.channel.update({where:{id:data.channelId}, data:{banedUsers:{disconnect:{id:{in:data.banedUsers}}}}});
+            const conversation = await this.prisma.conversation.findUnique({where:{channelId:data.channelId}});
+            const conversationUsers = await this.prisma.conversation.findUnique({where:{channelId:data.channelId}, include:{users:true}});
+            // to protect 
+            const {users} = conversationUsers;
+            // add banned from deletion ...
+            const removeConversationFromUser =  this.prisma.conversation.update({where:{channelId:data.channelId}, data:{users:{disconnect: users.map((user)=>({id:user.id}))}}});
+            const deleteConversationMembers =  this.prisma.member.deleteMany({where:{conversationId:conversation.id}});
+            const deleteConversationMessages =  this.prisma.message.deleteMany({where:{conversationId:conversation.id}});
+            const deleteConversation =  this.prisma.conversation.delete({where:{channelId:requestedChannel.id}});
+            const deleteUserChannels = this.prisma.userChannel.deleteMany({where:{channelId: requestedChannel.id}});
+            const deleteChannel = this.prisma.channel.delete({where:{id:requestedChannel.id}})
+            await this.prisma.$transaction([removeConversationFromUser, deleteConversationMembers, deleteConversationMessages, deleteConversation ,deleteUserChannels, deleteChannel]);
+            // await this.prisma.conversation.delete({where:{channelId:requestedChannel.id}});
+            // await this.prisma.channel.delete({where:{id:requestedChannel.id}});
           }
         }
 

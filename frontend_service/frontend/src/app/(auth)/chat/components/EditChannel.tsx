@@ -59,6 +59,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
 
   useEffect(() => {
     const channelId = conversationProps.channelId;
+    // here i should fetch the channelName and channelPic and channelType and else ... from the backend
     console.log("channelId ??????????: ", channelId);
     fetch(`http://localhost:3001/api/channels/channelInfos/${channelId}`, {
       method: "GET",
@@ -78,13 +79,12 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
       .then((data) => {
         if (data)
         {
-          console.log("data??????????: ", data);
+          // console.log("data??????????: ", data);
+          setSaveChannelName(data.channelName);
           setSelectedOption(data.channelType);
+
+
         }
-        
-        // setConversationInfo(data);
-        // const channelType = conversationInfo?.type;
-        // setSelectedOption(channelType ?? "");
       })
       .catch((error) => {
         console.error("Error during fetch:", error);
@@ -94,54 +94,61 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
   // console.log("conversationInfo ????????????????? : ", conversationInfo);
     // setSelectedOption(data.type);
 
-    console.log("selectedOption ????????????????? : ", selectedOption);
-
-
-
-  const handleEditButton = () => {
-
-    if (!passwordMatch){
-      setShowAlert(true);
-    }
+    console.log("saveChannelName ????????????????? : ", saveChannelName);
+    // console.log("selectedOption ????????????????? : ", selectedOption);
     
-    if(saveChannelName === ""){
-      setChannelName(true);
-
+    
+    
+    
+    const handleEditButton = () => {
       
-      // here i should fetch the channelName and channelPic and channelType and else ... from the backend
+      console.log("saveChannelName ++++++++++++++++++++++ : ", saveChannelName);
+      if (!passwordMatch){
+        setShowAlert(true);
+      }
+      
+      if(saveChannelName === ""){
+        setChannelName(true);
+
+        
+      
 
           // }
-      // const channelData = {
-      //   channelName: saveChannelName,
-      //   channelPic: "some link",
-      //   password: savePassword,
-      //   type: selectedOption,
-      //   // creator: creatorInfo?.id,
-      //   // here i should add the selected friends
-      // };
-      // console.log("channelData of Delete: ", channelData);
-      // const fetchPostFun = async () => {
-      //   await fetch("http://localhost:3001/api/channels/deleteChannel", {
-        //     method: "PATCH",
-        //     credentials: "include",
-        //     headers: {
-          //       "Content-Type": "application/json",
-      //       "Access-Control-Allow-Origin": "*",
-      //     },
-      //     body: JSON.stringify(channelData),
-      //   })
-      //     .then((res) => {
-        //       console.log("res: ", res);
-      //       if (!res.ok) {
-        //         throw new Error("Network response was not ok");
-        //       }
-        //       setEditChannel(false);
-      //     })
-      //     .catch((error) => {
-        //       console.error("Error during fetch:", error);
-      //     });
-      // };
-      // fetchPostFun();
+      const channelData = {
+        channelName: saveChannelName,
+        password: savePassword,
+        type: selectedOption,
+        channelId: conversationProps.channelId,
+        // channelPic: "some link",
+        // creator: creatorInfo?.id,
+        // here i should add the selected friends
+      };
+      console.log("channelData of Edited: ", channelData);
+      const fetchPostFun = async () => {
+        await fetch("http://localhost:3001/api/channels/editChannel", {
+          method: "PATCH",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(channelData),
+        })
+        .then((res) => {
+          console.log("res: ", res);
+          if (!res.ok) {
+            throw new Error("Network response was not ok");
+          }
+          setEditChannel(false);
+        })
+        .catch((error) => {
+          console.error("Error during fetch:", error);
+        });
+        if (passwordMatch && saveChannelName !== ""){
+          setShowNotify(true);
+        }
+      };
+      fetchPostFun();
     }
     
     // const members = selectedFriends.map((friend) => ({
@@ -203,9 +210,6 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         //   console.error("Error during fetch:", error);
         // });
         
-        if (passwordMatch && saveChannelName !== ""){
-          setShowNotify(true);
-        }
       }
       
   const handleCancelAddChannel = (event: any) => {
@@ -226,7 +230,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         <div className=" px-4 pt-4">
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
             {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setEditChannel(false);}} message={"Channel Has Been Edited Successfully"} type={'notify'}> </AlertMessage>)}
-            {notCreated && (<AlertMessage onClick={() => setShowNotify(false)} message={"Channel Not Edited"} type={'error'}> </AlertMessage>)}
+            {notCreated && (<AlertMessage onClick={() => {setNotCreated(false); setEditChannel(false);}} message={"Channel Not Edited"} type={'error'}> </AlertMessage>)}
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
           <div>
               <Image
@@ -331,7 +335,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
                   )
             }
             <div className="passWord relative mt-[15px]">
-              Adminsator
+              Administrators
               <div
                 onClick={() => setPassword(true)}
                 className="passwordParameter absolute right-[3%] top-[18%]"

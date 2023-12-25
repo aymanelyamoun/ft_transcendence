@@ -570,7 +570,62 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                 },
             })
             const total =  wins + losses;
-            return { wins, losses, total};
+            return { wins : wins, losses : losses, total : total};
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async SelectBall(ball : string, @Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userid = user.id;
+            const result = await this.prisma.user.update({
+                where : {id : userid},
+                data: { ball: ball }
+            })
+            return (result);
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+    async SelectPaddle(paddle : string, @Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userid = user.id;
+            const result = await this.prisma.user.update({
+                where : {id : userid},
+                data: { paddle: paddle }
+            })
+            return (result);
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+    async SelectTable(table : string, @Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userid = user.id;
+            const result = await this.prisma.user.update({
+                where : {id : userid},
+                data: { table: table }
+            })
+            return (result);
         }
         catch (error)
         {

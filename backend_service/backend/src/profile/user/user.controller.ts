@@ -151,4 +151,28 @@ export class UserController {
     const total = await this.userService.getTotalWinsLoses(req);
     res.status(200).send(total);
   }
+
+  @Post('skin/:ball')
+  @UseGuards(JwtGuard)
+  async selectBall(@Param('ball') ball, @Res() res:  Response, @Req() req: Request)
+  {
+    const result = await this.userService.SelectBall(ball, req);
+    res.status(200).send(result)
+  }
+
+  @Post('skin/:table')
+  @UseGuards(JwtGuard)
+  async selectTable(@Param('table') table, @Res() res:  Response, @Req() req: Request)
+  {
+    const result = await this.userService.SelectTable(table, req);
+    res.status(200).send(result)
+  }
+
+  @Post('skin/:paddle')
+  @UseGuards(JwtGuard)
+  async selectPaddle(@Param('paddle') paddle, @Res() res:  Response, @Req() req: Request)
+  {
+    const result = await this.userService.SelectPaddle(paddle, req);
+    res.status(200).send(result)
+  }
 }

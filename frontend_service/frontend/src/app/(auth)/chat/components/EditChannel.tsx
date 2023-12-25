@@ -22,7 +22,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
   // selectedOption need to be intialized with the channel type by fetching it from the backend
-  const [selectedOption, setSelectedOption] = useState<string>("public");
+  const [selectedOption, setSelectedOption] = useState<string>("");
   const [channelName, setChannelName] = useState<boolean>(false);
 
 
@@ -76,17 +76,22 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         return res.json();
       })
       .then((data) => {
-        console.log("data??????????: ", data);
-        setConversationInfo(data);
-        const channelType = conversationInfo?.type;
-        setSelectedOption(channelType ?? "");
+        if (data)
+        {
+          console.log("data??????????: ", data);
+          setSelectedOption(data.channelType);
+        }
+        
+        // setConversationInfo(data);
+        // const channelType = conversationInfo?.type;
+        // setSelectedOption(channelType ?? "");
       })
       .catch((error) => {
         console.error("Error during fetch:", error);
       });
-  }, [selectedOption]);
+  }, []);
   
-  console.log("conversationInfo ????????????????? : ", conversationInfo);
+  // console.log("conversationInfo ????????????????? : ", conversationInfo);
     // setSelectedOption(data.type);
 
     console.log("selectedOption ????????????????? : ", selectedOption);

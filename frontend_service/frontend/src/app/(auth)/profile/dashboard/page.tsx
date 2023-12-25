@@ -88,8 +88,8 @@ function App() {
         // console.log("---------------------");
         const data = await res.json();
         setStatisticsProps(data);
-        console.log("data : ", data);
-        console.log("data statistics ylh bismillah : ", StatisticsProps);
+        // console.log("data : ", data);
+        // console.log("data statistics ylh bismillah : ", StatisticsProps);
           setSidebarDone(false);
       }
       else {
@@ -163,9 +163,6 @@ function App() {
     }
   }, [])
   
-  {SidebarDone ?
-    console.log("StatisticsProps : ", StatisticsProps) : console.log("not done yet")}
-
   return (
     <>
       {ShowEditProfile && <EditProfileShow EditRef={EditRef}/>}

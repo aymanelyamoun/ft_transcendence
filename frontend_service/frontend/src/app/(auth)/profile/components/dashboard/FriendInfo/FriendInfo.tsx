@@ -162,7 +162,7 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
   return (
   <div className="addChannelOverlay flex justify-center items-center ">
     <div ref={ref} className={styles['info-container']}>
-    <Link href={`/profile/FriendProfile?username=${props.username}`}> //FriendInfoProps
+    <Link href={`/profile/FriendProfile?username=${props.username}`}>
       <div className={styles['info-picture']}>
         <img src={props.profilePic} alt="" className={styles['info-picture']}/>
       </div>

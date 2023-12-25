@@ -13,9 +13,11 @@ interface StatisticsPieProps {
 const StatisticsPie: React.FC<StatisticsPieProps> = (props: { statistics: any; }) => {
 
     const statistics = props.statistics;
-    const WinPercentage = statistics.totalGame ? (statistics.wins * 100) / statistics.totalGame : 0;
-    const LosePercentage = statistics.totalGame ? (statistics.loses * 100) / statistics.totalGame : 0;
+    const WinPercentage = statistics.totalGames ? (statistics.wins * 100) / statistics.totalGames : 0;
+    const LosePercentage = statistics.totalGames ? (statistics.loses * 100) / statistics.totalGames : 0;
     
+    // console.log("data statistics ylh bismillah : ", statistics);
+    console.log("data total games: ", statistics.totalGames);
 
     const option = {
         color: ['var(--blue 500)'],

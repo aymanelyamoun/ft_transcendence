@@ -77,6 +77,7 @@ export class ChatGateway implements OnGatewayConnection {
     friends.forEach((friend)=>{
       if (this.gatewayService.userIsConnected(friend.id))
       {
+        this.gameService.clearFinishedGames();
         const inGame = this.gameService.inGameCheckByID(friend.id);
         if (inGame){
           console.log("emmiting status userId is in game: ", userId);

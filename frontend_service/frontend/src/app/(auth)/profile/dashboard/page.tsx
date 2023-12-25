@@ -108,6 +108,10 @@ function App() {
     socket.on("connect", () => {
       console.log("Connected to server");
     });
+    return () => {
+      console.log("calling disconnect")
+      socket.disconnect();
+    }
   }, []);
   
   // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);

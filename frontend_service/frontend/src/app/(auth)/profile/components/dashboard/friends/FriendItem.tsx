@@ -35,7 +35,7 @@ const MoreIconStyle = styled.div`
   status === '2' &&
   `
     svg {
-      color: green;
+      color: blue;
     }
   `}
 

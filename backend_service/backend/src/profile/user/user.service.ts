@@ -227,6 +227,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
         {
             const user = await this.prisma.user.findUnique({
                 where: { id: userId },
+                // select: { friends: true },
                 select: { friends: true },
             });
 

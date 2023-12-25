@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 // import FriendList from './chat/components/FriendList'
 import FriendList from "./components/FriendList";
-import ChatSection from "./components/ChatSection";
+// import ChatSection from "./components/ChatSection";
 import ProfileInfos from "./components/ProfileInfos";
 import { StaticImageData } from "next/image";
 // import avatar from '../../public/garou-kid.jpeg';
@@ -29,6 +29,13 @@ export interface Channel {
   channelPic: StaticImageData;
 }
 
+export interface Friend {
+  id: string;
+  username: string;
+  profilePic: string;
+  title?: string;
+  online: boolean;
+}
 interface User {
   id: string;
   email: string;

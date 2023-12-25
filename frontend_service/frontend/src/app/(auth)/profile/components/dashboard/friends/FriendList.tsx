@@ -92,7 +92,10 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
         });
       });
     });
-  });
+    return () => {
+      socket.off("friendStatus");
+    }
+  },[]);
 
 
   return (

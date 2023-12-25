@@ -14,10 +14,10 @@ const Ball: React.FC = () => {
     
     return (
         <div className={styles.Table}>
-            <SkinComp svgImage={default_ball}  Name="Default" Type="table" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
-            <SkinComp svgImage={basketball}  Name="basketball" Type="table" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
-            <SkinComp svgImage={redball}  Name="redball" Type="table" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
-            <SkinComp svgImage={mikaza}  Name="mikaza" Type="table" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={default_ball}  Name="Default" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={basketball}  Name="basketball" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={redball}  Name="redball" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={mikaza}  Name="mikaza" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
         </div>
     );
 };

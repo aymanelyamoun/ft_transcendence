@@ -11,6 +11,7 @@ import { Backend_URL } from '@/lib/Constants';
 import Sidebar from '../sidebar/sidebar';
 import FriendProfile from '../../../FriendProfile/page';
 import Link from 'next/link';
+import ShowGroups from './ShowGroups';
 
 interface FriendInfoProps {
   id: string;
@@ -108,7 +109,8 @@ const GameButton = styled.button`
 `;
 
 const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref) => {
-
+  
+  const [ShowGroupes, setShowGroupes] = React.useState(false);
   useEffect(() => {
     console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
 
@@ -159,6 +161,10 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
     };
   };
 
+  const handleShowGroup = () => {
+    setShowGroupes(true);
+  };
+
   return (
   <div className="addChannelOverlay flex justify-center items-center ">
     <div ref={ref} className={styles['info-container']}>
@@ -171,7 +177,7 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
         <span >{props.username}</span>
       </InfoName>
       <ButtonContainer>
-        <AddGroupButton>
+        <AddGroupButton onClick={handleShowGroup}>
           <MdGroupAdd />
         </AddGroupButton>
       <GameButton>
@@ -184,6 +190,7 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
         <BsPersonFillSlash />
       </BlockButton>
       </ButtonContainer>
+      {ShowGroupes && <ShowGroups ref={ref}/>}
     </div>
   </div>
   );

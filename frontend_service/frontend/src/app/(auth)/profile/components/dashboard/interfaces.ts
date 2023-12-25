@@ -57,6 +57,6 @@ export interface SearchU {
 export interface StatisticsInterface
 {
   wins: number;
-  loses: number;
-  totalGames: number;
+  losses: number;
+  total: number;
 }

@@ -12,7 +12,7 @@ interface StatisticsProps {
 const Statistics: React.FC<StatisticsProps> = (props) => {
   const statistics = props.statistics;
 
-  // console.log("data statistics ylh bismillah : ", statistics);
+  console.log("data statistics ylh bismillah : ", statistics);
   return (
     <div className={styles.statistics}>
       <div className={styles.container}>

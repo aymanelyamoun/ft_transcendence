@@ -71,14 +71,8 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
         console.error("Error fetching data: ", error);
       }
     };
-    fetchFriendsListData();
-    console.log ('fetching friends list')
-  }, []);
-
- 
-  useEffect(() => {
-    console.log ('listening to friendStatus');
-      socket.on("friendStatus", (data: any) => {
+    fetchFriendsListData().then(() => {
+        socket.on("friendStatus", (data: any) => {
         console.log('data : ')
         console.log(data);
         // FriendsList.forEach((friend) => {
@@ -96,14 +90,26 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
           });
         });
       });
-      socket.emit("getFriendStatus");
-      // document.addEventListener('keydown', (e) => {console.log(FriendsList)})
+      socket.emit("getFriendStatus"); 
+    });
+
+
+
     return () => {
       // document.removeEventListener('keydown', (e) => {console.log(FriendsList)})
       socket.off("friendStatus");
       console.log ('umounted');
     }
-  },[FetchedFriendList]);
+    console.log ('fetching friends list')
+  }, []);
+
+
+  // useEffect(() => {
+  //   console.log ('listening to friendStatus');
+      
+  //     // document.addEventListener('keydown', (e) => {console.log(FriendsList)})
+
+  // },[]);
 
 
   return (

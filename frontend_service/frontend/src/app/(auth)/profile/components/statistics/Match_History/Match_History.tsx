@@ -46,9 +46,8 @@ left: 0.7vw;
 `;
 
 const MatchListUser = styled.div`
-position: relative;
-top: 9vh;
-left: 0.7vw;
+    position: relative;
+    left: 0.7vw;
 `;
 
 const Match_History: React.FC<MatchProps> = (props) => {

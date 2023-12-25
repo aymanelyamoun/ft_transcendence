@@ -15,7 +15,6 @@ interface SidebarInfo {
   profilePic: string;
   title: string;
   wallet: number;
-  // ShowSettings: boolean,
 }
 
 interface SidebarProps {

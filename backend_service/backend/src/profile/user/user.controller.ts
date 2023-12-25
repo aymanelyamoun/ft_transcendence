@@ -144,11 +144,11 @@ export class UserController {
      res.status(200).send(profile);
   }
 
-  @Get('winsLoses')
+  @Get('winsLoses/:username')
   @UseGuards(JwtGuard)
-  async totalWinsLoses(@Res() res:  Response, @Req() req: Request)
+  async totalWinsLoses(@Param('username') username, @Res() res:  Response, @Req() req: Request)
   {
-    const total = await this.userService.getTotalWinsLoses(req);
+    const total = await this.userService.getTotalWinsLoses(username);
     res.status(200).send(total);
   }
 

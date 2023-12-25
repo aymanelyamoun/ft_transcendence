@@ -8,6 +8,7 @@ import { profile } from "console";
 import { Request, Response, NextFunction } from 'express';
 import { User } from "@prisma/client";
 import { UpdatePassDto } from "./dto/updatepass.dto";
+import { SkinDto } from "./dto/skins.dto";
 
 
 @Controller('user')
@@ -152,27 +153,28 @@ export class UserController {
     res.status(200).send(total);
   }
 
-  @Post('skin/:ball')
-  @UseGuards(JwtGuard)
-  async selectBall(@Param('ball') ball, @Res() res:  Response, @Req() req: Request)
+  @Post('skins')
+   @UseGuards(JwtGuard)
+  async selectBall(@Body() body, @Res() res:  Response, @Req() req: Request)
   {
-    const result = await this.userService.SelectBall(ball, req);
+    // console.log('wsadsdsdsdsd  lna han',body)
+    const result = await this.userService.SelectSkin(body, req);
     res.status(200).send(result)
   }
 
-  @Post('skin/:table')
-  @UseGuards(JwtGuard)
-  async selectTable(@Param('table') table, @Res() res:  Response, @Req() req: Request)
-  {
-    const result = await this.userService.SelectTable(table, req);
-    res.status(200).send(result)
-  }
+  // @Post('skin/:table')
+  // @UseGuards(JwtGuard)
+  // async selectTable(@Param('table') table, @Res() res:  Response, @Req() req: Request)
+  // {
+  //   const result = await this.userService.SelectTable(table, req);
+  //   res.status(200).send(result)
+  // }
 
-  @Post('skin/:paddle')
-  @UseGuards(JwtGuard)
-  async selectPaddle(@Param('paddle') paddle, @Res() res:  Response, @Req() req: Request)
-  {
-    const result = await this.userService.SelectPaddle(paddle, req);
-    res.status(200).send(result)
-  }
+  // @Post('skin/:paddle')
+  // @UseGuards(JwtGuard)
+  // async selectPaddle(@Param('paddle') paddle, @Res() res:  Response, @Req() req: Request)
+  // {
+  //   const result = await this.userService.SelectPaddle(paddle, req);
+  //   res.status(200).send(result)
+  // }
 }

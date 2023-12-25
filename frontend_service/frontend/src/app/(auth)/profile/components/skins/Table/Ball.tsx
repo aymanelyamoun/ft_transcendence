@@ -3,19 +3,18 @@ import React from 'react';
 import styles from './Table.module.css';
 import SkinComp from '../SkinComp/SkinComp';
 import styled from 'styled-components';
-import Skin_purple from './../../../imgs/skin_purple.svg';
-import Skin_yellow from './../../../imgs/skin_yellow.svg';
-import Skin_green from './../../../imgs/skin_green.svg';
-import Skin_black from './../../../imgs/skin_black.svg';
-
+import default_ball from './../../../imgs/default_ball.svg';
+import basketball from './../../../imgs/basketball.svg';
+import redball from './../../../imgs/redball.svg';
+import mikaza from './../../../imgs/mikaza.svg';
 
 const Ball: React.FC = () => {
     return (
         <div className={styles.Table}>
-            <SkinComp svgImage={Skin_yellow} skinName="Snouae rfe3 ta7di" />
-            <SkinComp svgImage={Skin_purple} skinName="Anas senior frontend" />
-            <SkinComp svgImage={Skin_green} skinName="Levi Ait Ackerman" />
-            <SkinComp svgImage={Skin_black} skinName="Ayman fih Depression" />
+            <SkinComp svgImage={default_ball}  Name="Default" Type="table" />
+            <SkinComp svgImage={basketball}  Name="basketball" Type="table" />
+            <SkinComp svgImage={redball}  Name="redball" Type="table" />
+            <SkinComp svgImage={mikaza}  Name="mikaza" Type="table" />
         </div>
     );
 };

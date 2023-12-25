@@ -21,7 +21,6 @@ export default async function RootLayout({
               <span className={styles['wallet-value']}>215</span>
           </div>
           <SearchBar />
-          {/* <StatusBar Table={<Table />} Paddle={<Paddle />} Ball={<Ball />} */}
           <StatusBar Table={<Table />} Paddle={<Paddle />} Ball={<Ball />}/>
         </div>
       </div>

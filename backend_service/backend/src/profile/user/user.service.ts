@@ -8,6 +8,7 @@ import { LOG_TYPE, User } from '@prisma/client';
 import { UpdatePassDto } from './dto/updatepass.dto';
 import { tr } from '@faker-js/faker';
 import { request } from 'http';
+import { SkinDto } from './dto/skins.dto';
 
 
 @Injectable()
@@ -580,17 +581,28 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     }
 
 
-    async SelectBall(ball : string, @Req() req: Request)
+    async SelectSkin(@Body() body, @Req() req: Request)
     {
         try
         {
+            // console.log("skins data : ", body);
             const user = req['user'] as User;
             const userid = user.id;
-            const result = await this.prisma.user.update({
-                where : {id : userid},
-                data: { ball: ball }
-            })
-            return (result);
+            if ( body.Type == "ball")
+                return  await this.prisma.user.update({
+                    where : {id : userid},
+                    data: { ball:  body.Name }
+                })
+            else if ( body.Type == "paddle")
+                return  await this.prisma.user.update({
+                    where : {id : userid},
+                    data: { paddle:  body.Name }
+                })
+            else if ( body.Type == "table")
+                return  await this.prisma.user.update({
+                    where : {id : userid},
+                    data: { table:  body.Name }
+                })
         }
         catch (error)
         {

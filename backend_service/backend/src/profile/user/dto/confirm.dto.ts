@@ -14,4 +14,7 @@ export class ConfirmUserDto {
   @IsString({ message: 'Password must be a string.' })
   @IsNotEmpty({ message: 'Password is required.' })
   hash: string;
+
+  @IsString({ message: 'Password must be a string.' })
+  confirmPass: string;
 }

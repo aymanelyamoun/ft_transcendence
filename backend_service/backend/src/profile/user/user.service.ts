@@ -2,14 +2,14 @@ import { Body, ConflictException, HttpException, HttpStatus, Injectable, NotFoun
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/user.dto';
 import { ConfirmUserDto } from './dto/confirm.dto';
-// import { Request, Response } from 'express';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
-import { use } from 'passport';
 import { Request, Response, NextFunction } from 'express';
 import { LOG_TYPE, User } from '@prisma/client';
-import { tr } from '@faker-js/faker';
-import { NotFoundError } from 'rxjs';
 import { UpdatePassDto } from './dto/updatepass.dto';
+import { tr } from '@faker-js/faker';
+import { request } from 'http';
+import { SkinDto } from './dto/skins.dto';
+
 
 @Injectable()
 export class UserService {
@@ -125,11 +125,11 @@ export class UserService {
     async allUsers(userloged: string) {
         try {
             const users = await this.prisma.user.findMany({
-                select: {
-                    id: true,
-                    username: true,
-                    profilePic: true,
-                },
+                // select: {
+                //     id: true,
+                //     username: true,
+                //     profilePic: true,
+                // },
             //     where: {
             //         id: { not: userloged },
             //     AND:{
@@ -196,9 +196,14 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async confirm(email: string, dto: ConfirmUserDto)
     {
+       // console.log(dto.confirmPass);
+       // console.log(dto.hash);
+        if (dto.confirmPass !== dto.hash)
+            throw new UnauthorizedException('the password and the confirm password are not the same');
         const existingUser = await this.prisma.user.findUnique({
-        where: { username: dto.username },
+             where: { username: dto.username },
         });
+        delete dto.confirmPass;
         if (existingUser && existingUser.email !== email) {
             throw new ConflictException(`Username ${dto.username} already exists`);
         }
@@ -449,6 +454,194 @@ If any of them had an id equal to userloged, the condition would not be satisfie
             });
             return notifications;
         } catch (error) {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async getProfileUser(username: string)
+    {
+        try
+        {
+            //console.log('wsalna han',username)
+            const profile = await this.prisma.user.findUnique({
+                where : {
+                    username: username,
+                },
+                include: {
+                    gameRecords:{
+                        include: {
+                            user : {
+                                select:{
+                                    profilePic : true,
+                                }
+                            },
+                            oponent : {
+                                select:{
+                                    profilePic : true,
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+          //  console.log('jdsfkljdgkfhdfjkhgkhdfgdfjkghdfjkhgdfjk');
+           // console.log('ana hna : ',profile);
+
+            if (profile.gameRecords.length == 0)
+                profile.gameRecords = null;
+            return (profile);
+
+        }catch (error)
+        {
+             throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async getGames(@Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userId = user.id;
+            const games = await this.prisma.gameRecord.findMany({
+                where : {userId : userId},
+                // orderBy: {
+                //     createdAt: 'desc', 
+                //   },
+                include : {
+                    oponent : {
+                        select : {
+                            profilePic : true,
+                        }
+                    }
+                }
+            })
+            return games;
+        }
+            catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+    async getGlobalRating()
+    {
+        try
+        {
+            const ranks =  await this.prisma.user.findMany({
+                orderBy : {
+                    totalXp : 'desc'
+                },
+                select : {
+                    username : true,
+                    totalXp : true,
+                    profilePic : true,
+                    title : true,
+                }
+            })
+            return ranks;
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async getTotalWinsLoses(username: string)
+    {
+        try
+        {
+           const user = await this.findByUsername(username);
+           if (!user)
+                throw new UnauthorizedException('Internal server error');
+            const wins = await this.prisma.gameRecord.count({
+                where : {userId : user.id,
+                xp: {
+                    gt: 0,
+                  },
+                },
+            })
+            const loses = await this.prisma.gameRecord.count({
+                where : {userId : user.id,
+                xp: {
+                    lte: 0,
+                    },
+                },
+            })
+            const total =  wins + loses;
+            return { wins : wins, losses : loses, total : total};
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+
+    async SelectSkin(@Body() body, @Req() req: Request)
+    {
+        try
+        {
+            // console.log("skins data : ", body);
+            const user = req['user'] as User;
+            const userid = user.id;
+            if ( body.Type == "ball")
+                return  await this.prisma.user.update({
+                    where : {id : userid},
+                    data: { ball:  body.Name }
+                })
+            else if ( body.Type == "paddle")
+                return  await this.prisma.user.update({
+                    where : {id : userid},
+                    data: { paddle:  body.Name }
+                })
+            else if ( body.Type == "table")
+                return  await this.prisma.user.update({
+                    where : {id : userid},
+                    data: { table:  body.Name }
+                })
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+    async SelectPaddle(paddle : string, @Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userid = user.id;
+            const result = await this.prisma.user.update({
+                where : {id : userid},
+                data: { paddle: paddle }
+            })
+            return (result);
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('Internal server error');
+        }
+    }
+
+    async SelectTable(table : string, @Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userid = user.id;
+            const result = await this.prisma.user.update({
+                where : {id : userid},
+                data: { table: table }
+            })
+            return (result);
+        }
+        catch (error)
+        {
             throw new UnauthorizedException('Internal server error');
         }
     }

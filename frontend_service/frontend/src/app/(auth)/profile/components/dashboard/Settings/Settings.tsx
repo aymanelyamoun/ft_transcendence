@@ -79,10 +79,15 @@ const SettingSpan = styled.span`
     line-height: normal;
 `;
 
+interface SettingsProps {
+  setShowEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Settings = () => {
+
+const Settings: React.FC<SettingsProps> = (props) => {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
+    const setShowEditProfile = props.setShowEditProfile;
 
     const handleClick = () => {
         setOpen(true);
@@ -124,7 +129,7 @@ const Settings = () => {
           {open && (
             <OpenedBar>
                 <div className={styles.otherBar}>
-                    <EditProfile/>
+                    <EditProfile setShowEditProfile={setShowEditProfile}/>
                 </div>
                 <div className={styles.otherBar} onClick={ () => LogOutReq()}>
                     <LogOut />

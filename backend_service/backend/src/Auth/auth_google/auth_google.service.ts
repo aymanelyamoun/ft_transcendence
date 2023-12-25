@@ -122,10 +122,6 @@ async validateUser(details: UserDtetails, typ: LOG_TYPE)
                expiresIn: '1h',
                secret: process.env.jwtSecretKey ,
            }),
-           refreshToken: await this.jwtService.signAsync(payload, {
-               expiresIn: '7d',
-               secret: process.env.jwtRefreshToken ,
-           }),
            payload
         }
   }

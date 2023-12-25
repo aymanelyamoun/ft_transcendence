@@ -8,6 +8,7 @@ import { profile } from "console";
 import { Request, Response, NextFunction } from 'express';
 import { User } from "@prisma/client";
 import { UpdatePassDto } from "./dto/updatepass.dto";
+import { SkinDto } from "./dto/skins.dto";
 
 
 @Controller('user')
@@ -47,7 +48,6 @@ export class UserController {
     }
   }
 
-
   @Get('all')
   @UseGuards(JwtGuard)
   async all(@Req() req: Request, @Res() res: Response)
@@ -80,19 +80,19 @@ export class UserController {
   @UseGuards(JwtGuard)
   async SearchUser(@Param('username') username, @Res() res: Response, @Req() req: Request)
   {
-    console.log('ana wsalt');
     const users = await this.userService.Searchuser(username, req);
     res.status(200).send(users);
   }
 
+  
   @Patch('update/password')
   @UseGuards(JwtGuard)
   async UpdatePass(@Res() res: Response, @Req() req: Request, @Body() dto:UpdatePassDto)
   {
-      const data = await this.userService.updatepass(req, dto);
-      return res.status(200).send(data);
+    const data = await this.userService.updatepass(req, dto);
+    return res.status(200).send(data);
   }
-
+  
   
   @Patch('update/username')
   @UseGuards(JwtGuard)
@@ -109,7 +109,7 @@ export class UserController {
     const data = await this.userService.updateimage(req, body);
     return res.status(200).send(data);
   }
-
+  
   @Get('notifications')
   @UseGuards(JwtGuard)
   async getNotifications(@Req() req: Request, @Res() res: Response)
@@ -118,4 +118,63 @@ export class UserController {
     const data = await this.userService.getNotifications(user.id);
     return res.status(200).send(data);
   }
+
+  @Get('profil/:username')
+  @UseGuards(JwtGuard)
+  async profileUser(@Param('username') username, @Res() res:  Response, @Req() req: Request)
+  {
+    // console.log('wsalna han',username)
+     const profile = await this.userService.getProfileUser(username);
+     res.status(200).send(profile);
+  }
+
+  @Get('history')
+  @UseGuards(JwtGuard)
+  async history(@Res() res:  Response, @Req() req: Request)
+  {
+     const historyGame = await this.userService.getGames(req);
+     res.status(200).send(historyGame);
+  }
+
+
+  @Get('globalRating')
+  @UseGuards(JwtGuard)
+  async globalRating(@Res() res:  Response, @Req() req: Request)
+  {
+     const profile = await this.userService.getGlobalRating();
+     res.status(200).send(profile);
+  }
+
+  @Get('winsLoses/:username')
+  @UseGuards(JwtGuard)
+  async totalWinsLoses(@Param('username') username, @Res() res:  Response, @Req() req: Request)
+  {
+    const total = await this.userService.getTotalWinsLoses(username);
+    res.status(200).send(total);
+  }
+
+  @Post('skins')
+   @UseGuards(JwtGuard)
+  async selectBall(@Body() body, @Res() res:  Response, @Req() req: Request)
+  {
+    // console.log('wsadsdsdsdsd  lna han',body)
+    const result = await this.userService.SelectSkin(body, req);
+    res.status(200).send(result)
+  }
+
+  // @Post('skin/:table')
+  // @UseGuards(JwtGuard)
+  // async selectTable(@Param('table') table, @Res() res:  Response, @Req() req: Request)
+  // {
+  //   const result = await this.userService.SelectTable(table, req);
+  //   res.status(200).send(result)
+  // }
+
+  // @Post('skin/:paddle')
+  // @UseGuards(JwtGuard)
+  // async selectPaddle(@Param('paddle') paddle, @Res() res:  Response, @Req() req: Request)
+  // {
+  //   const result = await this.userService.SelectPaddle(paddle, req);
+  //   res.status(200).send(result)
+  // }
 }

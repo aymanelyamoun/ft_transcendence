@@ -94,8 +94,6 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
     });
   });
 
-  console.log("friend list: ", FriendsList);
-
 
   return (
     <div className={styles['friends-list']}>

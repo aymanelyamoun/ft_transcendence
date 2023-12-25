@@ -1,47 +1,47 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './Match_History.module.css'
 import { match } from 'assert';
 import MatchItem from './MatchItem';
+import {MatchProps} from './match_history_interfaces'
 
-interface Match {
-    id: string;
-    player1_profile: string;
-    player2_profile: string;
-    player1_score: number;
-    player2_score: number;
-    result: string;
-    xp: number;
-}
+// interface Match {
+//   xp: number;
+//   scoredGoals: number;
+//   concededGoals: number;
+// }
 
-interface MatchListProps {
-  matches: Match[];
-  UserProfileStyling: boolean;
-}
 
-const MatchList: React.FC<MatchListProps> = (props) => {
+const MatchList: React.FC<MatchProps> = (props) => {
 
-  const matches = props.matches;
-  const UserProfileStyling = props.UserProfileStyling;
-  return (
-    <div className={styles['match-list']}>
-      <ul>
-        {matches.map((match: Match) => (
-          <MatchItem
-            key={match.id}
-            id={match.id}
-            player1_profile={match.player1_profile}
-            player2_profile={match.player2_profile}
-            player1_score={match.player1_score}
-            player2_score={match.player2_score}
-            result={match.result}
-            xp={match.xp}
-            UserProfileStyling={UserProfileStyling}
-          />
-        ))}
-      </ul>
-    </div>
-  );
-};
+    const matches = props.matches;
+    const UserProfileStyling = props.UserProfileStyling;
+    useEffect(() => {
+      console.log('after fetcddddh');
+      console.log(matches);
+      console.log('----------');
+      // if (Array.isArray(matches))
+      //   console.log("here is an array");
+    }, []);
+    return (
+      <div className={styles['match-list']}>
+        <ul>
+          {matches ? (
+            matches.map((match, index: number) => (
+              <MatchItem
+                key={index}
+                xp={match.xp}
+                scoredGoals={match.scoredGoals}
+                concededGoals={match.concededGoals}
+                opponnetProfilePic={match.oponent.profilePic}
+                userProfilePic={match.user.profilePic}
+                UserProfileStyling={UserProfileStyling}
+              />
+            ))
+          ) : null}
+        </ul>
+      </div>
+    );
+  };
 
 export default MatchList;

@@ -164,8 +164,6 @@ model Channel{
   mutedUsers Muted[]
 }
 
-
-
 model UserChannel{
 
   isAdmin Boolean @default(false)

@@ -5,6 +5,9 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import EditProfileShow from './EditProfileShow';
 
+interface EditProfileProps {
+  setShowEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const EditProfileContainer = styled.div`
   position: relative;
@@ -32,23 +35,26 @@ const EditSpan = styled.span`
 
 `;
 
-const EditProfile = () => {
+const EditProfile: React.FC<EditProfileProps> = (props) => {
   const [showEdit, setShowEdit] = useState<boolean>(false);
+  const setShowEditProfile = props.setShowEditProfile;
+
   const handleEdit = () => {
     { setShowEdit(true) }
+  }
+
+  const handleShowProfile = () => {
+    setShowEditProfile(true);
   }
   useEffect(() => {
     console.log(showEdit);
   }, [showEdit]); 
   return (
     <>
-      {showEdit ? (<EditProfileShow />) : null}
       <EditProfileContainer >
         <RiEditBoxLine />
-        <div className='edit-profile-text'>
-          <Link href="/update">
+        <div className='edit-profile-text' onClick={handleShowProfile}>
             <EditSpan>Edit Profile</EditSpan>
-          </Link>
           </div>
     </EditProfileContainer>
     </>

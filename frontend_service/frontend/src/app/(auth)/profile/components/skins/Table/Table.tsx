@@ -2,18 +2,18 @@
 import React from 'react';
 import styles from './Table.module.css';
 import SkinComp from '../SkinComp/SkinComp';
-import Skin_purple from './../../../imgs/skin_purple.svg';
-import Skin_yellow from './../../../imgs/skin_yellow.svg';
-import Skin_green from './../../../imgs/skin_green.svg';
-import Skin_black from './../../../imgs/skin_black.svg';
+import kazino from './../../../imgs/kazino.svg';
+import Beach from './../../../imgs/Beach.svg';
+import default_table from './../../../imgs/default_table.svg';
 
 const Table: React.FC = () => {
+
+  const [ActiveSkin, setActiveSkin] = React.useState(false);
   return (
     <div className={styles.Table}>
-      <SkinComp svgImage={Skin_yellow} skinName="Snouae rfe3 ta7di" WalletValue={215} />
-      <SkinComp svgImage={Skin_purple} skinName="Anas senior frontend" WalletValue={215} />
-      <SkinComp svgImage={Skin_green} skinName="Levi Ait Ackerman" WalletValue={215} />
-      <SkinComp svgImage={Skin_black} skinName="Ayman fih Depression" WalletValue={215} />
+      <SkinComp svgImage={default_table} Name="Default" Type="table" active={ActiveSkin === false} onClick={() => setActiveSkin(false)}/>
+      <SkinComp svgImage={kazino} Name="Kazino" Type="table" active={ActiveSkin === false} onClick={() => setActiveSkin(false)}/>
+      <SkinComp svgImage={Beach} Name="Beach" Type="table" active={ActiveSkin === false} onClick={() => setActiveSkin(false)}/>
     </div>
   );
 };

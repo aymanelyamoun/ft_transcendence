@@ -67,7 +67,7 @@ export const ConversationChatSection = () => {
     socket.connect();
 
     socket.on("connect", () => {
-      socket.emit("userData", { userId: userInfo?.id, isAdmin: "false" });
+      // socket.emit("userData", { userId: userInfo?.id, isAdmin: "false" });
       console.log("connected to server");
     });
 

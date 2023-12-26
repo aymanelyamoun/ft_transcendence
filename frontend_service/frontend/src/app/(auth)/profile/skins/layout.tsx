@@ -4,6 +4,8 @@ import SearchBar from '../components/skins/SearchBar/SearchBar'
 import { FaGoogleWallet } from 'react-icons/fa';
 import StatusBar from "../components/skins/StatusBar/StatusBar";
 import Table from "../components/skins/Table/Table";
+import Paddle from "../components/skins/Table/Paddle";
+import Ball from "../components/skins/Table/Ball";
 
 export default async function RootLayout({
     children,
@@ -19,8 +21,7 @@ export default async function RootLayout({
               <span className={styles['wallet-value']}>215</span>
           </div>
           <SearchBar />
-          {/* <StatusBar Table={<Table />} Paddle={<Paddle />} Ball={<Ball />} */}
-          <StatusBar Table={<Table />} />
+          <StatusBar Table={<Table />} Paddle={<Paddle />} Ball={<Ball />}/>
         </div>
       </div>
           {children}

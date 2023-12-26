@@ -1,18 +1,23 @@
 'use client'
 import { Backend_URL } from '@/lib/Constants';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { IoSettingsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import Loading from "../../../../../components/Loading";
 import Authorization from '@/utils/auth';
 import { AlertMessage } from '@/app/components/alertMessage';
+import styles from './EditProfile.module.css'
 
 
 let data : any
 var notify : string
 
-export default function EditProfileShow() {
+interface EditProfileShowProps {
+  EditRef: React.RefObject<HTMLDivElement>;
+}
+
+const EditProfileShow: React.FC<EditProfileShowProps> = ({ EditRef }) => {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState<boolean>(false);
   const handleClick = () => {
@@ -264,11 +269,13 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
       }
     }, [isChecked]);
   return (
-    <div>
+    <>
     {/* <div
       style={{ background: "#050A27" }}
       className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
     > */}
+    <div className="addChannelOverlay flex justify-center items-center ">
+    <div ref={EditRef}></div>
       <div
         style={gradientStyle}
         className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
@@ -619,9 +626,12 @@ const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
         </div>
       </div>
+      </div>
+      {/* </div> */}
     {/* </div> */}
     {/* )}  */}
-    </div>
+    </>
   );
-}
+};
 
+export default EditProfileShow;

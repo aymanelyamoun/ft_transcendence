@@ -21,7 +21,25 @@
     overflow: hidden;
     margin: 5rem 2rem;
   }
-  
+
+  .SkinComp:active
+  {
+    border: 1px solid #C2FF86;
+  }
+
+  .SkinComp.active
+  {
+    border: 1px solid #C2FF86;
+    width: 13vw;
+    height: 46vh;
+    transform: scaleX(1.1) scaleY(1.1);
+    transition: width 2s heigh 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
+    border-radius 2s ease-in-out,
+    background 2s ease-in-out,
+    box-shadow 2s ease-in-out;
+    transition-property: all;
+  }
+
   .SkinComp:hover {
     width: 13vw;
     height: 46vh;
@@ -31,7 +49,6 @@
     background 2s ease-in-out,
     box-shadow 2s ease-in-out;
     transition-property: all;
-    border: 1px solid #C2FF86;
   }
   
   .skin-name {

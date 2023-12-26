@@ -43,3 +43,9 @@ export type ChannelEdit = {
     // userId:string,
     userId2?:string,
 }
+
+export type MuteUser = {
+    channelId:string,
+    userToMute:string,
+    muteUntil:Date,
+}

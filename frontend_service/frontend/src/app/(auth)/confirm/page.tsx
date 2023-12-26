@@ -22,6 +22,7 @@ export default function Confirm() {
     username: string;
     profilePic?: string;
     hash: string;
+    confirmPass?: string;
     typeLog: string;
   }
 
@@ -32,6 +33,7 @@ export default function Confirm() {
     username: user?.username || '',
     profilePic: user?.profilePic || '',
     hash: user?.hash || '',
+    confirmPass: user?.hash || '',
     typeLog: user?.typeLog || '',
   });
   const [hash, setPassword] = useState<string>(user?.hash || '');
@@ -43,6 +45,7 @@ export default function Confirm() {
             username: user.username,
             profilePic: user.profilePic,
             hash: user.hash,
+            confirmPass: user.hash,
             typeLog: user.typeLog,
           });
           setPassword(user.hash);
@@ -62,6 +65,7 @@ export default function Confirm() {
         username: userData?.username,
         profilePic: userData?.profilePic,
         hash: userData?.hash,
+        confirmPass : userData?.confirmPass,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -76,8 +80,7 @@ export default function Confirm() {
       return;
     }
     setIsNotify(true);
-    window.location.href = "/profile/dashboard";    
-  
+    router.push("/profile/dashboard");
   };
   
   
@@ -164,6 +167,7 @@ export default function Confirm() {
                          (prev) =>
                            ({
                              username: e.target.value,
+                             confirmPass: prev?.confirmPass || undefined,
                              hash: prev?.hash || undefined,
                              profilePic: prev?.profilePic || undefined,
                            } as UserData)
@@ -172,6 +176,7 @@ export default function Confirm() {
                    />
                  </div>
                  {hash === "" && (
+                  <>
                    <div
                      style={{ background: "rgba(154, 155, 211, 0.20)" }}
                      className=" p-2 flex items-center mb-7 rounded-md w-full"
@@ -179,7 +184,7 @@ export default function Confirm() {
                      <input
                        type="password"
                        name="password"
-                       placeholder="password"
+                       placeholder="New Password"
                        value={userData?.hash}
                        style={{ background: "rgba(154, 155, 211, 0)" }}
                        className="outline-none text-sm flex-1"
@@ -188,6 +193,7 @@ export default function Confirm() {
                            (prev) =>
                              ({
                                hash: e.target.value,
+                               confirmPass: prev?.confirmPass || undefined,
                                username: prev?.username || undefined,
                                profilePic: prev?.profilePic || undefined,
                              } as UserData)
@@ -195,6 +201,31 @@ export default function Confirm() {
                        }
                      />
                    </div>
+                   <div
+                     style={{ background: "rgba(154, 155, 211, 0.20)" }}
+                     className=" p-2 flex items-center mb-7 rounded-md w-full"
+                   >
+                     <input
+                       type="password"
+                       name="password"
+                       placeholder="Confirm Password"
+                       value={userData?.confirmPass}
+                       style={{ background: "rgba(154, 155, 211, 0)" }}
+                       className="outline-none text-sm flex-1"
+                       onChange={(e) =>
+                         setUserData(
+                           (prev) =>
+                             ({
+                               confirmPass: e.target.value,
+                               hash: prev?.hash || undefined,
+                               username: prev?.username || undefined,
+                               profilePic: prev?.profilePic || undefined,
+                             } as UserData)
+                         )
+                       }
+                     />
+                   </div>
+                  </>
                  )}
                  <div className="border-2 border-white w-10 inline-block mb-7"></div>
                  <Link

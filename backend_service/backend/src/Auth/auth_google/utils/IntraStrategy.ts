@@ -11,7 +11,6 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
         @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
       ){
         super({
-          
             clientID:
                 'u-s4t2ud-ae38f95888699e53a0d1e83d0112945b049d14a0d11d467ebb5d373db96cd2be',
             clientSecret:
@@ -23,7 +22,6 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
 
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
-
       const user = await  this.authGoogleService.validateUser({
         email: profile.emails[0].value,
           username: profile._json.login,

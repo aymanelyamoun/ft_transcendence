@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
-import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, userDataDto } from "./DTOs/dto";
+import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, MuteUserDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { JoinChannel } from "./types/channel";
 import { ChatChannelAdminGuard } from "./chat.channel.guard";
@@ -83,6 +83,11 @@ export class ChannelController{
         await this.prismaChatService.unbanUser(data, req);
     }
 
+    @Patch()
+    async muteUser(@Body()data:MuteUserDto, @Req() req:Request){
+        await this.prismaChatService.muteUser(data, req);
+    }
+
     @Get('/conversation/groupMembers')
     async getChannelMembers(@Query() conversationInfo:ConversationInfoDto, @Req() req:Request){
         console.log("getting the channel members");
@@ -128,10 +133,10 @@ export class ChannelController{
 
 
     // this one is just tmeporary it should be handeled in the user part
-    @Get('friends/:id')
-    async getFriends(@Param('id') id:string){
-        return await this.prismaChatService.getFriends(id)
-    }
+    // @Get('friends/:id')
+    // async getFriends(@Param('id') id:string){
+    //     return await this.prismaChatService.getFriends(id)
+    // }
     // getUserData(userDataDto):user{
     //     return {
     //         userId:userDataDto.userId,

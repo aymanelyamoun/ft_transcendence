@@ -1,15 +1,18 @@
 "use client";
 import React, {useRef, useState } from 'react';
 import './globals.css'
+import { useRouter } from 'next/navigation';
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import io from 'socket.io-client';     
 import { Socket } from 'socket.io-client';
+
 interface GameMenuProps {
   setGameState: React.Dispatch<React.SetStateAction<string>>;
   gameState: string;
 }
 
 const Matchmaking = ({setGameState, gameState}: GameMenuProps) => {
+  const router = useRouter();
   const [queueTimer , setQueueTimer] = useState<number>(-1);
   const [inQueue, setInQueue] = useState<boolean>(false);
   const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
@@ -36,9 +39,7 @@ const Matchmaking = ({setGameState, gameState}: GameMenuProps) => {
           clearInterval(INTERVAL.current!);
           socketRef.current?.disconnect();
           socketRef.current = null;
-          if (typeof window !== 'undefined') {
-            window.location.href = destination;
-          }
+          router.push(destination);
         });
       console.log('joined matchmaking');
     };

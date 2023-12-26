@@ -4,6 +4,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Server, Socket } from 'socket.io';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
+import { pl } from '@faker-js/faker';
 
 
 const HEIGHT : number = 800;
@@ -152,8 +153,9 @@ export class GameInstance {
 
     socketConnect = (socket: Socket) => {
         console.log('a socket connected to room ' + socket['id']);
-        socket.emit('startFriendGame', [this.playerOne.playerData, this.playerTwo.playerData])
         socket.join(this.gameInfo.gameRoom);
+        socket.emit('startFriendGame', [this.playerOne.playerData, this.playerTwo.playerData])
+        socket.emit('selfData', socket['user']);
         if (socket['user'].username == this.playerOne.playerData.username)
         {
             this.playerOne.playerSocket.push(socket);
@@ -341,6 +343,8 @@ export class GameInstance {
         console.log('Game started between ' + this.playerOne.playerData.username + ' and ' + this.playerTwo.playerData.username)
         this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('startFriendGame',
             [this.playerOne.playerData, this.playerTwo.playerData]);
+        this.playerOne.playerSocket[0].emit('selfData', this.playerOne.playerData);
+        this.playerTwo.playerSocket[0].emit('selfData', this.playerTwo.playerData);
         this.playerOne.playerSocket[0].on('onMove', (movement : number) => {
             this.playerOne.paddle.move = movement;});
         this.playerTwo.playerSocket[0].on('onMove', (movement : number) => {

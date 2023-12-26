@@ -89,8 +89,7 @@ const SearchHeader = () => {
 
       const fetchChannel = async (channelName: string) => {
         try {
-          console.log("fetching channel entered");
-          const res = await fetch( Backend_URL+"channels/"+channelName, {
+          const res = await fetch( Backend_URL+"channels/search/"+channelName, {
             method: "GET",
             mode: "cors",
             credentials: "include",

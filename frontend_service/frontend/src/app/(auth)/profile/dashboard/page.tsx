@@ -67,8 +67,8 @@ function App() {
 
   const [StatisticsProps, setStatisticsProps] = useState<StatisticsInterface>({
     wins: 0,
-    loses: 0,
-    totalGames: 0,
+    losses: 0,
+    total: 0,
   });
 
   const fetchStatistics = async () => {

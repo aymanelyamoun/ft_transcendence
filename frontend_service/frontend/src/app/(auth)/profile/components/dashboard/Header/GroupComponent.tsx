@@ -7,6 +7,7 @@ import { MdGroupAdd } from "react-icons/md";
 // import { SearchU } from '../SearchFriends/SearchFriends'
 import { SearchU } from '../interfaces';
 import { GroupComponentProps } from '../interfaces';
+import { Backend_URL } from '@/lib/Constants';
 
 
 // interface SearchU {
@@ -81,6 +82,14 @@ const GroupPictureItem = styled.div`
 `;
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
+
+  // const SendClick = async () => {
+  //   try {
+  //     const res = await fetch( Backend_URL+"channels", {
+  //     });
+  //   }
+  // };
+  
   // console.log("members: ",props.members)
   return (
     <>
@@ -98,7 +107,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
             ))}
         </GroupPictureItem>
       </GroupPictures>
-    <AddGroupButton>
+    <AddGroupButton onClick={SendClick}>
       <MdGroupAdd />
     </AddGroupButton>
     </>

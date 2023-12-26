@@ -45,9 +45,11 @@ const NoFriendsIcon = styled.div`
 
 const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   const [FriendsList, setFriendsList] = useState<Friend[]>([]);
+  const [FetchedFriendList, setFetchedFriendList] = useState<Friend[]>([]);
   const socket = React.useContext(SocketUseContext);
 
   useEffect(() => {
+    console.log ('fetching friends list');
     const fetchFriendsListData = async () => {
       try {
         const res = await fetch( Backend_URL + "user/friends", {
@@ -62,37 +64,52 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
         if (res.ok) {
           const data = await res.json() as Friend[];
           setFriendsList(data);
+          setFetchedFriendList(data);
         }
       }
       catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
-    fetchFriendsListData();
-
-  }, [setFriendsList]);
-
-  // console
-  useEffect(() => {
-    socket.on("friendStatus", (data: any) => {
-      console.log("Friend status changed");
-      // console.log(data);
-      // FriendsList.forEach((friend) => {
-      //   if (friend.id === data.id) {
-      //     friend.status = data.status;
-      //   }
-      // });
-      // console.log("setting friends list");
-      setFriendsList((prev) => {
-        return prev.map((friend) => {
-          if (friend.id === data.userId) {
-            friend.status = data.status;
-          }
-          return friend;
+    fetchFriendsListData().then(() => {
+        socket.on("friendStatus", (data: any) => {
+        console.log('data : ')
+        console.log(data);
+        // FriendsList.forEach((friend) => {
+          //   if (friend.id === data.id) {
+        //     friend.status = data.status;
+        //   }
+        // });
+        // console.log("setting friends list");
+        setFriendsList((prev) => {
+          return prev.map((friend) => {
+            if (friend.id === data.userId) {
+              friend.status = data.status;
+            }
+            return friend;
+          });
         });
       });
+      socket.emit("getFriendStatus"); 
     });
-  });
+
+
+
+    return () => {
+      // document.removeEventListener('keydown', (e) => {console.log(FriendsList)})
+      socket.off("friendStatus");
+      console.log ('umounted');
+    }
+    console.log ('fetching friends list')
+  }, []);
+
+
+  // useEffect(() => {
+  //   console.log ('listening to friendStatus');
+      
+  //     // document.addEventListener('keydown', (e) => {console.log(FriendsList)})
+
+  // },[]);
 
 
   return (

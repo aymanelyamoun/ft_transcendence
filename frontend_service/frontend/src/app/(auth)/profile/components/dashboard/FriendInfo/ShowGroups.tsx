@@ -29,6 +29,7 @@ overflow-y: auto;
 const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
   const [isLoading, setisLoading] = useState(false);
   const [ChannelFriendSearch, setChannelFriendSearch] = useState<SearchU[]>([]);
+  const [ShowGroups, setShowGroups] = useState(true);
 
   const fetchChannelGroups = async () => {
     try {
@@ -74,6 +75,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
                 channelPic={friend.channelPic}
                 members={friend.members}  
                 setChannelFriendSearch={setChannelFriendSearch}
+                ShowGroups={ShowGroups}
               />
             );
           })}

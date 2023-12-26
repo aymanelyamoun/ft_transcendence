@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import { MdGroupAdd } from "react-icons/md";
@@ -89,8 +89,20 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   //     });
   //   }
   // };
-  
   // console.log("members: ",props.members)
+  //
+  const ShowGroups = props.ShowGroups;
+  const setChannelFriendSearch = props.setChannelFriendSearch;
+
+  // const SendAddMe = async () => { // channelId,
+  //   try {
+
+  //   }
+  // };
+
+  // useEffect(() => {
+  // }, []);
+
   return (
     <>
     <FriendImage>
@@ -107,7 +119,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
             ))}
         </GroupPictureItem>
       </GroupPictures>
-    <AddGroupButton onClick={SendClick}>
+    <AddGroupButton >
       <MdGroupAdd />
     </AddGroupButton>
     </>

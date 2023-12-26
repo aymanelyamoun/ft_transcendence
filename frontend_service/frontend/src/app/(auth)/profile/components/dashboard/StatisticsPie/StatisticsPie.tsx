@@ -17,7 +17,7 @@ const StatisticsPie: React.FC<StatisticsPieProps> = (props: { statistics: any; }
     const LosePercentage = statistics.total !== 0 ? (statistics.losses * 100) / statistics.total : 0;
     
     // console.log("data statistics ylh bismillah : ", statistics);
-    console.log("data total games: ", statistics.total);
+    // console.log("data total games: ", statistics.totalGames);
 
     const option = {
         color: ['var(--blue 500)'],

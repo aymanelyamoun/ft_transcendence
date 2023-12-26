@@ -213,8 +213,14 @@ export class ChatGateway implements OnGatewayConnection {
     // client.emit('privateMessage', msg.message, msg.conversationId);
     console.log("sending message: ", msg.conversationId);
     // this.server.emit("rcvMessage", msg.message);
-    const newMessage = await this.prismaChat.addMessageToDM(msg);
-    client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
+
+    //check if the user is muted
+
+    if (this.prismaChat.userIsMutedFromConversation(msg.from, msg.conversationId))
+    {
+        const newMessage = await this.prismaChat.addMessageToDM(msg);
+        client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
+    }
     // check if there is aconversation between the two users
     // if not create a new conversation
     // next add messages to database 

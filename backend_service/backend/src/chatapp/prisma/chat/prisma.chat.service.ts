@@ -140,15 +140,16 @@ export class PrismaChatService{
             // to protect 
             const {users} = conversationUsers;
             // add banned from deletion ...
-            const removeConversationFromUser =  this.prisma.conversation.update({where:{channelId:data.channelId}, data:{users:{disconnect: users.map((user)=>({id:user.id}))}}});
-            const deleteConversationMembers =  this.prisma.member.deleteMany({where:{conversationId:conversation.id}});
-            const deleteConversationMessages =  this.prisma.message.deleteMany({where:{conversationId:conversation.id}});
-            const deleteConversation =  this.prisma.conversation.delete({where:{channelId:requestedChannel.id}});
-            const deleteUserChannels = this.prisma.userChannel.deleteMany({where:{channelId: requestedChannel.id}});
-            const deleteChannel = this.prisma.channel.delete({where:{id:requestedChannel.id}})
-            await this.prisma.$transaction([removeConversationFromUser, deleteConversationMembers, deleteConversationMessages, deleteConversation ,deleteUserChannels, deleteChannel]);
-            // await this.prisma.conversation.delete({where:{channelId:requestedChannel.id}});
-            // await this.prisma.channel.delete({where:{id:requestedChannel.id}});
+            // const removeConversationFromUser =  this.prisma.conversation.update({where:{channelId:data.channelId}, data:{users:{disconnect: users.map((user)=>({id:user.id}))}}});
+            // const deleteConversationMembers =  this.prisma.member.deleteMany({where:{conversationId:conversation.id}});
+            // const deleteConversationMessages =  this.prisma.message.deleteMany({where:{conversationId:conversation.id}});
+            // const deleteConversation =  this.prisma.conversation.delete({where:{channelId:requestedChannel.id}});
+            // const deleteUserChannels = this.prisma.userChannel.deleteMany({where:{channelId: requestedChannel.id}});
+            // const deleteChannel = this.prisma.channel.delete({where:{id:requestedChannel.id}})
+            // await this.prisma.$transaction([removeConversationFromUser, deleteConversationMembers, deleteConversationMessages, deleteConversation ,deleteUserChannels, deleteChannel]);
+
+            const rmChannel = this.prisma.channel.delete({where:{id:requestedChannel.id}});
+            await this.prisma.$transaction([rmChannel]);
           }
         }
 
@@ -607,6 +608,20 @@ export class PrismaChatService{
           }
 
           return newAddAdmins;
+        }
+
+        // async getMutedUsers(conversationId:string){
+        //   return this.prisma.conversation.findUnique({where:{id:conversationId}, include:{channel:{select:{mutedUsers:true}}}});
+        // }
+
+        async userIsMutedFromConversation(userId:string, conversationId:string){
+          const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{channel:{select:{mutedUsers:true}}}});
+
+          if (!conversation) throw new NotFoundException("conversation does not exist");
+          if (conversation.type === CONVERSATION_TYPE.DIRECT)
+            return false;
+
+          return conversation.channel.mutedUsers.some((user)=>{return(user.id === userId && (new Date() < user.timeToEnd))});
         }
 
         async filterToDelete(data: ChangeChannelData) {

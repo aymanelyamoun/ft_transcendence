@@ -89,7 +89,7 @@ ${({ status }) =>
 `;
 
   const FriendItem: React.FC<FriendItemProps> = ({friend, onFriendItemClick}) => {
-    console.log('friend ' + friend.username + ' status: ' + friend.status);
+    // console.log('friend ' + friend.username + ' status: ' + friend.status);
   // const IconContainer = friend.status === "2" ? <FaGamepad color="green" /> : (friend.status === "0" ? <BsCircleFill color="grey"/> : <BsCircleFill color="green"/>);
 
   const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);

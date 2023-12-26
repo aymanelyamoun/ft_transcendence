@@ -14,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { GameService } from 'src/Game/game.service';
 import { UserService } from 'src/profile/user/user.service';
+import { fa } from '@faker-js/faker';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
@@ -45,12 +46,13 @@ export class ChatGateway implements OnGatewayConnection {
         
         console.log("------- ADDING CONNECTED SOCKET TO MAP --------")
         this.gatewayService.addConnectedSocketToMap({socket:socket, userId:socket['user'].id});
+
+        const connectedSocket = this.gatewayService.addConnectedSocket({socket:socket, userId:socket['user'].id});
+        this.gatewayService.joinRooms(connectedSocket);
+
         // console.log("emmiting status userId", socket['user'].id);
         this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
-        // this.gatewayService.addConnectedSocketToMap({socket:socket, userId:user.id});
-        // console.log("emmiting status userId", user.id);
-        // this.server.emit('friendStatus', {userId: user.id, status: '1'});
-        // console.log("userId: " , socket['user'].id, " is now connected");
+
         await this.emitFriendsStatus(socket['user'].id);
       }
       catch(error){
@@ -198,14 +200,10 @@ export class ChatGateway implements OnGatewayConnection {
     this.gameService.MatchMaking(this.server, client);
   }
 
-  @SubscribeMessage('userData')
-  subscribeUserData(client: Socket, data: userDataDto) {
-    console.log('got user data: ', data);
-    const connectedSocket = this.gatewayService.addConnectedSocket({socket:client, userId:data.userId});
-    // this.connectedSockets.add({socket: client, userId: data.userId})
-
-    this.gatewayService.joinRooms(connectedSocket);
-  }
+  // @SubscribeMessage('userData')
+  // subscribeUserData(client: Socket, data: userDataDto) {
+  //   console.log('got user data: ', data);
+  // }
 
   @SubscribeMessage('messageTo')
   async sendMessageTo(client: Socket, msg: messageDto) {
@@ -216,11 +214,19 @@ export class ChatGateway implements OnGatewayConnection {
 
     //check if the user is muted
 
-    if (this.prismaChat.userIsMutedFromConversation(msg.from, msg.conversationId))
-    {
-        const newMessage = await this.prismaChat.addMessageToDM(msg);
-        client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
+    // check if the user in in the conversation
+
+    // const user = await this.getUserData(client) as User;
+
+
+    if (await this.prismaChat.userIsInConversation(client['user'].id, msg.conversationId)){
+      if (await this.prismaChat.userIsMutedFromConversation(client['user'].id , msg.conversationId) === false)
+      {
+          const newMessage = await this.prismaChat.addMessageToDM(msg);
+          client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
+      }
     }
+
     // check if there is aconversation between the two users
     // if not create a new conversation
     // next add messages to database 

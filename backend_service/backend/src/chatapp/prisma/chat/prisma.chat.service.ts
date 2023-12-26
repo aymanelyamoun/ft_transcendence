@@ -614,6 +614,14 @@ export class PrismaChatService{
         //   return this.prisma.conversation.findUnique({where:{id:conversationId}, include:{channel:{select:{mutedUsers:true}}}});
         // }
 
+        async userIsInConversation(userId:string, conversationId:string){
+          const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{users:{select:{id:true}}}});
+
+          if (!conversation) throw new NotFoundException("conversation does not exist");
+
+          return conversation.users.some((user)=>{return(user.id === userId)});
+        }
+
         async userIsMutedFromConversation(userId:string, conversationId:string){
           const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{channel:{select:{mutedUsers:true}}}});
 

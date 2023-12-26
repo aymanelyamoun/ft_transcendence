@@ -128,10 +128,10 @@ export class ChannelController{
 
 
     // this one is just tmeporary it should be handeled in the user part
-    @Get('friends/:id')
-    async getFriends(@Param('id') id:string){
-        return await this.prismaChatService.getFriends(id)
-    }
+    // @Get('friends/:id')
+    // async getFriends(@Param('id') id:string){
+    //     return await this.prismaChatService.getFriends(id)
+    // }
     // getUserData(userDataDto):user{
     //     return {
     //         userId:userDataDto.userId,

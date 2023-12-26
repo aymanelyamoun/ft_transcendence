@@ -559,14 +559,24 @@ export class PrismaChatService{
           const blockedUsers = creator.blockedUsers.map(blockedUser => blockedUser.id);
           const blockedByUsers = creator.blockedByUsers.map(blockedByUser => blockedByUser.id);
         
-          const newList = usersTocheck.filter(toCheck => {
+          let newList = usersTocheck.filter(toCheck => {
             console.log("Checking userId:", toCheck.userId);
             return friends.includes(toCheck.userId) && 
               !blockedUsers.includes(toCheck.userId) && 
               !blockedByUsers.includes(toCheck.userId);
           });
 
+          // remove dubplicates
+
           newList.push({userId:cratorUserId});
+
+          newList = newList.filter((user, index, self) =>
+          index === self.findIndex((t) => (
+            t.userId === user.userId
+          ))
+        )
+
+
           console.log("New List: ", newList);
           return newList;
         }

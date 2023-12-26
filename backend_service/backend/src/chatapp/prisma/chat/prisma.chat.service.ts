@@ -11,7 +11,7 @@ import { NOTIF_TYPE } from "@prisma/client";
 import { CONVERSATION_TYPE } from "@prisma/client";
 import { title } from "process";
 import { MessageInfo } from "src/chatapp/chat/types/message";
-import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "src/chatapp/chat/types/channel";
+import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel, MuteUser } from "src/chatapp/chat/types/channel";
 import { JoinChannelDto } from "src/chatapp/chat/DTOs/dto";
 import { user } from "src/chatapp/chat/types/user";
 import { ConversationInfo } from "src/chatapp/chat/types/conversation";
@@ -204,6 +204,14 @@ export class PrismaChatService{
           }
         }
 
+        // async addUserToChannelSearch(data:chennelEdit, @Req() req:Request){
+        //   try{
+        //     const user = req['user'] as User;
+
+        //     const channel = await this.prisma.channel.findMany({where:{id:data.channelId}, include:{members:true, creator:true}})
+        //   }
+        // }
+      
         async getFilteredChannels(filter:string, @Req() req: Request){
           try{
             const user = req['user'] as User;
@@ -1026,7 +1034,27 @@ export class PrismaChatService{
           catch(error){
             throw new Error(error);
           }
+        }
 
+        async muteUser(data: MuteUser, @Req() req: Request){
+          try{
+            const user = req['user'] as User;
+
+            const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{mutedUsers:true, members:true},});
+
+            if (!channel) throw new NotFoundException("channel does not exist");
+
+            if (!channel.members.some((member)=>{return(member.userId === user.id)}))
+              throw new ForbiddenException("you are not a member of this channel");
+
+            if (channel.mutedUsers.some((user)=>{return(user.id === data.userToMute)}))
+              await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{update:{where:{id:data.userToMute}, data:{timeToEnd:data.muteUntil}}}}});
+            else
+              await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{create:{mutedUser:{connect:{id:data.userToMute}}, timeToEnd:data.muteUntil}}}});
+          }
+          catch(error){
+            throw new Error(error);
+          }
         }
 }
 

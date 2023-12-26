@@ -28,7 +28,9 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { MdArrowForwardIos } from "react-icons/md";
 import { UserContext } from "../page";
-
+import { GiAstronautHelmet } from "react-icons/gi";
+import { FaUserAstronaut } from "react-icons/fa";
+import { ChannelInfoProps } from "../../../../../../../backend_service/backend/types/chatTypes";
 // export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 // export const isAdmin = false;
 
@@ -44,6 +46,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
   const editChannel = useContext(showEditChannelContext);
   const userInfo = useContext(UserContext);
+  const [isCreator, setIsCreator] = useState(false);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
   //   return;
@@ -82,12 +85,16 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   //     fetchFun();
 
   // }
+  console.log(
+    "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
+    conversationProps?.type
+  );
 
   return (
     <>
       {conversationProps?.type === "DIRECT" ? (
         <ConversationInfoWrapper
-          username="username"
+          name="username"
           title={conversationProps?.title}
           imgUrl={avatar}
         >
@@ -125,28 +132,59 @@ export const ConversationInfo = ({ type }: { type: string }) => {
             </div>
           </ButtonInfo>
         </ConversationInfoWrapper>
-      ) : (
+      ) : conversationProps?.type === "CHANNEL_CHAT" ? (
         <ConversationInfoWrapper
-          username="channel name"
+          name={conversationProps?.name}
           title=""
           imgUrl={avatar}
         >
-          <MemberList />
-          <ButtonInfo width="10" hight="10">
-            <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-12">
-              <CostumeButton
-                onClick={() => setEditChannel(true)}
-                bgColor="bg-transparent border-[#FEFFFF]"
-                color="#FC2B5D"
-                width="w-full"
-                hight="h-11"
-              >
-                <p className=" text-[#FEFFFF] font-semibold font-poppins text-sm">
-                  Edit Channel
-                </p>
-                <FiEdit color="#FEFFFF" size={24} />
-              </CostumeButton>
+          <MemberList setIsCreator={setIsCreator} />
+          {isCreator && (
+            <ButtonInfo width="10" hight="10">
+              <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-12">
+                <CostumeButton
+                  onClick={() => setEditChannel(true)}
+                  bgColor="bg-transparent border-[#FEFFFF]"
+                  color="#FC2B5D"
+                  width="w-full"
+                  hight="h-11"
+                >
+                  <p className=" text-[#FEFFFF] font-semibold font-poppins text-sm">
+                    Edit Channel
+                  </p>
+                  <FiEdit color="#FEFFFF" size={24} />
+                </CostumeButton>
 
+                <CostumeButton
+                  onClick={() => setExitChannel(true)}
+                  bgColor="bg-transparent border-[#FC2B5D]"
+                  color="wthie"
+                  width="w-full"
+                  hight="h-11"
+                >
+                  <p className=" text-light-red font-semibold font-poppins text-sm">
+                    Exit Channel
+                  </p>
+                  <FaRunning color="#FC2B5D" size={24} />
+                </CostumeButton>
+
+                <CostumeButton
+                  onClick={() => setDeleteChannel(true)}
+                  bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
+                  color="#FC2B5D"
+                  width="w-full"
+                  hight="h-11"
+                >
+                  <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
+                    Delete channel
+                  </p>
+                  <MdDelete color="#FEFFFF" size={24} />
+                </CostumeButton>
+              </div>
+            </ButtonInfo>
+          )}
+          {!isCreator && (
+            <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-60">
               <CostumeButton
                 onClick={() => setExitChannel(true)}
                 bgColor="bg-transparent border-[#FC2B5D]"
@@ -159,22 +197,20 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 </p>
                 <FaRunning color="#FC2B5D" size={24} />
               </CostumeButton>
-
-              <CostumeButton
-                onClick={() => setDeleteChannel(true)}
-                bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
-                color="#FC2B5D"
-                width="w-full"
-                hight="h-11"
-              >
-                <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
-                  Delete channel
-                </p>
-                <MdDelete color="#FEFFFF" size={24} />
-              </CostumeButton>
             </div>
-          </ButtonInfo>
+          )}
         </ConversationInfoWrapper>
+      ) : (
+        <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
+          <div className="mt-10 flex justify-center items-center gap-10 flex-col">
+            {/* <GiAstronautHelmet size={120} /> */}
+            <FaUserAstronaut size={140} />
+            <h1 className="font-poppins text-lg">
+              {" "}
+              No Conversation Is Selected{" "}
+            </h1>
+          </div>
+        </div>
       )}
     </>
   );
@@ -190,17 +226,28 @@ const MemberIthem = ({
   isAdmin: boolean;
 }) => {
   const [isOptions, setIsOptions] = useState(false);
+  const [isAdmine, setIsAdmine] = useState(true);
   // const [selectedOption, setSelectedOption] = useState("public");
 
   const options = [
-    { id: 1, label: "mute", subOptions: ["5 min", "30 min", "1 hour"] },
-    { id: 2, label: "kick", acton: "kick" },
-    { id: 3, label: "ban", action: "ban" },
+    { id: 0, label: `${isAdmin ?  "Make As Admin" : "Remove Admin "}`, action: "makeAsAdmin" },
+    { id: 1, label: "Mute", subOptions: ["5 min", "30 min", "1 hour"] },
+    { id: 2, label: "Kick", acton: "kick" },
+    { id: 3, label: "Ban", action: "ban" },
   ];
 
-  const handleOptionClick =
+  const handleSubOptionClick =
     (option: { id: number; label: string; subOptions?: string[] }) => () => {
       console.log("clicked", option);
+      // setSelectedOption(option.label);
+    };
+  const handleOptionClick =
+    (option: { id: number; label: string; action?: string }) => () => {
+      console.log("clicked", option);
+      if (option.action === "makeAsAdmin") {
+        setIsAdmine(!isAdmine);
+        console.log("isAdmine:", isAdmine);
+      }
       // setSelectedOption(option.label);
     };
   return (
@@ -215,158 +262,120 @@ const MemberIthem = ({
         <h3>{name}</h3>
       </div>
       {
-        // !isOptions ? <SlOptions className="cursor-pointer" onClick={() => setIsOptions(!isOptions)} />
-        // :
-        // <div className="optionsMenu absolute mt-[149px] ml-[114px] z-50">
-        //     <SlOptions className="cursor-pointer left-[88%] absolute" onClick={() => setIsOptions(!isOptions)} />
-        //     <select className="">
-        //         {/* <option value="apple">Apple</option>
-        //           <option value="banana">Banana</option>
-        //         <option value="orange">Orange</option> */}
-        //     </select>
-        // </div>
-
-        // function MyMenu() {
-        //   return (
-
-        // <Menu>
-        //   <Menu.Button>Options</Menu.Button>
-        //   <Menu.Items>
-        //     {links.map((link) => (
-        //       /* Use the `active` state to conditionally style the active item. */
-        //       <Menu.Item key={link.href} as={Fragment}>
-        //         {({ active }) => (
-        //           <a
-        //             href={link.href}
-        //             className={`${
-        //               active ? 'bg-blue-500 text-white' : 'bg-white text-black'
-        //             }`}
-        //           >
-        //             {link.label}
-        //           </a>
-        //         )}
-        //       </Menu.Item>
-        //     ))}
-        //   </Menu.Items>
-        // </Menu>
-
-        /// bedore ading mute dropdown
-        //       <Menu>
-        //       <Menu.Button className=" cursor-pointer left-[95%] absolute ">
-        //         <SlOptions className=" " onClick={() => setIsOptions(!isOptions)} />
-        //       </Menu.Button>
-        //       <Transition
-        //     as={Fragment}
-        //     enter="transition duration-100 ease-out"
-        //     enterFrom="transform opacity-0 scale-95"
-        //     enterTo="transform opacity-100 scale-100"
-        //     leave="transition duration-75 ease-out"
-        //     leaveFrom="transform opacity-100 scale-100"
-        //     leaveTo="transform opacity-0 scale-95"
-        //   >
-        //     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50
-        //     ">
-        //       {optins.map((option) => (
-        //         <Menu.Item key={option.id}>
-        //           {({ active }) => (
-        //             <div
-        //               className={`${
-        //                 active ? 'bg-[#9A9BD326] text-white rounded-md' : 'text-white'
-        //               } block px-4 py-2 text-sm`}
-        //             >
-        //               {option.label}
-        //             </div>
-        //           )}
-        //         </Menu.Item>
-        //       ))}
-        //     </Menu.Items>
-        //   </Transition>
-        // </Menu>
-
-        // )
-
         // after adding mute dropdown
-
-        <Menu>
-          <Menu.Button className="cursor-pointer left-[95%] absolute">
-            <SlOptions className="" onClick={() => setIsOptions(!isOptions)} />
-          </Menu.Button>
-          <Transition
-            as={Fragment}
-            enter="transition duration-100 ease-out"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-              {options.map((option) => (
-                <Menu.Item key={option.id}>
-                  {({ active }) => (
-                    <div
-                      className={`${
-                        active
-                          ? "bg-[#9A9BD326] text-white rounded-md flex justify-between"
-                          : "text-white flex justify-between"
-                      } block px-4 py-2 text-sm cursor-pointer`}
-                    >
-                      {option.label}
-                      {option.subOptions && (
-                        <Menu as="div" className="relative flex items-center">
-                          <Menu.Button className="pl-4 text-white ">
-                            <MdArrowForwardIos />
-                            {/* <span className="ml-2"> &gt; </span> */}
-                          </Menu.Button>
-                          <Transition
-                            as={Fragment}
-                            enter="transition duration-100 ease-out"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition duration-75 ease-out"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                          >
-                            <Menu.Items className="origin-top-right absolute right-0 mr-[112px] mt-[140px] w-32 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                              {option.subOptions.map((subOption, index) => (
-                                <Menu.Item key={index}>
-                                  {({ active }) => (
-                                    <div
-                                      className={`${
-                                        active
-                                          ? "bg-[#9A9BD326] text-white rounded-md "
-                                          : "text-white "
-                                      } block px-4 py-2 text-sm cursor-pointer`}
-                                      onClick={handleOptionClick(option)}
-                                    >
-                                      {subOption}
-                                    </div>
-                                  )}
-                                </Menu.Item>
-                              ))}
-                            </Menu.Items>
-                          </Transition>
-                        </Menu>
-                      )}
-                    </div>
-                  )}
-                </Menu.Item>
-              ))}
-            </Menu.Items>
-          </Transition>
-        </Menu>
+        isAdmin && (
+          <Menu>
+            <Menu.Button className="cursor-pointer left-[95%] absolute">
+              <SlOptions
+                className=""
+                onClick={() => setIsOptions(!isOptions)}
+              />
+            </Menu.Button>
+            <Transition
+              as={Fragment}
+              enter="transition duration-100 ease-out"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                {options.map((option) => (
+                  <Menu.Item key={option.id}>
+                    {({ active }) => (
+                      <div
+                        className={`${
+                          active
+                            ? "bg-[#9A9BD326] text-white rounded-md flex justify-between"
+                            : "text-white flex justify-between"
+                        } block px-4 py-2 text-sm cursor-pointer`}
+                        onClick={handleOptionClick(option)}
+                      >
+                        {option.label}
+                        {option.subOptions && (
+                          <Menu as="div" className="relative flex items-center">
+                            <Menu.Button className="pl-4 text-white ">
+                              <MdArrowForwardIos />
+                              {/* <span className="ml-2"> &gt; </span> */}
+                            </Menu.Button>
+                            <Transition
+                              as={Fragment}
+                              enter="transition duration-100 ease-out"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition duration-75 ease-out"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
+                            >
+                              <Menu.Items className="origin-top-right absolute right-0 mr-[127px] mt-[140px] w-36 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                {option.subOptions.map((subOption, index) => (
+                                  <Menu.Item key={index}>
+                                    {({ active }) => (
+                                      <div
+                                        className={`${
+                                          active
+                                            ? "bg-[#9A9BD326] text-white rounded-md "
+                                            : "text-white "
+                                        } block px-4 py-2 text-sm cursor-pointer`}
+                                        onClick={handleSubOptionClick(option)}
+                                      >
+                                        {subOption}
+                                      </div>
+                                    )}
+                                  </Menu.Item>
+                                ))}
+                              </Menu.Items>
+                            </Transition>
+                          </Menu>
+                        )}
+                      </div>
+                    )}
+                  </Menu.Item>
+                ))}
+              </Menu.Items>
+            </Transition>
+          </Menu>
+        )
       }
-
-      {/* } */}
     </div>
   );
 };
 
-const MemberList = ({}: {}) => {
+const MemberList = ({
+  setIsCreator,
+}: {
+  setIsCreator: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const conversation = useContext(LstConversationStateContext);
   const [members, setMembers] = useState<MemberProps[]>([]);
+  const [membersInfo, setMembersInfo] = useState<ChannelInfoProps>(
+    {} as ChannelInfoProps
+  );
+  const conversationProps = useContext(LstConversationStateContext);
+  const userInfo = useContext(UserContext);
 
   const [isSet, setIsSet] = useState(false);
+
+  // const userData = {
+  //   channelId: conversation?.id,
+  //   userId2: "381512f8-e314-490f-8c5e-a624dc5cee49",
+  // };
+
+  // fetch("http://localhost:3001/api/channels/addAdmin", {
+  //   method: "PATCH",
+  //   credentials: "include",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(userData),
+  // })
+  //   .then((res) => {
+  //     return res.json();
+  //   })
+  //   .then((data) => {
+  //     console.log("data admin:", data);
+  //   });
 
   useEffect(() => {
     const fetchFun = async () => {
@@ -386,11 +395,49 @@ const MemberList = ({}: {}) => {
         .then((data) => {
           setMembers(data);
           // setMembers((prev) => { return [...prev, data] })
+          console.log("Members data:", data);
+          console.log("hereeeeeeeeeee");
           if (data) setIsSet(true);
         });
     };
-    if (conversation?.id !== undefined) fetchFun();
+
+    const fetchFun2 = async () => {
+      await fetch(
+        `http://localhost:3001/api/channels/channelInfos/${conversationProps.channelId}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setMembersInfo(data);
+          // setMembers((prev) => { return [...prev, data] })
+          console.log("channels info data:", data);
+          // if (data) setIsSet(true);
+        });
+    };
+    if (conversation?.id !== undefined) {
+      fetchFun();
+      fetchFun2();
+    }
   }, [conversation, isSet]);
+
+  const isAdmin = (): boolean => {
+    return membersInfo.members?.some(
+      (member) => member.userId === userInfo?.id && member.isAdmin === true
+    );
+  };
+  const isCreator = (): boolean => {
+    return membersInfo.creator?.id === userInfo?.id;
+  };
+
+  if (isCreator()) setIsCreator(true);
 
   // console.log("isSet:", isSet);
   // console.log("members:", members);
@@ -403,10 +450,11 @@ const MemberList = ({}: {}) => {
             <MemberIthem
               imgUrl="some/url"
               name={member.user.username}
-              isAdmin={true}
+              isAdmin={isAdmin()}
             />
           );
         })}
+      {/* <BanedMemberSeparator /> */}
       {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
     </>
   );
@@ -422,27 +470,39 @@ const MemberSeparator = () => {
   );
 };
 
+// const BanedMemberSeparator = () => {
+//   return (
+//     <div className="flex w-full justify-between mt-8 font-poppins font-light items-center">
+//       <div className="border-b-2 border-light-purple min-w-3 w-1/4 mt-2 mb-2"></div>
+//       <h3 className="text-light-purple">Baned Members</h3>
+//       <div className="border-b-2 border-light-purple min-w-3 w-1/4 mt-2 mb-2"></div>
+//     </div>
+//   );
+// };
+
 const ConversationInfoWrapper = ({
-  username,
+  name,
   title,
   imgUrl,
   children,
 }: {
-  username: string;
+  name: string;
   title: string;
   imgUrl: StaticImageData;
   children: React.ReactNode;
 }) => {
   const conversationProps = useContext(LstConversationStateContext);
+  console.log("name ----------------------- :", name);
   return (
-    <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12">
+    <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96">
       {title !== "" ? (
-        <ProfileInfos username={conversationProps?.name}>
-          {" "}
-          <p className="titleInfo">{title}</p>{" "}
+        <ProfileInfos name={name}>
+          {/* {" "} */}
+          <p className="titleInfo">{title}</p>
+          {/* {" "} */}
         </ProfileInfos>
       ) : (
-        <ProfileInfos username="channel name">
+        <ProfileInfos name={name}>
           <></>
         </ProfileInfos>
       )}
@@ -515,8 +575,6 @@ export const ChatPage = () => {
   const [showEditChannel, setShowEditChannel] = useState<boolean>(false);
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
-
-
 
   // console.log("conversationId:", conversation?.id);
   useEffect(() => {
@@ -683,16 +741,17 @@ export const ButtonInfo = ({
 };
 
 const ProfileInfos = ({
-  username,
+  name,
   children,
 }: {
-  username: string | undefined;
+  name: string | undefined;
   children: React.ReactNode;
 }) => {
+  console.log("name------------ :", name);
   return (
     <div className="flex flex-col items-center ">
       <Image className="avatar" src={avatar} alt={"avatar"} />
-      <h4 className="nameInfo"> {username} </h4>
+      <h4 className="nameInfo"> {name} </h4>
       {children}
     </div>
   );

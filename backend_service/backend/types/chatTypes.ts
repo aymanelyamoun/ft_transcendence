@@ -65,7 +65,25 @@ export type MessageProps = {
 
 export type MemberProps = {
   user: {
+      id: string;
       profilePic: string;
       username: string;
   };
+}
+
+
+export interface ChannelInfoProps{
+  channelName: string;
+  channelPic: string;
+  channelType: string;
+  creator: {
+      id: string;
+      profilePic: string;
+      username: string;
+  };
+  members: {
+      isAdmin: boolean;
+      userId: string;
+      channelId: string;
+  }[];
 }

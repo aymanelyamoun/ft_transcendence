@@ -17,8 +17,8 @@ interface User {
   profilePic?: string;
   hash: string;
   typeLog: string;
-  isTwoFactorEnabled: Boolean;
-  isConfirmed2Fa: Boolean;
+  isTwoFactorEnabled: boolean;
+  isConfirmed2Fa: boolean;
 }
 
 interface UserContextValue {

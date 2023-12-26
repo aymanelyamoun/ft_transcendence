@@ -103,17 +103,20 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
     const handleEditButton = () => {
       
       console.log("saveChannelName ++++++++++++++++++++++ : ", saveChannelName);
+      if (passwordMatch && saveChannelName !== ""){
+        setShowNotify(true);
+      }
       if (!passwordMatch){
+        console.log("!passwordMatch: ", passwordMatch);
         setShowAlert(true);
       }
       
       if(saveChannelName === ""){
+        console.log("saveChannelName ===  : ", saveChannelName);
         setChannelName(true);
-
-        
+      }
       
-
-          // }
+        
       const channelData = {
         channelName: saveChannelName,
         password: savePassword,
@@ -123,13 +126,14 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         // creator: creatorInfo?.id,
         // here i should add the selected friends
       };
+
       console.log("channelData of Edited: ", channelData);
-      const fetchPostFun = async () => {
-        await fetch("http://localhost:3001/api/channels/editChannel", {
+      // const fetchPostFun = async () => {
+        fetch("http://localhost:3001/api/channels/editChannel", {
           method: "PATCH",
             credentials: "include",
             headers: {
-                "Content-Type": "application/json",
+            "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
           },
           body: JSON.stringify(channelData),
@@ -144,71 +148,67 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         .catch((error) => {
           console.error("Error during fetch:", error);
         });
-        if (passwordMatch && saveChannelName !== ""){
-          setShowNotify(true);
-        }
-      };
-      fetchPostFun();
-    }
-    
-    // const members = selectedFriends.map((friend) => ({
-    //   userId: friend.id,
-    //   isAdmin: false,
-    // }));
+          // };
+          // fetchPostFun();
+        
+        // const members = selectedFriends.map((friend) => ({
+        //   userId: friend.id,
+        //   isAdmin: false,
+        // }));
 
-    // const channelData = {
-      //   channelName: saveChannelName,
-      //   channelPic: "some link",
-      //   creator: creatorInfo?.id,
-      //   type: selectedOption,
-      //   password: savePassword,
-      //   members: members,
-      //   admines: [creatorInfo],
-      // here i should add the selected friends
-      // };
-      
-      // console.log("channelData : ", channelData);
-      
-      // fetch("http://localhost:3001/api/channels/createChannel", {
-        //   method: "POST",
-        //   mode: "cors",
-        //   credentials: "include",
-        //   headers: {
-          //     "Content-Type": "application/json",
+        // const channelData = {
+          //   channelName: saveChannelName,
+          //   channelPic: "some link",
+          //   creator: creatorInfo?.id,
+          //   type: selectedOption,
+          //   password: savePassword,
+          //   members: members,
+          //   admines: [creatorInfo],
+          // here i should add the selected friends
+          // };
+          
+          // console.log("channelData : ", channelData);
+          
+          // fetch("http://localhost:3001/api/channels/createChannel", {
+            //   method: "POST",
+            //   mode: "cors",
+            //   credentials: "include",
+            //   headers: {
+              //     "Content-Type": "application/json",
+              //     "Access-Control-Allow-Origin": "*",
+              //   },
+              //   body: JSON.stringify(channelData),
+              // })
+              //   .then((res) => {
+                //     return res.json();
+                //   })
+                //   .then((data) => {
+                  //     console.log("data : ", data);
+                  //   });
+                  // fetch("http://localhost:3001/api/channels/createChannel", {
+          //   method: "POST",
+          //   mode: "cors",
+          //   credentials: "include",
+          //   headers: {
+            //     "Content-Type": "application/json",
           //     "Access-Control-Allow-Origin": "*",
           //   },
           //   body: JSON.stringify(channelData),
           // })
-          //   .then((res) => {
-            //     return res.json();
-            //   })
-            //   .then((data) => {
-              //     console.log("data : ", data);
-              //   });
-              // fetch("http://localhost:3001/api/channels/createChannel", {
-      //   method: "POST",
-      //   mode: "cors",
-      //   credentials: "include",
-      //   headers: {
-        //     "Content-Type": "application/json",
-      //     "Access-Control-Allow-Origin": "*",
-      //   },
-      //   body: JSON.stringify(channelData),
-      // })
-      // .then((res) => {
-      //   if (!res.ok) {
-      //     setNotCreated(true);
-      //     throw new Error("Network response was not ok");
-      //   }
-      //   // console.log("res: ", res);
-      //   // return res.json();
-      // })
-      // // .then((data) => {
-      // //   console.log("data: ", data);
-      // // })
-      // .catch((error) => {
-        //   console.error("Error during fetch:", error);
-        // });
+          // .then((res) => {
+          //   if (!res.ok) {
+          //     setNotCreated(true);
+          //     throw new Error("Network response was not ok");
+          //   }
+          //   // console.log("res: ", res);
+          //   // return res.json();
+          // })
+          // // .then((data) => {
+          // //   console.log("data: ", data);
+          // // })
+          // .catch((error) => {
+            //   console.error("Error during fetch:", error);
+            // });
         
       }
       

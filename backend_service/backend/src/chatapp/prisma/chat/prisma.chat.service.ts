@@ -849,6 +849,7 @@ export class PrismaChatService{
               channelName:true,
               channelPic:true,
               channelType:true,
+              members:true,
             }
             // include: {creator: true}
           });

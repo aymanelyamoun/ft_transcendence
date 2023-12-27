@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { CONVERSATION_TYPE } from "@prisma/client";
 import { connect } from 'http2';
 
-const data = Array.from({length:1}).map(()=>{
+const data = Array.from({length:3}).map(()=>{
     return {
         profilePic: "some link",
         username: faker.helpers.unique(faker.person.firstName),

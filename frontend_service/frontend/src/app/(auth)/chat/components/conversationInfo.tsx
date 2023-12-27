@@ -227,8 +227,9 @@ const MemberIthem = ({
   name: string;
   isAdmin: boolean;
 }) => {
-  const [isOptions, setIsOptions] = useState(false);
-  const [asAdmin, setAsAdmin] = useState(isAdmin);
+  const [isOptions, setIsOptions] = useState<boolean>(false);
+  console.log("before isAdmin:", isAdmin);
+  const [asAdmin, setAsAdmin] = useState<boolean>(isAdmin);
   // const [selectedOption, setSelectedOption] = useState("public");
   const [selectedMuteTime, setSelectedMuteTime] = useState<string>('');
 
@@ -240,7 +241,7 @@ const MemberIthem = ({
   console.log("asAdmin:", asAdmin);
   console.log("userId:", userId);
   const options = [
-    { id: 0, label: asAdmin ?  "Make As Admin" : "Remove Admin", action:  asAdmin ? "makeAsAdmin" : "removeAdmin"},
+    { id: 0, label: (!asAdmin ?  "Make As Admin" : "Remove Admin"), action:  (!asAdmin ? "makeAsAdmin" : "removeAdmin")},
     { id: 1, label: "Mute", subOptions: ["5 min", "30 min", "1 hour"] },
     { id: 2, label: "Kick", acton: "kick" },
     { id: 3, label: "Ban", action: "ban" },
@@ -526,6 +527,8 @@ const MemberList = ({
 
   if (isCreator()) setIsCreator(true);
 
+  console.log("membersInfo:", membersInfo);
+  console.log("userInfo?.id:", userInfo?.id);
   // console.log("isSet:", isSet);
   // console.log("members:", members);
   return (

@@ -65,6 +65,11 @@ export class ChannelController{
     async getAllChannels(){
         return await this.prismaChatService.getAllChannels();
     }
+    @Get('/toAddSearch/')
+    async addUserToChannelSearch(@Req() req:Request ){
+        return await this.prismaChatService.addUserToChannelSearch(req);
+        // return await this.prismaChatService.getAllChannels();
+    }
 
     @Get('/search/:filter')
     // @UseGuards(JwtGuard)

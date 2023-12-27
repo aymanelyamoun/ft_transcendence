@@ -40,7 +40,6 @@ export type JoinChannel = {
 
 export type ChannelEdit = {
     channelId:string,
-    // userId:string,
     userId2?:string,
 }
 

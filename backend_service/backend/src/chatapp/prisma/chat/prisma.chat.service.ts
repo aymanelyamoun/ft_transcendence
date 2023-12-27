@@ -44,7 +44,7 @@ export class PrismaChatService{
       }
       catch(error){
         // thow prisma server error
-        throw new Error(error);
+        throw error;
         // console.log(error);
       }
 
@@ -77,7 +77,7 @@ export class PrismaChatService{
             return await this.prisma.message.findUnique({where:{id:newMessage.id}, include:{sender:{select:{profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -136,7 +136,7 @@ export class PrismaChatService{
           });
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -160,7 +160,7 @@ export class PrismaChatService{
             }
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -175,12 +175,13 @@ export class PrismaChatService{
             const userIsAdmin = await this.userIsAdmin(user.id, data.channelId);
             if (userIsAdmin) {
               await this.prisma.userChannel.delete({where:{userId_channelId:{userId: data.userId2, channelId:data.channelId}}});
+              await this.prisma.conversation.update({where:{channelId:data.channelId}, data:{users:{disconnect:{id:data.userId2}}}});
             }
             else
               throw new ForbiddenException("you are not an admin on this channel");
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -200,17 +201,21 @@ export class PrismaChatService{
             });
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
-        // async addUserToChannelSearch(data:chennelEdit, @Req() req:Request){
-        //   try{
-        //     const user = req['user'] as User;
-
-        //     const channel = await this.prisma.channel.findMany({where:{id:data.channelId}, include:{members:true, creator:true}})
-        //   }
-        // }
+        async addUserToChannelSearch(@Req() req:Request){
+          try{
+            const user = req['user'] as User;
+            const channel = await this.prisma.channel.findMany({where:{members:{some:{userId:user.id, isAdmin:true}}}, include:{banedUsers:{select:{id:true}}}});
+            if (!channel) throw new NotFoundException("channel does not exist");
+            return channel;
+          }
+          catch(error){
+            throw error;
+          }
+        }
       
         async getFilteredChannels(filter:string, @Req() req: Request){
           try{
@@ -242,7 +247,7 @@ export class PrismaChatService{
             });
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
 
         }
@@ -283,7 +288,7 @@ export class PrismaChatService{
             return transaction;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
 
         }
@@ -305,7 +310,7 @@ export class PrismaChatService{
             await this.prisma.userChannel.delete({where:{userId_channelId:{userId: user.id, channelId:data.channelId}}});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -326,7 +331,7 @@ export class PrismaChatService{
               throw new ForbiddenException("wrong password please check again");
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -334,25 +339,32 @@ export class PrismaChatService{
           try{
             const loggedUser = req['user'] as User;
 
-            const channel = this.getChannelWithProp(data.channelId);
+            // const channel = await this.getChannelWithProp(data.channelId);
+            const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{members:true, banedUsers:true}})
 
             if (!channel)
               throw new NotFoundException("the channel you are asking does not exist");
-            
-            const user = await this.getUser({where:{id:data.userId2}})
 
-            if (!user)
-              throw new NotFoundException("the channel you are asking does not exist");
 
-            const isFriendOf = await this.isFriendOf(loggedUser.id, data.userId2);
-            const isAdmin = await this.isAdminOnChannel(loggedUser.id, data.channelId);
+            if (!channel.members.some((member)=>{ return(member.userId === data.userId2)})){
+              if (channel.banedUsers.some((user)=> user.id === data.userId2))
+                throw new ForbiddenException("this user is banned from this channel");
+              
+              const user = await this.getUser({where:{id:data.userId2}})
 
-            if (isAdmin && isFriendOf){
-            const joinChannel = await this.addChannelToUser(data.userId2 ,data.channelId);
+              if (!user)
+                throw new NotFoundException("the channel you are asking does not exist");
+
+              const isFriendOf = await this.isFriendOf(loggedUser.id, data.userId2);
+              const isAdmin = await this.isAdminOnChannel(loggedUser.id, data.channelId);
+
+              if (isAdmin && isFriendOf){
+              const joinChannel = await this.addChannelToUser(data.userId2 ,data.channelId);
+              }
             }
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -361,7 +373,7 @@ export class PrismaChatService{
             const notif = await this.prisma.notification.create({data:{type:type, title:title, discription:discription, user:{connect:{id:userId}}, sender:{connect:{id:senderId}}}});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -378,7 +390,7 @@ export class PrismaChatService{
             await this.prisma.userChannel.update({where:{userId_channelId:{userId:data.userId2, channelId:data.channelId}}, data:{isAdmin:true}});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -400,7 +412,7 @@ export class PrismaChatService{
               throw new NotFoundException("this user doesn't exixt in the channel");
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -432,10 +444,11 @@ export class PrismaChatService{
                 },
               },
             });
+            await this.prisma.conversation.update({where:{channelId:channelId}, data:{users:{disconnect:{id:userId2}}}});
             return updatedChannel;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -471,7 +484,7 @@ export class PrismaChatService{
             return updatedChannel;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
 
         }
@@ -493,7 +506,7 @@ export class PrismaChatService{
             return members;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -502,7 +515,7 @@ export class PrismaChatService{
             return await this.prisma.channel.findUnique({ where: { id: channelId } });
           }
           catch (error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -514,7 +527,7 @@ export class PrismaChatService{
             });
           }
           catch (error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -530,7 +543,7 @@ export class PrismaChatService{
             return channel.members.some(admin => ((admin.userId) === userId && admin.isAdmin));
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -543,7 +556,7 @@ export class PrismaChatService{
             return (user.friends.some((friend)=>(friend.id === userId2)))
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -566,7 +579,7 @@ export class PrismaChatService{
             await this.addUserToConversation(userId, conversation.id);
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
 
         }
@@ -576,7 +589,7 @@ export class PrismaChatService{
             return (await this.prisma.user.findUnique(params))
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -616,7 +629,7 @@ export class PrismaChatService{
             return newList;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -659,7 +672,7 @@ export class PrismaChatService{
             return newAddAdmins;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -672,7 +685,7 @@ export class PrismaChatService{
             return conversation.users.some((user)=>{return(user.id === userId)});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -687,7 +700,7 @@ export class PrismaChatService{
             return conversation.channel.mutedUsers.some((user)=>{return(user.id === userId && (new Date() < user.timeToEnd))});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -714,7 +727,7 @@ export class PrismaChatService{
             return newRemoveAdmins;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -729,7 +742,7 @@ export class PrismaChatService{
             return memberIn
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -747,7 +760,7 @@ export class PrismaChatService{
             return memberIn
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -779,7 +792,7 @@ export class PrismaChatService{
             return members
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -796,7 +809,7 @@ export class PrismaChatService{
             return conversations;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -840,7 +853,7 @@ export class PrismaChatService{
             return conversationIthem;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -877,7 +890,7 @@ export class PrismaChatService{
             return conversationIthem;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -889,7 +902,7 @@ export class PrismaChatService{
             return [...DMs, ...channelChats];
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -916,7 +929,7 @@ export class PrismaChatService{
             return messages_;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -931,7 +944,7 @@ export class PrismaChatService{
             return channelInfoWithoutHash;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -954,7 +967,7 @@ export class PrismaChatService{
             return channelData;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -973,7 +986,7 @@ export class PrismaChatService{
             });
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -985,7 +998,7 @@ export class PrismaChatService{
             return user.isAdmin
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -1004,7 +1017,7 @@ export class PrismaChatService{
             const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{members:true}});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
 
         }
@@ -1015,7 +1028,7 @@ export class PrismaChatService{
             return channel.conversation;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -1032,7 +1045,7 @@ export class PrismaChatService{
             return conversation;
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 
@@ -1053,7 +1066,7 @@ export class PrismaChatService{
               await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{create:{mutedUser:{connect:{id:data.userToMute}}, timeToEnd:data.muteUntil}}}});
           }
           catch(error){
-            throw new Error(error);
+            throw error;
           }
         }
 }

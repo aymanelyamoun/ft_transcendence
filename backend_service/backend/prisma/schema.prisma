@@ -63,6 +63,8 @@ model GameRecord{
   concededGoals Int @default(0)
   oponent User @relation("gameRecordOponent",fields: [oponentId], references: [id])
   oponentId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Message{
@@ -182,7 +184,7 @@ model Muted{
   timeToEnd DateTime
   mutedUser User?
 
-  mutedChannel Channel @relation(fields: [mutedId], references: [id])
+  mutedChannel Channel @relation(fields: [mutedId], references: [id], onDelete: Cascade)
   mutedId String
 }
 

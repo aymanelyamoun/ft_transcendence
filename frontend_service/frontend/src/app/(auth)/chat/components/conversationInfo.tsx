@@ -201,7 +201,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           )}
         </ConversationInfoWrapper>
       ) : (
-        <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
+        <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
           <div className="mt-10 flex justify-center items-center gap-10 flex-col">
             {/* <GiAstronautHelmet size={120} /> */}
             <FaUserAstronaut size={140} />

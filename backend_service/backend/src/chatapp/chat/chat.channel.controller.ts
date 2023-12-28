@@ -90,6 +90,7 @@ export class ChannelController{
 
     @Patch('muteUser')
     async muteUser(@Body()data:MuteUserDto, @Req() req:Request){
+        console.log("RECIEVED DATA : ", data);
         await this.prismaChatService.muteUser(data, req);
     }
 

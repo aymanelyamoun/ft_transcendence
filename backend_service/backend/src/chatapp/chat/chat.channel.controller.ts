@@ -88,7 +88,7 @@ export class ChannelController{
         await this.prismaChatService.unbanUser(data, req);
     }
 
-    @Patch()
+    @Patch('muteUser')
     async muteUser(@Body()data:MuteUserDto, @Req() req:Request){
         await this.prismaChatService.muteUser(data, req);
     }

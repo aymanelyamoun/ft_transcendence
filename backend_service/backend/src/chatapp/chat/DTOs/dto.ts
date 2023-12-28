@@ -143,8 +143,9 @@ export class MuteUserDto{
     userToMute:string;
 
     @IsNotEmpty()
-    @IsDate()
-    muteUntil:Date;
+    @IsString()
+    // @IsDate()
+    muteUntil:string;
 }
 
 export class ConversationInfoDto{

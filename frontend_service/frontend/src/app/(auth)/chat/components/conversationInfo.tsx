@@ -231,7 +231,7 @@ const MemberIthem = ({
   console.log("before isAdmin:", isAdmin);
   const [asAdmin, setAsAdmin] = useState<boolean>(isAdmin);
   // const [selectedOption, setSelectedOption] = useState("public");
-  const [selectedMuteTime, setSelectedMuteTime] = useState<string>('');
+  const [selectedMuteTime, setSelectedMuteTime] = useState<string>("");
 
   const conversationProps = useContext(LstConversationStateContext);
   // const userInfo = useContext(UserContext);
@@ -241,9 +241,13 @@ const MemberIthem = ({
   console.log("asAdmin:", asAdmin);
   console.log("userId:", userId);
   const options = [
-    { id: 0, label: (!asAdmin ?  "Make As Admin" : "Remove Admin"), action:  (!asAdmin ? "makeAsAdmin" : "removeAdmin")},
+    {
+      id: 0,
+      label: !asAdmin ? "Make As Admin" : "Remove Admin",
+      action: !asAdmin ? "makeAsAdmin" : "removeAdmin",
+    },
     { id: 1, label: "Mute", subOptions: ["5 min", "30 min", "1 hour"] },
-    { id: 2, label: "Kick", acton: "kick" },
+    { id: 2, label: "Kick", action: "kick" },
     { id: 3, label: "Ban", action: "ban" },
   ];
 
@@ -254,88 +258,106 @@ const MemberIthem = ({
   //     // console.log("selectedMuteTime:", selectedMuteTime);
   //     // setSelectedOption(option.label);
   //   };
+  function addMinutes(date: Date, minutes: number) {
+    date.setMinutes(date.getMinutes() + minutes);
+
+    return date;
+  }
 
   const handleSubOptionClick =
-  (option: { id: number; label: string; subOptions?: string[] }) =>
-  (subOption: string) => {
-    console.log(`You clicked "${subOption}"`);
+    (option: { id: number; label: string; subOptions?: string[] }) =>
+    (subOption: string) => {
+      console.log(`You clicked "${subOption}"`);
 
-    // if (subOption === "5 min") {
-    //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend  
-    // }
-    // else if (subOption === "30 min") {
-    //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend  
-    // }
-    // else if (subOption === "1 hour") {
-    //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend  
-    // } 
+      if (subOption === "5 min") {
+        // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
+        const userData = {
+          channelId: conversationProps.channelId,
+          userToMute: userId,
+          muteUntil: addMinutes(new Date(), 5),
+        };
+        console.log("userData Mute :", userData);
+        fetch("http://localhost:3001/api/channels/muteUser", {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      }
+      // else if (subOption === "30 min") {
+      //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
+      // }
+      // else if (subOption === "1 hour") {
+      //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
+      // }
 
-    // setSelectedMuteTime(subOption);
-  };
+      // setSelectedMuteTime(subOption);
+    };
 
   const handleOptionClick =
     (option: { id: number; label: string; action?: string }) => () => {
       console.log("clicked", option);
       if (option.action === "makeAsAdmin") {
-          setAsAdmin(!asAdmin);
-          console.log("isAdmin:", asAdmin);
-          const userData = {
-            channelId: conversationProps.channelId,
-            userId2: userId,
-          };
+        setAsAdmin(!asAdmin);
+        console.log("isAdmin:", asAdmin);
+        const userData = {
+          channelId: conversationProps.channelId,
+          userId2: userId,
+        };
         fetch("http://localhost:3001/api/channels/addAdmin", {
-            method: "PATCH",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          })
-        }
-        else if (option.action === "removeAdmin") {
-            setAsAdmin(!asAdmin);
-          console.log("isAdmin:", asAdmin);
-          const userData = {
-            channelId: conversationProps.channelId,
-            userId2: userId,
-          };
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      } else if (option.action === "removeAdmin") {
+        setAsAdmin(!asAdmin);
+        console.log("isAdmin:", asAdmin);
+        const userData = {
+          channelId: conversationProps.channelId,
+          userId2: userId,
+        };
         fetch("http://localhost:3001/api/channels/removeAdmin", {
-            method: "PATCH",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          })
-        }
-        else if (option.action === "ban") {
-          const userData = {
-            channelId: conversationProps.channelId,
-            userId2: userId,
-          };
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      } else if (option.action === "ban") {
+        console.log("BANNING A USER");
+        const userData = {
+          channelId: conversationProps.channelId,
+          userId2: userId,
+        };
         fetch("http://localhost:3001/api/channels/banUser", {
-            method: "PATCH",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          })
-        }
-        else if (option.action === "kick") {
-          const userData = {
-            channelId: conversationProps.channelId,
-            userId2: userId,
-          };
-        fetch("http://localhost:3001/api/channels/lremoveUserFromChannel", {
-            method: "PATCH",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          })
-        }
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      } else if (option.action === "kick") {
+        console.log("KICKING A USER");
+        const userData = {
+          channelId: conversationProps.channelId,
+          userId2: userId,
+        };
+        fetch("http://localhost:3001/api/channels/removeUserFromChannel", {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      }
       // setSelectedOption(option.label);
     };
   return (
@@ -406,7 +428,11 @@ const MemberIthem = ({
                                             ? "bg-[#9A9BD326] text-white rounded-md "
                                             : "text-white "
                                         } block px-4 py-2 text-sm cursor-pointer`}
-                                        onClick={() => handleSubOptionClick(option)(subOption)}
+                                        onClick={() =>
+                                          handleSubOptionClick(option)(
+                                            subOption
+                                          )
+                                        }
                                       >
                                         {subOption}
                                       </div>

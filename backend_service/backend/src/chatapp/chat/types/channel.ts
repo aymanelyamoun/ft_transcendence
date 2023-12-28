@@ -45,5 +45,6 @@ export type ChannelEdit = {
 export type MuteUser = {
     channelId:string,
     userToMute:string,
-    muteUntil:Date,
+    muteUntil:string,
+    // muteUntil:Date,
 }

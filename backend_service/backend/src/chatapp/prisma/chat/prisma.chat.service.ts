@@ -169,13 +169,15 @@ export class PrismaChatService{
           try{
             const user = req['user'] as User;
 
-            const requestedChannel = await this.prisma.channel.findUnique({ where: { id: data.channelId } });
+            const requestedChannel = await this.prisma.channel.findUnique({ where: { id: data.channelId }, include:{conversation:{select:{id:true}}} });
             if (!requestedChannel) throw new ForbiddenException("channel does not exist");
 
             const userIsAdmin = await this.userIsAdmin(user.id, data.channelId);
             if (userIsAdmin) {
+              console.log("user is admin");
               await this.prisma.userChannel.delete({where:{userId_channelId:{userId: data.userId2, channelId:data.channelId}}});
-              await this.prisma.conversation.update({where:{channelId:data.channelId}, data:{users:{disconnect:{id:data.userId2}}}});
+              const memberTodlt = await this.prisma.member.findFirst({where:{AND:[{userId:data.userId2}, {conversationId:requestedChannel.conversation.id}]}});
+              await this.prisma.conversation.update({where:{channelId:data.channelId}, data:{users:{disconnect:{id:data.userId2}}, members:{delete:{ id:memberTodlt.id }}}});
             }
             else
               throw new ForbiddenException("you are not an admin on this channel");
@@ -423,6 +425,7 @@ export class PrismaChatService{
             const { channelId, userId2 } = data;
             const channel = await this.prisma.channel.findUnique({
               where: { id: channelId },
+              include:{conversation:{select:{id:true}},}
             });
 
             if (!channel) {
@@ -444,7 +447,8 @@ export class PrismaChatService{
                 },
               },
             });
-            await this.prisma.conversation.update({where:{channelId:channelId}, data:{users:{disconnect:{id:userId2}}}});
+            const memberTodlt = await this.prisma.member.findFirst({where:{AND:[{userId:userId2}, {conversationId:channel.conversation.id}]}});
+            await this.prisma.conversation.update({where:{channelId:channelId}, data:{users:{disconnect:{id:userId2}}, members:{delete:{ id:memberTodlt.id }}}});
             return updatedChannel;
           }
           catch(error){
@@ -697,7 +701,9 @@ export class PrismaChatService{
             if (conversation.type === CONVERSATION_TYPE.DIRECT)
               return false;
 
-            return conversation.channel.mutedUsers.some((user)=>{return(user.id === userId && (new Date() < user.timeToEnd))});
+            console.log("USER ID: ", userId);
+            console.log("time to end : ", conversation.channel.mutedUsers.some((mutedUser)=>{console.log('user time to end mute: ',mutedUser.timeToEnd); console.log("user muted: ", mutedUser.mutedId);  ;console.log("time to mute has not passed: ", new Date() < mutedUser.timeToEnd );return(mutedUser.mutedId === userId && (new Date() < mutedUser.timeToEnd))}));
+            return conversation.channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === userId&& (new Date() < mutedUser.timeToEnd))});
           }
           catch(error){
             throw error;
@@ -1061,10 +1067,25 @@ export class PrismaChatService{
             if (!channel.members.some((member)=>{return(member.userId === user.id)}))
               throw new ForbiddenException("you are not a member of this channel");
 
-            if (channel.mutedUsers.some((user)=>{return(user.id === data.userToMute)}))
-              await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{update:{where:{id:data.userToMute}, data:{timeToEnd:data.muteUntil}}}}});
+            const userToMute = await this.prisma.user.findUnique({ where: { id: data.userToMute } });
+            if (!userToMute) {
+              throw new NotFoundException("User to mute does not exist");
+            }
+
+            const timeToEnd = new Date(data.muteUntil);
+
+            if (channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === data.userToMute)})){
+              console.log("USER EXE");
+              const mutedUser = await this.prisma.muted.findFirst({where:{AND:[{mutedUser:{id:data.userToMute}}, {mutedChannel:{id: data.channelId}}]}});
+              await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{update:{where:{id:mutedUser.id}, data:{timeToEnd:timeToEnd}}}}});
+            }
             else
-              await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{create:{mutedUser:{connect:{id:data.userToMute}}, timeToEnd:data.muteUntil}}}});
+            {
+              console.log("USER NOT EXE")
+              await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{create:{mutedUser:{connect:{id:data.userToMute}}, timeToEnd:timeToEnd}}}});
+              const test = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{mutedUsers:true}});
+              console.log("TEST: ",test)
+            }
           }
           catch(error){
             throw error;

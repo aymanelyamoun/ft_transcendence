@@ -46,7 +46,7 @@ model User{
 
   memberConv Member[]
 
-  mutedUser Muted? @relation(fields: [mutedId], references: [id])
+  mutedUser Muted[]
   mutedId String? @unique
 
   userMessages Message[]
@@ -180,15 +180,14 @@ model UserChannel{
 }
 
 model Muted{
-  id String @id() @default(uuid())
+  id String @id @default(uuid())
   timeToEnd DateTime
-  mutedUser User?
+  mutedUser User @relation(fields: [userId], references: [id])
+  userId String
 
   mutedChannel Channel @relation(fields: [mutedId], references: [id], onDelete: Cascade)
   mutedId String
 }
-
-
 
 
 

@@ -274,7 +274,7 @@ const MemberIthem = ({
         const userData = {
           channelId: conversationProps.channelId,
           userToMute: userId,
-          muteUntil: addMinutes(new Date(), 5),
+          muteUntil: addMinutes(new Date(), 1),
         };
         console.log("userData Mute :", userData);
         fetch("http://localhost:3001/api/channels/muteUser", {

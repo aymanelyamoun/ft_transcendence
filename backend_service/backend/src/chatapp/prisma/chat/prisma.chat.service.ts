@@ -703,7 +703,7 @@ export class PrismaChatService{
 
             console.log("USER ID: ", userId);
             console.log("time to end : ", conversation.channel.mutedUsers.some((mutedUser)=>{console.log('user time to end mute: ',mutedUser.timeToEnd); console.log("user muted: ", mutedUser.mutedId);  ;console.log("time to mute has not passed: ", new Date() < mutedUser.timeToEnd );return(mutedUser.mutedId === userId && (new Date() < mutedUser.timeToEnd))}));
-            return conversation.channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === userId&& (new Date() < mutedUser.timeToEnd))});
+            return conversation.channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === userId && (new Date() < mutedUser.timeToEnd))});
           }
           catch(error){
             throw error;
@@ -1089,8 +1089,8 @@ export class PrismaChatService{
               const testuser = await this.prisma.muted.create({data:{mutedUser:{connect:{id:data.userToMute}}, mutedChannel:{connect:{id:data.channelId}}, timeToEnd:timeToEnd}});
               console.log("TEST USER: ", testuser);
               // await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{create:{mutedUser:{connect:{id:data.userToMute}}, timeToEnd:timeToEnd}}}});
-              // const test = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{mutedUsers:true}});
-              // console.log("TEST: ",test)
+              const test = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{mutedUsers:true}});
+              console.log("TEST: ",test)
             }
           }
           catch(error){

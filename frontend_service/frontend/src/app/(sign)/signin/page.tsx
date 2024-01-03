@@ -9,6 +9,7 @@ import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { AlertMessage } from '@/app/components/alertMessage';
+import Loading from '@/app/components/Loading';
 
 let data : any;
 type FormInputs = {
@@ -45,6 +46,7 @@ export default function Signin() {
           const data = await res.json();
         } else {
             router.push('/profile/dashboard');
+            return <Loading />;
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
@@ -77,10 +79,11 @@ export default function Signin() {
       if (resp.isTwoFactorEnabled)
       {
         router.push("/confirmauth");
-        return;
+        return <Loading />;
       }
       setIsNotify(true);
       router.push("/profile/dashboard");
+      return <Loading />;
     }
     catch (error)
     {
@@ -104,7 +107,7 @@ export default function Signin() {
   return (
     <div style={{ background: '#050A27' }} 
     className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen">
-      <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 w-[30px] h-[323px] rounded-lg'></div>
+      {/* <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 w-[30px] h-[323px] rounded-lg'></div> */}
           {/* <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG</h2> */}
           <h2 className="text-white shadow-2xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3">PONG</h2>
           <div
@@ -133,7 +136,7 @@ export default function Signin() {
                 <FaLinkedinIn className="text-sm text-white" />
               </Link>
               </div>
-              <Link href="/signup" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-sky-950'>Create Account</Link>
+              <Link href="/signup" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-[#999BD3]'>Create Account</Link>
             </div>
             </div>
             {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={"User Logged!"} type="notify" /> : ""}

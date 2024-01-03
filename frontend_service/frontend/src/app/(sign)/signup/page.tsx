@@ -42,6 +42,7 @@ let response : any;
           const data = await res.json();
         } else {
             router.push("/profile/dashboard");
+            return <Loading />;
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
@@ -74,6 +75,7 @@ let response : any;
       }
       setIsNotify(true);
       router.push("/signin");
+      return <Loading />;
     } catch (error)
     {
          console.error("Error in log function:", error);
@@ -99,7 +101,7 @@ let response : any;
       {/* <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG</h2> */}
       <h2 className="text-white shadow-2xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3">PONG</h2>
       
-      <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 max-w-[30px] max-h-[323px] w-[3%] h-[33%] rounded-lg'></div>
+      {/* <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 max-w-[30px] max-h-[323px] w-[3%] h-[33%] rounded-lg'></div> */}
       <div
         style={gradientStyle}
         className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
@@ -145,7 +147,7 @@ let response : any;
               <FaLinkedinIn className="text-sm text-white" />
             </Link>
             </div>
-              <Link href="/signin" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:bg-[#999BD3]'>Sign in</Link>
+              <Link href="/signin" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-[#999BD3]'>Sign in</Link>
           </div>
           {isError === true ? <AlertMessage onClick={handleClick} message={response.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={"User Created!"} type="notify" /> : ""}
 

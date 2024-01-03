@@ -81,6 +81,8 @@ export default function Confirm() {
     }
     setIsNotify(true);
     router.push("/profile/dashboard");
+    return <Loading />;
+    
   };
   
   

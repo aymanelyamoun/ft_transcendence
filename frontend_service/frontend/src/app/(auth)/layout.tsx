@@ -64,6 +64,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           } else {
           
           router.push("/");
+          return <Loading />;
         }
       } catch (error) {
         console.error("Error fetching user data:", error);

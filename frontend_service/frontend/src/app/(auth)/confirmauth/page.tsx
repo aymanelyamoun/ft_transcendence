@@ -47,13 +47,15 @@ export default function ConfirmAuth() {
       if (res.ok) {
         alert("Two-factor authentication code is correct!");
        router.push("/profile/dashboard");
-      //  window.location.href = "/profile/dashboard";
+       return <Loading />;
+      //  window.location = "/profile/dashboard";
       } else {
         if (userData?.isTwoFactorEnabled)
           alert("Two-factor authentication code is incorrect!");
         else{
         alert("Two-factor authentication is not enabled!");
         router.push("/profile/dashboard");
+        return <Loading />;
         }
       }
     } catch (error) {

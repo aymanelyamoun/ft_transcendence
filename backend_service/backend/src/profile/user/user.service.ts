@@ -520,7 +520,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
             })
             return games;
         }
-            catch (error)
+        catch (error)
         {
             throw new UnauthorizedException('Internal server error');
         }

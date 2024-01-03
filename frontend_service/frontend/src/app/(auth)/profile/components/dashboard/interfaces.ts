@@ -52,6 +52,7 @@ export interface SearchU {
           };
       }[];
         setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
+        ShowGroups: boolean;
       }
 
 export interface StatisticsInterface

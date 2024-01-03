@@ -1,12 +1,13 @@
 "use client"
 
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import { MdGroupAdd } from "react-icons/md";
 // import { SearchU } from '../SearchFriends/SearchFriends'
 import { SearchU } from '../interfaces';
 import { GroupComponentProps } from '../interfaces';
+import { Backend_URL } from '@/lib/Constants';
 
 
 // interface SearchU {
@@ -81,7 +82,27 @@ const GroupPictureItem = styled.div`
 `;
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
+
+  // const SendClick = async () => {
+  //   try {
+  //     const res = await fetch( Backend_URL+"channels", {
+  //     });
+  //   }
+  // };
   // console.log("members: ",props.members)
+  //
+  const ShowGroups = props.ShowGroups;
+  const setChannelFriendSearch = props.setChannelFriendSearch;
+
+  // const SendAddMe = async () => { // channelId,
+  //   try {
+
+  //   }
+  // };
+
+  // useEffect(() => {
+  // }, []);
+
   return (
     <>
     <FriendImage>
@@ -98,7 +119,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
             ))}
         </GroupPictureItem>
       </GroupPictures>
-    <AddGroupButton>
+    <AddGroupButton >
       <MdGroupAdd />
     </AddGroupButton>
     </>

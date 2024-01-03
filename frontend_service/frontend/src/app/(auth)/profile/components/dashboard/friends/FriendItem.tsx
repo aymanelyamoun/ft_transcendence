@@ -6,6 +6,7 @@ import MoreIcon from './more_icon';
 import styled from 'styled-components';
 import { FaGamepad } from "react-icons/fa6";
 import { BsCircleFill } from "react-icons/bs";
+import Friends from './friends';
 
 interface Friend {
   id: string;
@@ -35,7 +36,7 @@ const MoreIconStyle = styled.div`
   status === '2' &&
   `
     svg {
-      color: green;
+      color: blue;
     }
   `}
 
@@ -88,7 +89,7 @@ ${({ status }) =>
 `;
 
   const FriendItem: React.FC<FriendItemProps> = ({friend, onFriendItemClick}) => {
-    
+    // console.log('friend ' + friend.username + ' status: ' + friend.status);
   // const IconContainer = friend.status === "2" ? <FaGamepad color="green" /> : (friend.status === "0" ? <BsCircleFill color="grey"/> : <BsCircleFill color="green"/>);
 
   const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);

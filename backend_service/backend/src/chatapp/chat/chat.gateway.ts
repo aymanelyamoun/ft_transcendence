@@ -14,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { GameService } from 'src/Game/game.service';
 import { UserService } from 'src/profile/user/user.service';
+import { fa } from '@faker-js/faker';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
@@ -42,53 +43,69 @@ export class ChatGateway implements OnGatewayConnection {
         socket["inGame"] = false;
         socket["inQueue"] = false;
         socket["inChat"] = false;
-
+        
+        console.log("------- ADDING CONNECTED SOCKET TO MAP --------")
         this.gatewayService.addConnectedSocketToMap({socket:socket, userId:socket['user'].id});
-        console.log("emmiting status userId", socket['user'].id);
+
+        const connectedSocket = this.gatewayService.addConnectedSocket({socket:socket, userId:socket['user'].id});
+        this.gatewayService.joinRooms(connectedSocket);
+
+        // console.log("emmiting status userId", socket['user'].id);
         this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
-        // this.gatewayService.addConnectedSocketToMap({socket:socket, userId:user.id});
-        // console.log("emmiting status userId", user.id);
-        // this.server.emit('friendStatus', {userId: user.id, status: '1'});
-        // this.emitFriendsStatus(user.id);
+
+        await this.emitFriendsStatus(socket['user'].id);
       }
       catch(error){
         socket.emit('redirect', '/', 'Your session has expired');
-        socket.disconnect(true);
+        // socket.disconnect(true);
       }
     }
     else 
     {
-      if (socket['user'] !== undefined){
-        if (!this.gatewayService.userIsConnected(socket['user'].id))
-          this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
-      }
-      socket.disconnect(true);
+      // if (socket['user'] !== undefined){
+      //   if (!this.gatewayService.userIsConnected(socket['user'].id))
+      //     this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
+      // }
+      // socket.disconnect(true);
     }
-    ;}
+    }
     
+
+    @SubscribeMessage("getFriendStatus")
+    async getFriendStatus(client: Socket)
+    {
+      const user = await this.getUserData(client) as User;
+      await this.emitFriendsStatus(user.id);
+    }
+
   // })
   // ;}
   
   async emitFriendsStatus(userId:string){
+    // console.log("emmiting status userId", userId);
     const friends = await this.userService.allFriend(userId);
     friends.forEach((friend)=>{
       if (this.gatewayService.userIsConnected(friend.id))
       {
+        this.gameService.clearFinishedGames();
         const inGame = this.gameService.inGameCheckByID(friend.id);
         if (inGame){
-          this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
-            socket.emit('friendStatus', {userId: userId, status: '2'});
+          console.log("emmiting status userId is in game: ", userId);
+          this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
+            socket.emit('friendStatus', {userId: friend.id, status: '2'});
           });
         }
         else{
-          this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
-            socket.emit('friendStatus', {userId: userId, status: '1'});
+          console.log("emmiting status userId is logged: ", userId);
+          this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
+            socket.emit('friendStatus', {userId: friend.id, status: '1'});
           });
         }
       }
       else{
-        this.gatewayService.connectedSocketsMap.get(friend.id).forEach((socket)=>{
-          socket.emit('friendStatus', {userId: userId, status: '0'});
+        console.log("emmiting status userId is not logged: ", userId);
+        this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
+          socket.emit('friendStatus', {userId: friend.id, status: '0'});
         });
       }
     });
@@ -116,6 +133,7 @@ export class ChatGateway implements OnGatewayConnection {
       console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
     }
     // else{
+      console.log("------- REMOVING CONNECTED SOCKET TO MAP --------")
     this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
     if (this.gatewayService.userIsConnected(socket['user'].id)){
 
@@ -182,14 +200,10 @@ export class ChatGateway implements OnGatewayConnection {
     this.gameService.MatchMaking(this.server, client);
   }
 
-  @SubscribeMessage('userData')
-  subscribeUserData(client: Socket, data: userDataDto) {
-    console.log('got user data: ', data);
-    const connectedSocket = this.gatewayService.addConnectedSocket({socket:client, userId:data.userId});
-    // this.connectedSockets.add({socket: client, userId: data.userId})
-
-    this.gatewayService.joinRooms(connectedSocket);
-  }
+  // @SubscribeMessage('userData')
+  // subscribeUserData(client: Socket, data: userDataDto) {
+  //   console.log('got user data: ', data);
+  // }
 
   @SubscribeMessage('messageTo')
   async sendMessageTo(client: Socket, msg: messageDto) {
@@ -197,8 +211,22 @@ export class ChatGateway implements OnGatewayConnection {
     // client.emit('privateMessage', msg.message, msg.conversationId);
     console.log("sending message: ", msg.conversationId);
     // this.server.emit("rcvMessage", msg.message);
-    const newMessage = await this.prismaChat.addMessageToDM(msg);
-    client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
+
+    //check if the user is muted
+
+    // check if the user in in the conversation
+
+    // const user = await this.getUserData(client) as User;
+
+
+    if (await this.prismaChat.userIsInConversation(client['user'].id, msg.conversationId)){
+      if (await this.prismaChat.userIsMutedFromConversation(client['user'].id , msg.conversationId) === false)
+      {
+          const newMessage = await this.prismaChat.addMessageToDM(msg);
+          client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
+      }
+    }
+
     // check if there is aconversation between the two users
     // if not create a new conversation
     // next add messages to database 

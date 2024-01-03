@@ -29,7 +29,7 @@ const scaleToWindow  = (render: Render) => {
     const scaledHeight = HEIGHT * scale;
     render.canvas.width = scaledWidth;
     render.canvas.height = scaledHeight;
-    render.canvas.style.backgroundImage = `url(${Skins.beachTable.path})`;
+    render.canvas.style.backgroundImage = `url(${tableSkin.path})`;
     render.canvas.style.backgroundPosition = 'center';
     render.canvas.style.backgroundSize = 'cover';
     render.canvas.style.borderRadius = '10px';
@@ -40,7 +40,9 @@ const scaleToWindow  = (render: Render) => {
     render.options.height = render.canvas.height;
     return scale;
 }
-
+var ballSkin = Skins.defaultBall;
+var paddleSkin = Skins.defaultPaddle;
+var tableSkin = Skins.defaultTable;
 var parsedBodies : Matter.Body[] = [];
 
 const handleEndGame = (endGameData : any, router : any) => {
@@ -73,13 +75,13 @@ const handleGameLoop = (socketRef: Socket, engine: Engine, render: Render) => {
             var playerTwoImage = document.getElementById('playerTwoImage')! as HTMLImageElement;
             const scoreOne = document.getElementById('scoreOne')!;
             const scoreTwo = document.getElementById('scoreTwo')!;
-            if (scoreOne && scoreTwo)
+            if (scoreOne && scoreTwo && playerOneImage && playerTwoImage)
             {
                 scoreOne.innerHTML = playersScore[1];
                 scoreTwo.innerHTML = playersScore[0];
+                playerOneImage.src = playersData[0].profilePic;
+                playerTwoImage.src = playersData[1].profilePic;
             }
-            playerOneImage.src = playersData[0].profilePic;
-            playerTwoImage.src = playersData[1].profilePic;
             if (typeof window !== 'undefined')
             {
                 render.element = document.getElementById('RenderMatch') as HTMLElement;
@@ -95,12 +97,12 @@ const handleGameLoop = (socketRef: Socket, engine: Engine, render: Render) => {
                 engine.world.bodies.forEach((body: Matter.Body) => {
                     if ((i === 2 || i === 3) && body.render.sprite !== undefined) {
                         const sprite = body.render.sprite as any;
-                        sprite.texture = Skins.redPaddle.path;
+                        sprite.texture = paddleSkin.path;
                         const vertices = body.vertices;
                         const bodyWidth = Math.abs(vertices[1].x - vertices[0].x);
                         const bodyHeight = Math.abs(vertices[2].y - vertices[0].y);
-                        const scaleX = bodyWidth / Skins.redPaddle.width;
-                        const scaleY = bodyHeight / Skins.redPaddle.height;
+                        const scaleX = bodyWidth / paddleSkin.width;
+                        const scaleY = bodyHeight / paddleSkin.height;
                         sprite.xScale = scaleX;
                         sprite.yScale = scaleY;
                         sprite.xOffset = 0.5;
@@ -110,9 +112,9 @@ const handleGameLoop = (socketRef: Socket, engine: Engine, render: Render) => {
                     {
                         // body.render.sprite = undefined;
                         const sprite = body.render.sprite as any;
-                        body.render.sprite.texture = Skins.basketBall.path;
-                        const scaleX = body.circleRadius! * 2 / Skins.basketBall.width;
-                        const scaleY = body.circleRadius! * 2 / Skins.basketBall.height;
+                        body.render.sprite.texture = ballSkin.path;
+                        const scaleX = body.circleRadius! * 2 / ballSkin.width;
+                        const scaleY = body.circleRadius! * 2 / ballSkin.height;
                         // const scale = Math.min(scaleX, scaleY);
                         sprite.xScale = scaleX;
                         sprite.yScale = scaleY;
@@ -142,7 +144,11 @@ const releaseHandle = (e: KeyboardEvent, socket : Socket) => {
         if (e.key === 's' || e.key === 'ArrowDown') socket.emit('onMove', 0);
     }
 };
-
+const setSkins = (selfData : any) => {
+    ballSkin = Skins.getBallSkin(selfData.ball);
+    paddleSkin = Skins.getPaddleSkin(selfData.paddle);
+    tableSkin = Skins.getTableSkin(selfData.table);
+}
 
 
 const MatchScene = () => {
@@ -165,6 +171,7 @@ const MatchScene = () => {
             router.push(destination);
         });
         socketRef.current.on('startFriendGame', (playersData : any) => {
+            socketRef.current!.on('selfData', setSkins);
             socketRef.current!.on('endGame', (eData: any) => {handleEndGame(eData, router)});
             document.addEventListener('keydown', (e) => 
             pressHandle(e, socketRef.current!));

@@ -8,6 +8,7 @@ import { AuthGoogleController } from "../../Auth/auth_google/auth_google.control
 import { IntraStrategy } from "../../Auth/auth_google/utils/IntraStrategy";
 import { GoogleStrategy } from "../../Auth/auth_google/utils/GoogleStrategy";
 import { PrismaService } from "src/chatapp/prisma/prisma.service";
+import { RedisService } from "src/redis/redis.service";
 // import { PrismaService } from "backAuth/src/prisma.service";
 
 @Module({
@@ -18,7 +19,7 @@ import { PrismaService } from "src/chatapp/prisma/prisma.service";
             useClass: AuthGoogleService,
         } ,PrismaService, 
       //  JwtService,
-        IntraStrategy,
+        IntraStrategy, RedisService,
     UserService],
 
     controllers: [UserController, AuthGoogleController,

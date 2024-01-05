@@ -6,6 +6,7 @@ import Authorization from "@/utils/auth";
 import { redirect, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Confirm from "../(auth)/confirm/page";
+import Transition from "../components/Transition";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
     const [authenticated, setAuthenticated] = useState<boolean | null>(null);
@@ -37,6 +38,29 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   
       checkAuthentication();
     }, [pathname]);
+
+
+    const [isRouting, setisRouting] = useState(false);
+    const path = usePathname();
+    const [prevPath, setPrevPath] = useState("/");
+  
+    useEffect(() => {
+      if (prevPath !== path) {
+        setisRouting(true);
+      }
+    }, [path, prevPath]);
+  
+    useEffect(() => {
+      if (isRouting) {
+        setPrevPath(path);
+        const timeout = setTimeout(() => {
+          setisRouting(false);
+        }, 1200);
+  
+        return () => clearTimeout(timeout);
+      }
+    }, [isRouting]);
+
   
     if (authenticated === null) {
       return <Loading />;
@@ -45,7 +69,10 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       router.push("/profile/dashboard");
       return <Loading />;
     }
-    return <>{children}</>;
+    return <>
+    {isRouting && <Transition />}
+    {children}
+    </>;
   }
   
   export default RootLayout;

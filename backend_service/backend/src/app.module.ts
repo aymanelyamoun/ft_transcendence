@@ -27,13 +27,15 @@ import { UserService } from './profile/user/user.service';
 import { GameModule } from './Game/game.module';
 import { GameService } from './Game/game.service';
 import { RequestModule } from './profile/request/request.module';
+import { RedisModule } from './redis/redis.module';
+import { RedisService } from './redis/redis.service';
 
 @Module({
-  imports: [ConfigModule.forRoot(), ChatModule, PrismaModule, AuthGoogleModule, PassportModule.register({session : true}), UserModule, GameModule , RequestModule],
+  imports: [ConfigModule.forRoot(), ChatModule, PrismaModule, AuthGoogleModule, PassportModule.register({session : true}), UserModule, GameModule , RequestModule, RedisModule],
   controllers: [TmpUserController],
-  providers: [AppService, TmpUserService, PrismaService, PrismaChatService,UserService, JwtService, GameService, {
+  providers: [AppService, TmpUserService, PrismaService, PrismaChatService, UserService, JwtService, GameService, RedisService,{
     provide: 'AUTH_SERVICE',
-    useClass: AuthGoogleService,
+    useClass: AuthGoogleService
 }],
 })
 export class AppModule {}

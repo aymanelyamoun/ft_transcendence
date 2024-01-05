@@ -13,6 +13,7 @@ import { CreateUserDto } from "../../profile/user/dto/user.dto";
 import { LoginDto } from "../../profile/user/dto/auth.dto";
 import { User } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
+import { RedisService } from "src/redis/redis.service";
 const speakeasy = require('speakeasy');
 
 
@@ -35,6 +36,7 @@ export class AuthGoogleController
       @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
       private readonly userService: UserService,
       private readonly jwtService: JwtService,
+      private redisService: RedisService
     ){}
     @Get('google/login')
     @UseGuards(AuthGuard('google'))
@@ -110,6 +112,9 @@ async check(@Req() req: Request, @Res() res: Response)
 @UseGuards(JwtGuard)
 async logout(@Req() req: Request, @Res() res: Response)
 {
+  const jwt_payload = req['jwt_payload'];
+  const token = req['Token'];
+  await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
 
   res.clearCookie('access_token');
   res.status(200).json({ message: 'Logout successful' });

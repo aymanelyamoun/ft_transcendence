@@ -108,22 +108,11 @@ async check(@Req() req: Request, @Res() res: Response)
   }
 }
 
-@Get('logout')
+
+@Get('2FA/generate')
 @UseGuards(JwtGuard)
-async logout(@Req() req: Request, @Res() res: Response)
-{
-  const jwt_payload = req['jwt_payload'];
-  const token = req['Token'];
-  await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
-
-  res.clearCookie('access_token');
-  res.status(200).json({ message: 'Logout successful' });
-}
-
-  @Get('2FA/generate')
-  @UseGuards(JwtGuard)
-  async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
-
+async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
+  
     const user = req['user'] as User;
     const secret = this.authGoogleService.generateTwoFactorAuthenticationSecret(user.username);
     const Url = speakeasy.otpauthURL({
@@ -140,7 +129,7 @@ async logout(@Req() req: Request, @Res() res: Response)
       return res.status(500).json({ message: 'Error generating QR code' });
     }
   }
-
+  
   @Post('2FA/enable')
   @UseGuards(JwtGuard)
   async enableTwoFactorAuth(@Req() req, @Body() body, @Res() res)
@@ -151,26 +140,26 @@ async logout(@Req() req: Request, @Res() res: Response)
       token,
       user.TwoFactSecret,
       );
-    await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
-    if (!isValidToken) {
-      return res.status(401).json({message : 'Two-factor authentication code is incorrect!'});
-    }
-    try
-    {
-      user.isTwoFactorEnabled = true;
-      await this.userService.updateUser(user.id, { isTwoFactorEnabled: true });
-      (user as any).isConfirmed2Fa = true;
-      const accessToken = await this.jwtService.signAsync(user, {
-        expiresIn: '1h',
-        secret: process.env.jwtSecretKey,
-      });
-      res.cookie('access_token', accessToken, { httpOnly : false });
-      return res.status(200).json('2FA enabled successfully');
-    }
-    catch (error)
-    {
       await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
-      return res.status(500).json('Error updating user');
+      if (!isValidToken) {
+        return res.status(401).json({message : 'Two-factor authentication code is incorrect!'});
+      }
+      try
+      {
+        user.isTwoFactorEnabled = true;
+        await this.userService.updateUser(user.id, { isTwoFactorEnabled: true });
+        (user as any).isConfirmed2Fa = true;
+        const accessToken = await this.jwtService.signAsync(user, {
+          expiresIn: '1h',
+          secret: process.env.jwtSecretKey,
+        });
+        res.cookie('access_token', accessToken, { httpOnly : false });
+        return res.status(200).json('2FA enabled successfully');
+      }
+      catch (error)
+      {
+        await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
+        return res.status(500).json('Error updating user');
     }
   }
   
@@ -196,47 +185,47 @@ async logout(@Req() req: Request, @Res() res: Response)
       return res.status(500).json({message : 'Error disabling 2FA'});
     }
   }
-
+  
   @Post('2FA/validate')
   @UseGuards(JwtGuard)
   async validateTwoFactorAuth(@Req() req, @Body() body, @Res() res)
   {
     const user = req['user'] as User;
-      if (!user.isTwoFactorEnabled) {
-    return res.status(400).json('2FA is not enabled for this user!');
-      }
+    if (!user.isTwoFactorEnabled) {
+      return res.status(400).json('2FA is not enabled for this user!');
+    }
     const { token } = body;
     const isValidToken = this.authGoogleService.validateTwoFactorAuthenticationToken(
       token,
       user.TwoFactSecret
-    );
-    if (!isValidToken) {
-      return res.status(401).json('Invalid 2FA token');
-    }
-    (user as any).isConfirmed2Fa = true;
-    const accessToken = await this.jwtService.signAsync(user, {
-      expiresIn: '1h',
-      secret: process.env.jwtSecretKey,
+      );
+      if (!isValidToken) {
+        return res.status(401).json('Invalid 2FA token');
+      }
+      (user as any).isConfirmed2Fa = true;
+      const accessToken = await this.jwtService.signAsync(user, {
+        expiresIn: '1h',
+        secret: process.env.jwtSecretKey,
     });
     res.cookie('access_token', accessToken, { httpOnly : false });
     return res.status(200).json('User validate');
   }
 
-
-    @Post('register')
-    async registerUser(@Body() dto:CreateUserDto, @Res() res: Response)
-    {
-      // try {
-        const data = await this.userService.create(dto);
-        return res.status(200).send(data);
+  
+  @Post('register')
+  async registerUser(@Body() dto:CreateUserDto, @Res() res: Response)
+  {
+    // try {
+      const data = await this.userService.create(dto);
+      return res.status(200).send(data);
       // } catch (error)
       // {
-      //   console.error('Error in login:', error);
-      //   res.status(500).json({ error: 'Internal Server Error' });
-      // }
-    }
-
-    @Post('login')
+        //   console.error('Error in login:', error);
+        //   res.status(500).json({ error: 'Internal Server Error' });
+        // }
+      }
+      
+      @Post('login')
     async login(@Body() dto:LoginDto,@Req() req: Request, @Res() res: Response)
     {
       // try
@@ -245,12 +234,29 @@ async logout(@Req() req: Request, @Res() res: Response)
         res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
         return res.status(200).send(data); 
         //res.json(data.user);
-      // }
-      // catch (error)
-      // {
-      //   console.error('Error in login:', error);
-      //   res.status(500).json({ error: 'Internal Server Error' });
-      // }
-    }
+        // }
+        // catch (error)
+        // {
+          //   console.error('Error in login:', error);
+          //   res.status(500).json({ error: 'Internal Server Error' });
+          // }
+        }
+        
+        @Get('logout')
+        @UseGuards(JwtGuard)
+        async logout(@Req() req: Request, @Res() res: Response)
+        {
+          try {
+            const jwt_payload = req['jwt_payload'];
+            const token = req['Token'];
+            await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
+            res.clearCookie('access_token');
+            console.log("heeere");
+            res.status(200).json({ message: 'Logout successful' });
 
-}
+          }catch(error)
+          {
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
+        }
+      }

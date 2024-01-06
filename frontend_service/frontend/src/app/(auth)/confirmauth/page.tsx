@@ -48,7 +48,6 @@ export default function ConfirmAuth() {
         alert("Two-factor authentication code is correct!");
        router.push("/profile/dashboard");
        return <Loading />;
-      //  window.location = "/profile/dashboard";
       } else {
         if (userData?.isTwoFactorEnabled)
           alert("Two-factor authentication code is incorrect!");
@@ -65,7 +64,6 @@ export default function ConfirmAuth() {
 
   if (!(userData?.isTwoFactorEnabled && !userData.isConfirmed2Fa))
   {
-    console.log(213515645645645646464646464654564);
     router.push("/profile/dashboard");
     return <Loading />;
   }

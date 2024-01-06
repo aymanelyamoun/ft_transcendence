@@ -7,6 +7,9 @@ import { MdLabelOutline } from 'react-icons/md'
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { AlertMessage } from '@/app/components/alertMessage';
+import InputField from '@/app/components/InputField';
+import Button from '@/app/components/Button';
+import { fetchAPI } from '@/utils/api';
 
 let response : any;
   type FormInputs = {
@@ -26,68 +29,96 @@ let response : any;
     setIsNotify(false);
   }
    const router = useRouter();
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const res = await fetch(Backend_URL + 'auth/check', {
-        method: "GET",
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          'Access-Control-Allow-Origin':'*'
-        },
-    });
-        if (!res.ok) {
-          const data = await res.json();
-        } else {
-            router.push("/profile/dashboard");
-            return <Loading />;
-        }
-      } catch (error) {
-        console.error('Error checking authentication:', error);
-      }
-    };
-  checkAuthentication();
-  },[]);
-  const register = async () =>
-  {
+  // useEffect(() => {
+  //   const checkAuthentication = async () => {
+  //     try {
+  //       const res = await fetch(Backend_URL + 'auth/check', {
+  //       method: "GET",
+  //       mode: 'cors',
+  //       credentials: 'include',
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         'Access-Control-Allow-Origin':'*'
+  //       },
+  //   });
+  //       if (!res.ok) {
+  //         const data = await res.json();
+  //       } else {
+  //           router.push("/profile/dashboard");
+  //           return <Loading />;
+  //       }
+  //     } catch (error) {
+  //       console.error('Error checking authentication:', error);
+  //     }
+  //   };
+  // checkAuthentication();
+  // },[]);
+  // const register = async () =>
+  // {
+  //   try {
+  //     const res = await fetch(Backend_URL + "auth/register", {
+  //       method: "POST",
+  //       mode: 'cors',
+  //       credentials: 'include',
+  //       body: JSON.stringify({
+  //         username: formData.username,
+  //         email: formData.email,
+  //         hash: formData.hash,
+  //         hashConfirm: formData.hashConfirm
+  //       }),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         'Access-Control-Allow-Origin': '*'
+  //       },
+  //     });
+  //     if (!res.ok) {
+  //       response = await res.json();
+  //       setIsError(true);
+  //       return;
+  //     }
+  //     setIsNotify(true);
+  //     router.push("/signin");
+  //     return <Loading />;
+  //   } catch (error)
+  //   {
+  //        console.error("Error in log function:", error);
+  //   }
+  // }
+
+  const register = async () => {
     try {
-      const res = await fetch(Backend_URL + "auth/register", {
-        method: "POST",
-        mode: 'cors',
-        credentials: 'include',
-        body: JSON.stringify({
-          username: data.current.username,
-          email: data.current.email,
-          hash: data.current.hash,
-          hashConfirm: data.current.hashConfirm
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          'Access-Control-Allow-Origin': '*'
+      await fetchAPI({
+        url: Backend_URL + 'auth/register',
+        method: 'POST',
+        body: {
+          username: formData.username,
+          email: formData.email,
+          hash: formData.hash,
+          hashConfirm: formData.hashConfirm
         },
       });
-      if (!res.ok) {
-        response = await res.json();
-        setIsError(true);
-        return;
-      }
       setIsNotify(true);
-      router.push("/signin");
-      return <Loading />;
-    } catch (error)
-    {
-         console.error("Error in log function:", error);
+      router.push('/signin');
+    } catch (error) {
+      response = error;
+      setIsError(true);
     }
-  }
+  };
+  
 
-  const data = useRef<FormInputs>({
+  // const data = useRef<FormInputs>({
+  //   username: "",
+  //   email: "",
+  //   hash: "",
+  //   hashConfirm: "",
+  // })
+  const [formData, setFormData] = useState<FormInputs>({
     username: "",
     email: "",
     hash: "",
     hashConfirm: "",
-  })
+  });
+
   
   const gradientStyle = {
   background: 'linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)',
@@ -108,7 +139,12 @@ let response : any;
       >
           <div className='py-10'>
           <div className="flex flex-col items-center ">
-             <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
+          <InputField type="text" name="username" placeholder="Username" value={formData.username} onChange={(e) => (setFormData({ ...formData, username: e.target.value }))} />
+            <InputField type="email" name="email" placeholder="Email" value={formData.email} onChange={(e) => (setFormData({ ...formData, email: e.target.value }))} />
+            <InputField type="password" name="password" placeholder="Password" value={formData.hash} onChange={(e) => (setFormData({ ...formData, hash: e.target.value }))} />
+            <InputField type="password" name="confirm password" placeholder="Confirm Password" value={formData.hashConfirm} onChange={(e) => (setFormData({ ...formData, hashConfirm: e.target.value }))} />
+
+             {/* <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
               <input type="text" name="Username" placeholder='Username' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1 max-w-full"
               onChange={(e) => (data.current.username = e.target.value) }
               />
@@ -136,8 +172,9 @@ let response : any;
                 className="outline-none text-sm flex-1 max-w-full"
                 onChange={(e) => (data.current.hashConfirm = e.target.value)}
               />     
-            </div>
-          <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#999BD3] mb-7' onClick={register}>Sign up</Link>
+            </div> */}
+          {/* <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#999BD3] mb-7' onClick={register}>Sign up</Link> */}
+          <Button onClick={register} text="Sign up" />
           <div className="border-2 border-white w-10 inline-block mb-7"></div>
           <div className="flex justify-center mb-7 ">
             <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">

@@ -7,6 +7,8 @@ import Loading from "../../components/Loading";
 import { useUser } from "../layout";
 import { json } from "stream/consumers";
 import { AlertMessage } from "@/app/components/alertMessage";
+import InputField from "@/app/components/InputField";
+import { fetchAPI } from "@/utils/api";
 
 let data: any;
 export default function Confirm() {
@@ -56,44 +58,32 @@ export default function Confirm() {
   }, [user, router]);
   
   const confirm = async () => {
-    console.log(userData?.profilePic);
-    const res = await fetch(Backend_URL + "user/confirm", {
-      method: "PATCH",
-      mode: "cors",
-      credentials: "include",
-      body: JSON.stringify({
-        username: userData?.username,
-        profilePic: userData?.profilePic,
-        hash: userData?.hash,
-        confirmPass : userData?.confirmPass,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-    data = await res.json();
-    console.log(data);
-    if (!res.ok) {
-      
+
+    try {
+      await fetchAPI({
+        url: Backend_URL + "user/confirm",
+        method: 'PATCH',
+        body: {
+          username: userData?.username,
+          profilePic: userData?.profilePic,
+          hash: userData?.hash,
+          confirmPass : userData?.confirmPass,
+        },
+      });
+      setIsNotify(true);
+      router.push('/profile/dashboard');
+    } catch (error)
+    {
+      data = error;
       setIsError(true);
-      return;
     }
-    setIsNotify(true);
-    router.push("/profile/dashboard");
-    return <Loading />;
     
   };
   
   
   
   const handleConfirm = () => {
-    // if (userData?.hash != '') {
       confirm();
-    // } else {
-    //   // alert("Password is required!");
-    //   <AlertMessage onClick={handleClick} message={data.message} type="error" />
-    // }
   };
   const gradientStyle = {
     background:
@@ -103,9 +93,6 @@ export default function Confirm() {
   
   return (
      <div>
-       {/* {!authenticated ? (
-         <Loading />
-       ) : ( */}
     <div
       style={{ background: "#050A27" }}
       className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
@@ -153,80 +140,53 @@ export default function Confirm() {
                      }}
                    />
                  </div>
-                 <div
-                   style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                   className=" p-2 flex items-center mb-7 rounded-md w-full"
-                 >
-                   <input
-                     value={userData?.username}
-                     type="text"
-                     name="Username"
-                     placeholder="Username"
-                     style={{ background: "rgba(154, 155, 211, 0)" }}
-                     className=" outline-none text-sm flex-1 text-white"
-                     onChange={(e) =>
-                       setUserData(
-                         (prev) =>
-                           ({
-                             username: e.target.value,
-                             confirmPass: prev?.confirmPass || undefined,
-                             hash: prev?.hash || undefined,
-                             profilePic: prev?.profilePic || undefined,
-                           } as UserData)
-                       )
-                     }
-                   />
-                 </div>
+                 <InputField
+        type="text"
+        name="Username"
+        placeholder="Username"
+        value={userData?.username || ''}
+        onChange={(e) =>
+          setUserData((prev) => ({
+            ...(prev as UserData),
+            username: e.target.value,
+            confirmPass: prev?.confirmPass || undefined,
+            hash: prev?.hash || undefined,
+            profilePic: prev?.profilePic || undefined,
+          }))
+        }
+      />
                  {hash === "" && (
                   <>
-                   <div
-                     style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                     className=" p-2 flex items-center mb-7 rounded-md w-full"
-                   >
-                     <input
-                       type="password"
-                       name="password"
-                       placeholder="New Password"
-                       value={userData?.hash}
-                       style={{ background: "rgba(154, 155, 211, 0)" }}
-                       className="outline-none text-sm flex-1"
-                       onChange={(e) =>
-                         setUserData(
-                           (prev) =>
-                             ({
-                               hash: e.target.value,
-                               confirmPass: prev?.confirmPass || undefined,
-                               username: prev?.username || undefined,
-                               profilePic: prev?.profilePic || undefined,
-                             } as UserData)
-                         )
-                       }
-                     />
-                   </div>
-                   <div
-                     style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                     className=" p-2 flex items-center mb-7 rounded-md w-full"
-                   >
-                     <input
-                       type="password"
-                       name="password"
-                       placeholder="Confirm Password"
-                       value={userData?.confirmPass}
-                       style={{ background: "rgba(154, 155, 211, 0)" }}
-                       className="outline-none text-sm flex-1"
-                       onChange={(e) =>
-                         setUserData(
-                           (prev) =>
-                             ({
-                               confirmPass: e.target.value,
-                               hash: prev?.hash || undefined,
-                               username: prev?.username || undefined,
-                               profilePic: prev?.profilePic || undefined,
-                             } as UserData)
-                         )
-                       }
-                     />
-                   </div>
+          <InputField
+            type="password"
+            name="password"
+            placeholder="New Password"
+            value={userData?.hash || ''}
+            onChange={(e) =>
+              setUserData((prev) => ({
+                ...(prev as UserData),
+                hash: e.target.value,
+                confirmPass: prev?.confirmPass || undefined,
+                username: prev?.username || undefined,
+                profilePic: prev?.profilePic || undefined,
+              }))
+            }
+          />
+          <InputField
+            type="password"
+            name="password"
+            placeholder="Confirm Password"
+            value={userData?.confirmPass || ''}
+            onChange={(e) =>
+              setUserData((prev) => ({
+                ...(prev as UserData),
+                confirmPass: e.target.value,
+                hash: prev?.hash || undefined,
+                username: prev?.username || undefined,
+                profilePic: prev?.profilePic || undefined,
+              }))
+            }
+          />
                   </>
                  )}
                  <div className="border-2 border-white w-10 inline-block mb-7"></div>

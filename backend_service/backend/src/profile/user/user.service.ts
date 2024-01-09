@@ -421,6 +421,7 @@ If any of them had an id equal to userloged, the condition would not be satisfie
             const user = req['user'] as User;
             const userId = user.id;
             const { pic } = body;
+            console.log("url : pic" , body);
             const newupdat = await this.prisma.user.update({
                 where: { id: userId },
                 data: { profilePic: pic },

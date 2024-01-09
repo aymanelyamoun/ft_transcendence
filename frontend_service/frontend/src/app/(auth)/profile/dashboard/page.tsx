@@ -169,7 +169,7 @@ function App() {
   
   return (
     <>
-      {ShowEditProfile && <EditProfileShow EditRef={EditRef}/>}
+      {ShowEditProfile && <EditProfileShow />}
       <div className="App">
         <SocketUseContext.Provider value={socket}>
           <SearchDiv >

@@ -1,4 +1,3 @@
-// ProfilePicUpload.jsx
 import React from 'react';
 
 interface ProfilePicUploadProps {

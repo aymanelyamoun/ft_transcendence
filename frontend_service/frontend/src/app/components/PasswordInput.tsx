@@ -1,4 +1,3 @@
-// PasswordInput.jsx
 import React from 'react';
 
 interface PasswordInputProps {

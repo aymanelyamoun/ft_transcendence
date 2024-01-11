@@ -88,7 +88,6 @@ const TwoFaSettings: React.FC<TwoFaSettingsProps> = ({
                 <div className="mb-7 mt-3">
                   <img src={qrCode} alt="QR Code" />
                 </div>
-
                 <span
                   className="outline-none text-sm flex-1 text-white mb-2"
                   style={{ fontFamily: 'Poppins', fontSize: '0.9rem' }}

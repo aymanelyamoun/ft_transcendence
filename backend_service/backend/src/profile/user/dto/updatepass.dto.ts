@@ -12,4 +12,4 @@ export class UpdatePassDto {
   @IsString({ message: 'Confirm password must be a string.' })
   @IsNotEmpty({ message: 'confirm password is required.' })
   confirmPass: string;
-}// onChange={(e) => (data.current.username = e.target.value)}
+}

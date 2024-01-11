@@ -101,69 +101,13 @@ export class UserService {
         }
     }
 
-
-    // async allUsers(userloged: string)
-    // {
-    //     const users = await this.prisma.user.findMany({
-    //         select: {
-    //             id: true,
-    //             username: true,
-    //             profilePic: true,
-    //         },
-    //         where: {
-    //             id: { not: userloged },//his excludes user loged
-    //             friends: { //his excludes friends
-    //                 none: {
-    //                     id: userloged
-    //                 }
-    //             },
-    //         },
-    //     });
-    //     return users;
-    // }
-
     async allUsers(userloged: string) {
         try {
             const users = await this.prisma.user.findMany({
-                // select: {
-                //     id: true,
-                //     username: true,
-                //     profilePic: true,
-                // },
-            //     where: {
-            //         id: { not: userloged },
-            //     AND:{
-            //         NOT:{
-            //             friends: {
-            //             some: {
-            //                 id: userloged, 
-            //             },
-            //         },
-            //     },
-            //         blockedByUsers: {
-            //         some: {
-            //             id: userloged,
-            //         },
-            //         }
-            // },
-            //     },
-            // where: {
-            //     id: { not: userloged },
-            //     friends: {
-            //         none: {
-            //             id: userloged,
-            //         },
-            //     },
-            //     blockedUsers: {
-            //         none: {
-            //             id: userloged,
-            //         },
-            //     },
-            // },
-
             /*If none of them have the id equal to userloged, the condition is satisfied,
             and the filter allows these users to be included in the final result.
-If any of them had an id equal to userloged, the condition would not be satisfied, and that user would be excluded from the result. */
+            If any of them had an id equal to userloged, the condition would not be satisfied,
+            and that user would be excluded from the result. */
             where: {
                 id: { not: userloged },
                 friends: {
@@ -185,7 +129,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                 ...user,
                 isBlocked: blockedUsers.some((blockedUser) => blockedUser.id === user.id),
             }));
-            // console.log(usersWithBlockedFlag);
             return usersWithBlockedFlag;
         } catch (error) {
             throw new Error('Internal server error');
@@ -196,8 +139,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async confirm(email: string, dto: ConfirmUserDto)
     {
-       // console.log(dto.confirmPass);
-       // console.log(dto.hash);
         if (dto.confirmPass !== dto.hash)
             throw new UnauthorizedException('the password and the confirm password are not the same');
         const existingUser = await this.prisma.user.findUnique({
@@ -227,7 +168,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
         {
             const user = await this.prisma.user.findUnique({
                 where: { id: userId },
-                // select: { friends: true },
                 select: { friends: true },
             });
 
@@ -237,7 +177,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                 ...friend,
                 status:"0",
             }));
-            // return user.friends;
         }
         catch (error)
         {
@@ -284,8 +223,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
 
     async Searchuser(username: string, @Req() req: Request)
     {
-    //     console.log('here with : |',username,'|')
-    //    console.log(username);
         const user = req['user'] as User;
         const userloged = user.id;
         username = username.trim();
@@ -298,7 +235,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                         startsWith: username,
                         mode: 'insensitive',
                     },
-                    // NOT : {id: userloged},
                     id: { not: userloged },
                     friends: {
                         none: {
@@ -421,7 +357,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
             const user = req['user'] as User;
             const userId = user.id;
             const { pic } = body;
-            console.log("url : pic" , body);
             const newupdat = await this.prisma.user.update({
                 where: { id: userId },
                 data: { profilePic: pic },
@@ -465,7 +400,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     {
         try
         {
-            //console.log('wsalna han',username)
             const profile = await this.prisma.user.findUnique({
                 where : {
                     username: username,
@@ -487,9 +421,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
                     }
                 }
             })
-          //  console.log('jdsfkljdgkfhdfjkhgkhdfgdfjkghdfjkhgdfjk');
-           // console.log('ana hna : ',profile);
-
             if (profile.gameRecords.length == 0)
                 profile.gameRecords = null;
             return (profile);
@@ -587,7 +518,6 @@ If any of them had an id equal to userloged, the condition would not be satisfie
     {
         try
         {
-            console.log("skins data : ", body);
             const user = req['user'] as User;
             const userid = user.id;
             if ( body.Type == "ball")

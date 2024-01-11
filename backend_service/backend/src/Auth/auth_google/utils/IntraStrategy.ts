@@ -16,16 +16,20 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
             clientSecret:
                 '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',
             callbackURL: 'http://localhost:3001/api/auth/google/redirect42',
-            // scope: ['profile', 'email'],
         });
     }
 
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
+      var pic : String;
+      if (profile._json.image.link)
+           pic  = profile._json.image.link;
+      else 
+          pic = "https://i.imgur.com/GJvG1b.png";
       const user = await  this.authGoogleService.validateUser({
         email: profile.emails[0].value,
           username: profile._json.login,
-            profilePic: profile._json.image.link,
+            profilePic: pic,
         }, LOG_TYPE.intralog);
          return (user);
     }

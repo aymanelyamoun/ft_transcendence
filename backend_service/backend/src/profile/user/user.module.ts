@@ -9,16 +9,13 @@ import { IntraStrategy } from "../../Auth/auth_google/utils/IntraStrategy";
 import { GoogleStrategy } from "../../Auth/auth_google/utils/GoogleStrategy";
 import { PrismaService } from "src/chatapp/prisma/prisma.service";
 import { RedisService } from "src/redis/redis.service";
-// import { PrismaService } from "backAuth/src/prisma.service";
 
 @Module({
     providers: [ PrismaService,JwtService, UserService, GoogleStrategy,
-        // SessionSerializer, AuthGoogleService, 
         {
             provide: 'AUTH_SERVICE',
             useClass: AuthGoogleService,
         } ,PrismaService, 
-      //  JwtService,
         IntraStrategy, RedisService,
     UserService],
 

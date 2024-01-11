@@ -49,7 +49,6 @@ export class AuthGoogleController
     async handleRedirect(@Req() req: Request, @Res() res: Response)
     {
       (req.user as any).isConfirmed2Fa = false;
-      // console.log(req.user);
       const jwtResult = await this.authGoogleService.generateJwt(req.user);
       res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
       const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
@@ -215,48 +214,33 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
   @Post('register')
   async registerUser(@Body() dto:CreateUserDto, @Res() res: Response)
   {
-    // try {
       const data = await this.userService.create(dto);
       return res.status(200).send(data);
-      // } catch (error)
-      // {
-        //   console.error('Error in login:', error);
-        //   res.status(500).json({ error: 'Internal Server Error' });
-        // }
-      }
+  }
       
-      @Post('login')
-    async login(@Body() dto:LoginDto,@Req() req: Request, @Res() res: Response)
-    {
-      // try
-      // {
-        const data = await this.authGoogleService.login(dto);
-        res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
-        return res.status(200).send(data); 
-        //res.json(data.user);
-        // }
-        // catch (error)
-        // {
-          //   console.error('Error in login:', error);
-          //   res.status(500).json({ error: 'Internal Server Error' });
-          // }
-        }
-        
-        @Get('logout')
-        @UseGuards(JwtGuard)
-        async logout(@Req() req: Request, @Res() res: Response)
-        {
-          try {
-            const jwt_payload = req['jwt_payload'];
-            const token = req['Token'];
-            await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
-            res.clearCookie('access_token');
-            console.log("heeere");
-            res.status(200).json({ message: 'Logout successful' });
+  @Post('login')
+  async login(@Body() dto:LoginDto,@Req() req: Request, @Res() res: Response)
+  {
 
-          }catch(error)
-          {
-            res.status(500).json({ error: 'Internal Server Error' });
-          }
-        }
-      }
+      const data = await this.authGoogleService.login(dto);
+      res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
+      return res.status(200).send(data); 
+  }
+        
+  @Get('logout')
+  @UseGuards(JwtGuard)
+  async logout(@Req() req: Request, @Res() res: Response)
+  {
+    try {
+      const jwt_payload = req['jwt_payload'];
+      const token = req['Token'];
+      await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
+      res.clearCookie('access_token');
+      res.status(200).json({ message: 'Logout successful' });
+
+    }catch(error)
+    {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+}

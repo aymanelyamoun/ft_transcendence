@@ -29,10 +29,16 @@ This method is part of the strategy and is called automatically by Passport.js. 
     
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
+       var pic : String;
+        if (profile._json.picture)
+             pic  = profile._json.picture;
+        else 
+            pic = "https://i.imgur.com/GJvG1b.png";
+    
         const user = await  this.authGoogleService.validateUser({
                 email: profile.emails[0].value,
                 username: profile.emails[0].value.split('@')[0],
-                profilePic: profile._json.picture,
+                 profilePic: pic,
         }, LOG_TYPE.googlelog);
         
         return (user);

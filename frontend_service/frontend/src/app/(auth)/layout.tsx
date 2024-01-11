@@ -1,4 +1,3 @@
-
 'use client'
 import React, { useContext, useEffect, useState, createContext } from "react";
 import Loading from "@/app/components/Loading";
@@ -35,7 +34,6 @@ const UserContext = createContext<UserContextValue>({
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [twoFa, setTwoFa] = useState<boolean>(false)
-  // const [check2fa, setCheck2fa] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const pathname = usePathname();  
@@ -57,7 +55,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           setAuthenticated(true);
           if (data?.isTwoFactorEnabled  && !data.isConfirmed2Fa)
           {
-              //router.push("/confirmauth");
               setTwoFa(true);
               return ; 
           }
@@ -72,22 +69,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     };
     checkAuthentication();
   }, [pathname]);
-
   const value = { user, setUser };
-
   return (
     <UserContext.Provider value={value}>
-    {/* {authenticated ? (
-      !user?.hash ? (
-        <Confirm />
-      ) : (
-        <> 
-          {children}
-        </>
-      )
-    ) : (
-      <Loading />
-    )} */}
       <>
     {authenticated ? (
       twoFa ? (

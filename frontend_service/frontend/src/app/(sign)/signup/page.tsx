@@ -28,63 +28,7 @@ let response : any;
     setIsError(false);
     setIsNotify(false);
   }
-   const router = useRouter();
-  // useEffect(() => {
-  //   const checkAuthentication = async () => {
-  //     try {
-  //       const res = await fetch(Backend_URL + 'auth/check', {
-  //       method: "GET",
-  //       mode: 'cors',
-  //       credentials: 'include',
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         'Access-Control-Allow-Origin':'*'
-  //       },
-  //   });
-  //       if (!res.ok) {
-  //         const data = await res.json();
-  //       } else {
-  //           router.push("/profile/dashboard");
-  //           return <Loading />;
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking authentication:', error);
-  //     }
-  //   };
-  // checkAuthentication();
-  // },[]);
-  // const register = async () =>
-  // {
-  //   try {
-  //     const res = await fetch(Backend_URL + "auth/register", {
-  //       method: "POST",
-  //       mode: 'cors',
-  //       credentials: 'include',
-  //       body: JSON.stringify({
-  //         username: formData.username,
-  //         email: formData.email,
-  //         hash: formData.hash,
-  //         hashConfirm: formData.hashConfirm
-  //       }),
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         'Access-Control-Allow-Origin': '*'
-  //       },
-  //     });
-  //     if (!res.ok) {
-  //       response = await res.json();
-  //       setIsError(true);
-  //       return;
-  //     }
-  //     setIsNotify(true);
-  //     router.push("/signin");
-  //     return <Loading />;
-  //   } catch (error)
-  //   {
-  //        console.error("Error in log function:", error);
-  //   }
-  // }
-
+  const router = useRouter();
   const register = async () => {
     try {
       await fetchAPI({
@@ -104,14 +48,6 @@ let response : any;
       setIsError(true);
     }
   };
-  
-
-  // const data = useRef<FormInputs>({
-  //   username: "",
-  //   email: "",
-  //   hash: "",
-  //   hashConfirm: "",
-  // })
   const [formData, setFormData] = useState<FormInputs>({
     username: "",
     email: "",
@@ -129,10 +65,7 @@ let response : any;
     style={{ background: "#050A27" }}
     className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
   >
-      {/* <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG</h2> */}
       <h2 className="text-white shadow-2xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3">PONG</h2>
-      
-      {/* <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 max-w-[30px] max-h-[323px] w-[3%] h-[33%] rounded-lg'></div> */}
       <div
         style={gradientStyle}
         className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
@@ -143,37 +76,6 @@ let response : any;
             <InputField type="email" name="email" placeholder="Email" value={formData.email} onChange={(e) => (setFormData({ ...formData, email: e.target.value }))} />
             <InputField type="password" name="password" placeholder="Password" value={formData.hash} onChange={(e) => (setFormData({ ...formData, hash: e.target.value }))} />
             <InputField type="password" name="confirm password" placeholder="Confirm Password" value={formData.hashConfirm} onChange={(e) => (setFormData({ ...formData, hashConfirm: e.target.value }))} />
-
-             {/* <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
-              <input type="text" name="Username" placeholder='Username' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1 max-w-full"
-              onChange={(e) => (data.current.username = e.target.value) }
-              />
-            </div>
-            <div style={{ background: 'rgba(154, 155, 211, 0.2)'}} className="  p-2 flex items-center mb-7 rounded-md w-full ">
-              <input style={{ background: 'rgba(154, 155, 211, 0)' }} type="email" name="email" placeholder='Email' className=" outline-none text-sm flex-1 max-w-full"
-                onChange={(e) => (data.current.email = e.target.value) } />
-            </div>
-            <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
-              <input
-                type="password"
-                name="password"
-                placeholder="password"
-                style={{ background: 'rgba(154, 155, 211, 0)' }}
-                className="outline-none text-sm flex-1 max-w-full"
-                onChange={(e) => (data.current.hash = e.target.value)}
-              />     
-            </div>
-            <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
-              <input
-                type="password"
-                name="confirm password"
-                placeholder="confirm password"
-                style={{ background: 'rgba(154, 155, 211, 0)' }}
-                className="outline-none text-sm flex-1 max-w-full"
-                onChange={(e) => (data.current.hashConfirm = e.target.value)}
-              />     
-            </div> */}
-          {/* <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#999BD3] mb-7' onClick={register}>Sign up</Link> */}
           <Button onClick={register} text="Sign up" />
           <div className="border-2 border-white w-10 inline-block mb-7"></div>
           <div className="flex justify-center mb-7 ">
@@ -187,7 +89,6 @@ let response : any;
               <Link href="/signin" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-[#999BD3]'>Sign in</Link>
           </div>
           {isError === true ? <AlertMessage onClick={handleClick} message={response.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={"User Created!"} type="notify" /> : ""}
-
           </div>
         </div>
     </div>

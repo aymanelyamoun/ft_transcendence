@@ -18,7 +18,6 @@ export class RequestController {
     @UseGuards(JwtGuard)
     async sendRequest(@Req() req: Request, @Param('recieverId') recieverid: string,  @Res() res: Response)
     {
-      // console.log(recieverid);
       const user = req['user'] as User
       const Notif = await this.requestService.handleSendRequest(user.id, recieverid, "login sent you friend request", NOTIF_TYPE.friendReq);
       return res.status(200).send(Notif);
@@ -76,7 +75,6 @@ export class RequestController {
     {
       const user = req['user'] as User
       const list = await this.requestService.BlockList(user.id)
-      // console.log(list);
       return res.status(200).send(list);
     }
 }

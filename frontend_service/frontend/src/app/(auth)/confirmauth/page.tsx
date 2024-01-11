@@ -5,8 +5,17 @@ import { Backend_URL } from "@/lib/Constants";
 import { useRouter } from "next/navigation";
 import { useUser } from "../layout";
 import Loading from "@/app/components/Loading";
+import { fetchAPI } from "@/utils/api";
+import { AlertMessage } from "@/app/components/alertMessage";
 
+let response : any;
 export default function ConfirmAuth() {
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isNotify, setIsNotify] = useState<boolean>(false);
+  const handleClick = () => {
+    setIsError(false);
+    setIsNotify(false);
+  }
   interface UserData {
        isTwoFactorEnabled: Boolean;
        isConfirmed2Fa: Boolean;
@@ -32,33 +41,20 @@ export default function ConfirmAuth() {
 
   const handleValidateTwoFa = async () => {
     try {
-      const res = await fetch(Backend_URL + "auth/2FA/validate", {
+      await fetchAPI({
+        url: Backend_URL + "auth/2FA/validate",
         method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+        body: {
+          token : codeTwoFa,
         },
-        body: JSON.stringify({
-          token: codeTwoFa,
-        }),
       });
-      const data = await res.json();
-      if (res.ok) {
-        alert("Two-factor authentication code is correct!");
-       router.push("/profile/dashboard");
-       return <Loading />;
-      } else {
-        if (userData?.isTwoFactorEnabled)
-          alert("Two-factor authentication code is incorrect!");
-        else{
-        alert("Two-factor authentication is not enabled!");
-        router.push("/profile/dashboard");
-        return <Loading />;
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching:", error);
+      setIsNotify(true);
+      router.push("/profile/dashboard");
+    }
+    catch (error)
+    {
+      response = "Two-factor authentication code is incorrect!";
+      setIsError(true);
     }
   };
 
@@ -93,6 +89,7 @@ export default function ConfirmAuth() {
             }}
           />
         </div>
+        {isError == true ? <AlertMessage onClick={handleClick} message={response} type="error" /> : isNotify == true ? <AlertMessage onClick={handleClick} message={"Two-factor authentication code is correct!"} type="notify" /> : ""}
       </div>
     </div>
   );

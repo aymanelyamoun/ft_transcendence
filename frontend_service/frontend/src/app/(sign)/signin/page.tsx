@@ -33,67 +33,6 @@ export default function Signin() {
     setIsNotify(false);
   }
    const router = useRouter();
-  // useEffect(() => {
-  //   const checkAuthentication = async () => {
-  //     try {
-  //       const res = await fetch(Backend_URL + 'auth/check', {
-  //       method: "GET",
-  //       mode: 'cors',
-  //       credentials:'include',
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         'Access-Control-Allow-Origin':'*'
-  //       },
-  //   });
-  //       if (!res.ok) {
-  //         const data = await res.json();
-  //       } else {
-  //           router.push('/profile/dashboard');
-  //           return <Loading />;
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking authentication:', error);
-  //     }
-  //   };
-  // checkAuthentication();
-  // },[router]);
-
-  // const log = async () => {
-  //   try {
-  //     const res = await fetch(Backend_URL + "auth/login", {
-  //       method: "POST",
-  //       mode: 'cors',
-  //       credentials:'include',
-  //       body: JSON.stringify({
-  //         email: formData.email,
-  //         hash: formData.hash,
-  //       }),
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         'Access-Control-Allow-Origin':'*'
-  //       },
-  //     });
-  //     if (!res.ok) {
-  //       data = await res.json();
-  //       setIsError(true);
-  //       return;
-  //     }
-  //     const resp = await res.json();
-  //     if (resp.isTwoFactorEnabled)
-  //     {
-  //       router.push("/confirmauth");
-  //       return <Loading />;
-  //     }
-  //     setIsNotify(true);
-  //     router.push("/profile/dashboard");
-  //     return <Loading />;
-  //   }
-  //   catch (error)
-  //   {
-  //         console.error('Error in log function:', error);
-  //   }
-  // }
-
   const log = async () => {
     try {
       const res = await fetchAPI({
@@ -133,8 +72,6 @@ export default function Signin() {
   return (
     <div style={{ background: '#050A27' }} 
     className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen">
-      {/* <div style={{ background: '#9A9BD3', transform: 'rotate(-137.42deg)' }} className='fixed top-4 left-36 w-[30px] h-[323px] rounded-lg'></div> */}
-          {/* <h2 className=" text-white shadow-2xl  text-7xl font-bold mb-3"> PONG</h2> */}
           <h2 className="text-white shadow-2xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3">PONG</h2>
           <div
           style={gradientStyle}
@@ -142,19 +79,8 @@ export default function Signin() {
         >
             <div className='py-10'>
             <div className="flex flex-col items-center ">
-              {/* <div style={{ background: 'rgba(154, 155, 211, 0.2)'}} className="  p-2 flex items-center mb-3 rounded-md w-full ">
-                <input style={{ background: 'rgba(154, 155, 211, 0)' }} type="email" name="email" placeholder='Email' className=" outline-none text-sm flex-1 max-w-full"
-                onChange={handleInputChange}
-                />
-              </div>
-              <div style={{ background: 'rgba(154, 155, 211, 0.20)'}} className=" p-2 flex items-center mb-7 rounded-md w-full">
-                <input type="password" name="hash" placeholder='password' style={{ background: 'rgba(154, 155, 211, 0)' }} className=" outline-none text-sm flex-1 max-w-full"
-                onChange={handleInputChange}  
-                />
-              </div> */}
             <InputField type="email" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} />
             <InputField type="password" name="hash" placeholder="Password" value={formData.hash} onChange={handleInputChange} />
-            {/* <Link href="" className=' m = 0 border-2 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#999BD3] mb-7' onClick={log}>LOG</Link> */}
             <Button onClick={log} text="LOG" />
             <div className="border-2 border-white w-10 inline-block mb-7"></div>
             <div className="flex justify-center mb-7 ">

@@ -9,6 +9,7 @@ import { json } from "stream/consumers";
 import { AlertMessage } from "@/app/components/alertMessage";
 import InputField from "@/app/components/InputField";
 import { fetchAPI } from "@/utils/api";
+import ProfilePicUpload from "@/app/components/ProfilePicUpload";
 
 let data: any;
 export default function Confirm() {
@@ -85,6 +86,33 @@ export default function Confirm() {
   const handleConfirm = () => {
       confirm();
   };
+
+
+  const handlePicConfirm = async (e: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    const file = e.target.files?.[0];
+    if (file)
+    {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'imagesus');
+      const resCLoud = await fetch(`https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`, {
+        method: 'POST',
+        body: formData,
+      } );
+      if (resCLoud.ok) {
+        const data1 = await resCLoud.json();
+        if (data1 && data1.secure_url) {
+          setUserData((prev) => ({
+            ...(prev as UserData),
+            profilePic: data1.secure_url
+          }));
+        }
+    }
+  
+  }
+}
+
   const gradientStyle = {
     background:
       "linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)",
@@ -113,35 +141,7 @@ export default function Confirm() {
       >
              <div className="py-10">
                <div className="flex flex-col items-center ">
-                 <div className="flex items-center shrink-0 mb-7">
-                   <label htmlFor="fileInput" className="cursor-pointer">
-                     <img
-                       id="preview_img"
-                       className="w-20 h-auto object-cover rounded-full sm:w-24 md:w-32 lg:w-40 xl:w-48"
-                       src={userData?.profilePic}
-                       alt="Current profile photo"
-                     />
-                   </label>
-                   <input
-                     type="file"
-                     id="fileInput"
-                     accept="image/*"
-                     className="hidden"
-                     onChange={(e) => {
-                       const file = e.target.files?.[0];
-                       if (file) {
-                         const reader = new FileReader();
-                         reader.onloadend = () => {
-                           setUserData((prev) => ({
-                             ...(prev as UserData),
-                             profilePic: reader.result as string,
-                           }));
-                         };
-                         reader.readAsDataURL(file);
-                       }
-                     }}
-                   />
-                 </div>
+               <ProfilePicUpload profilePic={userData?.profilePic} handlePicUpdate={handlePicConfirm} />
                  <InputField
         type="text"
         name="Username"

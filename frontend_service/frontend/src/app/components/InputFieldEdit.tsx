@@ -1,4 +1,3 @@
-// InputSection.tsx
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import { IoSettingsOutline } from 'react-icons/io5';

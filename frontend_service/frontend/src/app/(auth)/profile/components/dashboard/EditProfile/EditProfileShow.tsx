@@ -97,7 +97,6 @@ const EditProfileShow = () => {
             const data1 = await resCLoud.json();
             if (data1 && data1.secure_url) {
               profilePic = data1.secure_url;
-              console.log("the path is ", profilePic);
           
               const response = await fetch(Backend_URL + 'user/update/image', {
                 method: 'PATCH',
@@ -282,16 +281,16 @@ const EditProfileShow = () => {
                   <PasswordInput label="New Password" value={userPass?.newPass || ''} onChange={(value) => setUserPass((prev) => ({ ...prev, newPass: value } as UserPass))} />
                   <PasswordInput label="Confirm Password" value={userPass?.confirmPass || ''} onChange={(value) => setUserPass((prev) => ({ ...prev, confirmPass: value } as UserPass))} />
             </InputSection>
-            <TwoFaSettings
-              isTofaVisible={isTofaVisible}
-              isChecked={isChecked}
-              isDisabled={isDisabled}
-              handleToggleClick={handleToggleClick}
-              qrCode={qrCode}
-              handleToggleVisibility={() => setIsTofaVisible((prevState) => !prevState)}
-              handleEnableTwoFa={handlEnableTwoFa}
-              setCodeTwoFa={setCodeTwoFa}
-            />
+              <TwoFaSettings
+                isTofaVisible={isTofaVisible}
+                isChecked={isChecked}
+                isDisabled={isDisabled}
+                handleToggleClick={handleToggleClick}
+                qrCode={qrCode}
+                handleToggleVisibility={() => setIsTofaVisible((prevState) => !prevState)}
+                handleEnableTwoFa={handlEnableTwoFa}
+                setCodeTwoFa={setCodeTwoFa}
+              />
           </div>
           {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={notify as string} type="notify" /> : ""}
         </div>

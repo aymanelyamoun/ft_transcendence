@@ -1,8 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ExecutionContext} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-42';
 import { AuthGoogleService } from '../auth_google.service';
 import {Response} from 'express';
+import { UnauthorizedException } from "@nestjs/common";
+
 import { LOG_TYPE } from '@prisma/client';
 
 @Injectable()
@@ -18,6 +21,14 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
             callbackURL: 'http://localhost:3001/api/auth/google/redirect42',
         });
     }
+
+    async authenticate(request: any, options?: any): Promise<any> {
+        if (request.query && request.query.error === 'access_denied') {
+          return request.res.redirect('http://localhost:3000');
+        }
+        return super.authenticate(request, options);
+      }
+    
 
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {

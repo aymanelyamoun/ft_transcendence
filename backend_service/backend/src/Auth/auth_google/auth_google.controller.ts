@@ -70,22 +70,24 @@ export class AuthGoogleController
     @UseGuards(AuthGuard('42'))
     async handleRedirect42(@Req() req: Request, @Res() res: Response)
     {
-      try{
-      (req.user as any).isConfirmed2Fa = false;
-      const jwtResult = await this.authGoogleService.generateJwt(req.user);
-      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
-      const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
-      if (user.isTwoFactorEnabled)
-        return res.redirect('http://localhost:3000/confirmauth')
-      else if (user.hash != '') {
-        return res.redirect('http://localhost:3000/profile/dashboard')
+      try
+      {
+        (req.user as any).isConfirmed2Fa = false;
+        const jwtResult = await this.authGoogleService.generateJwt(req.user);
+        res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
+        const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
+        if (user.isTwoFactorEnabled)
+          return res.redirect('http://localhost:3000/confirmauth')
+        else if (user.hash != '') {
+          return res.redirect('http://localhost:3000/profile/dashboard')
+        }
+        return res.redirect('http://localhost:3000/confirm')
       }
-      return res.redirect('http://localhost:3000/confirm')
-    } catch (error)
-    {
-      console.error('Error in login:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+      catch (error)
+      {
+        console.error('Error in login:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
   }
 
 
@@ -118,12 +120,13 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
       secret = user.TwoFactSecret
     else
       secret = this.authGoogleService.generateTwoFactorAuthenticationSecret(user.username);
-    const Url = speakeasy.otpauthURL({
+      const Url = speakeasy.otpauthURL({
       label: 'Ft_Transcendence',
       secret: secret,
     });
-    try {
-    const qrCode = await qrcode.toDataURL(Url);
+    try
+    {
+      const qrCode = await qrcode.toDataURL(Url);
       await this.userService.updateUser(user.id, { TwoFactSecret: secret });
       return res.status(200).json(qrCode);
     }

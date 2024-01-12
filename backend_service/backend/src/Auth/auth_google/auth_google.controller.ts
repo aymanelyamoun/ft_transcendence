@@ -113,7 +113,11 @@ async check(@Req() req: Request, @Res() res: Response)
 async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
   
     const user = req['user'] as User;
-    const secret = this.authGoogleService.generateTwoFactorAuthenticationSecret(user.username);
+    var secret : string;
+    if (user.TwoFactSecret)
+      secret = user.TwoFactSecret
+    else
+      secret = this.authGoogleService.generateTwoFactorAuthenticationSecret(user.username);
     const Url = speakeasy.otpauthURL({
       label: 'Ft_Transcendence',
       secret: secret,
@@ -122,7 +126,8 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
     const qrCode = await qrcode.toDataURL(Url);
       await this.userService.updateUser(user.id, { TwoFactSecret: secret });
       return res.status(200).json(qrCode);
-    } catch (error)
+    }
+    catch (error)
     {
       console.error('Error generating QR code:', error);
       return res.status(500).json({ message: 'Error generating QR code' });
@@ -135,11 +140,13 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
   {
     const user = req['user'] as User;
     const { token } = body;
+    console.log(user);
+    if  (user.isTwoFactorEnabled)
+      return res.status(401).json({message : 'Two-factor is already enabled'});
     const isValidToken = this.authGoogleService.validateTwoFactorAuthenticationToken(
       token,
       user.TwoFactSecret,
       );
-      await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
       if (!isValidToken) {
         return res.status(401).json({message : 'Two-factor authentication code is incorrect!'});
       }

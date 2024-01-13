@@ -28,6 +28,7 @@ interface FriendProps {
 const Friends: React.FC<FriendProps>  = ({ showGroups }) => {
   const [showRequest, setRequest] = React.useState(false);
   const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
+  const [closeGroups, setCloseGroups] = useState(false);
   // const infoRef = useRef<HTMLDivElement>(null);
 
   const handleRequestClick = () => {
@@ -82,7 +83,10 @@ const Friends: React.FC<FriendProps>  = ({ showGroups }) => {
           onClose={() => setSelectedFriend(false)}
           // ref={infoRef}
         />)}
-    { showGroups && <ShowGroups />}
+    { showGroups &&
+    <ShowGroups 
+      onClose={() => setSelectedFriend(false)}
+      />}
       </>
   );
 };

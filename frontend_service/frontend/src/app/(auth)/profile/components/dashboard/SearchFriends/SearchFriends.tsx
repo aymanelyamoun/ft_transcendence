@@ -96,7 +96,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
 
   const fetchChannel = async (channelName: string) => {
     try {
-      console.log("fetching channel entered");
       const res = await fetch( Backend_URL+"channels/search/"+channelName, {
         method: "GET",
         mode: "cors",
@@ -108,7 +107,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
       });
       if (res.ok) {
         const data = await res.json() as SearchU[];
-        console.log("requested search channels : ",data);
         setChannelFriendSearch(data);
       }
     } catch (error) {
@@ -122,7 +120,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
     username = username.trim();
     if (username)
     {
-      console.log("searching for : ",username)
       Searchusers('search/'+username);
       fetchChannel(username);
     }

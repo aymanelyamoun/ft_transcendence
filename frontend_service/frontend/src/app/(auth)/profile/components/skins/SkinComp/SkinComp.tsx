@@ -20,7 +20,6 @@ position: relative;
 const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, setActiveSkin }) => {
 
   const SendSkin = async (Name: string, Type: string) => {
-    console.log("skin body: ", Name, Type);
     try {
     const response = await fetch(`${Backend_URL}user/skins`, {
       method: "POST",

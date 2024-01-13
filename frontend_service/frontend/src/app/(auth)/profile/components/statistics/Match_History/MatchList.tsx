@@ -16,13 +16,6 @@ const MatchList: React.FC<MatchProps> = (props) => {
 
     const matches = props.matches;
     const UserProfileStyling = props.UserProfileStyling;
-    useEffect(() => {
-      console.log('after fetcddddh');
-      console.log(matches);
-      console.log('----------');
-      // if (Array.isArray(matches))
-      //   console.log("here is an array");
-    }, []);
     return (
       <div className={styles['match-list']}>
         <ul>

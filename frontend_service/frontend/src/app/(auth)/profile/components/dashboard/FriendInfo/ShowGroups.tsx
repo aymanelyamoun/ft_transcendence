@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
 import { SearchU } from '../interfaces';
 import GroupComponent from '../Header/GroupComponent';
 
+import { connect } from 'react-redux'
+import { toggleShowGroups } from '@/features/booleans/booleanActions';
 // const ShowGroupsContainer = styled.div`
 // background: rgba(154, 155, 211, 0.2);
 // display: flex;
@@ -31,10 +33,20 @@ const ShowGroupsRoot = styled.div`
   justify-content: space-evenly;
 `;
 
-const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
+interface showGroupProps
+{
+  onClose: () => void;
+  showGroups: boolean;
+  toggleShowGroups: () => void;
+}
+
+const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
+  const onClose = props.onClose;
+  const { showGroups, toggleShowGroups} = props;
   const [isLoading, setisLoading] = useState(false);
   const [ChannelFriendSearch, setChannelFriendSearch] = useState<SearchU[]>([]);
   const [ShowGroups, setShowGroups] = useState(true);
+  const showRef = useRef<HTMLDivElement>(null);
 
   const fetchChannelGroups = async () => {
     try {
@@ -49,7 +61,6 @@ const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
       });
       if (res.ok) {
         const data = await res.json();
-        console.log("requested search channels : ",data);
         setChannelFriendSearch(data);
       } else
       {
@@ -63,12 +74,25 @@ const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
 
   useEffect(() => {
     fetchChannelGroups();
-    console.log("ChannelFriendSearch : ", ChannelFriendSearch);
   }, []);
 
+  const handleClickOutside = (event: any) => {
+    if (showRef.current && !showRef.current.contains(event.target as Node))
+    {
+      onClose();
+      toggleShowGroups();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]) 
+
   return (
-    <div className="addChannelGroups flex justify-center items-center">
-      <div ref={ref} className={styles['info-container']}>
+    <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
+      <div ref={showRef} className={styles['info-container']}>
         <ShowGroupsRoot>
         {/* <ShowGroupsContainer> */}
           {ChannelFriendSearch.map((friend) => {
@@ -90,5 +114,15 @@ const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
     </div>
   );
 });
-  
-  export default ShowGroups;
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    ShowGroups: state.booleans.showGroups,
+  };
+};
+
+const mapDispatchToProps = {
+  toggleShowGroups,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShowGroups);

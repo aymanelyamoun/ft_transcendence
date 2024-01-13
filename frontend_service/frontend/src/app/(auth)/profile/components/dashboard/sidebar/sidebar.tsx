@@ -151,7 +151,6 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   const { ShowSettings } = props; // Destructure the props object to get the ShowSettings property
   const setShowEditProfile = props.setShowEditProfile;
   useEffect (() => {
-    console.log(ShowSettings);
   },[]);
 
   return (

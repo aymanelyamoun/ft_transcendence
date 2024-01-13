@@ -11,6 +11,7 @@ import ResultItem from './ResultItem';
 import { Backend_URL } from "@/lib/Constants";
 import { on } from "events";
 import { SearchU } from "../interfaces";
+import styles from './search.module.css';
 // import { SearchU } from "../SearchFriends/SearchFriends";
 
 interface SearchModalProps {
@@ -22,14 +23,15 @@ interface SearchModalProps {
 }
 
 
-  const ResultList = styled.div`
-  flex: 1; // Fills remaining space vertically
-  display: flex;
-  flex-direction: column; // Stack results vertically
-  align-items: center;
-  border-top-left-radius: 10px; // Matches Tailwind rounded-t-[10px]
-  height: 750px; // Same height as Tailwind h-[750px]
-  overflow-y: auto; // Scroll if needed
+const ResultList = styled.div`
+flex: 1;
+display: flex;
+flex-direction: row;
+border-top-left-radius: 10px;
+height: 50vh;
+overflow-y: auto;
+justify-content: center;
+align-items: flex-start;
 `;
 
 const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers, ChannelFriendSearch, setChannelFriendSearch}) => {
@@ -46,7 +48,7 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
     return (
         <>
         <div onClick={handleCancelAddChannel} className="addChannelOverlay flex justify-center items-center ">
-            <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModaloumad flex justify-between rounded-[10px] ">
+            <div ref={cancelAddChannel} id="AddchannelContainer" className={styles['addChannelModaloumad']}>
                 <ResultList>
                         <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch}/>
                         {[...friendSearch, ...ChannelFriendSearch].map((friend) => (

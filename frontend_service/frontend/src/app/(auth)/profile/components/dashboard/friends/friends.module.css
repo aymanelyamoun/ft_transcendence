@@ -15,11 +15,11 @@
 {
     background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
     overflow: auto;
-    position: absolute;
+    position: relative;
     justify-content: space-between;
     box-sizing: border-box;
     height: 95%;
-    width: 96%;
+    width: 85%;
     border-radius: 10px;
 }
 /* &::-webkit-scrollbar {
@@ -29,16 +29,24 @@
 .friends-container::-webkit-scrollbar {
     display: none;
 }
-
+.top-container
+{
+    position: inherit;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
 div span.friends-title {
     color: aliceblue;
     font-family: "Inter", sans-serif;
     /* margin-top: 4rem; */
     display: flex;
-    margin-left: 50px;
-    padding-top: 30px;
+    margin-left: 2vw;
+    padding-top: 2vh;
     font-weight: 800;
-    font-size: 35px;
+    font-size: 3vh;
     font-weight: bold;
 }
 .friendItem-container
@@ -219,15 +227,19 @@ div span.friends-title {
     right: 1.3vw;
 }
 
-@media (min-width: 1300px) and (max-width: 1900px)
+@media (max-width: 1000px)
 {
     .friends
     {
         grid-row-start: 1;
-        grid-row-end: 2;
-        grid-column-start: 3;
-        grid-column-end: 5;
-        padding-left: 3rem;
+        grid-row-end: 3;
+        grid-column-start: 2;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        top: 5vh;
+        left: 4vw;
+        transition: all 300ms ease;
     }
 
     .friends-container
@@ -243,20 +255,39 @@ div span.friends-title {
     }
 }
 
-@media (max-width: 1300px)
+@media screen and (max-width: 550px)
 {
     .friends
     {
-        grid-row-start: 2;
-        grid-row-end: 3;
-        grid-column-start: 1;
-        grid-column-end: 9;
-        padding-left: 0rem;
-        top: 0vh;
+        grid-column-start: 2;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 40rem;
+        left: auto;
+        height: 80%;
+        width: 80%;
+        transition: all 300ms ease;
     }
+
     .friends-container
     {
         width: 100%;
-        height: 97%;
+        height: 98%;
+    }
+
+    div span.friends-title {
+        color: aliceblue;
+        font-family: "Inter", sans-serif;
+        /* margin-top: 4rem; */
+        display: flex;
+        margin-left: 2vw;
+        padding-top: 2vh;
+        font-weight: 800;
+        font-size: 22px;
+        font-weight: bold;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-left: 20px;
     }
 }

@@ -1,13 +1,31 @@
 .notification
 {
-    position: absolute;
+    position: relative;
     top: 2.5vh;
-    right: 2vw;
+    margin-left: auto;
+    margin-right: 2.5vh;
 }
 
 .notification svg
 {
     color: aliceblue;
-    width: 4rem;
-    height: 3rem;
+    width: 3vw;
+    height: 3.5vh;
+}
+
+@media (max-width: 1900px), (max-height: 900px) {
+    .notification
+    {
+        margin-right: 1vh;
+    }
+}
+
+@media (max-width: 550px)
+{
+    .notification svg
+    {
+        color: aliceblue;
+        width: 2rem;
+        height: 2rem;
+    }
 }

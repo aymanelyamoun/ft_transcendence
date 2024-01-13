@@ -38,6 +38,7 @@ const SearchDiv = styled.div`
 `;
 
 const AppGlass = styled.div`
+@media (min-width: 1900px) {
   display: grid;
   height: 90%;
   width: 90%;
@@ -48,10 +49,39 @@ const AppGlass = styled.div`
   grid-template-columns: 2rem 30rem auto 35rem 2rem;
   grid-template-rows: repeat(3, 1fr);
   z-index: auto;
+}
 
-  @media screen and (max-width: 1300px) {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, 1fr);
+  @media (min-width: 1000px) and (max-width: 1900px) {
+    display: grid;
+    height: 90%;
+    width: 90%;
+    border-radius: 2rem;
+    overflow: hidden;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-template-columns: 2rem 17rem auto 22rem 2rem;
+    grid-template-rows: repeat(3, 1fr);
+    z-index: auto;
+  }
+
+  @media screen and (max-width: 1000px) {
+    display: grid;
+    height: 90%;
+    width: 90%;
+    border-radius: 2rem;
+    overflow: hidden;
+    grid-template-columns: repeat(2, 1fr); /* Two columns with equal size */
+    // grid-gap: 4rem; /* Space between columns (margin + margin) */
+    grid-template-rows: 15rem 11rem auto;
+    z-index: auto;
+  }
+  @media screen and (max-width: 450px)
+  {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
   }
 `;
 

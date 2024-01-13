@@ -1,0 +1,37 @@
+.addChannelModaloumad
+{
+  background: var(
+    --linear-blue_purble,
+    linear-gradient(
+      170deg,
+      rgba(255, 255, 255, 0) -50.22%,
+      #040924 -9.3%,
+      #111534 -1.17%,
+      rgba(68, 71, 111, 0.96) 83.26%,
+      rgba(154, 155, 211, 0.9) 136.85%
+    )
+  );
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 30rem;
+  scrollbar-width: none;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  justify-content: center;
+}
+
+@media (max-height: 1100px) and (min-height: 700px)
+{
+    .addChannelModaloumad
+    {
+        width: 20rem;
+    }
+}
+
+@media (max-width: 550px)
+{
+  .addChannelModaloumad
+  {
+      width: 15rem;
+  }
+}

@@ -57,12 +57,14 @@ const Friends: React.FC<FriendProps>  = ({ showGroups }) => {
     <>
     <div className={styles.friends}>
       <div className={styles['friends-container']}>
-        {showRequest ? (
-          <span className={styles['friends-title']}>Friend Requests</span>
-          ) : (
-            <span className={styles['friends-title']}>Friends</span>
-            )}
-        <Notification onRequestClick={handleRequestClick} />
+        <div className={styles['top-container']}>
+          {showRequest ? (
+            <span className={styles['friends-title']}>Friend Requests</span>
+            ) : (
+              <span className={styles['friends-title']}>Friends</span>
+              )}
+          <Notification onRequestClick={handleRequestClick} />
+        </div>
         {showRequest ? (
           <FriendRequests 
           />

@@ -16,8 +16,8 @@ const Statistics: React.FC<StatisticsProps> = (props) => {
   return (
     <div className={styles.statistics}>
       <div className={styles.container}>
-          <StatisticsChart statistics={statistics}/>
             <StatisticsPie statistics={statistics}/>
+          <StatisticsChart statistics={statistics}/>
       </div>
     </div>
   );

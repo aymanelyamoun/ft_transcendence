@@ -13,16 +13,28 @@ import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
 import { SearchU } from '../interfaces';
 
+// const SearchContainer = styled.div`
+//   position: relative;
+//   top: 2vh;
+//   margin: 0 auto;
+//   // display: flex;
+//   width: 50%;
+//   height: 5vh;
+//   width: 50%;
+//   display: flex;
+//   margin-left: auto;
+// `;
+
 const SearchContainer = styled.div`
   position: relative;
   top: 2vh;
-  margin: 0 auto;
-  // display: flex;
-  width: 50%;
+  // margin: 0 auto;
+  width: 100%;
   height: 5vh;
-  width: 50%;
   display: flex;
-  margin-left: auto;
+  // margin-left: auto;
+  justify-content: center;
+    align-items: center;
 `;
 
 // export interface SearchU {

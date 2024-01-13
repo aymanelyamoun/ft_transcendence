@@ -22,7 +22,7 @@ interface Friend {
     onFriendItemClick: any;
   }
 
-const NoFriendContainer = styled.div`
+  const NoFriendContainer = styled.div`
 
   display: flex;
   flex-direction: column;
@@ -34,12 +34,12 @@ const NoFriendContainer = styled.div`
 `;
 
 const NoFriendsSpan = styled.span`
-  font-size: 1.5rem;
+  font-size: 3vh;
 `;
 
 const NoFriendsIcon = styled.div`
 
-  font-size: 5rem;
+font-size: 9vh;
   color: #fff;
 `;
 

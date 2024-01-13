@@ -33,6 +33,10 @@ const SettingsContainer = styled.div`
         transition: all 0.3s ease-in-out;
         background: rgba(5, 10, 39, 0.55);
     }
+
+    @media (max-width: 1000px) {
+    display: none;
+    }
 `;
 
 const OpenBarContainer = styled.div`

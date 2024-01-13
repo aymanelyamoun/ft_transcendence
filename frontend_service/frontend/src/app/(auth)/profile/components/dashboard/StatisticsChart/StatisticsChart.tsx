@@ -4,14 +4,10 @@ import React from 'react';
 import * as echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import styles from './StatisticsChart.module.css';
-import { StatisticsInterface } from '../interfaces';
 
-interface StatisticsChartProps {
-    statistics: StatisticsInterface;
-}
+interface StatisticsChartProps {}
 
-const StatisticsChart: React.FC<StatisticsChartProps> = (props) => {
-    const statistics = props.statistics;
+const StatisticsChart: React.FC<StatisticsChartProps> = () => {
   const option = {
     color: ['var(--blue 500)'],
 
@@ -91,7 +87,12 @@ const StatisticsChart: React.FC<StatisticsChartProps> = (props) => {
     ]
   };
 
-  return <ReactEcharts className={styles['echart-for-react']} option={option} />;
+  return (
+    <div className={styles['widgetContainer']}>
+      <ReactEcharts option={option} style={{ height: '100%', width: '100%' }} />
+      {/* Other children, if applicable */}
+    </div>
+  );
 };
 
 export default StatisticsChart;

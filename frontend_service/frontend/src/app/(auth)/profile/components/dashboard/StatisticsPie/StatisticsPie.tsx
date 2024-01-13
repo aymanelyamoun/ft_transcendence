@@ -72,7 +72,13 @@ const StatisticsPie: React.FC<StatisticsPieProps> = (props: { statistics: any; }
             }
         ]
     };
-    return <ReactEcharts className={styles['statistics-pie']} option={option} />;
+    return (
+        <div className={styles['widgetContainer']}>
+          <ReactEcharts option={option} style={{ height: '100%', width: '100%' }} />
+          {/* Other children, if applicable */}
+        </div>
+      );
 };
+
 
 export default StatisticsPie;

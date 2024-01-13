@@ -29,12 +29,12 @@ const NoRequestsContainer = styled.div`
 `;
 
 const NoRequestIcon = styled.div`
-  font-size: 5rem;
+  font-size: 9vh;
   color: #fff;
 `;
 
 const NoRequestSpan = styled.span`
-  font-size: 1.5rem;
+  font-size: 3vh;
 `;
 
 const FriendRequest = () => {

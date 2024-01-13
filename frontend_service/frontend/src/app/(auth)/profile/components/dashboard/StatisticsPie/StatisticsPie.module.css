@@ -1,3 +1,16 @@
+.widgetContainer
+{
+    padding: 9px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    background: rgba(154, 155, 211, 0.1);
+    width: 25%;
+    transition: all 300ms ease;
+    border-right: solid rgba(5, 10, 39, 1);;
+}
+
 .statistics-pie
 {
     background: rgba(154, 155, 211, 0.1);
@@ -7,15 +20,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    left: 1rem;
-    bottom: 2rem;
-    top: 2rem;
-    overflow: hidden;
+    position: inherit;
+    /* left: 1rem; */
+    /* bottom: 0rem; */
+    /* top: 3rem; */
     transition: all 300ms ease;
     padding: 10px;
     border-radius: 15px;
 }
+
 
 .statistics-pie .pie
 {
@@ -46,4 +59,12 @@
 {
     width: 100%;
     height: 100%;
+}
+
+@media screen and (max-width: 550px)
+{
+    .widgetContainer
+    {
+        display: none;
+    }
 }

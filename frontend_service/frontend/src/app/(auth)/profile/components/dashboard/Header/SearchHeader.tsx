@@ -31,13 +31,15 @@ margin-top: 0.5rem;
 padding: 0.8rem;
 border: 1px solid rgba(40, 44, 78, 1);
 background-color: rgba(40, 44, 78, 1);
+cursor: pointer;
 `;
 
 const SearchIcon = styled(BsSearch)`
 color: aliceblue;
-font-size: 2rem;
+font-size: 3vh;
 cursor: pointer;
 `;
+
 
 // const SearchModal = styled.div`
 

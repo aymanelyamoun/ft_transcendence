@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
@@ -31,10 +31,17 @@ const ShowGroupsRoot = styled.div`
   justify-content: space-evenly;
 `;
 
-const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
+interface showGroupProps
+{
+  onClose: () => void;
+}
+
+const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
+  const onClose = props.onClose;
   const [isLoading, setisLoading] = useState(false);
   const [ChannelFriendSearch, setChannelFriendSearch] = useState<SearchU[]>([]);
   const [ShowGroups, setShowGroups] = useState(true);
+  const showRef = useRef<HTMLDivElement>(null);
 
   const fetchChannelGroups = async () => {
     try {
@@ -66,9 +73,16 @@ const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
     console.log("ChannelFriendSearch : ", ChannelFriendSearch);
   }, []);
 
+  const handleClickOutside = (event: any) => {
+    if (showRef.current && !showRef.current.contains(event.target as Node))
+    {
+      onClose();
+    }
+  };
+
   return (
-    <div className="addChannelGroups flex justify-center items-center">
-      <div ref={ref} className={styles['info-container']}>
+    <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
+      <div ref={showRef} className={styles['info-container']}>
         <ShowGroupsRoot>
         {/* <ShowGroupsContainer> */}
           {ChannelFriendSearch.map((friend) => {

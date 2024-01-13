@@ -14,6 +14,11 @@ import { socket } from "../../../../socket"
 import EditProfileShow from '../components/dashboard/EditProfile/EditProfileShow';
 import { StatisticsInterface } from '../components/dashboard/interfaces';
 
+// import store and redux provider
+import { Provider } from 'react-redux'
+import store from './../../../../store';
+
+
 
 
 interface SearchU
@@ -169,6 +174,7 @@ function App() {
   
   return (
     <>
+    <Provider store={store}>
       {ShowEditProfile && <EditProfileShow />}
       <div className="App">
         <SocketUseContext.Provider value={socket}>
@@ -185,6 +191,7 @@ function App() {
           </AppGlass>
         </SocketUseContext.Provider>
       </div>
+      </Provider>
     </>
   );
 };

@@ -5,25 +5,30 @@ import { Backend_URL } from '@/lib/Constants';
 import { SearchU } from '../interfaces';
 import GroupComponent from '../Header/GroupComponent';
 
-const ShowGroupsContainer = styled.div`
-background: rgba(154, 155, 211, 0.2);
-display: flex;
-align-items: center;
-width: 90%;
-// width: 100%;
-padding: 6px 10px;
-box-sizing: border-box;
-border-bottom: 1px solid rgba(154, 155, 211, 0.2);
-margin: 15px 10px;
-border-radius: 15px;
-`;
+// const ShowGroupsContainer = styled.div`
+// background: rgba(154, 155, 211, 0.2);
+// display: flex;
+// align-items: center;
+// width: 90%;
+// // width: 100%;
+// padding: 6px 10px;
+// box-sizing: border-box;
+// border-bottom: 1px solid rgba(154, 155, 211, 0.2);
+// margin: 15px 10px;
+// border-radius: 15px;
+// `;
 
 const ShowGroupsRoot = styled.div`
-position: relative;
-bottom: 19vh;
-width: 100%;
-margin-left: 2rem;
-overflow-y: auto;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
 `;
 
 const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
@@ -65,7 +70,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
     <div className="addChannelGroups flex justify-center items-center">
       <div ref={ref} className={styles['info-container']}>
         <ShowGroupsRoot>
-        <ShowGroupsContainer>
+        {/* <ShowGroupsContainer> */}
           {ChannelFriendSearch.map((friend) => {
             return (
               <GroupComponent
@@ -79,7 +84,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement>((props, ref) => {
               />
             );
           })}
-        </ShowGroupsContainer>
+        {/* </ShowGroupsContainer> */}
         </ShowGroupsRoot>
       </div>
     </div>

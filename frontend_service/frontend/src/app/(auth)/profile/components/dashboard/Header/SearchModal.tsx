@@ -43,10 +43,9 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
         }
     };
 
-    // console.log("channelFriendSearch ++ : ", ChannelFriendSearch);
     return (
         <>
-        <div onClick={handleCancelAddChannel} className=" addChannelOverlay flex justify-center items-center ">
+        <div onClick={handleCancelAddChannel} className="addChannelOverlay flex justify-center items-center ">
             <div ref={cancelAddChannel} id="AddchannelContainer" className="addChannelModaloumad flex justify-between rounded-[10px] ">
                 <ResultList>
                         <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch}/>

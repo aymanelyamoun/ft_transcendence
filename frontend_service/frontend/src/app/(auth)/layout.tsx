@@ -26,6 +26,7 @@ interface UserContextValue {
   setUser: (user: User | null) => void; 
 }
 
+
 const UserContext = createContext<UserContextValue>({
   user: null as User | null,
   setUser: (user: User | null) => {},
@@ -50,19 +51,20 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             },
           });
         if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-          setAuthenticated(true);
-          if (data?.isTwoFactorEnabled  && !data.isConfirmed2Fa)
-          {
-              setTwoFa(true);
-              return ; 
+            const data = await res.json();
+            setUser(data);
+            setAuthenticated(true);
+            if (data?.isTwoFactorEnabled  && !data.isConfirmed2Fa)
+            {
+                setTwoFa(true);
+                return ; 
+            }
+          } 
+          else
+          {  
+            router.push("/");
+            return <Loading />;
           }
-          } else {
-          
-          router.push("/");
-          return <Loading />;
-        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

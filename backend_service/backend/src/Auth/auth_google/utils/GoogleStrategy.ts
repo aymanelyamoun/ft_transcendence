@@ -21,6 +21,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
             scope: ['profile', 'email'],
         });
     }
+
+    async authenticate(request: any, options?: any): Promise<any> {
+        if (request.query && request.query.error === 'access_denied') {
+          return request.res.redirect('http://localhost:3000');
+        }
+        return super.authenticate(request, options);
+      }
     /*validate Method:
 
 The validate method is called by Passport.js after successful authentication to validate and process

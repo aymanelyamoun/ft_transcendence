@@ -70,22 +70,24 @@ export class AuthGoogleController
     @UseGuards(AuthGuard('42'))
     async handleRedirect42(@Req() req: Request, @Res() res: Response)
     {
-      try{
-      (req.user as any).isConfirmed2Fa = false;
-      const jwtResult = await this.authGoogleService.generateJwt(req.user);
-      res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
-      const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
-      if (user.isTwoFactorEnabled)
-        return res.redirect('http://localhost:3000/confirmauth')
-      else if (user.hash != '') {
-        return res.redirect('http://localhost:3000/profile/dashboard')
+      try
+      {
+        (req.user as any).isConfirmed2Fa = false;
+        const jwtResult = await this.authGoogleService.generateJwt(req.user);
+        res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
+        const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
+        if (user.isTwoFactorEnabled)
+          return res.redirect('http://localhost:3000/confirmauth')
+        else if (user.hash != '') {
+          return res.redirect('http://localhost:3000/profile/dashboard')
+        }
+        return res.redirect('http://localhost:3000/confirm')
       }
-      return res.redirect('http://localhost:3000/confirm')
-    } catch (error)
-    {
-      console.error('Error in login:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+      catch (error)
+      {
+        console.error('Error in login:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
   }
 
 
@@ -113,16 +115,22 @@ async check(@Req() req: Request, @Res() res: Response)
 async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
   
     const user = req['user'] as User;
-    const secret = this.authGoogleService.generateTwoFactorAuthenticationSecret(user.username);
-    const Url = speakeasy.otpauthURL({
+    var secret : string;
+    if (user.TwoFactSecret)
+      secret = user.TwoFactSecret
+    else
+      secret = this.authGoogleService.generateTwoFactorAuthenticationSecret(user.username);
+      const Url = speakeasy.otpauthURL({
       label: 'Ft_Transcendence',
       secret: secret,
     });
-    try {
-    const qrCode = await qrcode.toDataURL(Url);
+    try
+    {
+      const qrCode = await qrcode.toDataURL(Url);
       await this.userService.updateUser(user.id, { TwoFactSecret: secret });
       return res.status(200).json(qrCode);
-    } catch (error)
+    }
+    catch (error)
     {
       console.error('Error generating QR code:', error);
       return res.status(500).json({ message: 'Error generating QR code' });
@@ -135,11 +143,13 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
   {
     const user = req['user'] as User;
     const { token } = body;
+    console.log(user);
+    if  (user.isTwoFactorEnabled)
+      return res.status(401).json({message : 'Two-factor is already enabled'});
     const isValidToken = this.authGoogleService.validateTwoFactorAuthenticationToken(
       token,
       user.TwoFactSecret,
       );
-      await this.userService.updateUser(user.id, { isTwoFactorEnabled: false });
       if (!isValidToken) {
         return res.status(401).json({message : 'Two-factor authentication code is incorrect!'});
       }

@@ -20,27 +20,51 @@ import { toggleShowGroups } from '@/features/booleans/booleanActions';
 // border-radius: 15px;
 // `;
 
-const ShowGroupsRoot = styled.div`
-  position: relative;
-  height: 100%;
-  width: 100%;
-  margin: 0 auto;
+const ShowGroupsList = styled.div`
+flex: 1;
+display: flex;
+flex-direction: column;
+border-top-left-radius: 10px;
+width: 100%;
+height: 100%;
+overflow-y: auto;
+justify-content: flex-start;
+align-items: center;
+
+  // @media (max-height: 1100px) and (min-height: 700px)
+  // {
+
+  // }
+  // @media (max-width: 550px)
+  // {
+
+  // }
+`;
+
+const ShowGroupsContainer = styled.div`
+  background: rgba(154, 155, 211, 0.2);
   display: flex;
-  overflow-y: auto;
-  flex-direction: column;
-  flex-wrap: nowrap;
   align-items: center;
-  justify-content: space-evenly;
+  width: 85%;
+  // width: 100%;
+  heigh: 120px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(154, 155, 211, 0.2);
+  margin: 15px 10px;
+  border-radius: 15px;
 `;
 
 interface showGroupProps
 {
   onClose: () => void;
+  parentType: string;
   showGroups: boolean;
   toggleShowGroups: () => void;
 }
 
 const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
+  const parentType = props.parentType;
   const onClose = props.onClose;
   const { showGroups, toggleShowGroups} = props;
   const [isLoading, setisLoading] = useState(false);
@@ -93,10 +117,10 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
   return (
     <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
       <div ref={showRef} className={styles['info-container']}>
-        <ShowGroupsRoot>
-        {/* <ShowGroupsContainer> */}
+        <ShowGroupsList>
           {ChannelFriendSearch.map((friend) => {
             return (
+              <ShowGroupsContainer>
               <GroupComponent
                 key={friend.id}
                 id={friend.id} 
@@ -105,11 +129,11 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 members={friend.members}  
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
-              />
+                />
+                </ShowGroupsContainer>
             );
           })}
-        {/* </ShowGroupsContainer> */}
-        </ShowGroupsRoot>
+        </ShowGroupsList>
       </div>
     </div>
   );

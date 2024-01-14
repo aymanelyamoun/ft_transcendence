@@ -83,25 +83,8 @@ const GroupPictureItem = styled.div`
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
-  // const SendClick = async () => {
-  //   try {
-  //     const res = await fetch( Backend_URL+"channels", {
-  //     });
-  //   }
-  // };
-  // console.log("members: ",props.members)
-  //
   const ShowGroups = props.ShowGroups;
   const setChannelFriendSearch = props.setChannelFriendSearch;
-
-  // const SendAddMe = async () => { // channelId,
-  //   try {
-
-  //   }
-  // };
-
-  // useEffect(() => {
-  // }, []);
 
   return (
     <>

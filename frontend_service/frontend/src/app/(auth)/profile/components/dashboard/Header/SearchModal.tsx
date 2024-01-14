@@ -24,14 +24,14 @@ interface SearchModalProps {
 
 
 const ResultList = styled.div`
-flex: 1;
-display: flex;
-flex-direction: row;
-border-top-left-radius: 10px;
-height: 50vh;
-overflow-y: auto;
-justify-content: center;
-align-items: flex-start;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-top-left-radius: 10px;
+    height: 50vh;
+    overflow-y: auto;
+    justify-content: flex-start;
+    align-items: center;
 `;
 
 const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers, ChannelFriendSearch, setChannelFriendSearch}) => {

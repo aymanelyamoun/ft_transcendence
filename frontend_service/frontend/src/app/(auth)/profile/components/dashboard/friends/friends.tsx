@@ -86,9 +86,9 @@ const Friends: React.FC<FriendProps>  = ({ showGroups }) => {
           // ref={infoRef}
         />)}
     { showGroups &&
-    <ShowGroups 
-      onClose={() => setSelectedFriend(false)}
-      />}
+    <ShowGroups
+        parentType="AddUser"
+        onClose={() => setSelectedFriend(false)}/>}
       </>
   );
 };

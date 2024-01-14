@@ -27,14 +27,12 @@ import { SearchU } from '../interfaces';
 
 const SearchContainer = styled.div`
   position: relative;
-  top: 2vh;
-  // margin: 0 auto;
+  top: 1vh;
   width: 100%;
   height: 5vh;
   display: flex;
-  // margin-left: auto;
   justify-content: center;
-    align-items: center;
+  align-items: center;
 `;
 
 // export interface SearchU {

@@ -38,6 +38,7 @@ export class AuthGoogleController
       private readonly jwtService: JwtService,
       private redisService: RedisService
     ){}
+    
     @Get('google/login')
     @UseGuards(AuthGuard('google'))
     handleLogin()

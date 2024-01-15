@@ -17,7 +17,7 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
             clientID:
                 'u-s4t2ud-ae38f95888699e53a0d1e83d0112945b049d14a0d11d467ebb5d373db96cd2be',
             clientSecret:
-                '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',
+                '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',
             callbackURL: 'http://localhost:3001/api/auth/google/redirect42',
         });
     }

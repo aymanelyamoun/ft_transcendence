@@ -1,10 +1,12 @@
+import { IsString, IsNotEmpty, Matches, MinLength, MaxLength, IsEmail } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
   @IsString({ message: 'Username must be a string.' })
   @IsNotEmpty({ message: 'Username is required.' })
-  @Transform(({ value }) => value.trim()) 
+  @MinLength(4, { message: 'Username must be at least 4 characters long.' })
+  @MaxLength(20, { message: 'Username cannot be longer than 20 characters.' })
+  @Transform(({ value }) => value.trim())
   username: string;
 
   @IsEmail({}, {message: 'Invalid email format.'})
@@ -14,6 +16,7 @@ export class CreateUserDto {
 
   @IsString({ message: 'Password must be a string.' })
   @IsNotEmpty({ message: 'Password is required.' })
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: 'Password too weak' })
   hash: string;
 
   @IsString({ message: 'Confirm Password must be a string.' })

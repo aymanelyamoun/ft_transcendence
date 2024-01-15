@@ -440,9 +440,9 @@ export class UserService {
             const userId = user.id;
             const games = await this.prisma.gameRecord.findMany({
                 where : {userId : userId},
-                // orderBy: {
-                //     createdAt: 'desc', 
-                //   },
+                orderBy: {
+                    createdAt: 'desc', 
+                  },
                 include : {
                     oponent : {
                         select : {

@@ -63,6 +63,7 @@ model GameRecord{
   concededGoals Int @default(0)
   oponent User @relation("gameRecordOponent",fields: [oponentId], references: [id])
   oponentId String
+  createdAt DateTime @default(now())
 }
 
 model Message{

@@ -149,10 +149,17 @@ export class UserController {
   }
 
   @Post('skins')
-   @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   async selectBall(@Body() body, @Res() res:  Response, @Req() req: Request)
   {
     const result = await this.userService.SelectSkin(body, req);
     res.status(200).send(result)
+  }
+  
+  @Get('games/week')
+  @UseGuards(JwtGuard)
+  async gamesWeek(@Res() res:  Response, @Req() req: Request)
+  {
+    
   }
 }

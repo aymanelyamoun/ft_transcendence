@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsBoolean, isNumber, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, isNumber, IsNumber, IsOptional, IsDate } from 'class-validator';
 import { user } from '../types/user';
 
 export class userDataDto {
@@ -65,7 +65,7 @@ export class ChangeChannelDataDto{
     @IsString()
     channelName: string;
     
-    @IsNotEmpty()j
+    @IsNotEmpty()
     @IsString()
     password?: string;
 
@@ -133,6 +133,21 @@ export class ChannelEditDto{
     userId2?:string;
 }
 
+export class MuteUserDto{
+    @IsNotEmpty()
+    @IsString()
+    channelId:string;
+
+    @IsNotEmpty()
+    @IsString()
+    userToMute:string;
+
+    @IsNotEmpty()
+    @IsString()
+    // @IsDate()
+    muteUntil:string;
+}
+
 export class ConversationInfoDto{
     @IsNotEmpty()
     @IsString()
@@ -143,14 +158,6 @@ export class ConversationInfoDto{
     // userId:string;
 
 }
-
-
-
-
-
-
-
-
 
 
 

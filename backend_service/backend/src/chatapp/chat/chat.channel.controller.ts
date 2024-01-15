@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
-import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, userDataDto } from "./DTOs/dto";
+import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, MuteUserDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { JoinChannel } from "./types/channel";
 import { ChatChannelAdminGuard } from "./chat.channel.guard";
@@ -65,6 +65,11 @@ export class ChannelController{
     async getAllChannels(){
         return await this.prismaChatService.getAllChannels();
     }
+    @Get('/toAddSearch/')
+    async addUserToChannelSearch(@Req() req:Request ){
+        return await this.prismaChatService.addUserToChannelSearch(req);
+        // return await this.prismaChatService.getAllChannels();
+    }
 
     @Get('/search/:filter')
     // @UseGuards(JwtGuard)
@@ -81,6 +86,12 @@ export class ChannelController{
     @Patch('unbanUser')
     async unbanUser(@Body()data:ChannelEditDto, @Req() req:Request){
         await this.prismaChatService.unbanUser(data, req);
+    }
+
+    @Patch('muteUser')
+    async muteUser(@Body()data:MuteUserDto, @Req() req:Request){
+        console.log("RECIEVED DATA : ", data);
+        await this.prismaChatService.muteUser(data, req);
     }
 
     @Get('/conversation/groupMembers')

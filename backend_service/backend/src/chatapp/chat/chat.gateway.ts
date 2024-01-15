@@ -114,6 +114,7 @@ export class ChatGateway implements OnGatewayConnection {
 
   
   handleDisconnect(socket: Socket) {
+    // console.log(socket['user'].id)
   if (socket['user'] === undefined || socket['user'] === null) // user has session but socket['user'] is undefined which means that socket['user'] doesnt exist in handlecdisconnect after innitializing it in handleconnection 
   {
     console.log("3ayt l ossama", socket.id);
@@ -208,33 +209,58 @@ export class ChatGateway implements OnGatewayConnection {
   @SubscribeMessage('messageTo')
   async sendMessageTo(client: Socket, msg: messageDto) {
 
-    // client.emit('privateMessage', msg.message, msg.conversationId);
-    console.log("sending message: ", msg.conversationId);
-    // this.server.emit("rcvMessage", msg.message);
-
-    //check if the user is muted
-
-    // check if the user in in the conversation
-
-    // const user = await this.getUserData(client) as User;
-
-
     if (await this.prismaChat.userIsInConversation(client['user'].id, msg.conversationId)){
       if (await this.prismaChat.userIsMutedFromConversation(client['user'].id , msg.conversationId) === false)
       {
+        console.log("from inside, uSER IS MUted:", await this.prismaChat.userIsMutedFromConversation(client['user'].id , msg.conversationId))
           const newMessage = await this.prismaChat.addMessageToDM(msg);
           client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
       }
     }
+  }
 
-    // check if there is aconversation between the two users
-    // if not create a new conversation
-    // next add messages to database 
+  @SubscribeMessage('inviteGame')
+  async inviteGame(sender: Socket, data: {id: string}) {
+    // if (socket id already inviterd id then dont send invite)
+    const user = await this.getUserData(sender) as User;
+    sender["user"] = user;
+    if (!this.gatewayService.userIsConnected(data.id)|| this.gatewayService.userInvitedBySocket(sender, data.id)
+      || data.id === user.id)
+      return ; // if the invited user is not connected or already invited by this socket then dont send invite
+    setTimeout(()=>{
+      console.log("removing invite socket from map after 10sec.")
+      this.gatewayService.removeInviteSocketFromMap(sender, data.id);
+    }, 20000); 
+    this.gatewayService.addInviteSocketToMap(sender, data.id);
+    console.log("sending invite to: ", data.id)
+    // loop throught connected socket map and find the socket with id = data.id
 
-    // const requestedSocket = this.getRequestedSocket(msg.);
+    // could be changed to only send on room of the user
+    this.gatewayService.connectedSocketsMap.get(data.id).forEach((socket)=>{
+      socket.emit('gameInvite', {id: user.id, username: user.username});
+    });
+    
+    // protect user is friend and inviting him to game
+    
+  }
 
-    // console.log("sending message to", msg.messageTo);
-    // requestedSocket.emit('onMessage', msg.message);
+  @SubscribeMessage('acceptGameInvite')
+  async acceptGameInvite(receiver: Socket, data: {senderId: string}) {
+    // if user sent multiple requests to same user
+    // loop map of inviteMAp if user.id is in it then delete it 
+    const user = await this.getUserData(receiver) as User;
+    if (this.gatewayService.userIsInvitedBy(user.id, data.senderId))
+    {
+      this.gatewayService.removeInviteSocketFromMap(receiver, data.senderId);
+      console.log('GAME INVITE ACCEPTED BETWEEN ', user.id, ' and ', data.senderId);
+      const sender = this.gatewayService.getSocketByUserId(data.senderId);
+      if (sender){
+       sender.emit('gameInviteAccepted', {id: user.id, username: user.username});
+       receiver.emit('gameInviteAccepted', {id: data.senderId, username: sender['user'].username});    
+      }
+    }
+    else
+      console.log('Sir akhoya lay sma7lk');
   }
 
 

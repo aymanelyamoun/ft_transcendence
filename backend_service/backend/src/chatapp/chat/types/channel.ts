@@ -23,7 +23,6 @@ export type ChangeChannelData = {
 export type JoinChannel = {
     channelId: string,
     password?: string,
-    // userId:string,
 }
 
 // export type DeleteChannel = {
@@ -40,6 +39,12 @@ export type JoinChannel = {
 
 export type ChannelEdit = {
     channelId:string,
-    // userId:string,
     userId2?:string,
+}
+
+export type MuteUser = {
+    channelId:string,
+    userToMute:string,
+    muteUntil:string,
+    // muteUntil:Date,
 }

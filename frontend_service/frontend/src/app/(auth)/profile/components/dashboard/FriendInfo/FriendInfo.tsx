@@ -16,6 +16,7 @@ import ShowGroups from './ShowGroups';
 // redux part
 import { connect } from 'react-redux';
 import { toggleShowGroups } from '@/features/booleans/booleanActions';
+import { setSelectedUserId } from '@/features/strings/stringActions';
 import { Friend } from '@/app/(auth)/chat/page';
 
 interface FriendInfoProps {
@@ -196,6 +197,7 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => 
 
   const handleShowGroup = () => {
     toggleShowGroups();
+    setSelectedUserId(props.id);
   };
 
 return (
@@ -237,11 +239,13 @@ return (
 const mapStateToProps = (state : RootState) => {
   return {
     showGroups: state.booleans.showGroups,
+    setSelectedUserId: state.strings.selectedUserId,
   };
 };
 
 const mapDispatchToProps = {
   toggleShowGroups,
+  setSelectedUserId,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendInfo);

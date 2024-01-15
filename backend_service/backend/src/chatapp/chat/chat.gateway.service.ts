@@ -12,6 +12,52 @@ export class GatewayService{
     constructor(private readonly prismaChat:PrismaChatService, private readonly tmpUserAddService:TmpUserService, ){}
     connectedSocketsMap = new Map<string, Set<Socket> >();
     connectedSockets = new Set<ConnectedSocketInfo>();
+    inviteSocketsMap = new Map<Socket, Set<string>>();
+
+
+    addInviteSocketToMap(socket:Socket, userId:string){
+        if (!this.inviteSocketsMap.has(socket))
+            this.inviteSocketsMap.set(socket, new Set<string>());
+        this.inviteSocketsMap.get(socket).add(userId);
+    }
+
+    getSocketByUserId(userId:string){
+        for (const [socket, users] of this.inviteSocketsMap.entries()){
+            if (socket['user'].id === userId)
+                return (socket);
+        }
+        return null;
+    }
+
+    userIsInvitedBy(userId:string, senderId:string){
+        for (const [socket, users] of this.inviteSocketsMap.entries()){
+            if (users.has(userId) && socket['user'].id === senderId)
+                return true;
+        }
+        return false;
+    }
+
+    userInvitedBySocket(socket:Socket, userId:string){
+        if (this.inviteSocketsMap.has(socket))
+            if (this.inviteSocketsMap.get(socket).has(userId))
+                return true;
+        return false;
+    }
+
+    removeInviteSocketFromMap(socket:Socket, userId:string){
+        if (this.inviteSocketsMap.has(socket))
+        {
+            this.inviteSocketsMap.get(socket).delete(userId);
+            if (this.inviteSocketsMap.get(socket).size == 0)
+                this.inviteSocketsMap.delete(socket);
+        }
+    }
+
+    removeInviteSocket(socket:Socket){
+        this.inviteSocketsMap.delete(socket);
+    }
+
+
 
     addConnectedSocketToMap(connectedSocket:ConnectedSocketInfo){
         if (!this.connectedSocketsMap.has(connectedSocket.userId))

@@ -20,6 +20,7 @@ const CreateChannelButton = ({setShowAddChannel} : {setShowAddChannel:React.Disp
     <IoMdAddCircle
       style={iconStyle}
       onClick={handleAddChannelClick}
+      color='#FEFFFF'
     />
   </div>
   )

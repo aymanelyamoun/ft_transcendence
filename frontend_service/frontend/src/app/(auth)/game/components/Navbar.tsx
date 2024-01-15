@@ -29,8 +29,8 @@ export default function Navbar()
       }
     }, [isRouting]);
     return (
-        <div className="w-full h-[5vh] flex flex-row justify-center items-center z-auto ">
-            <div className="w-1/3 max-w-xs max-h-[5vh] min-h-[5vh] outline outline-2 bg-[#282C4E] rounded-b-lg flex flex-row justify-center items-center"> 
+        <div className="w-full h-[5vh] flex flex-row justify-center items-center z-auto">
+            <div className="w-1/3 max-w-xs max-h-[5vh] min-h-[5vh] bg-[#282C4E] rounded-b-lg flex flex-row justify-center items-center"> 
             {isRouting && <Transition />}
                 <Link href={'/game'} className="h-full w-full flex flex-col items-center justify-center">
                     <IoGameController className="h-[66%] w-[33%] text-white" />            

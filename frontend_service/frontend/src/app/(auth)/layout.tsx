@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Confirm from "./confirm/page";
 import ConfirmAuth from "./confirmauth/page";
 import Navbar from "./game/components/Navbar";
+// import './globals.css'
 // import '../../../src/app/'
 
 

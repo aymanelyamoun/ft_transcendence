@@ -9,12 +9,15 @@ import redball from './../../../imgs/redball.svg';
 import mikaza from './../../../imgs/mikaza.svg';
 
 const Ball: React.FC = () => {
+
+    const [ActiveSkin, setActiveSkin] = React.useState<string>("null");
+    
     return (
         <div className={styles.Table}>
-            <SkinComp svgImage={default_ball}  Name="Default" Type="table" />
-            <SkinComp svgImage={basketball}  Name="basketball" Type="table" />
-            <SkinComp svgImage={redball}  Name="redball" Type="table" />
-            <SkinComp svgImage={mikaza}  Name="mikaza" Type="table" />
+            <SkinComp svgImage={default_ball}  Name="default" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={basketball}  Name="basketball" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={redball}  Name="redball" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={mikaza}  Name="mikaza" Type="ball" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
         </div>
     );
 };

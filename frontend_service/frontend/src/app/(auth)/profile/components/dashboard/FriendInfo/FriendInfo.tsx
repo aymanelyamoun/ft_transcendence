@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { MdGroupAdd } from "react-icons/md";
@@ -11,12 +11,22 @@ import { Backend_URL } from '@/lib/Constants';
 import Sidebar from '../sidebar/sidebar';
 import FriendProfile from '../../../FriendProfile/page';
 import Link from 'next/link';
+import ShowGroups from './ShowGroups';
+
+// redux part
+import { connect } from 'react-redux';
+import { toggleShowGroups } from '@/features/booleans/booleanActions';
+import { Friend } from '@/app/(auth)/chat/page';
 
 interface FriendInfoProps {
   id: string;
   username: string;
   profilePic: string;
   title? : string;
+  // setSelectedFriend : React.Dispatch<React.SetStateAction<Friend | false>>;
+  onClose: () => void;
+  showGroups: boolean;
+  toggleShowGroups: () => void;
 }
 
 const InfoName = styled.div`
@@ -107,15 +117,40 @@ const GameButton = styled.button`
   }
 `;
 
-const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref) => {
+const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => {
+  // const setSelectedFriend = props.setSelectedFriend;
+  const onClose = props.onClose;
+  const { showGroups, toggleShowGroups } = props;
+  const infoRef = useRef<HTMLDivElement>(null);
+  // const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
 
   useEffect(() => {
+    // console.log('showGroups value:', showGroups);
     console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
 
     return () => {
       console.log("FriendInfo Unmounted");
     };
-  }, [props.id, props.username, props.profilePic]);
+  }, [props.id, props.username, props.profilePic, showGroups]);
+
+  const handleClickOutside = (event: any) => {
+    console.log('Clicked outside');
+    if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
+      // Click outside the FriendInfo component, hide it
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+
+    if (!showGroups) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose, showGroups]);
 
   const SendDeclineReq = async (id: string) => {
     try {
@@ -159,34 +194,54 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props, ref
     };
   };
 
-  return (
-  <div className="addChannelOverlay flex justify-center items-center ">
-    <div ref={ref} className={styles['info-container']}>
-    <Link href={`/profile/FriendProfile?username=${props.username}`}>
-      <div className={styles['info-picture']}>
-        <img src={props.profilePic} alt="" className={styles['info-picture']}/>
+  const handleShowGroup = () => {
+    toggleShowGroups();
+  };
+
+return (
+  <>
+    {!showGroups && (
+      <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
+        <div ref={infoRef} className={styles['info-container']}>
+          <Link href={`/profile/FriendProfile?username=${props.username}`}>
+            <div className={styles['info-picture']}>
+              <img src={props.profilePic} alt="" className={styles['info-picture']} />
+            </div>
+          </Link>
+          <InfoName>
+            <span>{props.username}</span>
+          </InfoName>
+          <ButtonContainer>
+            <AddGroupButton onClick={handleShowGroup}>
+              <MdGroupAdd />
+            </AddGroupButton>
+            <GameButton>
+              <IoGameController />
+            </GameButton>
+            <RemoveFriendButton onClick={() => SendDeclineReq(props.id)}>
+              <IoPersonRemoveSharp />
+            </RemoveFriendButton>
+            <BlockButton onClick={() => SendBlockUser(props.id)}>
+              <BsPersonFillSlash />
+            </BlockButton>
+          </ButtonContainer>
+          {/* {showGroups && <ShowGroups ref={ref}/>} */}
+        </div>
       </div>
-      </Link>
-      <InfoName>
-        <span >{props.username}</span>
-      </InfoName>
-      <ButtonContainer>
-        <AddGroupButton>
-          <MdGroupAdd />
-        </AddGroupButton>
-      <GameButton>
-        <IoGameController />
-      </GameButton>
-      <RemoveFriendButton onClick={() => SendDeclineReq(props.id)}>
-        <IoPersonRemoveSharp />
-      </RemoveFriendButton>
-      <BlockButton onClick={() => SendBlockUser(props.id)}>
-        <BsPersonFillSlash />
-      </BlockButton>
-      </ButtonContainer>
-    </div>
-  </div>
-  );
+    )}
+  </>
+);
+
 });
 
-export default FriendInfo;
+const mapStateToProps = (state : RootState) => {
+  return {
+    showGroups: state.booleans.showGroups,
+  };
+};
+
+const mapDispatchToProps = {
+  toggleShowGroups,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendInfo);

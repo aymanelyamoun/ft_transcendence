@@ -22,7 +22,7 @@ interface Friend {
     onFriendItemClick: any;
   }
 
-const NoFriendContainer = styled.div`
+  const NoFriendContainer = styled.div`
 
   display: flex;
   flex-direction: column;
@@ -34,12 +34,12 @@ const NoFriendContainer = styled.div`
 `;
 
 const NoFriendsSpan = styled.span`
-  font-size: 1.5rem;
+  font-size: 3vh;
 `;
 
 const NoFriendsIcon = styled.div`
 
-  font-size: 5rem;
+font-size: 9vh;
   color: #fff;
 `;
 
@@ -73,14 +73,6 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
     };
     fetchFriendsListData().then(() => {
         socket.on("friendStatus", (data: any) => {
-        console.log('data : ')
-        console.log(data);
-        // FriendsList.forEach((friend) => {
-          //   if (friend.id === data.id) {
-        //     friend.status = data.status;
-        //   }
-        // });
-        // console.log("setting friends list");
         setFriendsList((prev) => {
           return prev.map((friend) => {
             if (friend.id === data.userId) {
@@ -98,9 +90,7 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
     return () => {
       // document.removeEventListener('keydown', (e) => {console.log(FriendsList)})
       socket.off("friendStatus");
-      console.log ('umounted');
     }
-    console.log ('fetching friends list')
   }, []);
 
 

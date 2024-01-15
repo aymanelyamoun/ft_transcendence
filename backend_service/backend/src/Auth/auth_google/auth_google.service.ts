@@ -127,40 +127,6 @@ async validateUser(details: UserDtetails, typ: LOG_TYPE)
   }
 }
 
-//  extractTokenFromHeader(req: Request) {
-//   let token = null;
-//   if (req && req.cookies) {
-//     token = req.cookies['access_token'];
-//   }
-//   return token ;
-// }
-  
-
-//   async check_token(req: Request) {
-//   let payload;
-//   try {
-//     const token = this.extractTokenFromHeader(req);
-//     payload = await this.jwtService.verifyAsync(token, {
-//       secret: process.env.jwtSecretKey,
-//     });
-//   } catch (error) {
-//     console.error('Error verifying token:', error);
-//     return null;
-//   }
-
-//   if (!payload || !payload.email) {
-//     console.error('Invalid payload structure');
-//     return null;
-//   }
-    
-//   const user = await this.findUserByEmail(payload.email);
-//   if (!user) {
-//     console.error('User not found for email:', payload.email);
-//     return null;
-//     }
-//     return user;
-//   }
-
   generateTwoFactorAuthenticationSecret(username : string) {
     const secret = speakeasy.generateSecret({
       name: 'snouae',

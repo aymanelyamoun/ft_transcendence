@@ -20,16 +20,12 @@ export class UserController {
   @Patch('confirm')
   @UseGuards(JwtGuard)
   async confirm(@Req() req: Request, @Res() res: Response, @Body() dto: ConfirmUserDto) {
-    // try {
       const user = req['user'] as User;
       if (!user) {
         throw new UnauthorizedException();
       }
       const confirm = await this.userService.confirm(user.email, dto);
       res.status(200).json({ message: 'User confirmed successfully', result: confirm });
-    // } catch (error) {
-    //   res.status(500).json({ message: 'Error finding user' });
-    // }
   }
     
   @Get('profile')
@@ -123,7 +119,6 @@ export class UserController {
   @UseGuards(JwtGuard)
   async profileUser(@Param('username') username, @Res() res:  Response, @Req() req: Request)
   {
-    // console.log('wsalna han',username)
      const profile = await this.userService.getProfileUser(username);
      res.status(200).send(profile);
   }
@@ -157,24 +152,7 @@ export class UserController {
    @UseGuards(JwtGuard)
   async selectBall(@Body() body, @Res() res:  Response, @Req() req: Request)
   {
-    // console.log('wsadsdsdsdsd  lna han',body)
     const result = await this.userService.SelectSkin(body, req);
     res.status(200).send(result)
   }
-
-  // @Post('skin/:table')
-  // @UseGuards(JwtGuard)
-  // async selectTable(@Param('table') table, @Res() res:  Response, @Req() req: Request)
-  // {
-  //   const result = await this.userService.SelectTable(table, req);
-  //   res.status(200).send(result)
-  // }
-
-  // @Post('skin/:paddle')
-  // @UseGuards(JwtGuard)
-  // async selectPaddle(@Param('paddle') paddle, @Res() res:  Response, @Req() req: Request)
-  // {
-  //   const result = await this.userService.SelectPaddle(paddle, req);
-  //   res.status(200).send(result)
-  // }
 }

@@ -159,8 +159,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
     useEffect(() => {
         fetchIcon();
     }, [props.setSearchUsers]);
-
-    {console.log('pic: ', props.profilePic);}
   return (
     <>
         <Link href={`/profile/FriendProfile`}>

@@ -29,19 +29,19 @@ import { ResultItemProps } from '../interfaces'
 
 
 
-  const ItemContainer = styled.div`
-  background: rgba(154, 155, 211, 0.2);
-  display: flex;
-  align-items: center;
-  width: 85%;
-  // width: 100%;
-  heigh: 120px;
-  padding: 6px 10px;
-  box-sizing: border-box;
-  border-bottom: 1px solid rgba(154, 155, 211, 0.2);
-  margin: 15px 10px;
-  border-radius: 15px;
-    `;
+const ItemContainer = styled.div`
+background: rgba(154, 155, 211, 0.2);
+display: flex;
+align-items: center;
+width: 85%;
+// width: 100%;
+heigh: 120px;
+padding: 6px 10px;
+box-sizing: border-box;
+border-bottom: 1px solid rgba(154, 155, 211, 0.2);
+margin: 15px 10px;
+border-radius: 15px;
+  `;
 
 const ResultItem: React.FC<ResultItemProps> = (props) => {
   // console.log("members", props.members);

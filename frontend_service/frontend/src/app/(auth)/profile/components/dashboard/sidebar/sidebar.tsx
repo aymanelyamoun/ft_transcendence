@@ -35,16 +35,26 @@ const SidebarRoot = styled.div`
   top: 4vh;
   transition: all 300ms ease;
 
-  @media (max-width: 1300px) {
+  @media (max-width: 1000px) {
     grid-row-start: 1;
     grid-row-end: 2;
     grid-column-start: 1;
-    grid-column-end: 9;
+    grid-column-end: 2;
     display: flex;
     flex-direction: column;
     position: relative;
-    top: 4vh;
+    top: 5vh;
     transition: all 300ms ease;
+  }
+
+  @media (max-width: 550px) {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 5vh;
+    transition: all 300ms ease;
+    width: 85%;
+    height: 40%;
   }
   `;
   
@@ -57,7 +67,7 @@ const SidebarRoot = styled.div`
   align-items: center;
   border-radius: 15px;
 
-  @media (max-width: 1300px) {
+  @media (max-width: 1000px) {
     height: 88%;
     width: 100%;
   }
@@ -71,7 +81,7 @@ const ProfileHeader = styled.div`
   position: relative;
   top: 3vh;
 
-  @media (max-width: 1300px) {
+  @media (max-width: 1000px) {
     width: 93%;
     top: 1vh;
   }
@@ -97,7 +107,7 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 
-@media (max-width: 1300px) {
+@media (max-width: 1000px) {
   position: relative;
   bottom: 6vh;
 }
@@ -112,7 +122,7 @@ const UserId = styled.span`
   line-height: normal;
   margin-top: 2rem;
 
-  @media (max-width: 1300px) {
+  @media (max-width: 1000px) {
     position: relative;
     bottom: 6vh;
   }
@@ -130,9 +140,8 @@ const Wallet = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media (max-width: 1300px) {
-    top: -1.2vh;
-    left: -17vw;
+  @media (max-width: 1000px) {
+    display: none;
   }
 `;
 
@@ -151,7 +160,6 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   const { ShowSettings } = props; // Destructure the props object to get the ShowSettings property
   const setShowEditProfile = props.setShowEditProfile;
   useEffect (() => {
-    console.log(ShowSettings);
   },[]);
 
   return (

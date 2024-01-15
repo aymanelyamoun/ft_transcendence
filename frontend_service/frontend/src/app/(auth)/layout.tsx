@@ -1,4 +1,3 @@
-
 'use client'
 import React, { useContext, useEffect, useState, createContext } from "react";
 import Loading from "@/app/components/Loading";
@@ -28,6 +27,7 @@ interface UserContextValue {
   setUser: (user: User | null) => void; 
 }
 
+
 const UserContext = createContext<UserContextValue>({
   user: null as User | null,
   setUser: (user: User | null) => {},
@@ -36,7 +36,6 @@ const UserContext = createContext<UserContextValue>({
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [twoFa, setTwoFa] = useState<boolean>(false)
-  // const [check2fa, setCheck2fa] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const pathname = usePathname();  
@@ -53,41 +52,29 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             },
           });
         if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-          setAuthenticated(true);
-          if (data?.isTwoFactorEnabled  && !data.isConfirmed2Fa)
-          {
-              //router.push("/confirmauth");
-              setTwoFa(true);
-              return ; 
+            const data = await res.json();
+            setUser(data);
+            setAuthenticated(true);
+            if (data?.isTwoFactorEnabled  && !data.isConfirmed2Fa)
+            {
+                setTwoFa(true);
+                return ; 
+            }
+          } 
+          else
+          {  
+            router.push("/");
+            return <Loading />;
           }
-          } else {
-          
-          router.push("/");
-        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
     checkAuthentication();
   }, [pathname]);
-
   const value = { user, setUser };
-
   return (
     <UserContext.Provider value={value}>
-    {/* {authenticated ? (
-      !user?.hash ? (
-        <Confirm />
-      ) : (
-        <> 
-          {children}
-        </>
-      )
-    ) : (
-      <Loading />
-    )} */}
       <>
     {authenticated ? (
       twoFa ? (

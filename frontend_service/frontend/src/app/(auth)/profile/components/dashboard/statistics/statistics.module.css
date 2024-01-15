@@ -1,33 +1,35 @@
 .statistics
 {
-    grid-row-start: 3;
-    grid-row-end: 4;
-    grid-column-start: 3;
-    grid-column-end: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    top: 2.5vh;
-    /* padding-bottom: 2rem; */
-    transition: all 300ms ease;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  grid-column-start: 3;
+  grid-column-end: 5;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  /* top: 2.5vh; */
+  /* padding-bottom: 2rem; */
+  transition: all 300ms ease;
+  flex-wrap: nowrap;
 }
 
 .container
 {
-    background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
-    padding-top: 20px;
-    padding-bottom: 0px;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    position: relative;
-    height: 90%;
-    width: 98%;
-    margin: 0 auto;
-    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
+  /* top: 2.5rem; */
+  /* margin-top: 2.5rem; */
+  border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  height: 87%;
+  width: 93%;
+  margin: 2rem auto 0 1.5vw;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .chart {
@@ -47,28 +49,58 @@
     border-radius: 5px;
   }
 
-  @media (max-width: 1300px) {
+  @media (max-width: 1000px) {
 
     .statistics
     {
-    grid-row-start: 4;
-    grid-row-end: 5;
+    grid-row-start: 3;
+    /* grid-row-end: 5; */
     grid-column-start: 1;
-    grid-column-end: 9;
+    grid-column-end: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    top: 1.5vh;
+    /* top: 1.5vh; */
     /* padding-bottom: 2rem; */
     transition: all 300ms ease;
   }
 
   .container
   {
-    height: 100%;
+    height: 90%;
     width: 100%;
     overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .chart
+  {
+    width: 60%;
+    height: 50%;
+  }
+}
+
+@media (max-width: 550px)
+{
+  .statistics
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 27.5rem;
+    width: 79%;
+    height: 30%;
+    transition: all 300ms ease;
+  }
+
+  .container
+  {
+    height: 90%;
+    width: 100%;
+    overflow: hidden;
+    margin: 0 auto;
   }
 
   .chart

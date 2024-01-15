@@ -8,6 +8,12 @@ import Loading from "../../../../../components/Loading";
 import Authorization from '@/utils/auth';
 import { AlertMessage } from '@/app/components/alertMessage';
 import styles from './EditProfile.module.css'
+import InputSection from '@/app/components/InputFieldEdit';
+import { useUser } from '@/app/(auth)/layout';
+import PasswordInput from '@/app/components/PasswordInput';
+import TwoFaSettings from '@/app/components/TwoFaSettings';
+import ProfilePicUpload from '@/app/components/ProfilePicUpload';
+import { fetchAPI } from '@/utils/api';
 
 
 let data : any
@@ -17,7 +23,7 @@ interface EditProfileShowProps {
   EditRef: React.RefObject<HTMLDivElement>;
 }
 
-const EditProfileShow: React.FC<EditProfileShowProps> = ({ EditRef }) => {
+const EditProfileShow = () => {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState<boolean>(false);
   const handleClick = () => {
@@ -31,26 +37,18 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ({ EditRef }) => {
   const [isTofaVisible, setIsTofaVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
-  const [isToggleChecked, setIsToggleChecked] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  // const [notify, setNotify] = useState<string | null>(null);
   const [codeTwoFa, setCodeTwoFa] = useState<string | null>(null);
-  const [image, setImage] = useState<string | null>(null);
-
   const router = useRouter();
-
   const handleToggleClick = () => {
       setIsChecked(!isChecked);
       setIsDisabled(!isDisabled);
-  };    
-    
+  };
     const gradientStyle = {
         background:
         "linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)",
     };
-  
     interface UserData {
       username: string;
       profilePic: string;
@@ -58,578 +56,246 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ({ EditRef }) => {
       typeLog: string;
       isTwoFactorEnabled: Boolean
     }
-  
   interface UserPass {
     oldPass: string;
     newPass: string;
     confirmPass: string;
   }
-
   const [userPass, setUserPass] = useState<UserPass | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
-  
+  const user = useUser();
 
     useEffect(() => {
-      const fetchUserData = async () => {
+      const checkAuthentication = async () => {
+          if (user) {
+            setUserData({
+              username: user.username,
+              profilePic: user.profilePic,
+              hash: user.hash,
+               typeLog: user.typeLog,
+               isTwoFactorEnabled: user.isTwoFactorEnabled
+
+            });
+          }
+      };
+      checkAuthentication();
+    }, [user, router]); 
+  
+    const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      let profilePic : any
+      const file = e.target.files?.[0];
+      if (file) {
         try {
-          const res = await fetch(Backend_URL + "auth/check", {
-            method: "GET",
-            mode: "cors",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          });
-          if (res.ok) {
-            setAuthenticated(true);
-            const data = await res.json();
-            setUserData(data);
-           setIsToggleChecked(data.isTwoFactorEnabled);
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', 'imagesus');
+          const resCLoud = await fetch(`https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`, {
+            method: 'POST',
+            body: formData,
+          } );
+          if (resCLoud.ok) {
+            const data1 = await resCLoud.json();
+            if (data1 && data1.secure_url) {
+              profilePic = data1.secure_url;
+          
+              const response = await fetch(Backend_URL + 'user/update/image', {
+                method: 'PATCH',
+                mode: 'cors',
+                credentials: 'include',
+                body: JSON.stringify({ pic: profilePic }),
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                },
+              });
+          
+              data = await response.json();
+              if (response.ok) {
+                notify = 'Your new profile picture has been successfully updated';
+                setUserData(data.newupdat);
+                setIsNotify(true);
+              } else {
+                setIsError(true);
+              }
+            } else {
+              console.error('Cloudinary response does not contain secure_url:', data);
+              setIsError(true);
+            }
           } else {
-           // router.push("/");
-            setAuthenticated(false);
+            console.error('Cloudinary upload failed:', resCLoud);
+            setIsError(true);
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          console.error('Error updating image:', error);
         }
-      };
-
-      fetchUserData();
-    }, []);
-  
-  
-const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const profilePic = reader.result as string;
-        const response = await fetch(Backend_URL + "user/update/image", {
-          method: "PATCH",
-          mode: "cors",
-          credentials: "include",
-          body: JSON.stringify({ pic: profilePic }),
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        data = await response.json();
-        if (response.ok) {
-          notify = "Your new profile picture has been successfully updated"
-          setUserData(data.newupdat);
-          setIsNotify(true);
-        } else {
-          setIsError(true);
-        }
-      };
-      reader.readAsDataURL(file);
-    } catch (error) {
-      console.error("Error updating image:", error);
-    }
-  }
-};
-
-
+      }
+    };
+    
   const handlUpdateUsername = async () => {
-    try
-    {
-      const res = await fetch(Backend_URL + "user/update/username", {
+    try {
+      await fetchAPI({
+        url : Backend_URL + "user/update/username",
         method: "PATCH",
-        mode: "cors",
-        credentials: "include",
-        body: JSON.stringify({
+        body: {
           username: username,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
       });
-         data = await res.json();
-        if (res.ok) {
-          notify = "the Username is updated"
-          setIsNotify(true);
-          setIsUsernameVisible(false);
-        } else {
-          setIsError(true);
-        }
+      notify = "the Username is updated"
+      setIsNotify(true);
+      setIsUsernameVisible(false);
     }
-    catch (error) {
-      console.error("Error fetching:", error);
+    catch (error)
+    {
+      data =  error;
+      setIsError(true);
     }
   }
-  
   const handlUpdatePass = async () => {
-    try {
-    const res = await fetch(Backend_URL + "user/update/password", {
-      method: "PATCH",
-      mode: "cors",
-      credentials: "include",
-      body: JSON.stringify({
-        oldPass: userPass?.oldPass,
-        newPass: userPass?.newPass,
-        confirmPass: userPass?.confirmPass,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-      data = await res.json();
-      if (res.ok)
-      {
-        notify = "Password Updated Successfully"
-        // setUserData(data.newupdat);
-        setIsPasswordVisible(false);
-        setIsNotify(true);
-      } else {
-        setIsError(true);
-      }
+    try
+    {
+      await fetchAPI({
+        url : Backend_URL + "user/update/password",
+        method: "PATCH",
+        body : {
+            oldPass: userPass?.oldPass,
+            newPass: userPass?.newPass,
+            confirmPass: userPass?.confirmPass,
+        },
+      });
+      notify = "Password Updated Successfully"
+      setIsPasswordVisible(false);
+      setIsNotify(true);
     }
-    catch (error) {
-      console.error("Error fetching:", error);
+    catch (error)
+    {
+      data =  error;
+      setIsError(true);
     }
   }
   const handlEnableTwoFa = async () => {
     if (isChecked)
     {
-      try {
-        const res = await fetch(Backend_URL + "auth/2FA/enable", {
+      try
+      {
+        await fetchAPI({
+          url : Backend_URL + "auth/2FA/enable",
           method: "POST",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify({
+          body : {
             token: codeTwoFa,
-          }),
+          }
         });
-        data = await res.json();
-        if (res.ok) {
-          notify = "the code is coeerect and 2FA enabled successfully!"
-          setIsNotify(true);
-          setIsTofaVisible(false);  
-        } else {
-          setIsError(true);
-        }
-      } catch (error) {
-        console.error("Error fetching:", error);
+        notify = "the code is coeerect and 2FA enabled successfully!"
+        setIsNotify(true);
+        setIsTofaVisible(false);          
+      }
+      catch (error)
+      {
+        data =  error;
+        setIsError(true);
       }
     }
     else if (isDisabled)
     {
-       try {
-         const res = await fetch(Backend_URL + "auth/2FA/disable", {
-           method: "POST",
-           mode: "cors",
-           credentials: "include",
-           headers: {
-             "Content-Type": "application/json",
-             "Access-Control-Allow-Origin": "*",
-           },
+      try
+      {
+         await fetchAPI ({
+          url : Backend_URL + "auth/2FA/disable",
+          method: "POST",
          });
-          data = await res.json();
-         if (res.ok) {
-           notify = data.message
-           setIsNotify(true)
-           setIsTofaVisible(false);  
-         } else {
-           setIsError(true)
-         }
-       } catch (error) {
-         console.error("Error fetching:", error);
-       }
+        notify = "2FA disabled successfully";
+        setIsNotify(true)
+        setIsTofaVisible(false);  
+      } catch ( error)
+      {
+        data =  error;
+        setIsError(true);
+      }
     }
   }
-
-  
     useEffect(() => {
       if (isChecked) {
-        fetch(Backend_URL + "auth/2FA/generate", {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            setQrCode(data);
-          })
-          .catch((error) => {
-            console.error("Error fetching QR code data:", error);
+      const generateQr = async () =>
+      {
+        try { 
+          const res =  await fetchAPI({
+            url: Backend_URL + "auth/2FA/generate",
+            method: "GET",
           });
+          setQrCode(res);
+        }catch (error)
+        {
+          data =  error;
+          setIsError(true);
+        }
       }
+      generateQr();
+    }
     }, [isChecked]);
   return (
     <>
-    {/* <div
-      style={{ background: "#050A27" }}
-      className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
-    > */}
-    <div className="addChannelOverlay flex justify-center items-center ">
-    <div ref={EditRef}></div>
+    <div className="addChannelOverlay flex flex-col  justify-center items-center text-center  ">
+    {/* <div ref={EditRef}></div> */}
       <div
         style={gradientStyle}
         className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
       >
         <div className="py-10">
           <div className="flex flex-col items-center ">
-            <div className="flex items-center shrink-0 mb-8">
-              <label htmlFor="fileInput" className="cursor-pointer">
-                <img
-                  id="preview_img"
-                  className="w-20 h-auto object-cover rounded-full sm:w-24 md:w-32 lg:w-40 xl:w-48"
-                  src={userData?.profilePic}
-                  alt="Current profile photo"
-                />
-              </label>
-              <input
-                type="file"
-                id="fileInput"
-                accept="image/*"
-                className="hidden"
-                onChange={handlePicUpdate}
-              />
-            </div>
-            <div
-              style={{ background: "rgba(154, 155, 211, 0.20)" }}
-              className="p-0 flex-row items-center mb-8 rounded-md w-full  justify-between shadow"
-            >
-              <div
-                style={{
-                  background: isUsernameVisible
-                    ? "#050A27"
-                    : "rgba(154, 155, 211, 0)",
-                }}
-                className="justify-between flex items-center rounded p-2 "
-              >
-                <div>
-                  <span
-                    className="text-white text-xs"
-                    style={{ fontFamily: "Poppins", fontSize: "1rem" }}
-                  >
-                    username
-                  </span>
-                </div>
-                <div>
-                  <Link
-                    className="text-white"
-                    href=""
-                    onClick={() =>
-                      setIsUsernameVisible((prevState) => !prevState)
-                    }
-                  >
-                    <IoSettingsOutline />
-                  </Link>
-                </div>
-              </div>
-
-              {isUsernameVisible && (
-                <div
-                  style={{
-                    background: "rgba(154, 155, 211, 0)",
-                  }}
-                  className="flex flex-col items-center"
+          <ProfilePicUpload profilePic={userData?.profilePic} handlePicUpdate={handlePicUpdate} />
+              <InputSection
+                  title="username"
+                  linkText="Confirm"
+                  onClick={handlUpdateUsername}
+                  isVisible={isUsernameVisible}
+                  toggleVisibility={() => setIsUsernameVisible((prevState) => !prevState)}
                 >
                   <span
                     className="outline-none text-sm flex-1 text-white mb-2 mt-2"
-                    style={{ fontFamily: "Poppins", fontSize: "0.9rem" }}
+                    style={{ fontFamily: 'Poppins', fontSize: '0.9rem' }}
                   >
                     new username
                   </span>
                   <div
-                    style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                    className="p-2 flex-row items-center mb-2 rounded-md w-full  justify-between shadow"
+                    style={{ background: 'rgba(154, 155, 211, 0.20)' }}
+                    className="p-2 flex-row items-center mb-2 rounded-md w-full justify-between shadow"
                   >
                     <input
-                      // value={userData?.username}
                       type="text"
                       name="Username"
                       style={{
-                        background: "rgba(154, 155, 211, 0)",
+                        background: 'rgba(154, 155, 211, 0)',
                       }}
-                      className="outline-none text-sm flex-1  max-w-full"
+                      className="outline-none text-sm flex-1 max-w-full"
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </div>
-                  <Link
-                    href=""
-                    className=" border  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 mb-4 shadow-xl hover:bg-[#999BD3]"
-                    onClick={handlUpdateUsername}
-                  >
-                    Confirm
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            <div
-              style={{ background: "rgba(154, 155, 211, 0.20)" }}
-              className="flex-row items-center mb-8 rounded-md w-full  justify-between shadow"
-            >
-              <div
-                style={{
-                  background: isPasswordVisible
-                    ? "#050A27"
-                    : "rgba(154, 155, 211, 0)",
-                }}
-                className="justify-between flex items-center rounded p-2 "
-              >
-                <div>
-                  <span
-                    className="text-white text-xs"
-                    style={{ fontFamily: "Poppins", fontSize: "1rem" }}
-                  >
-                    password
-                  </span>
-                </div>
-                <div>
-                  <Link
-                    className="text-white"
-                    href=""
-                    onClick={() =>
-                      setIsPasswordVisible((prevState) => !prevState)
-                    }
-                  >
-                    <IoSettingsOutline />
-                  </Link>
-                </div>
-              </div>
-              {isPasswordVisible && (
-                <div
-                  style={{
-                    background: "rgba(154, 155, 211, 0)",
-                  }}
-                  className="flex flex-col items-center"
+                </InputSection>
+                <InputSection
+                  title="password"
+                  linkText="Confirm"
+                  onClick={handlUpdatePass}
+                  isVisible={isPasswordVisible}
+                  toggleVisibility={() => setIsPasswordVisible((prevState) => !prevState)}
                 >
-                  <span
-                    className="outline-none text-sm flex-1 text-white mb-2 mt-2"
-                    style={{ fontFamily: "Poppins", fontSize: "0.9rem" }}
-                  >
-                    old password
-                  </span>
-                  <div
-                    style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                    className="p-2 flex-row items-center mb-2  rounded-md w-full  justify-between shadow"
-                  >
-                    <input
-                      // value={userData?.username}
-                      type="password"
-                      name="password"
-                      style={{
-                        background: "rgba(154, 155, 211, 0)",
-                      }}
-                      className="outline-none text-sm flex-1 max-w-full "
-                      onChange={(e) =>
-                        setUserPass(
-                          (prevUserPass) =>
-                            ({
-                              ...prevUserPass,
-                              oldPass: e.target.value,
-                            } as UserPass)
-                        )
-                      }
-                    />
-                  </div>
-                  <span
-                    className="outline-none text-sm flex-1 text-white mb-2 mt-2"
-                    style={{ fontFamily: "Poppins", fontSize: "0.9rem" }}
-                  >
-                    new password
-                  </span>
-                  <div
-                    style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                    className="p-2 flex-row items-center mb-2 rounded-md w-full  justify-between shadow"
-                  >
-                    <input
-                      // value={userData?.username}
-                      type="password"
-                      name="password"
-                      style={{
-                        background: "rgba(154, 155, 211, 0)",
-                      }}
-                      className="outline-none text-sm flex-1 max-w-full"
-                      onChange={(e) =>
-                        setUserPass(
-                          (prevUserPass) =>
-                            ({
-                              ...prevUserPass,
-                              newPass: e.target.value,
-                            } as UserPass)
-                        )
-                      }
-                    />
-                  </div>
-                  <span
-                    className="outline-none text-sm flex-1 text-white mb-2 mt-2"
-                    style={{ fontFamily: "Poppins", fontSize: "0.9rem" }}
-                  >
-                    confirm password
-                  </span>
-                  <div
-                    style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                    className="p-2 flex-row items-center mb-2 rounded-md w-full  justify-between shadow"
-                  >
-                    <input
-                      // value={userData?.username}
-                      type="password"
-                      name="password"
-                      style={{
-                        background: "rgba(154, 155, 211, 0)",
-                      }}
-                      className="outline-none text-sm flex-1 max-w-full"
-                      onChange={(e) =>
-                        setUserPass(
-                          (prevUserPass) =>
-                            ({
-                              ...prevUserPass,
-                              confirmPass: e.target.value,
-                            } as UserPass)
-                        )
-                      }
-                    />
-                  </div>
-                  <Link
-                    href=""
-                    className=" border mb-5  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 shadow-xl hover:bg-[#999BD3]"
-                    onClick={handlUpdatePass}
-                  >
-                    Confirm
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            <div
-              style={{ background: "rgba(154, 155, 211, 0.20)" }}
-              className="flex-row items-center mb-8 rounded-md w-full  justify-between shadow"
-            >
-              <div
-                style={{
-                  background: isTofaVisible
-                    ? "#050A27"
-                    : "rgba(154, 155, 211, 0)",
-                }}
-                className="justify-between flex items-center rounded p-2 "
-              >
-                <div>
-                  <span
-                    className="text-white text-xs"
-                    style={{ fontFamily: "Poppins", fontSize: "1rem" }}
-                  >
-                    2FA
-                  </span>
-                </div>
-                <div>
-                  <Link
-                    className="text-white"
-                    href=""
-                    onClick={() => setIsTofaVisible((prevState) => !prevState)}
-                  >
-                    <IoSettingsOutline />
-                  </Link>
-                </div>
-              </div>
-
-              {isTofaVisible && (
-                <div
-                  style={{
-                    background: "rgba(154, 155, 211, 0)",
-                  }}
-                  className="flex"
-                >
-                  <div
-                    style={{ background: "rgba(154, 155, 211, 0)" }}
-                    className="p-2 flex-row items-center mb-2 rounded-md w-full  justify-between "
-                  >
-                    <div className="justify-between flex items-center">
-                      <div>
-                        <span
-                          style={{ fontFamily: "Poppins", fontSize: "0.9rem" }}
-                          className="ms-3 text-sm font-medium text-white dark:text-gray-300"
-                        >
-                          activate 2FA
-                        </span>
-                      </div>
-                      <div>
-                        <label className="relative inline-flex items-center me-5 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            checked={isChecked}
-                            disabled={isDisabled}
-                          />
-                          <div
-                            className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"
-                            onClick={handleToggleClick}
-                          ></div>
-                        </label>
-                      </div>
-                    </div>
-                    {qrCode && isChecked && (
-                      <div
-                        style={{
-                          background: "rgba(154, 155, 211, 0)",
-                        }}
-                        className="flex flex-col items-center"
-                      >
-                        <div className="mb-7 mt-3">
-                          <img src={qrCode} alt="QR Code" />
-                        </div>
-
-                        <span
-                          className="outline-none text-sm flex-1 text-white mb-2"
-                          style={{ fontFamily: "Poppins", fontSize: "0.9rem" }}
-                        >
-                          CODE
-                        </span>
-
-                        <div
-                          style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                          className="p-2 flex-row items-center mb-2 rounded-md w-full  justify-between shadow"
-                        >
-                          <input
-                            type="text"
-                            name="code"
-                            style={{
-                              background: "rgba(154, 155, 211, 0)",
-                              overflowWrap: "break-word",
-                            }}
-                            className="outline-none text-sm flex-1 max-w-full"
-                            onChange={(e) => setCodeTwoFa(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    )}
-                    <Link
-                      href=""
-                      className=" border  text-white rounded-full px-12 py-2 inline-block font-semibold  mt-4 mb-4 shadow-xl hover:bg-[#999BD3] max-w-full"
-                      onClick={handlEnableTwoFa}
-                    >
-                      Confirm
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
+                  <PasswordInput label="Old Password" value={userPass?.oldPass || ''} onChange={(value) => setUserPass((prev) => ({ ...prev, oldPass: value } as UserPass))} />
+                  <PasswordInput label="New Password" value={userPass?.newPass || ''} onChange={(value) => setUserPass((prev) => ({ ...prev, newPass: value } as UserPass))} />
+                  <PasswordInput label="Confirm Password" value={userPass?.confirmPass || ''} onChange={(value) => setUserPass((prev) => ({ ...prev, confirmPass: value } as UserPass))} />
+            </InputSection>
+              <TwoFaSettings
+                isTofaVisible={isTofaVisible}
+                isChecked={isChecked}
+                isDisabled={isDisabled}
+                handleToggleClick={handleToggleClick}
+                qrCode={qrCode}
+                handleToggleVisibility={() => setIsTofaVisible((prevState) => !prevState)}
+                handleEnableTwoFa={handlEnableTwoFa}
+                setCodeTwoFa={setCodeTwoFa}
+              />
           </div>
           {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={notify as string} type="notify" /> : ""}
-
         </div>
       </div>
       </div>
-      {/* </div> */}
-    {/* </div> */}
-    {/* )}  */}
     </>
   );
 };

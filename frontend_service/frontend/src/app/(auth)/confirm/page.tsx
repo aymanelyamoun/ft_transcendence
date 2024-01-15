@@ -7,6 +7,9 @@ import Loading from "../../components/Loading";
 import { useUser } from "../layout";
 import { json } from "stream/consumers";
 import { AlertMessage } from "@/app/components/alertMessage";
+import InputField from "@/app/components/InputField";
+import { fetchAPI } from "@/utils/api";
+import ProfilePicUpload from "@/app/components/ProfilePicUpload";
 
 let data: any;
 export default function Confirm() {
@@ -56,54 +59,70 @@ export default function Confirm() {
   }, [user, router]);
   
   const confirm = async () => {
-    console.log(userData?.profilePic);
-    const res = await fetch(Backend_URL + "user/confirm", {
-      method: "PATCH",
-      mode: "cors",
-      credentials: "include",
-      body: JSON.stringify({
-        username: userData?.username,
-        profilePic: userData?.profilePic,
-        hash: userData?.hash,
-        confirmPass : userData?.confirmPass,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-    data = await res.json();
-    console.log(data);
-    if (!res.ok) {
-      
+
+    try {
+      await fetchAPI({
+        url: Backend_URL + "user/confirm",
+        method: 'PATCH',
+        body: {
+          username: userData?.username,
+          profilePic: userData?.profilePic,
+          hash: userData?.hash,
+          confirmPass : userData?.confirmPass,
+        },
+      });
+      setIsNotify(true);
+      router.push('/profile/dashboard');
+    } catch (error)
+    {
+      data = error;
       setIsError(true);
-      return;
     }
-    setIsNotify(true);
-    router.push("/profile/dashboard");
+    
   };
   
   
   
   const handleConfirm = () => {
-    // if (userData?.hash != '') {
       confirm();
-    // } else {
-    //   // alert("Password is required!");
-    //   <AlertMessage onClick={handleClick} message={data.message} type="error" />
-    // }
   };
+
+
+  const handlePicConfirm = async (e: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    const file = e.target.files?.[0];
+    if (file)
+    {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'imagesus');
+      const resCLoud = await fetch(`https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`, {
+        method: 'POST',
+        body: formData,
+      } );
+      if (resCLoud.ok) {
+        const data1 = await resCLoud.json();
+        if (data1 && data1.secure_url) {
+          setUserData((prev) => ({
+            ...(prev as UserData),
+            profilePic: data1.secure_url
+          }));
+        }
+    }
+  
+  }
+}
+
   const gradientStyle = {
     background:
       "linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%)",
   };
-  
+  if (!authenticated) {
+    return <Loading />;
+  }
   
   return (
      <div>
-       {/* {!authenticated ? (
-         <Loading />
-       ) : ( */}
     <div
       style={{ background: "#050A27" }}
       className=" flex flex-col items-center justify-center w-full flex-1 px-20 text-center h-screen"
@@ -122,109 +141,54 @@ export default function Confirm() {
       >
              <div className="py-10">
                <div className="flex flex-col items-center ">
-                 <div className="flex items-center shrink-0 mb-7">
-                   <label htmlFor="fileInput" className="cursor-pointer">
-                     <img
-                       id="preview_img"
-                       className="w-20 h-auto object-cover rounded-full sm:w-24 md:w-32 lg:w-40 xl:w-48"
-                       src={userData?.profilePic}
-                       alt="Current profile photo"
-                     />
-                   </label>
-                   <input
-                     type="file"
-                     id="fileInput"
-                     accept="image/*"
-                     className="hidden"
-                     onChange={(e) => {
-                       const file = e.target.files?.[0];
-                       if (file) {
-                         const reader = new FileReader();
-                         reader.onloadend = () => {
-                           setUserData((prev) => ({
-                             ...(prev as UserData),
-                             profilePic: reader.result as string,
-                           }));
-                         };
-                         reader.readAsDataURL(file);
-                       }
-                     }}
-                   />
-                 </div>
-                 <div
-                   style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                   className=" p-2 flex items-center mb-7 rounded-md w-full"
-                 >
-                   <input
-                     value={userData?.username}
-                     type="text"
-                     name="Username"
-                     placeholder="Username"
-                     style={{ background: "rgba(154, 155, 211, 0)" }}
-                     className=" outline-none text-sm flex-1 text-white"
-                     onChange={(e) =>
-                       setUserData(
-                         (prev) =>
-                           ({
-                             username: e.target.value,
-                             confirmPass: prev?.confirmPass || undefined,
-                             hash: prev?.hash || undefined,
-                             profilePic: prev?.profilePic || undefined,
-                           } as UserData)
-                       )
-                     }
-                   />
-                 </div>
+               <ProfilePicUpload profilePic={userData?.profilePic} handlePicUpdate={handlePicConfirm} />
+                 <InputField
+        type="text"
+        name="Username"
+        placeholder="Username"
+        value={userData?.username || ''}
+        onChange={(e) =>
+          setUserData((prev) => ({
+            ...(prev as UserData),
+            username: e.target.value,
+            confirmPass: prev?.confirmPass || undefined,
+            hash: prev?.hash || undefined,
+            profilePic: prev?.profilePic || undefined,
+          }))
+        }
+      />
                  {hash === "" && (
                   <>
-                   <div
-                     style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                     className=" p-2 flex items-center mb-7 rounded-md w-full"
-                   >
-                     <input
-                       type="password"
-                       name="password"
-                       placeholder="New Password"
-                       value={userData?.hash}
-                       style={{ background: "rgba(154, 155, 211, 0)" }}
-                       className="outline-none text-sm flex-1"
-                       onChange={(e) =>
-                         setUserData(
-                           (prev) =>
-                             ({
-                               hash: e.target.value,
-                               confirmPass: prev?.confirmPass || undefined,
-                               username: prev?.username || undefined,
-                               profilePic: prev?.profilePic || undefined,
-                             } as UserData)
-                         )
-                       }
-                     />
-                   </div>
-                   <div
-                     style={{ background: "rgba(154, 155, 211, 0.20)" }}
-                     className=" p-2 flex items-center mb-7 rounded-md w-full"
-                   >
-                     <input
-                       type="password"
-                       name="password"
-                       placeholder="Confirm Password"
-                       value={userData?.confirmPass}
-                       style={{ background: "rgba(154, 155, 211, 0)" }}
-                       className="outline-none text-sm flex-1"
-                       onChange={(e) =>
-                         setUserData(
-                           (prev) =>
-                             ({
-                               confirmPass: e.target.value,
-                               hash: prev?.hash || undefined,
-                               username: prev?.username || undefined,
-                               profilePic: prev?.profilePic || undefined,
-                             } as UserData)
-                         )
-                       }
-                     />
-                   </div>
+          <InputField
+            type="password"
+            name="password"
+            placeholder="New Password"
+            value={userData?.hash || ''}
+            onChange={(e) =>
+              setUserData((prev) => ({
+                ...(prev as UserData),
+                hash: e.target.value,
+                confirmPass: prev?.confirmPass || undefined,
+                username: prev?.username || undefined,
+                profilePic: prev?.profilePic || undefined,
+              }))
+            }
+          />
+          <InputField
+            type="password"
+            name="password"
+            placeholder="Confirm Password"
+            value={userData?.confirmPass || ''}
+            onChange={(e) =>
+              setUserData((prev) => ({
+                ...(prev as UserData),
+                confirmPass: e.target.value,
+                hash: prev?.hash || undefined,
+                username: prev?.username || undefined,
+                profilePic: prev?.profilePic || undefined,
+              }))
+            }
+          />
                   </>
                  )}
                  <div className="border-2 border-white w-10 inline-block mb-7"></div>

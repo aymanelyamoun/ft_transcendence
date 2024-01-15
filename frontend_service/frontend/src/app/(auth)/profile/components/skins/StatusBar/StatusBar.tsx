@@ -16,6 +16,9 @@ const StatusBar = (props: StatusBarProps) => {
     const [table, setTable] = useState<boolean>(true);
     const [paddle, setPaddle] = useState<boolean>(false);
     const [ball, setBall] = useState<boolean>(false);
+    // const [ActiveTable, setActiveTable] = React.useState<string>("null");
+    // const [ActivePaddle, setActivePaddle] = React.useState<string>("null");
+    // const [ActiveBall, setActiveBall] = React.useState<string>("null");
 
     return (
         <div className={styles.StatusBar}>

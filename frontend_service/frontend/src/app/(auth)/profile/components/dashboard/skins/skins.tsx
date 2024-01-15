@@ -11,8 +11,8 @@ const Skins: React.FC = () => {
         <span className={styles['skins-title']}>Skins</span>
         <div className={styles['Skins-rectangle']}>
           <div className={styles['Skins-circle']}></div>
+          <div className={styles['Skins-stick']}></div>
         </div>
-        <div className={styles['Skins-stick']}></div>
       </div>
     </div>
   );

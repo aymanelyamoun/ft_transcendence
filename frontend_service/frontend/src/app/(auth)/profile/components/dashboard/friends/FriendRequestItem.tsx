@@ -33,14 +33,22 @@ interface FriendRequestItemProps {
 const ButtonsContainer = styled.div`
 
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  top: 0.5vh;
-  color: #fff;
-  margin-left: auto;
-  margin-right: 1vw;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+    margin-left: auto;
+    margin-right: 1vw;
+`;
+
+const UserInfoContainer = styled.div`
+position: relative;
+display: flex;
+flex-direction: column;
+justify-content: center;
+flex-wrap: nowrap;
+align-items: center;
 `;
 
 const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
@@ -103,12 +111,14 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
         <div className={styles['friendReq-image']}>
             <img src={props.profilePic} alt="Profile" className="rounded-lg" />
         </div>
+        <UserInfoContainer>
         <div className={styles['friendReq-name']}>
             <span className={styles['friendReq-name']}>{props.title}</span>
         </div>
         <div className={styles['friendReqSent']}>
                 <span className={styles['friendReqSent']}>{props.discription}</span>
         </div>
+        </UserInfoContainer>
                 <ButtonsContainer>
                   <button className={styles['friendReqAccept']} onClick={ () => fetchAcceptRequest(props)}><FcOk /></button>
                   <button className={styles['friendReqDecline']} onClick={ () => fetchRefuseRequest(props)}><FcCancel /></button>

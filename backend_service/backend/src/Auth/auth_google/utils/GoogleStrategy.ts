@@ -21,6 +21,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
             scope: ['profile', 'email'],
         });
     }
+
+    async authenticate(request: any, options?: any): Promise<any> {
+        if (request.query && request.query.error === 'access_denied') {
+          return request.res.redirect('http://localhost:3000');
+        }
+        return super.authenticate(request, options);
+      }
     /*validate Method:
 
 The validate method is called by Passport.js after successful authentication to validate and process
@@ -29,10 +36,16 @@ This method is part of the strategy and is called automatically by Passport.js. 
     
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
+       var pic : String;
+        if (profile._json.picture)
+             pic  = profile._json.picture;
+        else 
+            pic = "https://i.imgur.com/GJvG1b.png";
+    
         const user = await  this.authGoogleService.validateUser({
                 email: profile.emails[0].value,
                 username: profile.emails[0].value.split('@')[0],
-                profilePic: profile._json.picture,
+                 profilePic: pic,
         }, LOG_TYPE.googlelog);
         
         return (user);

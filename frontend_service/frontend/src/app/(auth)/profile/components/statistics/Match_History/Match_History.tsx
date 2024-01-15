@@ -60,9 +60,6 @@ const Match_History: React.FC<MatchProps> = (props) => {
     ? MatchListUser
     : MatchListStandard;
 
-    useEffect(() => {
-        console.log("abababab" + props.matches);
-      },[]);
 
   return (
     // <div className={styles['matchesClassName']}>

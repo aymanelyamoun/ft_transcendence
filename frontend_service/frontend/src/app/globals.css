@@ -564,6 +564,17 @@ body {
   z-index: 100;
 }
 
+.addChannelGroups
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: rgba(5, 10, 39, 0.9); */
+  z-index: 100;
+}
+
 .createChannelOverlay {
   position: fixed;
   top: 0;
@@ -674,7 +685,7 @@ i    --linear-blue_purble,
   scrollbar-width: none;
 }
 
-.addChannelModaloumad
+/* .addChannelModaloumad
 {
   background: var(
     --linear-blue_purble,
@@ -690,7 +701,7 @@ i    --linear-blue_purble,
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   width: 550px;
   scrollbar-width: none;
-}
+} */
 
 .addChannelModal::-webkit-scrollbar {
   display: none;

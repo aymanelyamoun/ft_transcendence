@@ -13,8 +13,8 @@ interface StatisticsPieProps {
 const StatisticsPie: React.FC<StatisticsPieProps> = (props: { statistics: any; }) => {
 
     const statistics = props.statistics;
-    const WinPercentage = statistics.totalGames ? (statistics.wins * 100) / statistics.totalGames : 0;
-    const LosePercentage = statistics.totalGames ? (statistics.loses * 100) / statistics.totalGames : 0;
+    const WinPercentage = statistics.total !== 0 ? (statistics.wins * 100) / statistics.total : 0;
+    const LosePercentage = statistics.total !== 0 ? (statistics.losses * 100) / statistics.total : 0;
     
     // console.log("data statistics ylh bismillah : ", statistics);
     // console.log("data total games: ", statistics.totalGames);
@@ -72,7 +72,13 @@ const StatisticsPie: React.FC<StatisticsPieProps> = (props: { statistics: any; }
             }
         ]
     };
-    return <ReactEcharts className={styles['statistics-pie']} option={option} />;
+    return (
+        <div className={styles['widgetContainer']}>
+          <ReactEcharts option={option} style={{ height: '100%', width: '100%' }} />
+          {/* Other children, if applicable */}
+        </div>
+      );
 };
+
 
 export default StatisticsPie;

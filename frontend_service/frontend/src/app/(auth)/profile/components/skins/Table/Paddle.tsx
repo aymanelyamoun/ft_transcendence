@@ -10,12 +10,14 @@ import potto from './../../../imgs/potto.svg';
 
 const Paddle: React.FC = () => {
 
+    const [ActiveSkin, setActiveSkin] = React.useState<string>("null");
+
     return (
         <div className={styles.Table}>
-            <SkinComp svgImage={default_paddle}  Name="Default" Type="paddle"/>
-            <SkinComp svgImage={bong}  Name="bong" Type="paddle"/>
-            <SkinComp svgImage={greeny}  Name="greeny" Type="paddle"/>
-            <SkinComp svgImage={potto}  Name="potto" Type="paddle"/>
+            <SkinComp svgImage={default_paddle}  Name="default" Type="paddle" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={bong}  Name="bong" Type="paddle" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={greeny}  Name="greeny" Type="paddle" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
+            <SkinComp svgImage={potto}  Name="potto" Type="paddle" active={ActiveSkin} setActiveSkin={setActiveSkin}/>
         </div>
     );
 };

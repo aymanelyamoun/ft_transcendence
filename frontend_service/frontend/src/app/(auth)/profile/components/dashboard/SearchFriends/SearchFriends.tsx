@@ -13,16 +13,26 @@ import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
 import { SearchU } from '../interfaces';
 
+// const SearchContainer = styled.div`
+//   position: relative;
+//   top: 2vh;
+//   margin: 0 auto;
+//   // display: flex;
+//   width: 50%;
+//   height: 5vh;
+//   width: 50%;
+//   display: flex;
+//   margin-left: auto;
+// `;
+
 const SearchContainer = styled.div`
   position: relative;
-  top: 2vh;
-  margin: 0 auto;
-  // display: flex;
-  width: 50%;
+  top: 1vh;
+  width: 100%;
   height: 5vh;
-  width: 50%;
   display: flex;
-  margin-left: auto;
+  justify-content: center;
+  align-items: center;
 `;
 
 // export interface SearchU {
@@ -96,7 +106,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
 
   const fetchChannel = async (channelName: string) => {
     try {
-      console.log("fetching channel entered");
       const res = await fetch( Backend_URL+"channels/search/"+channelName, {
         method: "GET",
         mode: "cors",
@@ -108,7 +117,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
       });
       if (res.ok) {
         const data = await res.json() as SearchU[];
-        console.log("requested search channels : ",data);
         setChannelFriendSearch(data);
       }
     } catch (error) {
@@ -122,7 +130,6 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
     username = username.trim();
     if (username)
     {
-      console.log("searching for : ",username)
       Searchusers('search/'+username);
       fetchChannel(username);
     }

@@ -160,6 +160,7 @@ export class UserController {
   @UseGuards(JwtGuard)
   async gamesWeek(@Res() res:  Response, @Req() req: Request)
   {
-    
+    const result = await this.userService.GamesWeek(req);
+    res.status(200).send(result)
   }
 }

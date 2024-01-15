@@ -97,7 +97,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new Error( 'Internal server error')
+            throw new Error( 'error')
         }
     }
 
@@ -180,7 +180,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new Error('Internal server error')
+            throw new Error('error')
         }
     }
 
@@ -256,7 +256,7 @@ export class UserService {
         return(usersWithBlockedFlag);
         } catch (error)
         {
-            throw new UnauthorizedException('Internal server error');
+            throw new UnauthorizedException('error');
         }
     }
 
@@ -391,7 +391,7 @@ export class UserService {
             });
             return notifications;
         } catch (error) {
-            throw new UnauthorizedException('Internal server error');
+            throw new UnauthorizedException('error');
         }
     }
 
@@ -427,7 +427,7 @@ export class UserService {
 
         }catch (error)
         {
-             throw new UnauthorizedException('Internal server error');
+             throw new UnauthorizedException('error');
         }
     }
 
@@ -455,7 +455,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('Internal server error');
+            throw new UnauthorizedException('error');
         }
     }
 
@@ -478,7 +478,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('Internal server error');
+            throw new UnauthorizedException('error');
         }
     }
 
@@ -489,7 +489,7 @@ export class UserService {
         {
            const user = await this.findByUsername(username);
            if (!user)
-                throw new UnauthorizedException('Internal server error');
+                throw new UnauthorizedException('error');
             const wins = await this.prisma.gameRecord.count({
                 where : {userId : user.id,
                 xp: {
@@ -509,7 +509,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('Internal server error');
+            throw new UnauthorizedException('error');
         }
     }
 
@@ -538,44 +538,84 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('Internal server error');
+            throw new UnauthorizedException('error');
         }
     }
 
-    async SelectPaddle(paddle : string, @Req() req: Request)
-    {
-        try
-        {
-            const user = req['user'] as User;
-            const userid = user.id;
-            const result = await this.prisma.user.update({
-                where : {id : userid},
-                data: { paddle: paddle }
-            })
-            return (result);
-        }
-        catch (error)
-        {
-            throw new UnauthorizedException('Internal server error');
-        }
-    }
+    // async SelectPaddle(paddle : string, @Req() req: Request)
+    // {
+    //     try
+    //     {
+    //         const user = req['user'] as User;
+    //         const userid = user.id;
+    //         const result = await this.prisma.user.update({
+    //             where : {id : userid},
+    //             data: { paddle: paddle }
+    //         })
+    //         return (result);
+    //     }
+    //     catch (error)
+    //     {
+    //         throw new UnauthorizedException('Internal server error');
+    //     }
+    // }
 
-    async SelectTable(table : string, @Req() req: Request)
-    {
-        try
-        {
-            const user = req['user'] as User;
-            const userid = user.id;
-            const result = await this.prisma.user.update({
-                where : {id : userid},
-                data: { table: table }
-            })
-            return (result);
-        }
-        catch (error)
-        {
-            throw new UnauthorizedException('Internal server error');
-        }
-    }
+    // async SelectTable(table : string, @Req() req: Request)
+    // {
+    //     try
+    //     {
+    //         const user = req['user'] as User;
+    //         const userid = user.id;
+    //         const result = await this.prisma.user.update({
+    //             where : {id : userid},
+    //             data: { table: table }
+    //         })
+    //         return (result);
+    //     }
+    //     catch (error)
+    //     {
+    //         throw new UnauthorizedException('Internal server error');
+    //     }
+    // }
     
+    
+    async GamesWeek(@Req() req: Request)
+    {
+        try
+        {
+            const user = req['user'] as User;
+            const userid = user.id;
+
+            const today = new Date();
+            const daysOfWeek = [];
+
+            for (let i = 0; i < 7; i++)
+            {
+              const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+            //   const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+              const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        
+              const gamesOfDay = await this.prisma.gameRecord.count({
+                where: {
+                  userId : userid,
+                  createdAt: {
+                    gte: date.toISOString(),
+                    lt: endOfDay.toISOString(),
+                  },
+                },
+              });
+        
+              daysOfWeek.push({
+                day: new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date),
+                gamesPlayed: gamesOfDay,
+              });
+            }
+            return (daysOfWeek);
+        }
+        catch (error)
+        {
+            throw new UnauthorizedException('error');
+        }
+    }
 }
+

@@ -18,8 +18,8 @@ export interface SearchU {
     hash: string;
     isBlocked: boolean;
     group: boolean;
-  
   }
+
   export interface ResultItemProps {
     members: {
       user: {
@@ -49,6 +49,7 @@ export interface SearchU {
         channelName?:string;
         profilePic?: string;
         channelPic?: string;
+        channelType: string;
         members?: {
               user: {
                     profilePic: string;

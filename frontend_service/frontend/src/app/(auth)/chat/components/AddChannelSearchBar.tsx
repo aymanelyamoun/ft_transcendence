@@ -44,7 +44,6 @@ const AddChannelSearchBar = ({addChannelSearch, setAddChannelSearch,setChannelFr
 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("frirndsList : ----------------------- : " , friendsList);
 
     const filteredFriends = friendsList.filter((friend) => {
       return friend.username.toLowerCase().startsWith(e.target.value.toLowerCase());

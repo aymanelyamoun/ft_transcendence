@@ -98,6 +98,8 @@ const GroupPictureItem = styled.div`
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const ShowGroups = props.ShowGroups;
+  const [inputPassword, setInputPassword] = useState<string>("");
+  const ChannelType = props.channelType;
   const setChannelFriendSearch = props.setChannelFriendSearch;
   const [UserUnbanned, setUserUnbanned] = useState<boolean>(false);
   const [UserAdded, setUserAdded] = useState<boolean>(false);
@@ -150,7 +152,14 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
+        body: JSON.stringify({
+          channelId: selectedUserId,
+          // password?: ---; 
+        })
       })
+    catch (error)
+    {
+      console.log("error in sending the request to join me: ", error);
     }
   };
 
@@ -226,25 +235,36 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
             ))}
         </GroupPictureItem>
       </GroupPictures>
-      {ShowGroups ? (
-        isBanned && !UserUnbanned ? (
-          <BannedUser onClick={() => UnbanUser(props)}>
-            <BsPersonFillDash />
-          </BannedUser>
+        {ShowGroups ? (
+          isBanned && !UserUnbanned ? (
+            <BannedUser onClick={() => UnbanUser(props)}>
+              <BsPersonFillDash />
+            </BannedUser>
+          ) : (
+            <AddGroupButton onClick={() => SendRequestUser(props)}>
+              {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
+            </AddGroupButton>
+          )
         ) : (
-          <AddGroupButton onClick={() => SendRequestUser(props)}>
-            {UserAdded ? (
-              <BsFillPersonCheckFill />
-              ) : (
+          <>
+            {ChannelType === "protected" ? (
+              <div>
+                {/* You can replace this with your actual component or content for password input */}
+                <input
+                  type="password"
+                  placeholder="Enter Password"
+                  value={inputPassword}
+                  onChange={(e) => setInputPassword(e.target.value)}
+                />
+                <button onClick={() => /* handle password submission */}>Submit Password</button>
+              </div>
+            ) : (
+              <AddGroupButton onClick={() => SendRequestMe(props)}>
                 <MdGroupAdd />
-              )}
-          </AddGroupButton>
-        )
-      ) : (
-        <AddGroupButton onClick={() => SendRequestMe(props)}>
-          <MdGroupAdd />
-        </AddGroupButton>
-      )}
+              </AddGroupButton>
+            )}
+          </>
+        )}
     </>
   );
 };

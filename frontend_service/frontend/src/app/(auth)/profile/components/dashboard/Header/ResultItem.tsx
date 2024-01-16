@@ -49,7 +49,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
   return (
     <ItemContainer>
       {props.group ? (
-        <GroupComponent id={props.id} channelName={props.channelName} channelPic={props.channelPic} members={props.members} setChannelFriendSearch={props.setChannelFriendSearch}/>
+        <GroupComponent id={props.id} channelName={props.channelName} channelPic={props.channelPic} channelType={props.channelType} members={props.members} setChannelFriendSearch={props.setChannelFriendSearch}/>
       ) : (
         <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked} setSearchUsers={props.setSearchUsers}/>
       )}

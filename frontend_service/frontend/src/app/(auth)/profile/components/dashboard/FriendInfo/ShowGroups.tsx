@@ -128,7 +128,8 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 channelName={friend.channelName}
                 channelPic={friend.channelPic}
                 members={friend.members}
-                bannedUsers={friend.bannedUsers}  
+                bannedUsers={friend.bannedUsers}
+                channelType={friend.channelType}
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
                 />

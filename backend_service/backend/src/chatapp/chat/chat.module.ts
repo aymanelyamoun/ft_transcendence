@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from 'src/profile/user/user.service';
 import { GameService } from 'src/Game/game.service';
+import { RedisService } from 'src/redis/redis.service';
 
 @Module({
   imports:[PrismaModule],
@@ -18,7 +19,7 @@ import { GameService } from 'src/Game/game.service';
   providers: [ChatGateway,PrismaService,UserService, PrismaChatService, GatewayService, JwtService, GameService,  {
     provide: 'AUTH_SERVICE',
     useClass: AuthGoogleService,
-  }]
+  }, RedisService]
 })
 
 export class ChatModule {}

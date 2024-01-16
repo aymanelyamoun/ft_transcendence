@@ -152,6 +152,10 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
         },
       })
     }
+    catch (error)
+    {
+      console.log(error);
+    }
   };
 
   const UnbanUser = async (props: GroupComponentProps) => {

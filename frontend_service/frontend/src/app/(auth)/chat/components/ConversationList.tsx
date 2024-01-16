@@ -318,7 +318,7 @@ export const Conversations = ({
             <AlertMessage
               onClick={handleExitChannel}
               message={
-                "are you sure you want to exit groupName you can no longer send or see messages in this group"
+                `are you sure you want to exit ${conversationProps.name} you can no longer send or see messages in this group .`
               }
               type={"exit"}
             />
@@ -327,7 +327,7 @@ export const Conversations = ({
             <AlertMessage
               onClick={handleDeleteChannel}
               message={
-                "are you sure you want to delete groupName, all the messages will be lost"
+                `are you sure you want to delete ${conversationProps.name}, all the messages will be lost .`
               }
               type={"delete"}
             />

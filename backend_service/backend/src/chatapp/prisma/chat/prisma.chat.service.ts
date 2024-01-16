@@ -1097,46 +1097,4 @@ export class PrismaChatService{
             throw error;
           }
         }
-
-        async muteUser(data: MuteUser, @Req() req: Request){
-          try{
-            const user = req['user'] as User;
-
-            const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{mutedUsers:true, members:true},});
-
-            if (!channel) throw new NotFoundException("channel does not exist");
-
-            if (!channel.members.some((member)=>{return(member.userId === user.id)}))
-              throw new ForbiddenException("you are not a member of this channel");
-
-            const userToMute = await this.prisma.user.findUnique({ where: { id: data.userToMute } });
-            console.log("user to mute: ", userToMute);
-            if (!userToMute) {
-              throw new NotFoundException("User to mute does not exist");
-            }
-
-            const timeToEnd = new Date(data.muteUntil);
-
-            if (channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === data.userToMute)})){
-              console.log("USER EXE----------------------------------------");
-              const mutedUser = await this.prisma.muted.findFirst({where:{AND:[{mutedUser:{id:data.userToMute}}, {mutedChannel:{id: data.channelId}}]}});
-              await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{update:{where:{id:mutedUser.id}, data:{timeToEnd:timeToEnd}}}}});
-            }
-            else
-            {
-              console.log("USER NOT EXE")
-              // let test = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{mutedUsers:true}});
-              // console.log("TEST: ",test)
-              console.log("USER TO MUTE: ", data.userToMute);
-              const testuser = await this.prisma.muted.create({data:{mutedUser:{connect:{id:data.userToMute}}, mutedChannel:{connect:{id:data.channelId}}, timeToEnd:timeToEnd}});
-              console.log("TEST USER: ", testuser);
-              // await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{create:{mutedUser:{connect:{id:data.userToMute}}, timeToEnd:timeToEnd}}}});
-              const test = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{mutedUsers:true}});
-              console.log("TEST: ",test)
-            }
-          }
-          catch(error){
-            throw error;
-          }
-        }
 }

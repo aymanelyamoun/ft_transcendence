@@ -20,6 +20,7 @@ import ConversationList, {
 } from "./components/ConversationList";
 import { ChatPage, ConversationInfo } from "./components/ConversationInfo";
 // import { CONVERSATION_TYP } from "../../../../../backend_service/backend/types/chatTypes";
+import './spinoza.css'
 
 // import Message from './Message'
 

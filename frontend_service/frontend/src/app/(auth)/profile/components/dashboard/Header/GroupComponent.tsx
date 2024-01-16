@@ -12,6 +12,7 @@ import { BsFillPersonCheckFill, BsPersonFillDash } from "react-icons/bs";
 import { AddSearchInterface } from '../interfaces';
 import { connect } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
+import ProtectedPassword from './ProtectedPassword';
 
 
 // interface SearchU {
@@ -157,6 +158,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
           // password?: ---; 
         })
       })
+    }
     catch (error)
     {
       console.log("error in sending the request to join me: ", error);
@@ -248,16 +250,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
         ) : (
           <>
             {ChannelType === "protected" ? (
-              <div>
-                {/* You can replace this with your actual component or content for password input */}
-                <input
-                  type="password"
-                  placeholder="Enter Password"
-                  value={inputPassword}
-                  onChange={(e) => setInputPassword(e.target.value)}
-                />
-                <button onClick={() => /* handle password submission */}>Submit Password</button>
-              </div>
+              <ProtectedPassword />
             ) : (
               <AddGroupButton onClick={() => SendRequestMe(props)}>
                 <MdGroupAdd />

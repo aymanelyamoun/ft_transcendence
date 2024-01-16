@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import Confirm from "./confirm/page";
 import ConfirmAuth from "./confirmauth/page";
 import Navbar from "./game/components/Navbar";
+// import './globals.css'
+// import '../../../src/app/'
 
 
 interface User {
@@ -17,8 +19,8 @@ interface User {
   profilePic?: string;
   hash: string;
   typeLog: string;
-  isTwoFactorEnabled: Boolean;
-  isConfirmed2Fa: Boolean;
+  isTwoFactorEnabled: boolean;
+  isConfirmed2Fa: boolean;
 }
 
 interface UserContextValue {
@@ -73,6 +75,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   }, [pathname]);
   const value = { user, setUser };
   return (
+    <main className="h-screen w-screen bg-[#050A27]">
+
     <UserContext.Provider value={value}>
       <>
     {authenticated ? (
@@ -96,6 +100,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     )}
   </>
     </UserContext.Provider>
+    </main>
   );
 }
 

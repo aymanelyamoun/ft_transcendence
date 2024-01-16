@@ -10,7 +10,9 @@ up_build:
 	docker compose up --build
 prune:
 	docker system prune -a -f
-clear: prune
+# rm_volumes:
+# 	docker volume rm $(docker volume ls -q)
+clear: prune #rm_volumes
 	rm -rf postgres_data
 	rm -rf backend_service/backend/node_modules
 	rm -rf backend_service/backend/prisma/migrations

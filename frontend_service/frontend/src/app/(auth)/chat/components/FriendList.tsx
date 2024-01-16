@@ -189,6 +189,7 @@ const FriendList = ({
             {activeChat.current === "channel" ? (
               <div className=" sticky w-[50px] ml-auto bottom-[12.8px] cursor-pointer">
                 <IoMdAddCircle
+                  color='#FEFFFF'
                   style={iconStyle}
                   onClick={handleAddChannelClick}
                 />

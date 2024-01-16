@@ -6,4 +6,10 @@ interface RootState
         // other properties
     };
     // other features
+    strings:
+    {
+        selectedUserId: any;
+        type: string;
+        payload: string;
+    }
 }

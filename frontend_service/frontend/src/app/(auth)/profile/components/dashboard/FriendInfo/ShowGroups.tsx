@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
-import { SearchU } from '../interfaces';
+import { AddSearchInterface } from '../interfaces';
 import GroupComponent from '../Header/GroupComponent';
 
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { toggleShowGroups } from '@/features/booleans/booleanActions';
 // const ShowGroupsContainer = styled.div`
 // background: rgba(154, 155, 211, 0.2);
@@ -68,13 +68,13 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
   const onClose = props.onClose;
   const { showGroups, toggleShowGroups} = props;
   const [isLoading, setisLoading] = useState(false);
-  const [ChannelFriendSearch, setChannelFriendSearch] = useState<SearchU[]>([]);
+  const [ChannelFriendSearch, setChannelFriendSearch] = useState<AddSearchInterface[]>([]);
   const [ShowGroups, setShowGroups] = useState(true);
   const showRef = useRef<HTMLDivElement>(null);
 
   const fetchChannelGroups = async () => {
     try {
-      const res = await fetch( Backend_URL+"channels/search/all", {
+      const res = await fetch( Backend_URL+"channels/toAddSearch", {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -112,7 +112,8 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]) 
+  }, [onClose])
+
 
   return (
     <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
@@ -126,7 +127,8 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 id={friend.id} 
                 channelName={friend.channelName}
                 channelPic={friend.channelPic}
-                members={friend.members}  
+                members={friend.members}
+                bannedUsers={friend.bannedUsers}  
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
                 />

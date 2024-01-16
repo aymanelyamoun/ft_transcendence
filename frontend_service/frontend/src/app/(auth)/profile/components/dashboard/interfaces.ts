@@ -42,6 +42,9 @@ export interface SearchU {
     }
 
     export interface GroupComponentProps {
+      bannedUsers: {
+        id: string;
+      }[];
         id: string;
         channelName?:string;
         profilePic?: string;
@@ -51,7 +54,7 @@ export interface SearchU {
                     profilePic: string;
           };
       }[];
-        setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
+        setChannelFriendSearch: React.Dispatch<React.SetStateAction<AddSearchInterface[]>>;
         ShowGroups: boolean;
       }
 
@@ -60,4 +63,22 @@ export interface StatisticsInterface
   wins: number;
   losses: number;
   total: number;
+}
+
+export interface AddSearchInterface
+{
+    bannedUsers: {
+        id: string;
+    }[];
+    id: string;
+    channelName: string;
+    channelPic: string;
+    creatorId: string;
+    channelType: string;
+    hash: string;
+    members: {
+      user: {
+        profilePic: string;
+      };
+    }[];
 }

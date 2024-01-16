@@ -1075,7 +1075,7 @@ export class PrismaChatService{
 
             const timeToEnd = new Date(data.muteUntil);
 
-            if (channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === data.userToMute)})){
+if (channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === data.userToMute)})){
               console.log("USER EXE----------------------------------------");
               const mutedUser = await this.prisma.muted.findFirst({where:{AND:[{mutedUser:{id:data.userToMute}}, {mutedChannel:{id: data.channelId}}]}});
               await this.prisma.channel.update({where:{id:data.channelId}, data:{mutedUsers:{update:{where:{id:mutedUser.id}, data:{timeToEnd:timeToEnd}}}}});

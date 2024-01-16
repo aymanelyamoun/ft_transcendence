@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
-import { AddSearchInterface } from '../interfaces';
+import { AddSearchInterface, SearchU } from '../interfaces';
 import GroupComponent from '../Header/GroupComponent';
 
 import { connect } from 'react-redux';
@@ -132,7 +132,9 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 channelType={friend.channelType}
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
-                />
+                setChannelFriendSearchU={function (value: React.SetStateAction<SearchU[]>): void {
+                  throw new Error('Function not implemented.')
+                } }/>
                 </ShowGroupsContainer>
             );
           })}

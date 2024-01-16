@@ -102,6 +102,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   const [inputPassword, setInputPassword] = useState<string>("");
   const ChannelType = props.channelType;
   const setChannelFriendSearch = props.setChannelFriendSearch;
+  const setChannelFriendSearchU = props.setChannelFriendSearchU;
   const [UserUnbanned, setUserUnbanned] = useState<boolean>(false);
   const [UserAdded, setUserAdded] = useState<boolean>(false);
   const dispatch = useDispatch();

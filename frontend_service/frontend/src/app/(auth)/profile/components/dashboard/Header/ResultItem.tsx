@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { StaticImageData } from 'next/image'
 import FriendComponent from './FriendComponent'
 import GroupComponent from './GroupComponent'
-import { SearchU } from '../interfaces'
+import { AddSearchInterface, SearchU } from '../interfaces'
 import { ResultItemProps } from '../interfaces'
 // import { SearchU } from '../SearchFriends/SearchFriends'
 
@@ -49,9 +49,11 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
   return (
     <ItemContainer>
       {props.group ? (
-        <GroupComponent id={props.id} channelName={props.channelName} channelPic={props.channelPic} channelType={props.channelType} members={props.members} setChannelFriendSearch={props.setChannelFriendSearch}/>
+        <GroupComponent key={props.id} id={props.id} channelName={props.channelName} channelPic={props.channelPic} channelType={props.channelType} members={props.members} setChannelFriendSearchU={props.setChannelFriendSearch} bannedUsers={[]} setChannelFriendSearch={function (value: React.SetStateAction<AddSearchInterface[]>): void {
+          throw new Error('Function not implemented.')
+        } }/>
       ) : (
-        <FriendComponent id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked} setSearchUsers={props.setSearchUsers}/>
+        <FriendComponent key={props.id}id={props.id} username={props.username} profilePic={props.profilePic} isBlocked={props.isBlocked} setSearchUsers={props.setSearchUsers}/>
       )}
     </ItemContainer>
   );

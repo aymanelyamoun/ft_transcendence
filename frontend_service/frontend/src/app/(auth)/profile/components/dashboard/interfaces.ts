@@ -41,7 +41,8 @@ export interface SearchU {
     setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
     }
 
-    export interface GroupComponentProps {
+    export interface GroupComponentProps<T = SearchU[]>
+    {
       bannedUsers: {
         id: string;
       }[];
@@ -49,14 +50,15 @@ export interface SearchU {
         channelName?:string;
         profilePic?: string;
         channelPic?: string;
-        channelType: string;
+        channelType?: string;
         members?: {
               user: {
                     profilePic: string;
           };
       }[];
+        setChannelFriendSearchU: React.Dispatch<React.SetStateAction<SearchU[]>>;
         setChannelFriendSearch: React.Dispatch<React.SetStateAction<AddSearchInterface[]>>;
-        ShowGroups: boolean;
+        ShowGroups?: boolean;
       }
 
 export interface StatisticsInterface

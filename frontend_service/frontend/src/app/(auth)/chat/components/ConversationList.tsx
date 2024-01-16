@@ -318,6 +318,7 @@ export const Conversations = ({
           {goToCreateChannel && (
             <CreateChannel
               selectedFriends={selectedFriends}
+              setSelectedFriends={setSelectedFriends}
               setChannelCreated={setGoToCreateChannel}
               setRefresh={setRefresh}
             />

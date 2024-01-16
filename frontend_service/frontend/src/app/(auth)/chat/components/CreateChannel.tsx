@@ -23,10 +23,12 @@ import { AlertMessage } from "./alertMessage";
 
 const CreateChannel = ({
   selectedFriends,
+  setSelectedFriends,
   setChannelCreated,
   setRefresh,
 }:{
   selectedFriends: Friend[],
+  setSelectedFriends: React.Dispatch<React.SetStateAction<Friend[]>>,
   setChannelCreated:React.Dispatch<React.SetStateAction<boolean>>,
   setRefresh:React.Dispatch<React.SetStateAction<boolean>>,
 }) => {
@@ -128,9 +130,11 @@ const CreateChannel = ({
         .catch((error) => {
           console.error("Error during fetch:", error);
         });
-        
+
+        setSelectedFriends([]);
         // setChannelCreated(false);
-        setRefresh((prev) => !prev);
+        // setRefresh((prev) => !prev);
+        // console.log(" refresh : ", refresh);
     }
   // }
   

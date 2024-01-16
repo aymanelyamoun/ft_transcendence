@@ -695,6 +695,7 @@ export const ChatPage = () => {
   const [refresh, setRefresh] = useState<boolean>(false);
 
   // console.log("conversationId:", conversation?.id);
+  console.log(" refresh : ", refresh);
   useEffect(() => {
     const fetchFun = async () => {
       const isAdmin = true; // Replace true with your desired value
@@ -720,11 +721,13 @@ export const ChatPage = () => {
               const aDate = new Date(a.updatedAt);
               return bDate.getTime() - aDate.getTime();
             })
-          );
-        });
-    };
-    fetchFun();
-  }, [refresh]);
+            );
+          });
+        };
+        fetchFun();
+      }, [refresh]);
+      
+      console.log(" refresh 2 : ", refresh);
 
   useEffect(() => {
     // console.log("conversation?.id:", conversation?.id);

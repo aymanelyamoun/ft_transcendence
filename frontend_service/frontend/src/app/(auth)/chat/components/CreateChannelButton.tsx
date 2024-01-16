@@ -1,7 +1,14 @@
 import React from 'react'
 import { IoMdAddCircle } from 'react-icons/io'
 
-const CreateChannelButton = ({setShowAddChannel} : {setShowAddChannel:React.Dispatch<React.SetStateAction<boolean>>}) => {
+const CreateChannelButton = ({
+  setShowAddChannel,
+  setRefresh,
+  
+}:{
+  setShowAddChannel:React.Dispatch<React.SetStateAction<boolean>>,
+  setRefresh:React.Dispatch<React.SetStateAction<boolean>>,
+}) => {
 
     const iconStyle = {
         width: "50px",

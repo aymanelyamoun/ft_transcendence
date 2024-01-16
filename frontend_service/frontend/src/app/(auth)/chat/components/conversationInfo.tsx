@@ -692,6 +692,7 @@ export const ChatPage = () => {
   const [showEditChannel, setShowEditChannel] = useState<boolean>(false);
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   // console.log("conversationId:", conversation?.id);
   useEffect(() => {
@@ -723,7 +724,7 @@ export const ChatPage = () => {
         });
     };
     fetchFun();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     // console.log("conversation?.id:", conversation?.id);
@@ -773,7 +774,9 @@ export const ChatPage = () => {
                           value={showDeleteChannel}
                         >
                           <div className="h-full basis-1/4 flex">
-                            <Conversations>
+                            <Conversations 
+                            setRefresh={setRefresh}
+                            >
                               {" "}
                               {/* <ConversationList /> */}
                             </Conversations>

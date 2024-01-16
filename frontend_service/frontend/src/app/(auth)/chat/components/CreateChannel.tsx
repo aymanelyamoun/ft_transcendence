@@ -23,10 +23,12 @@ import { AlertMessage } from "./alertMessage";
 
 const CreateChannel = ({
   selectedFriends,
-  setChannelCreated
+  setChannelCreated,
+  setRefresh,
 }:{
   selectedFriends: Friend[],
-  setChannelCreated:React.Dispatch<React.SetStateAction<boolean>>
+  setChannelCreated:React.Dispatch<React.SetStateAction<boolean>>,
+  setRefresh:React.Dispatch<React.SetStateAction<boolean>>,
 }) => {
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
@@ -128,6 +130,7 @@ const CreateChannel = ({
         });
         
         // setChannelCreated(false);
+        setRefresh((prev) => !prev);
     }
   // }
   

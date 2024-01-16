@@ -76,12 +76,14 @@ const ConversationIthem = (props: ConversationIthemProps) => {
 };
 
 export const ConversationList = ({
+  setRefresh,
   isChannel,
   setShowAddChannel,
 }: // rowData,
 // conversation,
 // setConversation,
 {
+  setRefresh:React.Dispatch<React.SetStateAction<boolean>>;
   isChannel: boolean;
   setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
   // rowData: Conversation[];
@@ -138,17 +140,22 @@ export const ConversationList = ({
           }
         })}
       {isChannel && (
-        <CreateChannelButton setShowAddChannel={setShowAddChannel} />
+        <CreateChannelButton 
+        setShowAddChannel={setShowAddChannel} 
+        setRefresh={setRefresh} 
+        />
       )}
     </ul>
   );
 };
 
 export const Conversations = ({
+  setRefresh,
   // conversationList,
   // setConversationList,
   children,
 }: {
+  setRefresh:React.Dispatch<React.SetStateAction<boolean>>;
   // conversationList: ConversationIthemProps[];
   // setConversationList: React.Dispatch<
   // React.SetStateAction<ConversationIthemProps[]>
@@ -291,6 +298,7 @@ export const Conversations = ({
                   // setChannelSearch={setChannelSearch}
                 /> */}
           <ConversationList
+            setRefresh={setRefresh}
             isChannel={isChannel}
             setShowAddChannel={setShowAddChannel}
             // conversationListData={conversationList}
@@ -311,6 +319,7 @@ export const Conversations = ({
             <CreateChannel
               selectedFriends={selectedFriends}
               setChannelCreated={setGoToCreateChannel}
+              setRefresh={setRefresh}
             />
           )}
           {editChannel && <EditChannel setEditChannel={setEditChannel} />}

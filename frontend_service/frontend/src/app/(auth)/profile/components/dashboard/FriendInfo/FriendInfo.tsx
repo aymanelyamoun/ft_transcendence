@@ -125,14 +125,14 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => 
   const infoRef = useRef<HTMLDivElement>(null);
   // const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
 
-  useEffect(() => {
-    // console.log('showGroups value:', showGroups);
-    console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
+  // useEffect(() => {
+  //   // console.log('showGroups value:', showGroups);
+  //   console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
 
-    return () => {
-      console.log("FriendInfo Unmounted");
-    };
-  }, [props.id, props.username, props.profilePic, showGroups]);
+  //   return () => {
+  //     console.log("FriendInfo Unmounted");
+  //   };
+  // }, [props.id, props.username, props.profilePic, showGroups]);
 
   const handleClickOutside = (event: any) => {
     console.log('Clicked outside');

@@ -98,129 +98,134 @@ const GroupPictureItem = styled.div`
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
-  const ShowGroups = props.ShowGroups;
-  const [inputPassword, setInputPassword] = useState<string>("");
-  const ChannelType = props.channelType;
-  const setChannelFriendSearch = props.setChannelFriendSearch;
-  const setChannelFriendSearchU = props.setChannelFriendSearchU;
-  const [UserUnbanned, setUserUnbanned] = useState<boolean>(false);
-  const [UserAdded, setUserAdded] = useState<boolean>(false);
-  const dispatch = useDispatch();
-    // Use useSelector to directly access selectedUserId from the Redux store
-    const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId);
+  // const ShowGroups = props.ShowGroups;
+  // const [inputPassword, setInputPassword] = useState<string>("");
+  // const ChannelType = props.channelType;
+  // const setChannelFriendSearch = props.setChannelFriendSearch;
+  // const setChannelFriendSearchU = props.setChannelFriendSearchU;
+  // const [UserUnbanned, setUserUnbanned] = useState<boolean>(false);
+  // const [UserAdded, setUserAdded] = useState<boolean>(false);
+  // const [passwordSent, setPasswordSent] = useState<boolean>(false);
+  // const dispatch = useDispatch();
+  //   // Use useSelector to directly access selectedUserId from the Redux store
+  //   const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId);
 
-  function isUserBanned(user: string, bannedUsers: {id: string}[]) : boolean
-  {
-    return (bannedUsers.some(BannedUser => BannedUser.id === user));
-  }
+  // function isUserBanned(user: string, bannedUsers: {id: string}[]) : boolean
+  // {
+  //   return (bannedUsers.some(BannedUser => BannedUser.id === user));
+  // }
 
-  const isBanned = isUserBanned(props.id , props.bannedUsers);
+  // const isBanned = isUserBanned(props.id , props.bannedUsers);
 
-  const SendRequestUser = async (props: GroupComponentProps) => {
-    try {
-      const res = await fetch(Backend_URL+"channels/addUserToChannel", {
-        method: "PATCH",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          channelId: selectedUserId,
-          userId2: props.id,
-        }),
-      });
-      if (res.ok)
-      {
-        alert("the request has been sent");
-        setUserAdded(true);
-      } else {
-        alert("the request has not been sent");
-       }
-    } catch (error)
-    {
-      console.log(error);
-    }
-  };
+  // const SendRequestUser = async (props: GroupComponentProps) => {
+  //   try {
+  //     const res = await fetch(Backend_URL+"channels/addUserToChannel", {
+  //       method: "PATCH",
+  //       mode: "cors",
+  //       credentials: "include",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //       },
+  //       body: JSON.stringify({
+  //         channelId: selectedUserId,
+  //         userId2: props.id,
+  //       }),
+  //     });
+  //     if (res.ok)
+  //     {
+  //       alert("the request has been sent");
+  //       setUserAdded(true);
+  //     } else {
+  //       alert("the request has not been sent");
+  //      }
+  //   } catch (error)
+  //   {
+  //     console.log(error);
+  //   }
+  // };
 
-  const SendRequestMe = async (props: GroupComponentProps) => {
-    try {
-      const res = await fetch (Backend_URL+"channels/joinChannel", {
-        method: "PATCH",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          channelId: selectedUserId,
-          // password?: ---; 
-        })
-      })
-    }
-    catch (error)
-    {
-      console.log("error in sending the request to join me: ", error);
-    }
-  };
+  // const SendRequestMe = async (props: GroupComponentProps) => {
+  //   try {
+  //     const res = await fetch (Backend_URL+"channels/joinChannel", {
+  //       method: "PATCH",
+  //       mode: "cors",
+  //       credentials: "include",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //       },
+  //       body: JSON.stringify({
+  //         channelId: selectedUserId,
+  //         // password?: ---; 
+  //       })
+  //     })
+  //   }
+  //   catch (error)
+  //   {
+  //     console.log("error in sending the request to join me: ", error);
+  //   }
+  // };
 
-  const UnbanUser = async (props: GroupComponentProps) => {
-    try {
-      const res = await fetch(Backend_URL+"channels/unbanUser", {
-        method: "PATCH",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          channelId: selectedUserId,
-          userId2: props.id,
-        }),
-      });
-      if (res.ok)
-      {
-        fetchIcon();
-        setUserUnbanned(true);
-        alert("the user has been unbanned");
-      }else {
-        alert("the user has not been unbanned");
-       }
-    } catch (error) {
-      console.log("unban user from group error: ", error);
-    }
-  };
+  // const UnbanUser = async (props: GroupComponentProps) => {
+  //   try {
+  //     const res = await fetch(Backend_URL+"channels/unbanUser", {
+  //       method: "PATCH",
+  //       mode: "cors",
+  //       credentials: "include",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //       },
+  //       body: JSON.stringify({
+  //         channelId: selectedUserId,
+  //         userId2: props.id,
+  //       }),
+  //     });
+  //     if (res.ok)
+  //     {
+  //       fetchIcon();
+  //       setUserUnbanned(true);
+  //       alert("the user has been unbanned");
+  //     }else {
+  //       alert("the user has not been unbanned");
+  //      }
+  //   } catch (error) {
+  //     console.log("unban user from group error: ", error);
+  //   }
+  // };
 
-  const fetchIcon = async () => {
-    try {
-      const res = await fetch( Backend_URL+"channels/toAddSearch", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setChannelFriendSearch(data);
-      } else
-      {
-        alert("Error fetching data: ");
-        console.error("Error fetching data: ", res.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  };
+  // const fetchIcon = async () => {
+  //   try {
+  //     const res = await fetch( Backend_URL+"channels/toAddSearch", {
+  //       method: "GET",
+  //       mode: "cors",
+  //       credentials: "include",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //       },
+  //     });
+  //     if (res.ok) {
+  //       const data = await res.json();
+  //       setChannelFriendSearch(data);
+  //     } else
+  //     {
+  //       // alert("Error fetching data: ");
+  //       // console.error("Error fetching data: ", res.statusText);
+  //     }
+  //   } catch (error) {
+  //     // console.error("Error fetching data: ", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchIcon();
+  // },[setChannelFriendSearch]);
 
   useEffect(() => {
-    fetchIcon();
-  },[setChannelFriendSearch]);
+    console.log("data: ", props);
+  })
 
   return (
     <>
@@ -238,7 +243,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
             ))}
         </GroupPictureItem>
       </GroupPictures>
-        {ShowGroups ? (
+        {/* {ShowGroups ? (
           isBanned && !UserUnbanned ? (
             <BannedUser onClick={() => UnbanUser(props)}>
               <BsPersonFillDash />
@@ -250,15 +255,15 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
           )
         ) : (
           <>
-            {ChannelType === "protected" ? (
-              <ProtectedPassword />
+            {ChannelType === "protected" && !passwordSent ? (
+              <ProtectedPassword setInputPassword={setInputPassword} setPasswordSent={setPasswordSent}/>
             ) : (
               <AddGroupButton onClick={() => SendRequestMe(props)}>
                 <MdGroupAdd />
               </AddGroupButton>
             )}
           </>
-        )}
+        )} */}
     </>
   );
 };

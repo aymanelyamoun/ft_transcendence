@@ -49,7 +49,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
   return (
     <ItemContainer>
       {props.group ? (
-        <GroupComponent key={props.id} id={props.id} channelName={props.channelName} channelPic={props.channelPic} channelType={props.channelType} members={props.members} setChannelFriendSearchU={props.setChannelFriendSearch} bannedUsers={[]} setChannelFriendSearch={function (value: React.SetStateAction<AddSearchInterface[]>): void {
+        <GroupComponent key={props.id} id={props.id} channelName={props.channelName} channelPic={props.channelPic} channelType={props.channelType} members={props.members} setChannelFriendSearchU={props.setChannelFriendSearch} ShowGroups={false} bannedUsers={[]} setChannelFriendSearch={function (value: React.SetStateAction<AddSearchInterface[]>): void {
           throw new Error('Function not implemented.')
         } }/>
       ) : (

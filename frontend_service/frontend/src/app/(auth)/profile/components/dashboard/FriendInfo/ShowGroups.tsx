@@ -114,6 +114,10 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
     };
   }, [onClose])
 
+  useEffect(() => {
+    console.log("data friend: ", ChannelFriendSearch);
+  })
+
 
   return (
     <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
@@ -127,9 +131,10 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 id={friend.id} 
                 channelName={friend.channelName}
                 channelPic={friend.channelPic}
-                members={friend.members}
-                bannedUsers={friend.bannedUsers}
                 channelType={friend.channelType}
+                // members={friend.members}
+                members={[]}
+                bannedUsers={friend.bannedUsers}
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
                 setChannelFriendSearchU={function (value: React.SetStateAction<SearchU[]>): void {
@@ -146,7 +151,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    ShowGroups: state.booleans.showGroups,
+    showGroups: state.booleans.showGroups,
   };
 };
 

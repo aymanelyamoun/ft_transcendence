@@ -1,3 +1,5 @@
+import { SetStateAction } from "react";
+
 export interface SearchU {
     creator: {
         id: string;
@@ -41,14 +43,13 @@ export interface SearchU {
     setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
     }
 
-    export interface GroupComponentProps<T = SearchU[]>
+    export interface GroupComponentProps<>
     {
       bannedUsers: {
         id: string;
       }[];
         id: string;
         channelName?:string;
-        profilePic?: string;
         channelPic?: string;
         channelType?: string;
         members?: {
@@ -58,7 +59,7 @@ export interface SearchU {
       }[];
         setChannelFriendSearchU: React.Dispatch<React.SetStateAction<SearchU[]>>;
         setChannelFriendSearch: React.Dispatch<React.SetStateAction<AddSearchInterface[]>>;
-        ShowGroups?: boolean;
+        ShowGroups: boolean;
       }
 
 export interface StatisticsInterface
@@ -84,4 +85,10 @@ export interface AddSearchInterface
         profilePic: string;
       };
     }[];
+}
+
+export interface ProtectedPassProps
+{
+  setInputPassword: React.Dispatch<SetStateAction<string>>;
+  setPasswordSent: React.Dispatch<SetStateAction<boolean>>;
 }

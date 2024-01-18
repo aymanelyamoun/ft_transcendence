@@ -122,6 +122,12 @@ const CreateChannel = ({
             setNotCreated(true);
             throw new Error("Network response was not ok");
           }
+          else{
+            console.log("refresh in add new channel: ")
+            setRefresh((prev) => !prev);
+
+          }
+
           // return res.json();
         })
         // .then((data) => {

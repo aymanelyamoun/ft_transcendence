@@ -59,6 +59,32 @@ export const AlertMessage = ({onClick , message , type, children} : { onClick: (
                           OK
                         </p>
                       </CostumeButton>
+                      ) : type === 'wannaPlay' ? (
+                        <div className='flex justify-between'>
+                          <CostumeButton
+                            onClick={onClick}
+                            bgColor="bg-[#FEFFFF] border-[#FEFFFF]"
+                            color="#FC2B5D"
+                            width="w-[186px]"
+                            hight="h-11"
+                          >
+                            <p className=" text-[#0D1130] font-semibold font-poppins text-sm">
+                              Cancel
+                            </p>
+                          </CostumeButton>
+                          <CostumeButton
+                            onClick={onClick}
+                            bgColor="bg-[#FEFFFF] border-[#FEFFFF]"
+                            color="#FC2B5D"
+                            width="w-[186px]"
+                            hight="h-11"
+                          >
+                            <p className=" text-[#0D1130] font-semibold font-poppins text-sm">
+                              Let's Play
+                            </p>
+                        </CostumeButton>
+  
+                        </div>
                      ) : type === 'confirm' ? (
                       children 
                      ) : null

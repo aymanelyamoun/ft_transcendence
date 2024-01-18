@@ -21,6 +21,7 @@ import ConversationList, {
 import { ChatPage, ConversationInfo } from "./components/ConversationInfo";
 // import { CONVERSATION_TYP } from "../../../../../backend_service/backend/types/chatTypes";
 import './spinoza.css'
+import { socket } from "../../../socket";
 
 // import Message from './Message'
 
@@ -49,6 +50,8 @@ interface User {
 }
 
 export const UserContext = createContext<User | null>(null);
+export const SocketContext = createContext<typeof socket>(socket);
+
 
 export default function Home() {
   // const [friendSearch, setFriendSearch] = useState<Friend[]>(friendsData);
@@ -75,16 +78,22 @@ export default function Home() {
       }
     };
     checkAuthentication();
+    socket.connect();
+    return () => {
+      socket.disconnect();
+    };
   }, []);
-  console.log("user data: ",user);
-  if (!user) {
+    // console.log("user data: ",user);
+    if (!user) {
     return <div>not authorized</div>;
   }
   
   return (
     <>
       <UserContext.Provider value={user}>
-        <ChatPage />
+        <SocketContext.Provider value={socket}>
+           <ChatPage />
+        </SocketContext.Provider>
       </UserContext.Provider>
       {/* <ChatPage /> */}
     </>

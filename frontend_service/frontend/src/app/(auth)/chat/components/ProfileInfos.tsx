@@ -9,6 +9,8 @@ import AddToChannel from './AddToChannel';
 import Play from './Play';
 
 const ProfileInfos = () => {
+  console.log('pffftapfff')
+  
 
   return (
     <div className='profileInfo basis-1/4 bg-purple-600'>
@@ -23,7 +25,7 @@ const ProfileInfos = () => {
       <div className='flex gap-3 justify-center flex-wrap pr-10 pl-10'>
         <AddFriend/>
         <AddToChannel/>
-        <Play/>
+        <Play />
       </div>
     </div>
   )

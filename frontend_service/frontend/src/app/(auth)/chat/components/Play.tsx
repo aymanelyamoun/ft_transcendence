@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
-import addFriend from '../../../../../public/playButton.png';
-// import addFriend from '../../../../public/playButton.png';
+import playFriend from '../../../../../public/playButton.png';
 
 const Play = () => {
+
+  const invteToPlay = () => {
+    
+  }
   return (
-    <div className='playContainer cursor-pointer'>
-        <Image className='playIcon' src={addFriend} alt='play'/>
+    <div className='playContainer cursor-pointer'
+          onClick={invteToPlay}>
+      
+        <Image className='playIcon' src={playFriend} alt='play'/>
     </div>
   )
 }

@@ -27,7 +27,7 @@ import { SlOptions } from "react-icons/sl";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { MdArrowForwardIos } from "react-icons/md";
-import { UserContext } from "../page";
+import { SocketContext, UserContext } from "../page";
 import { GiAstronautHelmet } from "react-icons/gi";
 import { FaUserAstronaut } from "react-icons/fa";
 import { ChannelInfoProps } from "../../../../../../../backend_service/backend/types/chatTypes";
@@ -47,6 +47,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   const editChannel = useContext(showEditChannelContext);
   const userInfo = useContext(UserContext);
   const [isCreator, setIsCreator] = useState(false);
+  const socket = useContext(SocketContext);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
   //   return;
@@ -85,6 +86,10 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   //     fetchFun();
 
   // }
+
+  const inviteToPlay = () => {
+
+  };
   console.log(
     "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
     conversationProps?.type
@@ -121,7 +126,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
-                onClick={() => console.log("play game")}
+                onClick={inviteToPlay}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-44"
@@ -712,9 +717,11 @@ export const ChatPage = () => {
       )
         .then((res) => {
           return res.json();
+      
           // const data: Conversation[];
         })
         .then((data: ConversationIthemProps[]) => {
+          console.log("channels members data:", data);
           setConversationList(
             data.sort((a, b) => {
               const bDate = new Date(b.updatedAt);
@@ -727,6 +734,7 @@ export const ChatPage = () => {
         fetchFun();
       }, [refresh]);
       
+      // console.log("channels data:", ConversationList);
       console.log(" refresh 2 : ", refresh);
 
   useEffect(() => {

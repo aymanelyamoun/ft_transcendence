@@ -194,7 +194,7 @@ export class PrismaChatService{
                 {channelType:"public"},
                 {channelType:"protected"},
               ],
-            }, include:{members:{select:{user:{select:{profilePic:true}}}}, creator:{select:{id:true, }}}});
+            }, include:{members:{select:{user:{select:{id : true, profilePic:true}}}}, creator:{select:{id:true, }}}});
             return channels.map((channel)=>{
               return{
                 ...channel,

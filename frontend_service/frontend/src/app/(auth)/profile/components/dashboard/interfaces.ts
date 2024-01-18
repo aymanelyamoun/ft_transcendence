@@ -7,12 +7,13 @@ export interface SearchU {
     members: {
         user: {
             profilePic: string;
+            id: string;
         };
     }[];
   
     id: string;
-    username?: string;
-    profilePic?: string;
+    username: string;
+    profilePic: string;
     channelName: string;
     channelPic: string;
     creatorId: string;
@@ -26,16 +27,17 @@ export interface SearchU {
     members: {
       user: {
         profilePic: string;
+        id: string;
       };
     }[];
     
     id: string;
-    username?: string;
-    profilePic?: string;
-    channelName?: string;
-    channelPic?: string;
+    username: string;
+    profilePic: string;
+    channelName: string;
+    channelPic: string;
     // creatorId: string;
-    channelType?: string;
+    channelType: string;
     hash?: string;
     isBlocked: boolean;
     group: boolean;
@@ -55,8 +57,9 @@ export interface SearchU {
     members: {
       user: {
         profilePic: string;
+        id: string;
       };
-    }[];
+            }[];
         setChannelFriendSearchU: React.Dispatch<React.SetStateAction<SearchU[]>>;
         setChannelFriendSearch: React.Dispatch<React.SetStateAction<AddSearchInterface[]>>;
         ShowGroups: boolean;

@@ -97,8 +97,9 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   const dispatch = useDispatch();
   const [openPassComp, setOpenPassComp] = useState<boolean>(false);
   const [meAdded, setMeAdded] = useState<boolean>(false);
-    // Use useSelector to directly access selectedUserId from the Redux store
-    const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId);
+  // Use useSelector to directly access selectedUserId from the Redux store
+  const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId);
+  const loggedInUserId = useSelector((state: RootState) => state.strings.loggedInUserId);
 
   function isUserBanned(user: string, bannedUsers: {id: string}[]) : boolean
   {
@@ -107,10 +108,17 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const isBanned = isUserBanned(props.id , props.bannedUsers);
 
-  // useEffect(() => 
-  // {
-  //   console.log("selectedUserId: ",selectedUserId);
-  // }, [selectedUserId])
+  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string)
+  {
+    return (members.some(member => member.user.id === userId));
+  }
+
+  const isMember = isUserMember(props.members, loggedInUserId);
+
+// useEffect(() => {
+//   console.log("loggedInUserId: ", loggedInUserId);
+//   console.log("isMember: ", isMember);
+// },[])
 
   const SendRequestUser = async (props: GroupComponentProps) => {
     try {
@@ -238,53 +246,53 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   return (
     <>
-    <FriendImage>
-    <img src={props.channelPic} alt="Profile" className="rounded-full" />
-    </FriendImage>
-    <FriendName>
+        <>
+          <FriendImage>
+            <img src={props.channelPic} alt="Profile" className="rounded-full" />
+          </FriendImage>
+          <FriendName>
             <span>{props.channelName}</span>
-    </FriendName>
-    <GroupPictures>
-        <GroupPictureItem>
-            {props.members?.map((member) => (
-                <img src={member.user.profilePic} alt="Profile" className="rounded-full" />
-            ))}
-        </GroupPictureItem>
-      </GroupPictures>
-         {ShowGroups ? (
-          isBanned && !UserUnbanned ? (
-            <BannedUser onClick={() => UnbanUser(props)}>
-              <BsPersonFillDash />
-            </BannedUser>
-          ) : (
-            <AddGroupButton onClick={() => SendRequestUser(props)}>
-              {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
-            </AddGroupButton>
-          )
-        ) : (
-          <>
-            {ChannelType === "protected" ? (
-              <AddGroupButton onClick={handleOpenPassComp}>
-                <MdGroupAdd />
-              </AddGroupButton>
+          </FriendName>
+          <GroupPictures>
+            <GroupPictureItem>
+              {props.members?.map((member) => (
+                <img key={member.user.id} src={member.user.profilePic} alt="Profile" className="rounded-full" />
+              ))}
+            </GroupPictureItem>
+          </GroupPictures>
+          {ShowGroups ? (
+            isBanned && !UserUnbanned ? (
+              <BannedUser onClick={() => UnbanUser(props)}>
+                <BsPersonFillDash />
+              </BannedUser>
             ) : (
-              <AddGroupButton onClick={() => SendRequestMe(props)}>
-                {meAdded ? (
-                  <BsFillPersonCheckFill />
-                ) : (
-                  <MdGroupAdd />
-                )}
+              <AddGroupButton onClick={() => SendRequestUser(props)}>
+                {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
               </AddGroupButton>
-            )}
-            {openPassComp &&
-              <ProtectedPassword setInputPassword={setInputPassword} setPasswordSent={setPasswordSent} setOpenPassComp={setOpenPassComp}/>
-            }
-          </>
-        )}
+            )
+          ) : (
+            <>
+              {ChannelType === "protected" ? (
+                <AddGroupButton onClick={handleOpenPassComp}>
+                  <MdGroupAdd />
+                </AddGroupButton>
+              ) : (
+                <AddGroupButton onClick={() => SendRequestMe(props)}>
+                  {meAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
+                </AddGroupButton>
+              )}
+              {openPassComp && (
+                <ProtectedPassword setInputPassword={setInputPassword} setPasswordSent={setPasswordSent} setOpenPassComp={setOpenPassComp} />
+              )}
+            </>
+          )}
+        </>
     </>
   );
+
 };
 
-export default connect((state: RootState) => ({
-  selectedUserId: state.strings.selectedUserId,
-}))(GroupComponent);
+  export default connect((state: RootState) => ({
+    selectedUserId: state.strings.selectedUserId,
+    loggedInUserId: state.strings.loggedInUserId,
+  }))(GroupComponent);

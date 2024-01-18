@@ -8,6 +8,8 @@ import { UilSetting } from '@iconscout/react-unicons';
 import { FaGoogleWallet } from 'react-icons/fa';
 import Settings from '../Settings/Settings';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { setLoggedInUserId } from '@/features/strings/stringActions';
 
 interface SidebarInfo {
   id: string;
@@ -21,6 +23,7 @@ interface SidebarProps {
   sidebar: SidebarInfo;
   ShowSettings: boolean;
   setShowEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoggedInUserId: (id: string) => void;
   // onSidebarItemClick: (id: string) => void;
 }
 
@@ -157,10 +160,19 @@ const WalletValue = styled.span`
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
 
-  const { ShowSettings } = props; // Destructure the props object to get the ShowSettings property
+  const { ShowSettings, setLoggedInUserId } = props; // Destructure the props object to get the ShowSettings property
   const setShowEditProfile = props.setShowEditProfile;
-  useEffect (() => {
-  },[]);
+  useEffect(() => {
+    if (props.sidebar && props.sidebar.id) {
+      const loggedInUserId = props.sidebar.id;
+      setLoggedInUserId(loggedInUserId);
+    }
+  }, [props.sidebar, setLoggedInUserId]);
+
+  // useEffect(() => 
+  // {
+  //   console.log("props sideBar: ", props.sidebar);
+  // })
 
   return (
         <SidebarRoot>
@@ -185,4 +197,15 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   );
 };
 
-export default Sidebar;
+const mapStateToProps = (state: RootState) => 
+{
+  return {
+    setLoggedInUserId: state.strings.loggedInUserId,
+  };
+};
+
+const mapDispatchToProps = {
+  setLoggedInUserId,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

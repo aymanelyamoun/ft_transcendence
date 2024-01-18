@@ -9,6 +9,7 @@ interface RootState
     strings:
     {
         selectedUserId: any;
+        loggedInUserId: any;
         type: string;
         payload: string;
     }

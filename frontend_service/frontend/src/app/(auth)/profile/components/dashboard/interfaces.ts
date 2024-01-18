@@ -47,16 +47,16 @@ export interface SearchU {
     {
       bannedUsers: {
         id: string;
-      }[];
-        id: string;
-        channelName?:string;
-        channelPic?: string;
-        channelType?: string;
-        members?: {
-              user: {
-                    profilePic: string;
-          };
-      }[];
+    }[];
+    id: string;
+    channelName: string;
+    channelPic: string;
+    channelType: string;
+    members: {
+      user: {
+        profilePic: string;
+      };
+    }[];
         setChannelFriendSearchU: React.Dispatch<React.SetStateAction<SearchU[]>>;
         setChannelFriendSearch: React.Dispatch<React.SetStateAction<AddSearchInterface[]>>;
         ShowGroups: boolean;
@@ -91,4 +91,5 @@ export interface ProtectedPassProps
 {
   setInputPassword: React.Dispatch<SetStateAction<string>>;
   setPasswordSent: React.Dispatch<SetStateAction<boolean>>;
+  setOpenPassComp: React.Dispatch<SetStateAction<boolean>>;
 }

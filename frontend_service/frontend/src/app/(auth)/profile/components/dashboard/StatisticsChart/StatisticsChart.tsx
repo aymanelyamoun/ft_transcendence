@@ -5,7 +5,11 @@ import * as echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import styles from './StatisticsChart.module.css';
 
-interface StatisticsChartProps {}
+interface StatisticsChartProps {
+  wins: number;
+  losses: number;
+  total: number;
+}
 
 const StatisticsChart: React.FC<StatisticsChartProps> = () => {
   const option = {

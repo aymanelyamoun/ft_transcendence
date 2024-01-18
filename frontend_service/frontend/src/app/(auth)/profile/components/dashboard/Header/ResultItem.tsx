@@ -44,8 +44,7 @@ border-radius: 15px;
   `;
 
 const ResultItem: React.FC<ResultItemProps> = (props) => {
-  // console.log("members", props.members);
-
+  console.log("members", props);
   return (
     <ItemContainer>
       {props.group ? (

@@ -10,17 +10,18 @@ import { MatchProps } from './match_history_interfaces';
 
 const MatchesUserProfiles = styled.div`
 background: var(--linear-blue_purble, linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%));
-height: 56vh;
-width: 68vw;
+width: 90.5%;
+height: 62.2%;
 border-radius: 15px;
 display: flex;
-align-items: center;
-font-family: 'Inter',sans-serif;
+justify-content: space-evenly;
+align-items: flex-start;
+font-family: 'Inter', sans-serif;
 position: relative;
-top: 4vh;
-left: 1vw;
+left: 3vw;
 z-index: auto;
-overflow: auto;
+overflow: hidden;
+flex-direction: column;
 `;
 
 const StandardMatches = styled.div`

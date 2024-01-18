@@ -113,7 +113,6 @@ const SearchHeader = () => {
       };
     
       useEffect(() => {
-
         fetchUsers();
         fetchChannel('all');
       }, []);

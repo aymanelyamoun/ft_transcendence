@@ -98,7 +98,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
 
   useEffect(() => {
     fetchChannelGroups();
-  }, []);
+  }, [ChannelFriendSearch]);
 
   const handleClickOutside = (event: any) => {
     if (showRef.current && !showRef.current.contains(event.target as Node))
@@ -113,10 +113,6 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose])
-
-  useEffect(() => {
-    console.log("data friend: ", ChannelFriendSearch);
-  })
 
 
   return (
@@ -134,7 +130,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 channelType={friend.channelType}
                 // members={friend.members}
                 members={[]}
-                bannedUsers={friend.bannedUsers}
+                bannedUsers={friend.bannedUsers || []}
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
                 setChannelFriendSearchU={function (value: React.SetStateAction<SearchU[]>): void {

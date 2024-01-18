@@ -28,6 +28,7 @@ interface FriendInfoProps {
   onClose: () => void;
   showGroups: boolean;
   toggleShowGroups: () => void;
+  setSelectedUserId: (id: string) => void;
 }
 
 const InfoName = styled.div`
@@ -121,7 +122,8 @@ const GameButton = styled.button`
 const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => {
   // const setSelectedFriend = props.setSelectedFriend;
   const onClose = props.onClose;
-  const { showGroups, toggleShowGroups } = props;
+  const { showGroups, toggleShowGroups, setSelectedUserId } = props;
+  // const setSelectedUserId = mapDispatchToProps;
   const infoRef = useRef<HTMLDivElement>(null);
   // const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
 
@@ -227,7 +229,6 @@ return (
               <BsPersonFillSlash />
             </BlockButton>
           </ButtonContainer>
-          {/* {showGroups && <ShowGroups ref={ref}/>} */}
         </div>
       </div>
     )}

@@ -58,6 +58,7 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
                             profilePic={friend.profilePic}
                             channelName={friend.channelName}
                             channelPic={friend.channelPic}
+                            channelType={friend.channelType}
                             isBlocked={friend.isBlocked}
                             group={friend.group}
                             members={friend.members}

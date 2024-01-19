@@ -88,6 +88,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   // }
 
   const inviteToPlay = () => {
+    console.log()
 
   };
   console.log(
@@ -132,7 +133,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 width="w-44"
                 hight="h-11"
               >
-                <IoGameController color="#1C2041" size={24} />
+                <IoGameController color="#1C2041" size={24} onClick={inviteToPlay}/>
               </CostumeButton>
             </div>
           </ButtonInfo>

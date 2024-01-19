@@ -382,7 +382,7 @@ export const ChatToggel = ({
 
   const handleChannelClick = () => {
     setIsChannel(true);
-  };
+  };``
 
   return !isChannel ? (
     // add space-evenly using tailwindcss

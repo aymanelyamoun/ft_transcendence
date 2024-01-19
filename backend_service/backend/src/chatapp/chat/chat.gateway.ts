@@ -130,7 +130,7 @@ export class ChatGateway implements OnGatewayConnection {
     }
     else if (socket['inQueue'] == true)
     {
-      this.gameService.removeFromQueue(socket) // remove from queue if in queues
+      this.gameService.removeFromQueueID(socket.id) // remove from queue if in queues
       console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
     }
     // else{
@@ -182,13 +182,16 @@ export class ChatGateway implements OnGatewayConnection {
     client["user"] = await this.getUserData(client) as User;
     client['inQueue'] = true;
     client.on('CancelQueue', () => {
+      console.log('Got event CancelQueue from client: ', client['user'].username)
       this.gameService.removeFromQueue(client);
+      this.gameService.clearFinishedGames();
       client.disconnect(true);
       return ;
     });
     this.gameService.clearFinishedGames();
     if (this.gameService.inGameCheck(client))
     {
+        console.log("canceling queue cause user is still in game: ", client['user'].username);
         client.emit('CancelQueue')
         client.disconnect(true);
         return ;

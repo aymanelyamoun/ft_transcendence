@@ -22,6 +22,7 @@ const Matchmaking = ({setGameState, gameState}: GameMenuProps) => {
     setInQueue(true);
     if (!socketRef.current)
     {
+      console.log('socket is null, creating new socket');
       socketRef.current = io("http://localhost:3001/api/chat", {withCredentials: true});
       socketRef.current.emit('matchmaking')
     }
@@ -29,11 +30,12 @@ const Matchmaking = ({setGameState, gameState}: GameMenuProps) => {
         setQueueTimer(queueTimer => queueTimer + 1);
     }, 1000);
       socketRef.current.on('CancelQueue', () => {
+        console.log('Getting a Cancel Queue event from server');
           clearInterval(INTERVAL.current!);
           socketRef.current?.disconnect();
+          socketRef.current?.off('CancelQueue')
           socketRef.current = null;
           setGameState('menu');
-          console.log('CancelQueue');
       });
       socketRef.current.on('redirect', (destination : string) => {
           clearInterval(INTERVAL.current!);
@@ -48,10 +50,10 @@ const Matchmaking = ({setGameState, gameState}: GameMenuProps) => {
       clearInterval(INTERVAL.current!)
       socketRef.current?.emit('CancelQueue');
       socketRef.current?.disconnect();
+      socketRef.current?.off('CancelQueue')
       socketRef.current = null;
       setQueueTimer(-1);
       setInQueue(false);
-      console.log('canceled matchmaking')
     }
     const goBack = () => {
       socketRef.current?.emit('CancelQueue');

@@ -468,10 +468,11 @@ export class UserService {
                     totalXp : 'desc'
                 },
                 select : {
-                    username : true,
-                    totalXp : true,
+                    id: true,
                     profilePic : true,
+                    username : true,
                     title : true,
+                    totalXp : true,
                 }
             })
             return ranks;
@@ -579,22 +580,20 @@ export class UserService {
     // }
     
     
-    async GamesWeek(@Req() req: Request)
+    async GamesWeek(username: string, @Req() req: Request)
     {
         try
         {
-            const user = req['user'] as User;
-            const userid = user.id;
+             const user = await this.findByUsername(username);
+             const userid = user.id;
 
             const today = new Date();
             const daysOfWeek = [];
 
-            for (let i = 0; i < 7; i++)
+            for (let i = 6; i >= 0; i--)
             {
               const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
-            //   const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
               const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-        
               const gamesOfDay = await this.prisma.gameRecord.count({
                 where: {
                   userId : userid,

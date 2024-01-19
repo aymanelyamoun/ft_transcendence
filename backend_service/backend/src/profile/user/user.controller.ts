@@ -136,8 +136,10 @@ export class UserController {
   @UseGuards(JwtGuard)
   async globalRating(@Res() res:  Response, @Req() req: Request)
   {
-     const profile = await this.userService.getGlobalRating();
-     res.status(200).send(profile);
+     const result = await this.userService.getGlobalRating();
+     if (result === undefined)
+     return res.status(200).send([]);
+     res.status(200).send(result);
   }
 
   @Get('winsLoses/:username')
@@ -156,11 +158,11 @@ export class UserController {
     res.status(200).send(result)
   }
   
-  @Get('games/week')
+  @Get('games/week/:username')
   @UseGuards(JwtGuard)
-  async gamesWeek(@Res() res:  Response, @Req() req: Request)
+  async gamesWeek(@Param('username') username,@Res() res:  Response, @Req() req: Request)
   {
-    const result = await this.userService.GamesWeek(req);
+    const result = await this.userService.GamesWeek(username, req);
     res.status(200).send(result)
   }
 }

@@ -12,7 +12,9 @@ import Animation from '../components/dashboard/Animation/Animation';
 
 import { socket } from "../../../../socket"
 import EditProfileShow from '../components/dashboard/EditProfile/EditProfileShow';
-import { StatisticsInterface } from '../components/dashboard/interfaces';
+import { StatisticsChartInterface, StatisticsPieInterface } from '../components/dashboard/interfaces';
+import { useRouter } from "next/navigation";
+import { useUser } from '../../layout';
 
 // import store and redux provider
 import { Provider } from 'react-redux'
@@ -72,7 +74,7 @@ const AppGlass = styled.div`
     overflow: hidden;
     grid-template-columns: repeat(2, 1fr); /* Two columns with equal size */
     // grid-gap: 4rem; /* Space between columns (margin + margin) */
-    grid-template-rows: 15rem 11rem auto;
+    grid-template-rows: auto 11rem 19rem;
     z-index: auto;
   }
   @media screen and (max-width: 450px)
@@ -92,6 +94,8 @@ function App() {
   const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
   const EditRef = useRef<HTMLDivElement>(null);
   const [SidebarDone, setSidebarDone] = useState<boolean>(false);
+  const [PieDone, setPieDone] = useState<boolean>(false);
+  const [ChartDone, setChartDone] = useState<boolean>(false);
   const [SidebarInfo, setSidebarInfo] = useState({
     id: "",
     username: "",
@@ -100,15 +104,31 @@ function App() {
     wallet: 0,
   });
 
-  const [StatisticsProps, setStatisticsProps] = useState<StatisticsInterface>({
+  const [statisticsPieProps, setStatisticsPieProps] = useState<StatisticsPieInterface>({
     wins: 0,
     losses: 0,
     total: 0,
   });
+  const [statisticsChartProps, setStatisticsChartProps] = useState<StatisticsChartInterface>({
+    daysOfWeek: [],
+  });
 
-  const fetchStatistics = async () => {
+  const router = useRouter();
+  const [username, setUsername] = useState<string | null>(null);
+  const user = useUser();
+  useEffect(() => {
+    const checkAuthentication = async () => {
+        if (user) {
+          setUsername(user.username);
+        }
+    };
+    checkAuthentication();
+  }, [user, router]); 
+
+  const fetchStatisticsPie = async () => 
+  {
     try {
-      const res = await fetch(`${Backend_URL}user/winsLoses/${SidebarInfo.username}`, {
+      const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -117,26 +137,43 @@ function App() {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      if (res.ok) {
-        // console.log("username : ", SidebarInfo.username);
-        // console.log("here" + res);
-        // console.log("---------------------");
+      const data = await res.json();
+      setStatisticsPieProps(data);
+      setPieDone(false);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    } finally
+    {
+      setPieDone(true);
+    }
+  };
+
+  const fetchStatisticsChart = async () => 
+  {
+    try {
+      const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok)
+      {
         const data = await res.json();
-        setStatisticsProps(data);
-        // console.log("data : ", data);
-        // console.log("data statistics ylh bismillah : ", StatisticsProps);
-          setSidebarDone(false);
-      }
-      else {
-        console.log("----------error-----------");
-        alert("error");
+        setStatisticsChartProps(data);
+        // setChartDone(true);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
-    } finally {
-      // console.log("data statistics ylh  : ", StatisticsProps);
+    } finally
+    {
+      setChartDone(true);
     }
   };
+
   
   useEffect(() => {
     socket.connect();
@@ -182,7 +219,9 @@ function App() {
   useEffect(() => {
     fetchUserData();
     if (SidebarDone)
-      fetchStatistics();
+    {
+
+    }
     // fetchReqData();
     // fetchUsers();
   }, [SidebarDone]);
@@ -203,6 +242,15 @@ function App() {
       document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [])
+
+  useEffect(() => 
+  {
+    if (username)
+    {
+      fetchStatisticsPie();
+      fetchStatisticsChart();
+    }
+  }, [PieDone, ChartDone, username]);
   
   return (
     <>
@@ -217,7 +265,9 @@ function App() {
             <Sidebar sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
             <Skins />
             <Animation />
-            <Statistics statistics={StatisticsProps} />
+            {PieDone && ChartDone &&
+                <Statistics StatisticsPie={statisticsPieProps} StatisticsChart={statisticsChartProps} UserProfile={false}/>
+                }
             <Friends
             />
           </AppGlass>

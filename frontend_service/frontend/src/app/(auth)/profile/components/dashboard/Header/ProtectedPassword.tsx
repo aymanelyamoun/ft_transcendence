@@ -21,6 +21,16 @@ const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((
     setInputPassword(event.target.value);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => 
+  {
+    if (event.key === 'Enter')
+    {
+      setPasswordSent(true);
+      setOpenPassComp(false);
+    }
+  };
+  
+
   return (
     <>
       <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center">
@@ -34,7 +44,7 @@ const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((
               placeholder="Enter password"
               // value={passwordInput}
               onChange={handlePasswordChange}
-              // onKeyPress={handleKeyPress}
+              onKeyPress={handleKeyPress}
             />
           {/* </div> */}
         </div>
@@ -44,3 +54,5 @@ const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((
 });
 
 export default ProtectedPassword;
+
+// I need to check if the password is correct or not in this comp

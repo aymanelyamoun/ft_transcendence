@@ -1,29 +1,30 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import StatisticsChart from '../../dashboard/StatisticsChart/StatisticsChart';
 import StatisticsPie from '../../dashboard/StatisticsPie/StatisticsPie';
 import styles from './Statistics.module.css';
+import { StatisticsPieInterface, StatisticsChartInterface } from  "../../../components/dashboard/interfaces";
 
-
-interface StatisticsInterface
-{
-  wins: number;
-  losses: number;
-  total: number;
-}
 
 interface StatisticsProps {
-  statistics: StatisticsInterface;
+  StatisticsPie : StatisticsPieInterface;
+  StatisticsChart : StatisticsChartInterface;
 }
 
 const Statistics: React.FC<StatisticsProps> = (props) => {
-  const statistics = props.statistics;
+  const statistics = props;
+
+  // useEffect(() => 
+  // {
+  //   console.log("Pie stati: ",props.StatisticsPie);
+  //   console.log("Chart stati: ", props.StatisticsChart);
+  // });
 
   return (
     <div className={styles.statistics}>
       <div className={styles.container}>
-      <StatisticsPie statistics={statistics}/>
-          <StatisticsChart statistics={statistics}/>
+      <StatisticsPie statistics={statistics.StatisticsPie}/>
+      <StatisticsChart statistics={statistics.StatisticsChart}/>
       </div>
     </div>
   );

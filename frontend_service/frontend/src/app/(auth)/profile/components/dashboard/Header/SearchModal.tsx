@@ -12,6 +12,7 @@ import { Backend_URL } from "@/lib/Constants";
 import { on } from "events";
 import { SearchU } from "../interfaces";
 import styles from './search.module.css';
+import { GiAstronautHelmet } from "react-icons/gi";
 // import { SearchU } from "../SearchFriends/SearchFriends";
 
 interface SearchModalProps {
@@ -34,6 +35,25 @@ const ResultList = styled.div`
     align-items: center;
 `;
 
+const NoGroupsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 15vh;
+  color: #fff;
+`;
+
+const NoGroupIcon = styled.div`
+  font-size: 11vh;
+  color: #fff;
+`;
+
+const NoGroupSpan = styled.span`
+font-size: 3vh;
+`;
+
 const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers, ChannelFriendSearch, setChannelFriendSearch}) => {
     const [friendSearch, setFriendSearch] = useState<SearchU[]>(searchUsers);
     const cancelAddChannel = useRef<HTMLDivElement>(null);
@@ -47,30 +67,31 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
 
     return (
         <>
-        <div onClick={handleCancelAddChannel} className="addChannelOverlay flex justify-center items-center ">
+          <div onClick={handleCancelAddChannel} className="addChannelOverlay flex justify-center items-center">
             <div ref={cancelAddChannel} id="AddchannelContainer" className={styles['addChannelModaloumad']}>
-                <ResultList>
-                        <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch}/>
-                        {[...friendSearch, ...ChannelFriendSearch].map((friend) => (
-                        <ResultItem key={friend.id}
-                            id={friend.id}
-                            username={friend.username}
-                            profilePic={friend.profilePic}
-                            channelName={friend.channelName}
-                            channelPic={friend.channelPic}
-                            channelType={friend.channelType}
-                            isBlocked={friend.isBlocked}
-                            group={friend.group}
-                            members={friend.members}
-                            setSearchUsers={setSearchUsers}
-                            setChannelFriendSearch={setChannelFriendSearch} 
-                        />
-                        ))}
-                  </ResultList>
-              </div>
+              <ResultList>
+                  <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch} />
+                {[...friendSearch, ...ChannelFriendSearch].map((friend) => (
+                  <ResultItem
+                    key={friend.id}
+                    id={friend.id}
+                    username={friend.username}
+                    profilePic={friend.profilePic}
+                    channelName={friend.channelName}
+                    channelPic={friend.channelPic}
+                    channelType={friend.channelType}
+                    isBlocked={friend.isBlocked}
+                    group={friend.group}
+                    members={friend.members}
+                    setSearchUsers={setSearchUsers}
+                    setChannelFriendSearch={setChannelFriendSearch}
+                  />
+                ))}
+              </ResultList>
+            </div>
           </div>
         </>
-    )
+      );
 };
 
 export default SearchModal;

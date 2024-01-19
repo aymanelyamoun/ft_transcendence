@@ -5,8 +5,10 @@ import { Backend_URL } from '@/lib/Constants';
 import { AddSearchInterface, SearchU } from '../interfaces';
 import GroupComponent from '../Header/GroupComponent';
 
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { toggleShowGroups } from '@/features/booleans/booleanActions';
+import { setSelectedUserId } from '@/features/strings/stringActions';
+import { GiAstronautHelmet } from 'react-icons/gi';
 // const ShowGroupsContainer = styled.div`
 // background: rgba(154, 155, 211, 0.2);
 // display: flex;
@@ -55,6 +57,25 @@ const ShowGroupsContainer = styled.div`
   border-radius: 15px;
 `;
 
+const NoGroupsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 15vh;
+  color: #fff;
+`;
+
+const NoGroupIcon = styled.div`
+  font-size: 11vh;
+  color: #fff;
+`;
+
+const NoGroupSpan = styled.span`
+font-size: 3vh;
+`;
+
 interface showGroupProps
 {
   onClose: () => void;
@@ -71,6 +92,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
   const [ChannelFriendSearch, setChannelFriendSearch] = useState<AddSearchInterface[]>([]);
   const [ShowGroups, setShowGroups] = useState(true);
   const showRef = useRef<HTMLDivElement>(null);
+  const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId)
 
   const fetchChannelGroups = async () => {
     try {
@@ -112,14 +134,23 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose])
+  }, [onClose]);
+
+  function isUserMember(members: { user: { profilePic: string, id: string}}[], userId: string)
+  {
+    if (members)
+      return (members.some(member => member.user.id === userId));
+  };
+
+  const isMember = isUserMember([], selectedUserId);
 
 
   return (
     <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
       <div ref={showRef} className={styles['info-container']}>
         <ShowGroupsList>
-          {ChannelFriendSearch.map((friend) => {
+          {ChannelFriendSearch.length ? (
+          ChannelFriendSearch.map((friend) => {
             return (
               <ShowGroupsContainer>
               <GroupComponent
@@ -138,7 +169,16 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 } }/>
                 </ShowGroupsContainer>
             );
-          })}
+          })
+          ) : (
+            <NoGroupsContainer>
+              <NoGroupIcon>
+                <GiAstronautHelmet />
+              </NoGroupIcon>
+              <NoGroupSpan>No Available groups</NoGroupSpan>
+            </NoGroupsContainer>
+          )
+        }
         </ShowGroupsList>
       </div>
     </div>

@@ -10,6 +10,22 @@ import { MatchProps } from './match_history_interfaces';
 
 const MatchesUserProfiles = styled.div`
 background: var(--linear-blue_purble, linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%));
+width: 93%;
+margin: 0 auto 0 1.5vw;
+height: 96%;
+border-radius: 15px;
+display: flex;
+justify-content: space-evenly;
+align-items: flex-start;
+font-family: 'Inter',sans-serif;
+position: relative;
+z-index: auto;
+overflow: hidden;
+flex-direction: column;
+`;
+
+const StandardMatches = styled.div`
+background: var(--linear-blue_purble, linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%));
 width: 90.5%;
 height: 62.2%;
 border-radius: 15px;
@@ -24,31 +40,19 @@ overflow: hidden;
 flex-direction: column;
 `;
 
-const StandardMatches = styled.div`
-background: var(--linear-blue_purble, linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%));
-height: 60vh;
-width: 90.5%;
-border-radius: 15px;
-display: flex;
-/* justify-content: center; */
-align-items: center;
-font-family: 'Inter', sans-serif;
-position: relative;
-top: 1vh;
-left: 3vw;
-z-index: auto;
-overflow: auto;
-`;
-
 const MatchListStandard = styled.div`
-position: relative;
-top: 6vh;
-left: 0.7vw;
+    position: relative;
+    width: 100%;
+    height: 57.5vh;
+    overflow: auto;
+    left: 0.6rem;
 `;
 
 const MatchListUser = styled.div`
-    position: relative;
-    left: 0.7vw;
+position: relative;
+width: 100%;
+height: 57.5vh;
+overflow: auto;
 `;
 
 const Match_History: React.FC<MatchProps> = (props) => {

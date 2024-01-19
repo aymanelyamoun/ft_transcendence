@@ -27,7 +27,39 @@ interface SidebarProps {
   // onSidebarItemClick: (id: string) => void;
 }
 
-const SidebarRoot = styled.div`
+const SidebarRootUserProfile = styled.div`
+  grid-row-start: 1;
+  grid-column-start: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 4vh;
+  transition: all 300ms ease;
+
+  @media (max-width: 1000px) {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 5vh;
+    transition: all 300ms ease;
+  }
+
+  @media (max-width: 550px) {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 5vh;
+    transition: all 300ms ease;
+    width: 85%;
+    height: 40%;
+  }
+  `;
+
+  const SidebarRootStandard = styled.div`
   grid-row-start: 1;
   grid-row-end: 4;
   grid-column-start: 2;
@@ -46,7 +78,6 @@ const SidebarRoot = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    top: 5vh;
     transition: all 300ms ease;
   }
 
@@ -168,6 +199,9 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       setLoggedInUserId(loggedInUserId);
     }
   }, [props.sidebar, setLoggedInUserId]);
+
+  const SidebarRoot = ShowSettings ? SidebarRootStandard : SidebarRootUserProfile;
+
 
   // useEffect(() => 
   // {

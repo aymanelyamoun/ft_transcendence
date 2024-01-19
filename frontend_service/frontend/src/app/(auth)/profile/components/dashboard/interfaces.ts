@@ -65,13 +65,20 @@ export interface SearchU {
         ShowGroups: boolean;
       }
 
-export interface StatisticsInterface
+export interface StatisticsPieInterface
 {
   wins: number;
   losses: number;
   total: number;
 }
 
+export interface StatisticsChartInterface
+{
+  daysOfWeek: {
+    day: string;
+    gamesPlayed: number;
+  }[];
+}
 export interface AddSearchInterface
 {
     bannedUsers: {

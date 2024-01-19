@@ -16,13 +16,15 @@ export default async function RootLayout({
       <>
       <div className={styles['skins']}>
         <div className={styles['skins-container']}>
-          <div className={styles.wallet}>
-              <FaGoogleWallet />
-              <span className={styles['wallet-value']}>215</span>
-          </div>
-          <SearchBar />
+        <div className={styles['skins-topBar']}>
+          {/* <SearchBar /> */}
           <StatusBar Table={<Table />} Paddle={<Paddle />} Ball={<Ball />}/>
+          {/* <div className={styles.wallet}> */}
+              {/* <FaGoogleWallet /> */}
+              {/* <span className={styles['wallet-value']}>215</span> */}
+          {/* </div> */}
         </div>
+      </div>
       </div>
           {children}
       </>

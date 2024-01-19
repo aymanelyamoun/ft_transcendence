@@ -57,9 +57,18 @@
   background: linear-gradient(0deg, rgba(154, 155, 211, 0.1), rgba(154, 155, 211, 0.1)),
 linear-gradient(0deg, rgba(154, 155, 211, 0.05), rgba(154, 155, 211, 0.05));
   border: 1px solid rgba(154, 155, 211, 0.1);
+  flex-shrink: 0;
   border-radius: 10px;
   width: 80%;
   height: 20%;
+  color: #feffff;
+  font-family: Poppins;
+  font-size: 18px;
+  padding-left: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  outline: none;
 }
 
 @media (max-height: 1100px) and (min-height: 700px)

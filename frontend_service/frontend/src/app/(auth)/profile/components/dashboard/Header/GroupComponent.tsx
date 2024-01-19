@@ -209,6 +209,38 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     }
   };
 
+  const SendRequestUserProtected = async (props: GroupComponentProps) => {
+    try {
+      const res = await fetch (Backend_URL+"channels/joinChannel", {
+        method: "PATCH",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          channelId: props.id,
+          password: inputPassword,
+        }),
+      });
+      if (res.ok)
+      {
+        alert("I the user have been added successfully!");
+        setMeAdded(true);
+      }
+      else
+      {
+        const err = await res.json();
+        console.log("error in sending the request to join me: ", err);
+      }
+    }
+    catch (error)
+    {
+      console.log("error in sending the request to join CATCH me: ", error);
+    }
+  };
+
   // const fetchIcon = async () => {
   //   try {
   //     const res = await fetch( Backend_URL+"channels/toAddSearch", {
@@ -240,8 +272,18 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const handleOpenPassComp = (event: any) =>
   {
-    setOpenPassComp(true);
+    if (!passwordSent)
+      setOpenPassComp(true);
+    else
+    {
+      SendRequestUserProtected(props);
+    }
   }
+
+  useEffect(() => 
+  {
+    console.log("saved password is: ",inputPassword);
+  })
 
 
   return (
@@ -284,6 +326,11 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
               {openPassComp && (
                 <ProtectedPassword setInputPassword={setInputPassword} setPasswordSent={setPasswordSent} setOpenPassComp={setOpenPassComp} />
               )}
+              {/* {passwordSent &&
+                <AddGroupButton onClick={() => SendRequestUserProtected(props)}>
+                  {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
+                </AddGroupButton>
+              } */}
             </>
           )}
         </>

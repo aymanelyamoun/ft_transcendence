@@ -47,7 +47,7 @@
     border-radius: 10px;
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
     width: 90%;
     box-sizing: border-box;
     height: 5.7rem;
@@ -114,7 +114,8 @@
     line-height: 30px;
     letter-spacing: 0em;
     text-align: left;
-    margin-left: 8vw;
+    margin-left: auto;
+    margin-right: 30px;
 }
 
 .global-rating-icon

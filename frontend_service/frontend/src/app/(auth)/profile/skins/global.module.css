@@ -24,14 +24,53 @@
     justify-content: flex-start;
     align-items: flex-start;
   }
+
+  .skins-topBar
+  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+    height: 5rem;
+    width: 100%;
+    top: 8rem;
+  }
   
-  @media (min-width: 1300px) and (max-width: 1900px) {
-    .AppGlass {
-      grid-template-columns: 2rem 25rem auto 22rem 2rem;
+  @media (max-width: 1500px), (max-height: 900px) {
+    .skins-container
+    {
+      display: flex;
+      height: 85%;
+      width: 85%;
+      border-radius: 2rem;
+      /* background-color: var(--glass); */
+      background: var(--linear-blue_purble, linear-gradient(170deg, rgba(255, 255, 255, 0.00) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.96) 83.26%, rgba(154, 155, 211, 0.90) 136.85%));
+      overflow: hidden;
+      /* grid-column-start: 1;
+      grid-column-end: 5;
+      grid-template-columns: 2rem 25rem auto 40rem 2rem;
+      grid-template-rows: repeat(3, 1fr); */
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .skins-topBar
+    {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-evenly;
+      align-items: center;
+      position: relative;
+      height: 5rem;
+      width: 100%;
+      top: 3rem;
     }
   }
   
-  @media screen and (max-width: 1300px) {
+  @media screen and (max-width: 1000px) {
     .AppGlass {
       grid-template-columns: 2rem 22rem auto;
     }
@@ -46,9 +85,9 @@
 
   .wallet {
     color: aliceblue;
-    position: absolute;
+    /* position: absolute;
     top: 22.5vh;
-    right: 25vw;
+    right: 25vw; */
     /* margin-left: auto; */
     gap: 0.5rem;
     /* padding: 0.625px; */

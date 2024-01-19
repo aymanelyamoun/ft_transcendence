@@ -161,7 +161,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
     }, [props.setSearchUsers]);
   return (
     <>
-        <Link href={`/profile/FriendProfile`}>
+        <Link href={`/profile/FriendProfile?username=${props.username}`}>
         <FriendImage>
             <img src={props.profilePic} alt="Profile" className="rounded-full" />
         </FriendImage>

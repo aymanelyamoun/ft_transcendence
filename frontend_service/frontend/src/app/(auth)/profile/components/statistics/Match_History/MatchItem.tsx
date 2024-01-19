@@ -33,13 +33,13 @@ background: rgba(154, 155, 211, 0.20);
 border-radius: 15px;
 display: flex;
 align-items: center;
-width: 50vw;
+width: 90%;
 box-sizing: border-box;
-height: 7vh;
+height: 5.5rem;
 border-bottom: 1px solid rgba(154, 155, 211, 0.2);
 margin: 30px 10px;
 flex-direction: row;
-flex-wrap: nowrap
+flex-wrap: nowrap;
 `;
 
 const MatchItem: React.FC<MatchListProps> = (props) => {

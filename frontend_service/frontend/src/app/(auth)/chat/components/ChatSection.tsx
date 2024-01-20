@@ -20,6 +20,7 @@ import { userId, isAdmin } from "./ConversationInfo";
 import sendIcon from "../../../../../public/sendButton.png";
 // import { isAdmin } from "./ConversationInfo";
 import { UserContext } from "../page";
+import { RiChatOffLine } from "react-icons/ri";
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>
@@ -47,6 +48,7 @@ function createConversationListIthem(
 export const ConversationChatSection = () => {
   const messagesData = useContext(MessagesContext);
   const setConversationList = useContext(ConversationListContextSet);
+  const lastConversation = useContext(LstConversationStateContext);
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const userInfo = useContext(UserContext);
 
@@ -106,7 +108,16 @@ export const ConversationChatSection = () => {
       </div>
       <ConversationMessagesContextSet.Provider value={setMessages}>
         <ConversationMessagesContextStat.Provider value={messages}>
-          <TypeMessage maxId={maxId} />
+          {
+            lastConversation !== undefined ? <TypeMessage maxId={maxId} />
+            :
+            (
+              <div>
+                < RiChatOffLine size={200} color="#FEFFFF" className="mb-[50%] ml-[50%]" />
+              </div>
+
+            )
+          }
           {/* <TypeMsg
             userId={userId}
             conversationId={conversation?.id}

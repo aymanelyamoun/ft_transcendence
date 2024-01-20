@@ -561,13 +561,15 @@ const MemberList = ({
 
   console.log("membersInfo:", membersInfo);
   console.log("userInfo?.id:", userInfo?.id);
+  console.log("userInfo?.name:", userInfo?.username);
   // console.log("isSet:", isSet);
   // console.log("members:", members);
   return (
     <>
       <MemberSeparator />
       {isSet &&
-        members.map((member) => {
+        // members.filter((member => member.user.id !== membersInfo.creator?.id)).map((member) => {
+        members.filter((member => member.user.id !== userInfo?.id)).map((member) => {
           return (
             <MemberIthem
               imgUrl="some/url"

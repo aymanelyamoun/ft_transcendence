@@ -8,12 +8,13 @@ const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((
   const setInputPassword = props.setInputPassword;
   const setPasswordSent = props.setPasswordSent;
   const setOpenPassComp = props.setOpenPassComp;
+  const inputPassword = props.inputPassword;
 
   const handleClickOutside = (event: any) => {
     console.log("Clicked outside");
     if (infoRef.current && !infoRef.current.contains(event.target as Node))
     {
-      setPasswordSent(true)
+      // setPasswordSent(true);
       setOpenPassComp(false);
     }
   }
@@ -25,8 +26,15 @@ const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((
   {
     if (event.key === 'Enter')
     {
-      setPasswordSent(true);
-      setOpenPassComp(false);
+      if (inputPassword && inputPassword === "123")
+      {
+        setPasswordSent(true);
+        setOpenPassComp(false);
+      }
+      else
+      {
+        alert("fikra ghalata a Imane!");
+      }
     }
   };
   

@@ -282,7 +282,8 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   useEffect(() => 
   {
-    console.log("saved password is: ",inputPassword);
+    // console.log("saved password is: ",inputPassword);
+    console.log("password sent? : ", passwordSent);
   })
 
 
@@ -324,7 +325,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
                 </AddGroupButton>
               )}
               {openPassComp && (
-                <ProtectedPassword setInputPassword={setInputPassword} setPasswordSent={setPasswordSent} setOpenPassComp={setOpenPassComp} />
+                <ProtectedPassword inputPassword={inputPassword} setInputPassword={setInputPassword} setPasswordSent={setPasswordSent} setOpenPassComp={setOpenPassComp} />
               )}
               {/* {passwordSent &&
                 <AddGroupButton onClick={() => SendRequestUserProtected(props)}>

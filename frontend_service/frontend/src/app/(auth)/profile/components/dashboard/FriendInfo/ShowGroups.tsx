@@ -142,7 +142,11 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
       return (members.some(member => member.user.id === userId));
   };
 
-  const isMember = isUserMember([], selectedUserId);
+  // const isMember = isUserMember(, selectedUserId);
+
+  // useEffect(() => {
+  //   console.log("Heeeere is member: ", isMember);
+  // })
 
 
   return (
@@ -152,6 +156,8 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
           {ChannelFriendSearch.length ? (
           ChannelFriendSearch.map((friend) => {
             return (
+              <>
+                {!isUserMember(friend.members, selectedUserId) ? (
               <ShowGroupsContainer>
               <GroupComponent
                 key={friend.id}
@@ -160,7 +166,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 channelPic={friend.channelPic}
                 channelType={friend.channelType}
                 // members={friend.members}
-                members={[]}
+                members={friend.members}
                 bannedUsers={friend.bannedUsers || []}
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
@@ -168,6 +174,10 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                   throw new Error('Function not implemented.')
                 } }/>
                 </ShowGroupsContainer>
+                ) : null}
+                {/* idea hna hiya ndir chi number variable and it will keep incrementing and when it gets to the
+                ChannelFriendSearch.length it will sho the `No available groups` */}
+                </>
             );
           })
           ) : (

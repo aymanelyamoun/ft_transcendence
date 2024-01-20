@@ -210,7 +210,7 @@ export class PrismaChatService{
         async addUserToChannelSearch(@Req() req:Request){
           try{
             const user = req['user'] as User;
-            const channel = await this.prisma.channel.findMany({where:{members:{some:{userId:user.id, isAdmin:true}}}, include:{banedUsers:{select:{id:true}}}});
+            const channel = await this.prisma.channel.findMany({where:{members:{some:{userId:user.id, isAdmin:true}}}, include:{members:{select:{user:{select:{id:true, profilePic:true}}}}, banedUsers:{select:{id:true}}}});
             if (!channel) throw new NotFoundException("channel does not exist");
             return channel;
           }

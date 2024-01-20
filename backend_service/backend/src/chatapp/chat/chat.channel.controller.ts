@@ -31,7 +31,7 @@ export class ChannelController{
         await this.prismaChatService.addUserToChannel(data, req);
     }
 
-    @Post('deleteChannel')
+   @Post('deleteChannel')
     async deleteChannel(@Body() deleteData:ChannelEditDto, @Req() req:Request){
         await this.prismaChatService.deleteChannel(deleteData, req);
     }

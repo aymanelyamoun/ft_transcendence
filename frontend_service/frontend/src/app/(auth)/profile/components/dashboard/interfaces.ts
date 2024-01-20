@@ -93,6 +93,7 @@ export interface AddSearchInterface
     members: {
       user: {
         profilePic: string;
+        id: string;
       };
     }[];
 }
@@ -102,4 +103,5 @@ export interface ProtectedPassProps
   setInputPassword: React.Dispatch<SetStateAction<string>>;
   setPasswordSent: React.Dispatch<SetStateAction<boolean>>;
   setOpenPassComp: React.Dispatch<SetStateAction<boolean>>;
+  inputPassword: string;
 }

@@ -35,7 +35,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           setAuthenticated(false);
         }
       };
-  
       checkAuthentication();
     }, [pathname]);
 

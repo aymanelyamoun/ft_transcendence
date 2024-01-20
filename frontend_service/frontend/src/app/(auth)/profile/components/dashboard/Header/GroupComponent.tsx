@@ -284,6 +284,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   {
     // console.log("saved password is: ",inputPassword);
     console.log("password sent? : ", passwordSent);
+    console.log("inputPassword: ", inputPassword);
   })
 
 

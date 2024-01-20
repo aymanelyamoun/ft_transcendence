@@ -160,7 +160,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
         },
         body: JSON.stringify({
           channelId: props.id,
-          // password: "",
+          password: "",
         }),
       });
       if (res.ok)
@@ -276,6 +276,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       setOpenPassComp(true);
     else
     {
+      console.log("HAHAHahaha dkhlat");
       SendRequestUserProtected(props);
     }
   }

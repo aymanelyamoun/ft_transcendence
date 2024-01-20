@@ -26,7 +26,7 @@ const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((
   {
     if (event.key === 'Enter')
     {
-      if (inputPassword && inputPassword === "123")
+      if (inputPassword)
       {
         setPasswordSent(true);
         setOpenPassComp(false);

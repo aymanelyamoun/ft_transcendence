@@ -92,7 +92,7 @@ export class JoinChannelDto{
 
     // @IsNotEmpty()
     // @IsString()
-    password?: string;
+    password: string;
 
     // @IsNotEmpty()
     // @IsString()

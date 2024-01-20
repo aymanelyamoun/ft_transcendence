@@ -8,6 +8,11 @@ import { PrismaChatService } from "../prisma/chat/prisma.chat.service";
 import { user } from "./types/user";
 import { JwtGuard } from "src/Auth/auth_google/utils/jwt.guard";
 
+interface joinChannelInterface
+{
+    channelId : string;
+    password: string;
+};
 
 @UseGuards(JwtGuard)
 @Controller('channels')
@@ -21,8 +26,8 @@ export class ChannelController{
 
     // @UseGuards(ChatChannelAdminGuard)
     @Patch('joinChannel')
-    async joinChannel(@Body() joinData:JoinChannelDto, @Req() req:Request){
-        // console.log("join the channel : ", joinData.channelId);
+    async joinChannel(@Body() joinData:joinChannelInterface, @Req() req:Request){
+        console.log("join the channel : ", joinData.channelId);
         await this.prismaChatService.joinChannel(joinData, req);
     }
 

@@ -322,10 +322,13 @@ export class PrismaChatService{
 
             const requestedChannel = await this.getChannelWithProp(channelData.channelId);
             const userIsBanned = requestedChannel.banedUsers.some((user)=> user.id === loggedUser.id);
+            console.log("user is banned: ", userIsBanned);
             if (userIsBanned) throw new ForbiddenException("you are banned from this channel");
-            if (requestedChannel.channelType === "public")
-              return await this.addChannelToUser(loggedUser.id, channelData.channelId);
+            // if (requestedChannel.channelType === "public")
+            //   return await this.addChannelToUser(loggedUser.id, channelData.channelId);
             const correctPass = await bcrypt.compare(channelData.password, requestedChannel.hash);
+            console.log("correctPass: ", correctPass);
+            console.log("user is banned: ", userIsBanned);
 
             if (correctPass) {const joinedchannel =  await this.addChannelToUser(loggedUser.id, channelData.channelId);}
             else

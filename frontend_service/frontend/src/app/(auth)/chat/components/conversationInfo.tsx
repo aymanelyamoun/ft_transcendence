@@ -40,14 +40,19 @@ import { ChannelInfoProps } from "../../../../../../../backend_service/backend/t
 
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
-
+  const ConversationListData = useContext(ConversationListContext); 
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
   const editChannel = useContext(showEditChannelContext);
   const userInfo = useContext(UserContext);
+  const lastConversation = useContext(LstConversationStateContext);
   const [isCreator, setIsCreator] = useState(false);
+
   const socket = useContext(SocketContext);
+
+
+  const [members, setMembers] = useState<MemberProps[]>([]);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
   //   return;
@@ -86,11 +91,56 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   //     fetchFun();
 
   // }
+  
+  
+  useEffect(() => {
+    const fetchFun = async () => {
+      await fetch(
+        `http://localhost:3001/api/channels/getConversationMembers/${lastConversation?.id}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setMembers(data);
+          // setMembers((prev) => { return [...prev, data] })
+          console.log("Members data: 2", data);
+          console.log("hereeeeeeeeeee");
+          // if (data) setIsSet(true);
+        });
+    };
+    // console.log("Members data:", data);
+    
+    if (lastConversation?.id !== undefined) {
+      fetchFun();
+      }
+    },[lastConversation]);
+    
+    // lastConversation?.
+    const recieverUserId = members.filter((member) => member.user.id !== userInfo?.id)[0]?.user.id;
+    const recieverUserName = members.filter((member) => member.user.id !== userInfo?.id)[0]?.user.username;
 
+  //   console.log("recieverUserId :", recieverUserId);
+    
+  // console.log("***************ConversationListData :", ConversationListData);
+  // console.log("***************userInfo?.username :", userInfo?.username);
+  // console.log("***************userInfo?.id :", userInfo?.id);
+  // console.log("***************members :", members);
+
+  // console.log("last conversation data :", lastConversation);
   const inviteToPlay = () => {
-    console.log()
-
+    console.log('inviting this man', recieverUserName, 'to play whose id is', recieverUserId)
+    // socket.emit("inviteGame", {id: lastConversation?.id})
+    socket.emit("inviteGame", {id: recieverUserId})
   };
+
   console.log(
     "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
     conversationProps?.type
@@ -100,7 +150,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
     <>
       {conversationProps?.type === "DIRECT" ? (
         <ConversationInfoWrapper
-          name="username"
+          name={conversationProps?.name}
           title={conversationProps?.title}
           imgUrl={avatar}
         >
@@ -127,13 +177,13 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
-                onClick={inviteToPlay}
+                onClick={() => inviteToPlay()}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-44"
                 hight="h-11"
               >
-                <IoGameController color="#1C2041" size={24} onClick={inviteToPlay}/>
+                <IoGameController color="#1C2041" size={24}/>
               </CostumeButton>
             </div>
           </ButtonInfo>
@@ -520,6 +570,7 @@ const MemberList = ({
           if (data) setIsSet(true);
         });
     };
+    // console.log("Members data:", data);
 
     const fetchFun2 = async () => {
       await fetch(
@@ -563,7 +614,7 @@ const MemberList = ({
   console.log("userInfo?.id:", userInfo?.id);
   console.log("userInfo?.name:", userInfo?.username);
   // console.log("isSet:", isSet);
-  // console.log("members:", members);
+  console.log("members:", members);
   return (
     <>
       <MemberSeparator />
@@ -701,7 +752,6 @@ export const ChatPage = () => {
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
-
   // console.log("conversationId:", conversation?.id);
   console.log(" refresh : ", refresh);
   useEffect(() => {

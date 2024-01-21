@@ -3,8 +3,6 @@ import Image from 'next/image'
 import playFriend from '../../../../../public/playButton.png';
 
 const Play = () => {
-
-  const invteToPlay = () => {
     
   }
   return (

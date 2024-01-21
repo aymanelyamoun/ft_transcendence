@@ -94,6 +94,7 @@ export const ConversationList = ({
   // >;
 }) => {
   const ConversationListData = useContext(ConversationListContext);
+  // const lastConv = useContext(LstConversationStateContext);
   if (!isChannel) {
     {
       return (

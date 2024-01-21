@@ -97,23 +97,34 @@ export const ConversationChatSection = () => {
   // console.log("data:", data);
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
-      <div className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">
-        {messages
-          .map((message) => {
-            // if (message.senderId === userId) {
-            return <Message key={message.id} message={message} />;
-            // }
-          })
-          .reverse()}
-      </div>
+    { 
+      lastConversation !== undefined ? 
+        <div className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">  
+          {messages
+            .map((message) => {
+              // if (message.senderId === userId) {
+              return <Message key={message.id} message={message} />;
+              // }
+            })
+            .reverse()}
+        </div>
+      : 
+        null
+      }
       <ConversationMessagesContextSet.Provider value={setMessages}>
         <ConversationMessagesContextStat.Provider value={messages}>
           {
             lastConversation !== undefined ? <TypeMessage maxId={maxId} />
             :
             (
-              <div>
-                < RiChatOffLine size={200} color="#FEFFFF" className="mb-[50%] ml-[50%]" />
+              // <div className="mt-[300px] ml-[400px]">
+              <div className=" flex ">
+                <div className="justify-center">
+                  < RiChatOffLine size={400} color="#FEFFFF" className="  opacity-30 " />
+                  <h1 className="font-poppins text-2xl text-[#FEFFFF] ml-[70px]">
+                      No Chat Is Selected
+                  </h1>
+                </div>
               </div>
 
             )

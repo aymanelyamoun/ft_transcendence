@@ -72,13 +72,19 @@ export default function Home() {
           const data = await res.json();
           setUser(data);
         }
-
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
     checkAuthentication();
     socket.connect();
+    socket.on('gameInvite', (data : any) => {
+      // notification pop-up
+      console.log("A notification of an invtation of a game : ", data);
+    })
+    socket.on('gameInviteAccepted', (data : any) => {
+      console.log("A GAME HAS BEEN ACCEPTED : ", data);
+    })
     return () => {
       socket.disconnect();
     };

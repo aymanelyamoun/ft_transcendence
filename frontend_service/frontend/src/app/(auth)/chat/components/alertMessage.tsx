@@ -6,10 +6,10 @@ import { SocketContext } from '../page';
 
 
 
-export const AlertMessage = ({onClick , message , type, children} : { onClick: () => void ,  message:string, type:string , children?:React.ReactNode}) => {
+export const AlertMessage = ({onClick , message , type, children, id = ""} : { onClick: () => void ,  message:string, type:string , children?:React.ReactNode, id:string}) => {
   const socket = useContext(SocketContext);
   const handlePlay = () => {
-    socket.emit('acceptGameInvite', {senderId: "a9f58269-b674-4675-8651-422e17669fab"})
+    socket.emit('acceptGameInvite', {senderId: id})
     console.log('play');
   }
   return (

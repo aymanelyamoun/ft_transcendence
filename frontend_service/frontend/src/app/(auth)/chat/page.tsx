@@ -13,7 +13,8 @@ import jake from "../../../public/jakeWithHeadPhones.jpg";
 // import avatar from '../../../public/garou-kid.jpeg';
 // import ChannelPic from '../../../public/group_pic.jpg';
 // import jake from '../../../public/jakeWithHeadPhones.jpg';
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
+import {useRouter} from 'next/navigation'
 import ConversationList, {
   ChatToggel,
   Conversations,
@@ -22,6 +23,7 @@ import { ChatPage, ConversationInfo } from "./components/ConversationInfo";
 // import { CONVERSATION_TYP } from "../../../../../backend_service/backend/types/chatTypes";
 import './spinoza.css'
 import { socket } from "../../../socket";
+import { AlertMessage } from "./components/alertMessage";
 
 // import Message from './Message'
 
@@ -54,8 +56,13 @@ export const SocketContext = createContext<typeof socket>(socket);
 
 
 export default function Home() {
+  const router = useRouter();
   // const [friendSearch, setFriendSearch] = useState<Friend[]>(friendsData);
   const [user, setUser] = useState<User | null>(null);
+  const [playPopUp, setplayPopUp] = useState<boolean>(false);
+  const popUpTimeout = useRef<NodeJS.Timeout>(null!);
+  const inviterData = useRef<User>(null!);
+
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -79,13 +86,24 @@ export default function Home() {
     checkAuthentication();
     socket.connect();
     socket.on('gameInvite', (data : any) => {
-      // notification pop-up
-      console.log("A notification of an invtation of a game : ", data);
+      inviterData.current = data;
+      setplayPopUp(true);
+      popUpTimeout.current = setTimeout(() => {
+        setplayPopUp(false);
+      }, 10000);
+      console.log("A notification of an invtation of a game : ", inviterData.current);
     })
     socket.on('gameInviteAccepted', (data : any) => {
       console.log("A GAME HAS BEEN ACCEPTED : ", data);
     })
+    socket.on('redirect', (destination : any) => {
+      router.push(destination)
+      console.log("redirecting to : ", destination);
+    })
     return () => {
+      socket.off('redirect')
+      socket.off('gameInvite');
+      socket.off('gameInviteAccepted');
       socket.disconnect();
     };
   }, []);
@@ -98,6 +116,7 @@ export default function Home() {
     <>
       <UserContext.Provider value={user}>
         <SocketContext.Provider value={socket}>
+            {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
            <ChatPage />
         </SocketContext.Provider>
       </UserContext.Provider>

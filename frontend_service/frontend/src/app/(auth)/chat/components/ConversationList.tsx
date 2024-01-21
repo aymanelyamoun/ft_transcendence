@@ -63,7 +63,7 @@ const ConversationIthem = (props: ConversationIthemProps) => {
         // alt={conversationProps.name}
         alt={conversationProps.name}
       />
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-[4%}">
         <p className="friendsName">{conversationProps.name}</p>
         <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">
           {

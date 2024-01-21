@@ -233,7 +233,7 @@ export class ChatGateway implements OnGatewayConnection {
     setTimeout(()=>{
       console.log("removing invite socket from map after 10sec.")
       this.gatewayService.removeInviteSocketFromMap(sender, data.id);
-    }, 20000); 
+    }, 10000); 
     this.gatewayService.addInviteSocketToMap(sender, data.id);
     console.log("sending invite to: ", data.id)
     // loop throught connected socket map and find the socket with id = data.id
@@ -258,8 +258,12 @@ export class ChatGateway implements OnGatewayConnection {
       console.log('GAME INVITE ACCEPTED BETWEEN ', user.id, ' and ', data.senderId);
       const sender = this.gatewayService.getSocketByUserId(data.senderId);
       if (sender){
+        const matchID : string = sender['user'].username + 
+            receiver['user'].username + Math.random().toString();
        sender.emit('gameInviteAccepted', {id: user.id, username: user.username});
-       receiver.emit('gameInviteAccepted', {id: data.senderId, username: sender['user'].username});    
+       receiver.emit('gameInviteAccepted', {id: data.senderId, username: sender['user'].username});
+       sender.emit('redirect', '/game/match?matchID=' + matchID);
+        receiver.emit('redirect', '/game/match?matchID=' + matchID);
       }
     }
     else

@@ -77,8 +77,8 @@ const handleGameLoop = (socketRef: Socket, engine: Engine, render: Render) => {
             const scoreTwo = document.getElementById('scoreTwo')!;
             if (scoreOne && scoreTwo && playerOneImage && playerTwoImage)
             {
-                scoreOne.innerHTML = playersScore[1];
-                scoreTwo.innerHTML = playersScore[0];
+                scoreOne.innerHTML = playersScore[0];
+                scoreTwo.innerHTML = playersScore[1];
                 playerOneImage.src = playersData[0].profilePic;
                 playerTwoImage.src = playersData[1].profilePic;
             }

@@ -118,14 +118,14 @@ export const ConversationChatSection = () => {
             :
             (
               // <div className="mt-[300px] ml-[400px]">
-              <div className=" flex ">
-                <div className="justify-center">
+              // <div className="h-full w-full">
+                <div className="flex flex-col justify-center items-center h-full w-full">
                   < RiChatOffLine size={400} color="#FEFFFF" className="  opacity-30 " />
-                  <h1 className="font-poppins text-2xl text-[#FEFFFF] ml-[70px]">
+                  <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center opacity-30">
                       No Chat Is Selected
                   </h1>
                 </div>
-              </div>
+              // </div>
 
             )
           }

@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { CostumeButton } from './ConversationInfo'
 import { FaRunning } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
+import { SocketContext } from '../page';
 
 
 
-
-export const AlertMessage = ({onClick , message , type, children} : { onClick: () => void ,  message:string, type:string , children?:React.ReactNode}) => {
+export const AlertMessage = ({onClick , message , type, children, id = ""} : { onClick: () => void ,  message:string, type:string , children?:React.ReactNode, id:string}) => {
+  const socket = useContext(SocketContext);
+  const handlePlay = () => {
+    socket.emit('acceptGameInvite', {senderId: id})
+    console.log('play');
+  }
   return (
     <div className=" alertOverlay flex justify-center items-center ">
       <div className="alertModal felx justify-between rounded-[10px] ">
@@ -59,6 +64,33 @@ export const AlertMessage = ({onClick , message , type, children} : { onClick: (
                           OK
                         </p>
                       </CostumeButton>
+                      ) : type === 'wannaPlay' ? (
+                        <div className='flex justify-between gap-8'>
+                          <CostumeButton
+                            onClick={onClick}
+                            bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
+                            color="#FC2B5D"
+                            width="w-[186px]"
+                            hight="h-11"
+                            >
+                            <p className=" text-[#FEFFFF] font-poppins font-medium text-sm">
+                              Cancel
+                            </p>
+                            {/* <MdDelete color="#FEFFFF" size={24} /> */}
+                          </CostumeButton>
+                          <CostumeButton
+                            onClick={handlePlay}
+                            bgColor="bg-[#FEFFFF] border-[#FEFFFF]"
+                            color="#FC2B5D"
+                            width="w-[186px]"
+                            hight="h-11"
+                          >
+                            <p className=" text-[#0D1130] font-semibold font-poppins text-sm">
+                              Let's Play
+                            </p>
+                        </CostumeButton>
+  
+                        </div>
                      ) : type === 'confirm' ? (
                       children 
                      ) : null

@@ -92,8 +92,12 @@ export class GameService {
     
     // start matchmaking event
     isAlreadyInQueue(playerSocket: Socket): boolean {
+        console.log('Checking if ' + playerSocket['user'].username + ' is already in queue')
+        console.log('Queue length : ' + this.playersInQueue.length)
         for (var i = 0; i < this.playersInQueue.length; i++)
         {
+            console.log('username : ' + this.playersInQueue[i]['user'].username)
+            console.log('username2 : ' + playerSocket['user'].username)
             if (this.playersInQueue[i]['user'].username == playerSocket['user'].username)
                 return true;
         }
@@ -104,12 +108,13 @@ export class GameService {
         this.clearFinishedGames();
         if (this.isAlreadyInQueue(client))
         {
+            console.log('Player ' + client['user'].username + ' is already in queue');
             client.emit('CancelQueue')
             client.disconnect(true);
             return ;
         }
         this.playersInQueue.push(client);
-        console.log('Player ' + client['user'].username + ' is in queue');
+        console.log('Player ' + client['user'].username + ' added to the queue');
         if (this.playersInQueue.length == 2)
         {
             console.log('Game is starting...');
@@ -131,6 +136,18 @@ export class GameService {
             {
                 this.playersInQueue.splice(i, 1);
                 console.log(playerSocket['user'].username + ' is removed from queue');
+                break;
+            }
+        }
+    }
+
+    removeFromQueueID(playerSocketID: string) {
+        for (var i = 0; i < this.playersInQueue.length; i++)
+        {
+            if (this.playersInQueue[i].id == playerSocketID)
+            {
+                this.playersInQueue.splice(i, 1);
+                console.log('Someone is removed from queue by ID');
                 break;
             }
         }

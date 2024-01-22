@@ -23,10 +23,14 @@ import { AlertMessage } from "./alertMessage";
 
 const CreateChannel = ({
   selectedFriends,
-  setChannelCreated
+  setSelectedFriends,
+  setChannelCreated,
+  setRefresh,
 }:{
   selectedFriends: Friend[],
-  setChannelCreated:React.Dispatch<React.SetStateAction<boolean>>
+  setSelectedFriends: React.Dispatch<React.SetStateAction<Friend[]>>,
+  setChannelCreated:React.Dispatch<React.SetStateAction<boolean>>,
+  setRefresh:React.Dispatch<React.SetStateAction<boolean>>,
 }) => {
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
@@ -118,6 +122,12 @@ const CreateChannel = ({
             setNotCreated(true);
             throw new Error("Network response was not ok");
           }
+          else{
+            console.log("refresh in add new channel: ")
+            setRefresh((prev) => !prev);
+
+          }
+
           // return res.json();
         })
         // .then((data) => {
@@ -126,8 +136,11 @@ const CreateChannel = ({
         .catch((error) => {
           console.error("Error during fetch:", error);
         });
-        
+
+        setSelectedFriends([]);
         // setChannelCreated(false);
+        // setRefresh((prev) => !prev);
+        // console.log(" refresh : ", refresh);
     }
   // }
   

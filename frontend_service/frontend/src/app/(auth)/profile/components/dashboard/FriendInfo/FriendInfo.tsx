@@ -14,10 +14,11 @@ import Link from 'next/link';
 import ShowGroups from './ShowGroups';
 
 // redux part
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { toggleShowGroups } from '@/features/booleans/booleanActions';
-import { setSelectedUserId } from '@/features/strings/stringActions';
+import { setLoggedInUserId, setSelectedUserId } from '@/features/strings/stringActions';
 import { Friend } from '@/app/(auth)/chat/page';
+import { SocketUseContext } from "../../../dashboard/page";
 
 interface FriendInfoProps {
   id: string;
@@ -125,6 +126,8 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => 
   const { showGroups, toggleShowGroups, setSelectedUserId } = props;
   // const setSelectedUserId = mapDispatchToProps;
   const infoRef = useRef<HTMLDivElement>(null);
+  const loggedInUserId = useSelector((state: RootState) => state.strings.loggedInUserId);
+  const socket = React.useContext(SocketUseContext);
   // const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
 
   // useEffect(() => {
@@ -197,6 +200,11 @@ const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => 
     };
   };
 
+  function inviteToPlay(id : string, loggedInUserId : string) {
+    socket.emit("inviteGame", {id: id})
+    console.log('invited a user to play');
+  }
+
   const handleShowGroup = () => {
     toggleShowGroups();
     setSelectedUserId(props.id);
@@ -219,7 +227,7 @@ return (
             <AddGroupButton onClick={handleShowGroup}>
               <MdGroupAdd />
             </AddGroupButton>
-            <GameButton>
+            <GameButton onClick={(e) => {inviteToPlay(props.id, loggedInUserId)}}>
               <IoGameController />
             </GameButton>
             <RemoveFriendButton onClick={() => SendDeclineReq(props.id)}>

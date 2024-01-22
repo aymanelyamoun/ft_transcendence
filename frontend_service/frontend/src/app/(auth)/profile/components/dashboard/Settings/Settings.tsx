@@ -94,7 +94,7 @@ const Settings: React.FC<SettingsProps> = (props) => {
     const setShowEditProfile = props.setShowEditProfile;
 
     const handleClick = () => {
-        setOpen(true);
+        setOpen(!open);
         // if (onClick) {
         //     onClick();
         // }
@@ -115,6 +115,7 @@ const Settings: React.FC<SettingsProps> = (props) => {
                 router.push("/");
             }else {
                alert("the logout has not been sent");
+               console.log("hadchi rah mahowach");
               }
         } catch (error) {
             console.log(error);
@@ -135,9 +136,11 @@ const Settings: React.FC<SettingsProps> = (props) => {
                 <div className={styles.otherBar}>
                     <EditProfile setShowEditProfile={setShowEditProfile}/>
                 </div>
-                <div className={styles.otherBar} onClick={ () => LogOutReq()}>
-                    <LogOut />
-                </div>
+                {/* <div className={styles.otherBar}> */}
+                  {/* <div className={styles.otherBar}> */}
+                      <LogOut />
+                  {/* </div> */}
+                {/* </div> */}
             </OpenedBar>
           )}
           </SettingsContainer>

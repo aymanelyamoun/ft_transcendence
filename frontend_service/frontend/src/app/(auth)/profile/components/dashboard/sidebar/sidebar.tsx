@@ -10,6 +10,7 @@ import Settings from '../Settings/Settings';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { setLoggedInUserId } from '@/features/strings/stringActions';
+import Link from 'next/link';
 
 interface SidebarInfo {
   id: string;
@@ -52,10 +53,10 @@ const SidebarRootUserProfile = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    top: 5vh;
+    top: 4vh;
     transition: all 300ms ease;
     width: 85%;
-    height: 40%;
+    height: 20.5rem;
   }
   `;
 
@@ -117,6 +118,12 @@ const ProfileHeader = styled.div`
 
   @media (max-width: 1000px) {
     width: 93%;
+    top: 1vh;
+  }
+  @media (max-width: 550px)
+  {
+    width: 93%;
+    height: 73%;
     top: 1vh;
   }
 `;
@@ -213,7 +220,9 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
         <SidebarContainer>
           <ProfileHeader>
           <ProfileImage>
+            <Link href="/profile/statistics">
             <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+            </Link>
             {/* <OnlineStatus online={props.sidebar.online}>
             </OnlineStatus> */}
             <Username>{props.sidebar.username}</Username>

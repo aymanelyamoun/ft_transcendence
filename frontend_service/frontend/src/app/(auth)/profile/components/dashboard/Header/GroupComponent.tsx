@@ -179,10 +179,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     {
       console.log("error in sending the request to join CATCH me: ", error);
     }
-    catch (error)
-    {
-      console.log(error);
-    }
   };
 
   const UnbanUser = async (props: GroupComponentProps) => {

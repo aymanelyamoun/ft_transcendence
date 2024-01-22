@@ -51,6 +51,8 @@ export const ConversationChatSection = () => {
   const lastConversation = useContext(LstConversationStateContext);
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const userInfo = useContext(UserContext);
+  // const chatContainerRef = useRef(null!);
+  const chatContainerRef = useRef<HTMLDivElement>(null!);
 
   let maxId = 0;
   if (messages.length !== 0) {
@@ -94,13 +96,21 @@ export const ConversationChatSection = () => {
     };
   }, [messagesData]);
 
+  useEffect(() => {
+    // Scroll to the bottom when new messages are added
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   // console.log("data:", data);
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
     { 
       lastConversation !== undefined ? 
-        <div className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">  
+        <div ref={chatContainerRef} className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">  
           {messages
+            .filter((message) => message.message.trim() !== '')
             .map((message) => {
               // if (message.senderId === userId) {
               return <Message key={message.id} message={message} />;
@@ -119,9 +129,9 @@ export const ConversationChatSection = () => {
             (
               // <div className="mt-[300px] ml-[400px]">
               // <div className="h-full w-full">
-                <div className="flex flex-col justify-center items-center h-full w-full">
-                  < RiChatOffLine size={400} color="#FEFFFF" className="  opacity-30 " />
-                  <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center opacity-30">
+                <div className="flex flex-col items-center h-full w-full">
+                  < RiChatOffLine size={360} color="#FEFFFF" className="  opacity-40 " />
+                  <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center opacity-40">
                       No Chat Is Selected
                   </h1>
                 </div>

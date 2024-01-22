@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import styles from './EditProfile.module.css'
+"use client"
+import React, { useEffect, useState } from 'react';
+import styles from './EditProfile.module.css';
 import { RiEditBoxLine } from "react-icons/ri";
 import Link from 'next/link';
 import styled from 'styled-components';

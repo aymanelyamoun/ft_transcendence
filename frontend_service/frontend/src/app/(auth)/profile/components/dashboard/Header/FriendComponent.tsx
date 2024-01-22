@@ -2,13 +2,10 @@
 
 import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
-import { StaticImageData } from 'next/image'
-import AddFriend from '@/app/(auth)/chat/components/AddFriend';
 import { IoMdPersonAdd } from "react-icons/io";
 import { Backend_URL } from '@/lib/Constants';
 import { CgUnblock } from "react-icons/cg";
 import { BsFillPersonCheckFill } from "react-icons/bs";
-import FriendInfo from '../FriendInfo/FriendInfo';
 import Link from 'next/link';
 import { SearchU } from '../interfaces';
 

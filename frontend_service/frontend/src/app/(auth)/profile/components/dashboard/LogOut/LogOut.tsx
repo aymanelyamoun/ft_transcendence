@@ -3,11 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './LogOut.module.css'
 import { IoIosLogOut } from "react-icons/io";
-import { Backend_URL } from '@/lib/Constants';
-import { redirect, useRouter } from "next/navigation";
 import Link from 'next/link';
-import Loading from '@/app/components/Loading';
-import Home from '@/app/page';
 
 const LogOut: React.FC = () => {
   return (

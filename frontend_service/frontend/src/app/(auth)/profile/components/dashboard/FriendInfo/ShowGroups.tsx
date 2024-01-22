@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
@@ -165,7 +167,6 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 channelName={friend.channelName}
                 channelPic={friend.channelPic}
                 channelType={friend.channelType}
-                // members={friend.members}
                 members={friend.members}
                 bannedUsers={friend.bannedUsers || []}
                 setChannelFriendSearch={setChannelFriendSearch}

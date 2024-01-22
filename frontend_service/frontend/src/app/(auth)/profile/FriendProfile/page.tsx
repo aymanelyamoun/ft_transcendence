@@ -4,8 +4,6 @@ import React, { useEffect, useState, ReactNode} from 'react';
 import styled from 'styled-components'
 import Sidebar from '../components/dashboard/sidebar/sidebar';
 import Match_History from '../components/statistics/Match_History/Match_History';
-import aoumad from '../imgs/aoumad.jpeg';
-import yamon from '../imgs/ael-yamo.jpeg';
 import Statistics from '../components/dashboard/statistics/statistics';
 import { Backend_URL } from '@/lib/Constants';
 import { Match } from '../components/statistics/Match_History/match_history_interfaces';

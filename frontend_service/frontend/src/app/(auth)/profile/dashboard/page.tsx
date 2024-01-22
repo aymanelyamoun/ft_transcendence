@@ -19,6 +19,8 @@ import { useUser } from '../../layout';
 // import store and redux provider
 import { Provider } from 'react-redux'
 import store from './../../../../store';
+import { AlertMessage } from '../../chat/components/alertMessage';
+import Navbar from '../../game/components/Navbar';
 
 
 
@@ -31,6 +33,12 @@ interface SearchU
     group: boolean;
     groupMembers?: string[];
 }
+
+const NavRoot = styled.div`
+    position: absolute;
+    top: 0;
+    width: 100%;
+`;
 
 
 const SearchDiv = styled.div`
@@ -86,14 +94,19 @@ const AppGlass = styled.div`
     justify-content: flex-start;
   }
 `;
-
+interface InviteInterface {
+  id: string;
+  username: string;
+}
 export const SocketUseContext = React.createContext(socket);
 
 function App() {
 
+  const [PlayPopUp , setplayPopUp] = useState<boolean>(false);
+  const popUpTimeout = useRef<NodeJS.Timeout>(null!);
   const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
   const EditRef = useRef<HTMLDivElement>(null);
-  const inviterData = useRef<string>(null!);
+  const inviterData = useRef<InviteInterface>(null!);
   const [SidebarDone, setSidebarDone] = useState<boolean>(false);
   const [PieDone, setPieDone] = useState<boolean>(false);
   const [ChartDone, setChartDone] = useState<boolean>(false);
@@ -183,10 +196,10 @@ function App() {
     });
     socket.on('gameInvite', (data : any) => {
       inviterData.current = data;
-      // setplayPopUp(true);
-      // popUpTimeout.current = setTimeout(() => {
-      //   setplayPopUp(false);
-      // }, 10000);
+      setplayPopUp(true);
+      popUpTimeout.current = setTimeout(() => {
+        setplayPopUp(false);
+      }, 10000);
       console.log("A notification of an invtation of a game : ", inviterData.current);
     })
 
@@ -273,14 +286,19 @@ function App() {
   }, [PieDone, ChartDone, username]);
   
   return (
-    <>
+    <> 
     <Provider store={store}>
       {ShowEditProfile && <EditProfileShow />}
+
       <div className="App">
         <SocketUseContext.Provider value={socket}>
+        {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
           <SearchDiv >
             <SearchHeader />
           </SearchDiv>
+          <NavRoot>
+            <Navbar/>
+          </NavRoot>
           <AppGlass>
             <Sidebar sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
             <Skins />

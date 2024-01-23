@@ -296,9 +296,9 @@ function App() {
           <SearchDiv >
             <SearchHeader />
           </SearchDiv>
-          <NavRoot>
+          {/* <NavRoot>
             <Navbar/>
-          </NavRoot>
+          </NavRoot> */}
           <AppGlass>
             <Sidebar sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
             <Skins />

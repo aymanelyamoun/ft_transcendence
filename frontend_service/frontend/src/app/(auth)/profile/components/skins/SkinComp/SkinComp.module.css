@@ -4,6 +4,15 @@
   inherits: false;
 }
 
+.SkinCompRoot
+{
+  position: relative;
+  width: 12vw;
+  height: 42vh;
+  padding: 0.875vw 0 0.875vw 0;
+  /* position: relative; */
+  margin: 5rem 2rem;
+}
 
 .SkinComp {
   border: none;
@@ -36,22 +45,22 @@
 
   .rotateanimation
   {
-    width: 12vw;
-    height: 42vh;
+    width: 100%;
+    height: 100%;
     z-index: auto;
     border-radius: 10px;
-    padding: 0.875vw 0 0.875vw 0;
+    /* padding: 0.875vw 0 0.875vw 0; */
     /* position: relative; */
-    margin: 5rem 2rem;
+    /* margin: 5rem 2rem; */
     box-sizing: border-box;
   }
 
   .rotateanimation:hover
   {
     content: "";
-    width: 15vw;
+    width: 13vw;
     height: 51.5vh;
-    padding: 3rem 1.5rem;
+    padding: 2.5rem 1.3rem;
     transform: scaleX(1.1) scaleY(1.1);
     border-radius: 8px;
     background-image: linear-gradient( var(--rotate) , #5ddcff, #3c67e3 43%, #4e00c2);
@@ -61,6 +70,38 @@
     transition: color 1s;
   }
 
+  .rotateanimation.active
+  {
+    content: "";
+    width: 13vw;
+    height: 51.5vh;
+    padding: 2.5rem 1.3rem;
+    transform: scaleX(1.1) scaleY(1.1);
+    border-radius: 8px;
+    background-image: linear-gradient( var(--rotate) , #5ddcff, #3c67e3 43%, #4e00c2);
+    z-index: -1;
+    animation: spin 2.5s linear infinite;
+    color: rgb(88 199 250 / 100%);
+    transition: color 1s;
+  }
+
+  .rotateanimation.active::after {
+    content: "";
+    position: absolute;
+    top: calc(0vh / 6);
+    left: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    transform: scale(0.8);
+    filter: blur(calc(51.5vh / 6));
+    background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
+    opacity: 1;
+    transition: opacity 0.5s;
+    animation: spin 2.5s linear infinite;
+  }
   .rotateanimation:hover::after {
     content: "";
     position: absolute;
@@ -89,6 +130,12 @@
     opacity: 0;
   } */
   .SkinComp:hover
+  {
+    transform: scaleX(1.1) scaleY(1.1);
+    position: relative;
+  }
+
+  .SkinComp.active
   {
     transform: scaleX(1.1) scaleY(1.1);
     position: relative;

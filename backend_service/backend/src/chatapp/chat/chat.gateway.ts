@@ -258,6 +258,8 @@ export class ChatGateway implements OnGatewayConnection {
       console.log('GAME INVITE ACCEPTED BETWEEN ', user.id, ' and ', data.senderId);
       const sender = this.gatewayService.getSocketByUserId(data.senderId);
       if (sender){
+        if (this.gameService.inGameCheckByID(user.id) || this.gameService.inGameCheckByID(sender.id))
+          return; 
         const matchID : string = sender['user'].username + 
             receiver['user'].username + Math.random().toString();
        sender.emit('gameInviteAccepted', {id: user.id, username: user.username});

@@ -22,7 +22,7 @@ const BannedUser = styled.button`
   top: 0vh;
   svg {
       font-size: 1.5rem;
-      color: aliceblue;
+      color: red;
   }
 `;
 
@@ -87,6 +87,7 @@ const GroupPictureItem = styled.div`
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const ShowGroups = props.ShowGroups;
+  const getBannedUsers = props.banedUsers
   const [inputPassword, setInputPassword] = useState<string>("");
   const ChannelType = props.channelType;
   const setChannelFriendSearch = props.setChannelFriendSearch;
@@ -106,7 +107,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     return (bannedUsers.some(BannedUser => BannedUser.id === user));
   }
 
-  const isBanned = isUserBanned(props.id , props.bannedUsers);
+  const isBanned = isUserBanned(selectedUserId , props.banedUsers);
 
   function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string)
   {
@@ -115,10 +116,15 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const isMember = isUserMember(props.members, loggedInUserId);
 
-// useEffect(() => {
-//   console.log("loggedInUserId: ", loggedInUserId);
-//   console.log("isMember: ", isMember);
-// },[])
+  // useEffect(() => {
+  //   // console.log("channelName: ", props.channelName);
+  //   if (props.channelName === "Public")
+  //   {
+  //     // console.log("banned users: ", props.banedUsers);
+  //     // console.log("props id: ", selectedUserId);
+  //     console.log("is banned? : ", isBanned);
+  //   }
+  // })
 
   const SendRequestUser = async (props: GroupComponentProps) => {
     try {
@@ -192,20 +198,21 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          channelId: selectedUserId,
-          userId2: props.id,
+          channelId: props.id,
+          userId2: selectedUserId,
         }),
       });
       if (res.ok)
       {
         // fetchIcon();
-        setUserUnbanned(true);
         alert("the user has been unbanned");
       }else {
         alert("the user has not been unbanned");
        }
     } catch (error) {
       console.log("unban user from group error: ", error);
+    } finally {
+      setUserUnbanned(true);
     }
   };
 
@@ -280,13 +287,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       SendRequestUserProtected(props);
     }
   }
-
-  useEffect(() => 
-  {
-    // console.log("saved password is: ",inputPassword);
-    console.log("password sent? : ", passwordSent);
-    console.log("inputPassword: ", inputPassword);
-  })
 
 
   return (

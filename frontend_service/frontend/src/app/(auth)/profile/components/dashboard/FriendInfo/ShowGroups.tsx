@@ -119,7 +119,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
       console.error("Error fetching data: ", error);
     }
   };
-
+  
   useEffect(() => {
     fetchChannelGroups();
   }, [ChannelFriendSearch]);
@@ -168,7 +168,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 channelPic={friend.channelPic}
                 channelType={friend.channelType}
                 members={friend.members}
-                bannedUsers={friend.bannedUsers || []}
+                banedUsers={friend.banedUsers}
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
                 setChannelFriendSearchU={function (value: React.SetStateAction<SearchU[]>): void {

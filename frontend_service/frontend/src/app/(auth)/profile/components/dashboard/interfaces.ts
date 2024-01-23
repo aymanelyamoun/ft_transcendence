@@ -47,7 +47,7 @@ export interface SearchU {
 
     export interface GroupComponentProps<>
     {
-      bannedUsers: {
+      banedUsers: {
         id: string;
     }[];
     id: string;
@@ -81,21 +81,21 @@ export interface StatisticsChartInterface
 }
 export interface AddSearchInterface
 {
-    bannedUsers: {
+    banedUsers: {
         id: string;
     }[];
     id: string;
     channelName: string;
     channelPic: string;
-    creatorId: string;
     channelType: string;
-    hash: string;
     members: {
       user: {
         profilePic: string;
         id: string;
       };
     }[];
+    creatorId: string;
+    hash: string;
 }
 
 export interface ProtectedPassProps

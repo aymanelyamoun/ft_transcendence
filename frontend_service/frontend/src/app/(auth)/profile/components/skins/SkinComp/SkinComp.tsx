@@ -40,12 +40,14 @@ const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, setActive
   }
   }
   return (
-    <div className={styles.rotateanimation}>
-      <div className={`${styles.SkinComp} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
-        <SkinImg>
-          <img src={svgImage.src} alt={Name} />
-        </SkinImg>
-          <span className={styles['skin-name']}>{Name}</span>
+    <div className={styles.SkinCompRoot}>
+      <div className={`${styles.rotateanimation} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
+        <div className={`${styles.SkinComp} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
+          <SkinImg>
+            <img src={svgImage.src} alt={Name} />
+          </SkinImg>
+            <span className={styles['skin-name']}>{Name}</span>
+        </div>
       </div>
     </div>
   );

@@ -187,13 +187,19 @@ export class PrismaChatService{
           }
         }
 
-        async getAllChannels(){
+        async getAllChannels(@Req() req:Request){
           try{
+            const user = req['user'] as User;
             const channels = await this.prisma.channel.findMany({where:{
               OR:[
                 {channelType:"public"},
                 {channelType:"protected"},
               ],
+              banedUsers: {
+                none: {
+                  id : user.id
+                }
+              }
             }, include:{members:{select:{user:{select:{id : true, profilePic:true}}}}, creator:{select:{id:true, }}}});
             return channels.map((channel)=>{
               return{

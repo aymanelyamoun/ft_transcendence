@@ -80,24 +80,3 @@ const Match_History: React.FC<MatchProps> = (props) => {
 }
 
 export default Match_History;
-
-
-{/* <div className={styles['matchesClassName']}>
-{UserProfileStyling ? (
-    <MatchesUserProfiles>
-        <div className={styles['match-title']}>
-            <span>Match History</span>
-        </div>
-        <div className={styles['match-list']}>
-            <MatchList matches={matches}/>
-        </div>
-    </MatchesUserProfiles>
-) : (
-    <>
-        <div className={styles['match-title']}>
-            <span>Match History</span>
-        </div>
-        <div className={styles['match-list']}>
-            <MatchList matches={matches}/>
-        </div>
-    </> */}

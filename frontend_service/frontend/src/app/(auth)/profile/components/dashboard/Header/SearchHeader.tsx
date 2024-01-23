@@ -117,6 +117,9 @@ const SearchHeader = () => {
         fetchChannel('all');
       }, []);
 
+      useEffect(() => {
+        console.log("ChannelFriendSearch: ",ChannelFriendSearch);
+      });
     
     return (
         <>

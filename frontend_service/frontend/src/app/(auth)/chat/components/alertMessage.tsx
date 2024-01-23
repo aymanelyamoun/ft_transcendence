@@ -2,11 +2,10 @@ import React, { useContext } from 'react'
 import { CostumeButton } from './ConversationInfo'
 import { FaRunning } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
-import { SocketContext } from '../page';
+import { SocketContext } from '@/utils/socketContext';
 
 
-
-export const AlertMessage = ({onClick , message , type, children, id = ""} : { onClick: () => void ,  message:string, type:string , children?:React.ReactNode, id:string}) => {
+export const AlertMessage = ({onClick , message , type, children, id = ""} : { onClick: () => void ,  message:string, type:string , children?:React.ReactNode, id?:string}) => {
   const socket = useContext(SocketContext);
   const handlePlay = () => {
     socket.emit('acceptGameInvite', {senderId: id})
@@ -86,7 +85,7 @@ export const AlertMessage = ({onClick , message , type, children, id = ""} : { o
                             hight="h-11"
                           >
                             <p className=" text-[#0D1130] font-semibold font-poppins text-sm">
-                              Let's Play
+                              {"Let's Play"}
                             </p>
                         </CostumeButton>
   

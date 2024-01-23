@@ -84,7 +84,7 @@ interface showGroupProps
   toggleShowGroups: () => void;
 }
 
-const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
+const ShowGroups = (props : showGroupProps) => {
   const parentType = props.parentType;
   const onClose = props.onClose;
   const { showGroups, toggleShowGroups} = props;
@@ -193,7 +193,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
       </div>
     </div>
   );
-});
+};
 
 const mapStateToProps = (state: RootState) => {
   return {

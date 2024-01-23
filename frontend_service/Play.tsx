@@ -4,7 +4,7 @@ import playFriend from '../../../../../public/playButton.png';
 
 const Play = () => {
     
-  }
+  
   return (
     <div className='playContainer cursor-pointer'
           onClick={invteToPlay}>

@@ -17,8 +17,8 @@ export default function ConfirmAuth() {
     setIsNotify(false);
   }
   interface UserData {
-       isTwoFactorEnabled: Boolean;
-       isConfirmed2Fa: Boolean;
+       isTwoFactorEnabled?: Boolean;
+       isConfirmed2Fa?: Boolean;
   }
   const router = useRouter();
   const user = useUser();

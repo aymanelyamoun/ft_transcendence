@@ -1,21 +1,23 @@
-"use client"
-import React, { useEffect } from 'react';
-import StatisticsChart from '../../dashboard/StatisticsChart/StatisticsChart';
-import StatisticsPie from '../../dashboard/StatisticsPie/StatisticsPie';
-import styles from './Statistics.module.css';
-import { StatisticsPieInterface, StatisticsChartInterface } from  "../../../components/dashboard/interfaces";
-import styled from 'styled-components';
-
+"use client";
+import React, { useEffect } from "react";
+import StatisticsChart from "../StatisticsChart/StatisticsChart";
+import StatisticsPie from "../StatisticsPie/StatisticsPie";
+import styles from "./Statistics.module.css";
+import {
+  StatisticsPieInterface,
+  StatisticsChartInterface,
+} from "../interfaces";
+import styled from "styled-components";
 
 interface StatisticsProps {
-  StatisticsPie : StatisticsPieInterface;
-  StatisticsChart : StatisticsChartInterface;
+  StatisticsPie: StatisticsPieInterface;
+  StatisticsChart: StatisticsChartInterface;
   UserProfile: boolean;
 }
 
 const StatisticsUserProfile = styled.div`
-grid-row-start: 2;
-grid-column-start: 2;
+  grid-row-start: 2;
+  grid-column-start: 2;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -54,8 +56,7 @@ const StatisticsStandard = styled.div`
     transition: all 300ms ease;
   }
 
-  @media (max-width: 550px)
-  {
+  @media (max-width: 550px) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -70,18 +71,20 @@ const StatisticsStandard = styled.div`
 const Statistics: React.FC<StatisticsProps> = (props) => {
   const statistics = props;
   const UserProfile = props.UserProfile;
-  // useEffect(() => 
+  // useEffect(() =>
   // {
   //   console.log("Pie stati: ",props.StatisticsPie);
   //   console.log("Chart stati: ", props.StatisticsChart);
   // });
 
-  const StatisticsRoot = UserProfile ? StatisticsUserProfile : StatisticsStandard;
+  const StatisticsRoot = UserProfile
+    ? StatisticsUserProfile
+    : StatisticsStandard;
   return (
     <StatisticsRoot>
       <div className={styles.container}>
-      <StatisticsPie statistics={statistics.StatisticsPie}/>
-      <StatisticsChart statistics={statistics.StatisticsChart}/>
+        <StatisticsPie statistics={statistics.StatisticsPie} />
+        <StatisticsChart statistics={statistics.StatisticsChart} />
       </div>
     </StatisticsRoot>
   );

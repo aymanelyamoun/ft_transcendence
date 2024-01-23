@@ -4,7 +4,7 @@ interface FetchAPIProps {
     body?: Record<string, any>;
   }
   
-  export const fetchAPI = async ({ url, method, body }: FetchAPIProps) => {
+export const fetchAPI = async ({ url, method, body }: FetchAPIProps) => {
     try {
       const response = await fetch(url, {
         method,

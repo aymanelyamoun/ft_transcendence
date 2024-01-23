@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { Backend_URL } from '@/lib/Constants';
 import { FaUserAstronaut } from "react-icons/fa6";
 import styled from 'styled-components';
-import { SocketUseContext } from "../../../dashboard/page";
+import { SocketUseContext } from "@/utils/socketUseContext";
 
 interface Friend {
   id: string;

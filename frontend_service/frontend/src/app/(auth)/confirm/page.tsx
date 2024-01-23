@@ -22,11 +22,11 @@ export default function Confirm() {
   }
 
   interface UserData {
-    username: string;
+    username?: string;
     profilePic?: string;
-    hash: string;
+    hash?: string;
     confirmPass?: string;
-    typeLog: string;
+    typeLog?: string;
   }
 
   const user = useUser();
@@ -45,13 +45,13 @@ export default function Confirm() {
     const checkAuthentication = async () => {
         if (user) {
           setUserData({
-            username: user.username,
+            username: user.username ,
             profilePic: user.profilePic,
             hash: user.hash,
             confirmPass: user.hash,
             typeLog: user.typeLog,
           });
-          setPassword(user.hash);
+          setPassword(user.hash as React.SetStateAction<string>);
           setAuthenticated(true);
         }
     };

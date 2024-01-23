@@ -18,7 +18,7 @@ import { connect, useSelector } from 'react-redux';
 import { toggleShowGroups } from '@/features/booleans/booleanActions';
 import { setLoggedInUserId, setSelectedUserId } from '@/features/strings/stringActions';
 import { Friend } from '@/app/(auth)/chat/page';
-import { SocketUseContext } from "../../../dashboard/page";
+import { SocketUseContext } from "@/utils/socketUseContext";
 
 interface FriendInfoProps {
   id: string;
@@ -120,7 +120,7 @@ const GameButton = styled.button`
   }
 `;
 
-const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => { // Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?
+const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?
   // const setSelectedFriend = props.setSelectedFriend;
   const onClose = props.onClose;
   const { showGroups, toggleShowGroups, setSelectedUserId } = props;
@@ -227,7 +227,7 @@ return (
             <AddGroupButton onClick={handleShowGroup}>
               <MdGroupAdd />
             </AddGroupButton>
-            <GameButton onClick={(e) => {inviteToPlay(props.id, loggedInUserId)}}>
+            <GameButton onClick={(e: any) => {inviteToPlay(props.id, loggedInUserId)}}>
               <IoGameController />
             </GameButton>
             <RemoveFriendButton onClick={() => SendDeclineReq(props.id)}>
@@ -243,7 +243,7 @@ return (
   </>
 );
 
-});
+};
 
 const mapStateToProps = (state : RootState) => {
   return {

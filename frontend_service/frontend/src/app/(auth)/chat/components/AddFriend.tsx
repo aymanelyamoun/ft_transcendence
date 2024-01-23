@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-// import addFriend from '../../../../public/addFriendButton.png';
 import addFriend from '../../../../public/addFriendButton.png';
 
 const AddFriend = () => {

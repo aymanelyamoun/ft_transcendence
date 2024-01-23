@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import styles from './search.module.css'
 import { ProtectedPassProps } from '../interfaces';
 
-const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((props, ref) => {
+const ProtectedPassword = (props : ProtectedPassProps) => {
   const infoRef = useRef<HTMLDivElement>(null);
   const setInputPassword = props.setInputPassword;
   const setPasswordSent = props.setPasswordSent;
@@ -59,7 +59,7 @@ const ProtectedPassword = React.forwardRef<HTMLDivElement, ProtectedPassProps>((
       </div>
     </>
   );
-});
+};
 
 export default ProtectedPassword;
 

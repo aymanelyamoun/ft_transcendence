@@ -38,9 +38,9 @@ services:
       - "3000:3000"
     networks:
       - all_connect
-    volumes:
-      - ./frontend_service/frontend:/frontend
-      - /frontend/node_modules
+    # volumes:
+    #   - ./frontend_service/frontend:/frontend
+    #   - /frontend/node_modules
   redis:
     image: redis
     container_name: redis

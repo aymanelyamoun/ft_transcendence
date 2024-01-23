@@ -21,6 +21,7 @@ import sendIcon from "../../../../../public/sendButton.png";
 // import { isAdmin } from "./ConversationInfo";
 import { UserContext } from "../page";
 import { RiChatOffLine } from "react-icons/ri";
+import { SiWechat } from "react-icons/si";
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>
@@ -130,9 +131,9 @@ export const ConversationChatSection = () => {
               // <div className="mt-[300px] ml-[400px]">
               // <div className="h-full w-full">
                 <div className="flex flex-col items-center h-full w-full">
-                  < RiChatOffLine size={360} color="#FEFFFF" className="  opacity-40 " />
-                  <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center opacity-40">
-                      No Chat Is Selected
+                  < SiWechat size={360} color="#FEFFFF" className=" opacity-40 " />
+                  <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center">
+                      Welcome To The Chat Section
                   </h1>
                 </div>
               // </div>

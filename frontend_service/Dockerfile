@@ -7,4 +7,4 @@ RUN npm install
 COPY frontend frontend
 WORKDIR /frontend
 
-ENTRYPOINT npm run build && npm run start
+ENTRYPOINT npm run dev

@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import StatisticsChart from "../StatisticsChart/StatisticsChart";
 import StatisticsPie from "../StatisticsPie/StatisticsPie";
+
 import styles from "./Statistics.module.css";
 import {
   StatisticsPieInterface,

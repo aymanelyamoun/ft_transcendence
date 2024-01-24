@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 import Image, { StaticImageData } from "next/image";
+// import avatar from "../../../../../public/garou-kid.jpeg";
 import avatar from "../../../../../public/garou-kid.jpeg";
 import { MdDelete, MdPersonAddAlt1 } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";

@@ -57,7 +57,6 @@ const MatchesContainer = styled.div`
     grid-row-start: 1;
     grid-column-start: 2;
     position: relative;
-    top: 4vh;
 `;
 
 function App() {

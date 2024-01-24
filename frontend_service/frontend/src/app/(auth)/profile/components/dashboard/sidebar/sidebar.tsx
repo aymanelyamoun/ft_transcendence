@@ -30,11 +30,11 @@ interface SidebarProps {
 
 const SidebarRootUserProfile = styled.div`
   grid-row-start: 1;
+  grid-row-end: 3;
   grid-column-start: 1;
   display: flex;
   flex-direction: column;
   position: relative;
-  top: 4vh;
   transition: all 300ms ease;
 
   @media (max-width: 1000px) {
@@ -220,9 +220,13 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
         <SidebarContainer>
           <ProfileHeader>
           <ProfileImage>
+            {!ShowSettings ? (
+              <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+            ) : (
             <Link href="/profile/statistics">
             <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
             </Link>
+            )}
             {/* <OnlineStatus online={props.sidebar.online}>
             </OnlineStatus> */}
             <Username>{props.sidebar.username}</Username>

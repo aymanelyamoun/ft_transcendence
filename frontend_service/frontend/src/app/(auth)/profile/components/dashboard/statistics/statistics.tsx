@@ -20,7 +20,7 @@ grid-column-start: 2;
   flex-direction: row;
   align-items: center;
   position: relative;
-  /* top: 2.5vh; */
+  bottom: 4vh;
   /* padding-bottom: 2rem; */
   transition: all 300ms ease;
   flex-wrap: nowrap;

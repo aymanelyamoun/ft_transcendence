@@ -120,7 +120,7 @@ const GameButton = styled.button`
   }
 `;
 
-const FriendInfo = React.forwardRef<HTMLDivElement, FriendInfoProps>((props) => { // Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?
+const FriendInfo : React.FC<FriendInfoProps> = (props) => { // Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?
   // const setSelectedFriend = props.setSelectedFriend;
   const onClose = props.onClose;
   const { showGroups, toggleShowGroups, setSelectedUserId } = props;
@@ -243,7 +243,7 @@ return (
   </>
 );
 
-});
+};
 
 const mapStateToProps = (state : RootState) => {
   return {

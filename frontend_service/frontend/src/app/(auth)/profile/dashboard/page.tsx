@@ -58,6 +58,8 @@ const AppGlass = styled.div`
   grid-column-end: 5;
   grid-template-columns: 2rem 30rem auto 35rem 2rem;
   grid-template-rows: repeat(3, 1fr);
+  position: relative;
+  bottom: 4vh;
   z-index: auto;
 }
 
@@ -289,7 +291,6 @@ function App() {
     <> 
     <Provider store={store}>
       {ShowEditProfile && <EditProfileShow onClose={() => setShowEditProfile(false)} />}
-
        <div className="App">
         <SocketUseContext.Provider value={socket}>
         {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}

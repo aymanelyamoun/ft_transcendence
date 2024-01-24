@@ -60,6 +60,8 @@ const AppGlass = styled.div`
   grid-column-end: 5;
   grid-template-columns: 2rem 30rem auto 35rem 2rem;
   grid-template-rows: repeat(3, 1fr);
+  position: relative;
+  bottom: 4vh;
   z-index: auto;
 }
 

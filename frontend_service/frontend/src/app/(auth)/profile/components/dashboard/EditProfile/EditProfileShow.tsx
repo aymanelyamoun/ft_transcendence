@@ -23,7 +23,7 @@ interface EditProfileShowProps {
   onClose: () => void;
 }
 
-const EditProfileShow = React.forwardRef<HTMLDivElement ,EditProfileShowProps>((props) => {
+const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
   const onClose = props.onClose;
   const [isError, setIsError] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState<boolean>(false);
@@ -313,6 +313,6 @@ const EditProfileShow = React.forwardRef<HTMLDivElement ,EditProfileShowProps>((
       </div>
     </>
   );
-});
+};
 
 export default EditProfileShow;

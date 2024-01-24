@@ -17,7 +17,7 @@ export const AlertMessage = ({onClick , message , type, children, id = ""} : { o
         <div className=" px-[55px] py-[65px]">
           <div className=" relative flex flex-col rounded-t-[10px] h-[250px] ">
             <div className='flex justify-center items-center'>
-              <p className={`alertMessage font-poppins font-light ${type !== 'notify' ? "text-[#FC2B5D]" : "text-[#FEFFFF]"} text-xl leading-normal not-italic`}>{message}</p>
+              <p className={`alertMessage font-poppins font-light ${type !== ('notify' || 'wannaPlay') ? "text-[#FC2B5D]" : "text-[#FEFFFF]"} text-xl leading-normal not-italic`}>{message}</p>
                 <div className=' absolute top-[79%] '>
                       {type === 'error' ? (
                           <button onClick={onClick} className= "alertDismiss relative buttom-[10%] text-[#FC2B5D]">

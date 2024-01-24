@@ -15,7 +15,7 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
   const router = useRouter();
   const [queueTimer, setQueueTimer] = useState<number>(-1);
   const [inQueue, setInQueue] = useState<boolean>(false);
-  const socketRef = useRef<Socket>(null!);
+  const socketRef = useRef<Socket | null>(null);
   const INTERVAL = useRef<NodeJS.Timeout | null>(null);
   const joinQueue = () => {
     setQueueTimer(0);
@@ -35,13 +35,13 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
       clearInterval(INTERVAL.current!);
       socketRef.current?.disconnect();
       socketRef.current?.off("CancelQueue");
-      socketRef.current = null!;
+      socketRef.current = null;
       setGameState("menu");
     });
     socketRef.current.on("redirect", (destination: string) => {
       clearInterval(INTERVAL.current!);
       socketRef.current?.disconnect();
-      socketRef.current = null!;
+      socketRef.current = null;
       router.push(destination);
     });
     console.log("joined matchmaking");
@@ -52,14 +52,14 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
     socketRef.current?.emit("CancelQueue");
     socketRef.current?.disconnect();
     socketRef.current?.off("CancelQueue");
-    socketRef.current = null!;
+    socketRef.current = null;
     setQueueTimer(-1);
     setInQueue(false);
   };
   const goBack = () => {
     socketRef.current?.emit("CancelQueue");
     socketRef.current?.disconnect();
-    socketRef.current = null!;
+    socketRef.current = null;
     setQueueTimer(-1);
     setInQueue(false);
     setGameState("menu");

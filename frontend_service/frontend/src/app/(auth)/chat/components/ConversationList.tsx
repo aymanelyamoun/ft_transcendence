@@ -15,6 +15,9 @@ import {
   CostumeButton,
   LstConversationSetStateContext,
   LstConversationStateContext,
+  alertInviteFriend,
+  setAlertInviteFriend,
+  setAlertInviteFriendContext,
   setShowDeleteChannelContext,
   setShowEditChannelContext,
   setShowExitChannelContext,
@@ -163,13 +166,14 @@ export const Conversations = ({
   const editChannel = useContext(showEditChannelContext);
   const exitChannel = useContext(showExitChannelContext);
   const deleteChannel = useContext(showDeleteChannelContext);
-
+  const inviteFriend = useContext(alertInviteFriend);
   const userInfo = useContext(UserContext);
 
   // setstates
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
+  const setInviteFriend = useContext(setAlertInviteFriendContext);
 
   const conversationProps = useContext(LstConversationStateContext);
 
@@ -335,6 +339,15 @@ export const Conversations = ({
               type={"delete"}
             />
           )}
+          {
+            inviteFriend && (
+              <AlertMessage
+                onClick={() => setInviteFriend(false)}
+                message={`are you sure you want to send invite requist to ${conversationProps?.name} .`}
+                type={"confirm"}
+              />
+            )
+          }
 
           {/* {children} */}
           {/* </ul> */}

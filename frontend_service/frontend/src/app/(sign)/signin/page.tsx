@@ -98,7 +98,7 @@ export default function Signin() {
               <Link href="/signup" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-[#999BD3]'>Create Account</Link>
             </div>
             </div>
-            {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={"User Logged!"} type="notify" /> : ""}
+            {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : ""}
         </div>
     </div>
   );

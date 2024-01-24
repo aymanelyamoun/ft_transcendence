@@ -11,6 +11,12 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { setLoggedInUserId } from '@/features/strings/stringActions';
 import Link from 'next/link';
+import { GiSkullShield } from "react-icons/gi";
+import { IoShieldSharp } from "react-icons/io5";
+import { GiRosaShield } from "react-icons/gi";
+import { GiBorderedShield } from "react-icons/gi";
+
+
 
 interface SidebarInfo {
   id: string;
@@ -18,6 +24,7 @@ interface SidebarInfo {
   profilePic: string;
   title: string;
   wallet: number;
+  totalXp: number
 }
 
 interface SidebarProps {
@@ -161,7 +168,7 @@ const UserId = styled.span`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-top: 2rem;
+
 
   @media (max-width: 1000px) {
     position: relative;
@@ -230,12 +237,25 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             {/* <OnlineStatus online={props.sidebar.online}>
             </OnlineStatus> */}
             <Username>{props.sidebar.username}</Username>
-            <UserId>{props.sidebar.title}</UserId>
+            {props.sidebar.title === 'Bronze' ? (
+              <GiSkullShield className='text-5xl text-orange-950' />
+          ) : props.sidebar.title === 'Silver' ? (
+            <IoShieldSharp className='text-5xl text-red-400' />
+          ) : props.sidebar.title === 'Gold' ? (
+            <GiRosaShield className='text-5xl text-amber-500' />
+          ) : props.sidebar.title === 'Master' ? (
+            <GiBorderedShield className='text-5xl text-amber-200' />
+          ) : (
+            null
+          )}
+            <UserId >
+                {props.sidebar.title}
+            </UserId>
           </ProfileImage>
         </ProfileHeader>
         <Wallet>
             <WalletIcon />
-            <WalletValue>{props.sidebar.wallet}</WalletValue>
+            <WalletValue>{props.sidebar.totalXp} XP </WalletValue>
         </Wallet>
         {ShowSettings ? <Settings setShowEditProfile={setShowEditProfile}/> : null}
         {/* <Settings /> */}

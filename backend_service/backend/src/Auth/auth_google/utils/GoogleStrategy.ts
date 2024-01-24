@@ -38,15 +38,14 @@ This method is part of the strategy and is called automatically by Passport.js. 
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
        var pic : String;
-        if (profile._json.picture)
-             pic  = profile._json.picture;
-        else 
-            pic = "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg";
-    
+        // if (profile._json.picture)
+        //      pic  = profile._json.picture;
+        // else 
+        // pic = "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg";
         const user = await  this.authGoogleService.validateUser({
                 email: profile.emails[0].value,
                 username: profile.emails[0].value.split('@')[0],
-                 profilePic: pic,
+                 profilePic: "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg",
         }, LOG_TYPE.googlelog);
         
         return (user);

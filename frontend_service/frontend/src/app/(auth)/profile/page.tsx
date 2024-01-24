@@ -118,6 +118,7 @@ function App() {
     title: "",
     profilePic: "",
     wallet: 0,
+    totalXp: 0,
   });
 
   const [statisticsPieProps, setStatisticsPieProps] = useState<StatisticsPieInterface>({
@@ -308,8 +309,7 @@ function App() {
             {PieDone && ChartDone &&
                 <Statistics StatisticsPie={statisticsPieProps} StatisticsChart={statisticsChartProps} UserProfile={false}/>
                 }
-            <Friends
-            />
+            <Friends/>
           </AppGlass>
         </SocketUseContext.Provider>
       </div>

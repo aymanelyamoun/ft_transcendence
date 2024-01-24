@@ -14,10 +14,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       ){
         super({
             clientID:
-                '1036525550588-efro8tfrk1fc4df8vk8k6lm1pqh7g5aq.apps.googleusercontent.com',
+                process.env.GoogleClinetId,
             clientSecret:
-                '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',
-          callbackURL: 'http://localhost:3001/api/auth/google/redirect',
+                process.env.GoogleClientSecret,
+            callbackURL:
+                process.env.GoogleCallbackURL,
             scope: ['profile', 'email'],
         });
     }
@@ -40,7 +41,7 @@ This method is part of the strategy and is called automatically by Passport.js. 
         if (profile._json.picture)
              pic  = profile._json.picture;
         else 
-            pic = "https://i.imgur.com/GJvG1b.png";
+            pic = "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg";
     
         const user = await  this.authGoogleService.validateUser({
                 email: profile.emails[0].value,

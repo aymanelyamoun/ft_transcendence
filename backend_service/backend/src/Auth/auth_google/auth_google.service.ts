@@ -79,7 +79,6 @@ async validateUser(details: UserDtetails, typ: LOG_TYPE)
           email: details.email,
           username: details.username,
           hash: '',
-          title: 'snouae rfa3 ta7di',
           wallet: 10,
           profilePic: details.profilePic.toString(),
           typeLog: typ,
@@ -119,7 +118,7 @@ async validateUser(details: UserDtetails, typ: LOG_TYPE)
       return {
         backendTokens: {
            accessToken: await this.jwtService.signAsync(payload, {
-               expiresIn: '1h',
+               expiresIn: '1d',
                secret: process.env.jwtSecretKey ,
            }),
            payload

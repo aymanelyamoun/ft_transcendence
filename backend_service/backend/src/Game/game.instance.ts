@@ -189,6 +189,40 @@ export class GameInstance {
         });
     }
 
+    getTitle = (xp : number) => {
+        if (xp < 50)
+            return ("Bronze")
+        else if (xp < 100)
+            return ("Silver")
+        else if (xp < 150)
+            return ("Gold")
+        else
+            return ("Master")
+    }
+
+
+    async update_achievement(winnerData : User, loserData : User, prisma : PrismaService) : Promise<void> {
+        // handle winner title
+        const winnerTitle = this.getTitle(winnerData.totalXp);
+        const loserTitle = this.getTitle(loserData.totalXp);
+        await prisma.user.update({
+            where :{
+                id : winnerData.id,
+            },
+            data: {
+                title: winnerTitle,
+            }
+        });
+        await prisma.user.update({
+            where :{
+                id : loserData.id,
+            },
+            data: {
+                title: loserTitle,
+            }
+        });
+    }
+
     async endGame (state : EndGameState) : Promise<void> {
         this.gameOver = true;
         this.gameEnded = true;
@@ -223,7 +257,6 @@ export class GameInstance {
                         // oponentId: loserData.id,
                     },
                 });
-            
                 await prismaService.gameRecord.create({
                     data: {
                         user: {connect:{id: loserData.id}},
@@ -252,6 +285,7 @@ export class GameInstance {
                         totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
                     },
                 });
+                await this.update_achievement(winnerData, loserData, prismaService)
                 console.log('database updated')
         }
             catch (error) {

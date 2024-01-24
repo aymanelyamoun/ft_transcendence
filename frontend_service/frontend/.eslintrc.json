@@ -1,7 +1,10 @@
 // {
 //   "extends": "next/core-web-vitals"
 // }
+// ,
 {
   "root": true,
-  "rules": {}
+  "rules": {},
+  // "extends": "airbnb",
+  // "plugins": ["react"]
 }

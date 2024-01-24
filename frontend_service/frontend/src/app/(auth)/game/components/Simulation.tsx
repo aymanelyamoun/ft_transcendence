@@ -1,4 +1,4 @@
-'use client';
+'use client';;
 import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import Matter, {Engine, Bodies, World, Render, Composite} from 'matter-js';

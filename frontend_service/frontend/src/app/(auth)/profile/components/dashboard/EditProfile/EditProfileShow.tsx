@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Backend_URL } from '@/lib/Constants';
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react'

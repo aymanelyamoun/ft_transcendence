@@ -23,7 +23,7 @@ model User{
   profilePic String
   username String @unique
   TwoFactSecret String?
-  title String
+  title String @default("Bronze")
   wallet Int?
   typeLog LOG_TYPE?
   isFirstLog Boolean?

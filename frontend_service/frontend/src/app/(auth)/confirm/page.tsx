@@ -57,6 +57,8 @@ export default function Confirm() {
     };
     checkAuthentication();
   }, [user, router]);
+
+
   
   const confirm = async () => {
 
@@ -72,7 +74,8 @@ export default function Confirm() {
         },
       });
       setIsNotify(true);
-      router.push('/profile/dashboard');
+      router.push('/profile');
+
     } catch (error)
     {
       data = error;

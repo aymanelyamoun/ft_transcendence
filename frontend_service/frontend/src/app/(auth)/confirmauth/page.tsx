@@ -49,7 +49,7 @@ export default function ConfirmAuth() {
         },
       });
       setIsNotify(true);
-      router.push("/profile/dashboard");
+      router.push("/profile");
     }
     catch (error)
     {
@@ -60,7 +60,7 @@ export default function ConfirmAuth() {
 
   if (!(userData?.isTwoFactorEnabled && !userData.isConfirmed2Fa))
   {
-    router.push("/profile/dashboard");
+    router.push("/profile");
     return <Loading />;
   }
   return (

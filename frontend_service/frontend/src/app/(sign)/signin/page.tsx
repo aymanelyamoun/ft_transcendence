@@ -51,7 +51,7 @@ export default function Signin() {
         router.push('/confirmauth');
       } else {
         setIsNotify(true);
-        router.push('/profile/dashboard');
+        router.push('/profile');
       }
     } catch (error) {
       data = error;

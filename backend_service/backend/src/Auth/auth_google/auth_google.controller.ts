@@ -58,7 +58,7 @@ export class AuthGoogleController
         if (user.isTwoFactorEnabled)
           return res.redirect('http://localhost:3000/confirmauth')
       else if (user.hash != '') {
-          return res.redirect('http://localhost:3000/profile/dashboard')
+          return res.redirect('http://localhost:3000/profile')
         }
         return res.redirect('http://localhost:3000/confirm')
       }
@@ -87,7 +87,7 @@ export class AuthGoogleController
         if (user.isTwoFactorEnabled)
           return res.redirect('http://localhost:3000/confirmauth')
         else if (user.hash != '') {
-          return res.redirect('http://localhost:3000/profile/dashboard')
+          return res.redirect('http://localhost:3000/profile')
         }
         return res.redirect('http://localhost:3000/confirm')
       }

@@ -35,7 +35,7 @@ export default function Navbar()
                 <Link href={'/game'} className="h-full w-full flex flex-col items-center justify-center">
                     <IoGameController className="h-[66%] w-[33%] text-white" />            
                 </Link>
-                <Link href={'/profile/dashboard'} className="h-full w-full flex flex-col items-center justify-center">
+                <Link href={'/profile'} className="h-full w-full flex flex-col items-center justify-center">
                     <FaUser className="h-[66%] w-[33%] text-white" />            
                 </Link>
                 <Link href={'/chat'} className="h-full w-full flex flex-col items-center justify-center">

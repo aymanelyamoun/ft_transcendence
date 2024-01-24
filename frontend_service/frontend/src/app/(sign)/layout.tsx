@@ -60,12 +60,16 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       }
     }, [isRouting, path]);
 
+    useEffect(() => {
+       window.history.replaceState({}, document.title, '/');
+    }, [pathname, router]);
+
   
     if (authenticated === null) {
       return <Loading />;
     }
     if (authenticated) {
-      router.push("/profile/dashboard");
+      router.push("/profile");
       return <Loading />;
     }
     return <>

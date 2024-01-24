@@ -34,6 +34,7 @@ const UserContext = createContext<UserContextValue>({
   setUser: (user: User | null) => { },
 });
 
+
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [twoFa, setTwoFa] = useState<boolean>(false)
@@ -71,6 +72,22 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     };
     checkAuthentication();
   }, [pathname]);
+  const [prevPath, setPrevPath] = useState("/");
+  const [isRouting, setisRouting] = useState(false);
+  // useEffect(() => {
+  //   if (prevPath !== pathname) {
+  //     setisRouting(true);
+  //   }
+  // }, [pathname, prevPath]);
+  // useEffect(() => {
+  //   // Redirect to '/' on the client side without adding to the history
+  //   if (isRouting)
+  //   {
+  //     setPrevPath(pathname);
+  //     setisRouting(false);
+  //    window.history.replaceState({}, document.title, '/');
+  //   }
+  // }, [pathname, router]);
   const value = { user, setUser };
   return (
     <main className="h-screen w-screen bg-[#050A27]">

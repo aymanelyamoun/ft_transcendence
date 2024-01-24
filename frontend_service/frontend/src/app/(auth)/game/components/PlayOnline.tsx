@@ -20,7 +20,7 @@ export default function PlayOnline({setGameState, gameState}: GameMenuProps) {
         }
     }, [])
     return (
-        <button id='ParentSim' className='relative linear-main rounded-lg bg-gradient-to-br w-[54vw] h-[80vh] text-white flex flex-col justify-center items-center'
+        <button id='ParentSim' className='linear-main rounded-lg bg-gradient-to-br w-[54vw] h-[80vh] text-white flex flex-col justify-center items-center'
         onClick={() => {setGameState('playing'); }}>
             <Simulation/>
             <div className='w-[70%] h-[60%] bg-[#9A9BD380] mx-auto rounded-xl'>

@@ -27,7 +27,7 @@ import { SlOptions } from "react-icons/sl";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { MdArrowForwardIos } from "react-icons/md";
-import { UserContext } from "../page";
+import { SocketContext, UserContext } from "../page";
 import { GiAstronautHelmet } from "react-icons/gi";
 import { FaUserAstronaut } from "react-icons/fa";
 import { ChannelInfoProps } from "../../../../../../../backend_service/backend/types/chatTypes";
@@ -40,13 +40,19 @@ import { ChannelInfoProps } from "../../../../../../../backend_service/backend/t
 
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
-
+  const ConversationListData = useContext(ConversationListContext); 
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
   const editChannel = useContext(showEditChannelContext);
   const userInfo = useContext(UserContext);
+  const lastConversation = useContext(LstConversationStateContext);
   const [isCreator, setIsCreator] = useState(false);
+
+  const socket = useContext(SocketContext);
+
+
+  const [members, setMembers] = useState<MemberProps[]>([]);
   // handle if the conversationProps is undefined
   // if (conversationProps?.id === undefined) {
   //   return;
@@ -85,6 +91,56 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   //     fetchFun();
 
   // }
+  
+  
+  useEffect(() => {
+    const fetchFun = async () => {
+      await fetch(
+        `http://localhost:3001/api/channels/getConversationMembers/${lastConversation?.id}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setMembers(data);
+          // setMembers((prev) => { return [...prev, data] })
+          console.log("Members data: 2", data);
+          console.log("hereeeeeeeeeee");
+          // if (data) setIsSet(true);
+        });
+    };
+    // console.log("Members data:", data);
+    
+    if (lastConversation?.id !== undefined) {
+      fetchFun();
+      }
+    },[lastConversation]);
+    
+    // lastConversation?.
+    const recieverUserId = members.filter((member) => member.user.id !== userInfo?.id)[0]?.user.id;
+    const recieverUserName = members.filter((member) => member.user.id !== userInfo?.id)[0]?.user.username;
+
+  //   console.log("recieverUserId :", recieverUserId);
+    
+  // console.log("***************ConversationListData :", ConversationListData);
+  // console.log("***************userInfo?.username :", userInfo?.username);
+  // console.log("***************userInfo?.id :", userInfo?.id);
+  // console.log("***************members :", members);
+
+  // console.log("last conversation data :", lastConversation);
+  const inviteToPlay = () => {
+    console.log('inviting this man', recieverUserName, 'to play whose id is', recieverUserId)
+    // socket.emit("inviteGame", {id: lastConversation?.id})
+    socket.emit("inviteGame", {id: recieverUserId})
+  };
+
   console.log(
     "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
     conversationProps?.type
@@ -94,7 +150,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
     <>
       {conversationProps?.type === "DIRECT" ? (
         <ConversationInfoWrapper
-          name="username"
+          name={conversationProps?.name}
           title={conversationProps?.title}
           imgUrl={avatar}
         >
@@ -121,13 +177,13 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
-                onClick={() => console.log("play game")}
+                onClick={() => inviteToPlay()}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-44"
                 hight="h-11"
               >
-                <IoGameController color="#1C2041" size={24} />
+                <IoGameController color="#1C2041" size={24}/>
               </CostumeButton>
             </div>
           </ButtonInfo>
@@ -202,7 +258,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         </ConversationInfoWrapper>
       ) : (
         <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
-          <div className="mt-10 flex justify-center items-center gap-10 flex-col">
+          <div className="mt-10 flex justify-center items-center gap-10 flex-col opacity-40">
             {/* <GiAstronautHelmet size={120} /> */}
             <FaUserAstronaut size={140} color='#FEFFFF' />
             <h1 className="font-poppins text-lg text-[#FEFFFF]">
@@ -514,6 +570,7 @@ const MemberList = ({
           if (data) setIsSet(true);
         });
     };
+    // console.log("Members data:", data);
 
     const fetchFun2 = async () => {
       await fetch(
@@ -555,13 +612,15 @@ const MemberList = ({
 
   console.log("membersInfo:", membersInfo);
   console.log("userInfo?.id:", userInfo?.id);
+  console.log("userInfo?.name:", userInfo?.username);
   // console.log("isSet:", isSet);
-  // console.log("members:", members);
+  console.log("members:", members);
   return (
     <>
       <MemberSeparator />
       {isSet &&
-        members.map((member) => {
+        // members.filter((member => member.user.id !== membersInfo.creator?.id)).map((member) => {
+        members.filter((member => member.user.id !== userInfo?.id)).map((member) => {
           return (
             <MemberIthem
               imgUrl="some/url"
@@ -692,8 +751,9 @@ export const ChatPage = () => {
   const [showEditChannel, setShowEditChannel] = useState<boolean>(false);
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
-
+  const [refresh, setRefresh] = useState<boolean>(false);
   // console.log("conversationId:", conversation?.id);
+  console.log(" refresh : ", refresh);
   useEffect(() => {
     const fetchFun = async () => {
       const isAdmin = true; // Replace true with your desired value
@@ -710,20 +770,25 @@ export const ChatPage = () => {
       )
         .then((res) => {
           return res.json();
+      
           // const data: Conversation[];
         })
         .then((data: ConversationIthemProps[]) => {
+          console.log("channels members data:", data);
           setConversationList(
             data.sort((a, b) => {
               const bDate = new Date(b.updatedAt);
               const aDate = new Date(a.updatedAt);
               return bDate.getTime() - aDate.getTime();
             })
-          );
-        });
-    };
-    fetchFun();
-  }, []);
+            );
+          });
+        };
+        fetchFun();
+      }, [refresh]);
+      
+      // console.log("channels data:", ConversationList);
+      console.log(" refresh 2 : ", refresh);
 
   useEffect(() => {
     // console.log("conversation?.id:", conversation?.id);
@@ -773,7 +838,9 @@ export const ChatPage = () => {
                           value={showDeleteChannel}
                         >
                           <div className="h-full basis-1/4 flex">
-                            <Conversations>
+                            <Conversations 
+                            setRefresh={setRefresh}
+                            >
                               {" "}
                               {/* <ConversationList /> */}
                             </Conversations>

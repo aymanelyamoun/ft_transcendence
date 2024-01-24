@@ -113,11 +113,13 @@ const SearchHeader = () => {
       };
     
       useEffect(() => {
-
         fetchUsers();
         fetchChannel('all');
       }, []);
 
+      useEffect(() => {
+        console.log("ChannelFriendSearch: ",ChannelFriendSearch);
+      });
     
     return (
         <>

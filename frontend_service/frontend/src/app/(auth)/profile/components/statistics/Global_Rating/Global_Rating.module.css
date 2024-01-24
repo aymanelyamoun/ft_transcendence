@@ -2,17 +2,17 @@
 {
     background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
     border-radius: 15px;
-    height: 88.8vh;
-    width: 70%;
+    height: 90%;
+    width: 90%;
     display: flex;
-
-    /* justify-content: center;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-    z-index: auto; */
     position: relative;
     top: 5.2vh;
-    overflow: auto;
+    /* overflow: auto; */
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .global-rating::-webkit-scrollbar {
@@ -21,21 +21,23 @@
 
 .global-rating-title
 {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     font-size: 2rem;
     color: white;
     font-weight: 600;
-    margin-left: 2vw;
+    margin-left: 1vw;
     margin-top: 2vh;
+    margin-left: 30px;
 }
 
 .RatingList
 {
     position: relative;
-    top: 6vh;
-    left: 0.7vw;
+    width: 100%;
+    overflow: auto;
+    /* margin-left: 30px; */
 
 }
 
@@ -44,15 +46,15 @@
     background: rgba(125, 126, 154, 0.2);
     border-radius: 10px;
     display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    /* width: 40vw; */
-    width: 22vw;
-    /* padding: 10px 0px; */
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
     box-sizing: border-box;
-    height: 7vh;
+    height: 5.7rem;
     border-bottom: 1px solid rgba(154, 155, 211, 0.2);
-    margin: 30px 10px;
+    margin: 30px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
 }
 
 .player-profile
@@ -62,6 +64,18 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
+}
+
+.username-container
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    left: 1rem;
 }
 
 /* .player-profile img {
@@ -78,8 +92,6 @@
     font-size: 1.5rem;
     color: white;
     font-weight: 600;
-    margin-left: 5vw;
-    margin-top: -5vh;
 }
 
 .player-title
@@ -91,7 +103,6 @@
     line-height: 27px;
     letter-spacing: 0em;
     text-align: left;    
-    margin-left: 5vw;
 }
 
 .player-rating
@@ -103,7 +114,8 @@
     line-height: 30px;
     letter-spacing: 0em;
     text-align: left;
-    margin-left: 8vw;
+    margin-left: auto;
+    margin-right: 30px;
 }
 
 .global-rating-icon

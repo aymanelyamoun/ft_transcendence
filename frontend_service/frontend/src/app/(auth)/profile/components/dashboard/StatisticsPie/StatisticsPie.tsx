@@ -4,10 +4,10 @@ import React, { use, useEffect } from 'react';
 import * as echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import styles from './StatisticsPie.module.css';
-import { StatisticsInterface } from '../interfaces';
+import { StatisticsPieInterface } from  "../../../components/dashboard/interfaces";
 
 interface StatisticsPieProps {
-    statistics: StatisticsInterface;
+    statistics: StatisticsPieInterface;
 }
 
 const StatisticsPie: React.FC<StatisticsPieProps> = (props: { statistics: any; }) => {

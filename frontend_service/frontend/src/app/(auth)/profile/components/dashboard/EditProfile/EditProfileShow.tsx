@@ -1,4 +1,4 @@
-'use client';
+"use client"
 import { Backend_URL } from '@/lib/Constants';
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react'
@@ -20,17 +20,32 @@ let data : any
 var notify : string
 
 interface EditProfileShowProps {
-  EditRef: React.RefObject<HTMLDivElement>;
+  onClose: () => void;
 }
 
-const EditProfileShow = () => {
+const EditProfileShow = React.forwardRef<HTMLDivElement ,EditProfileShowProps>((props) => {
+  const onClose = props.onClose;
   const [isError, setIsError] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState<boolean>(false);
+  const EditRef = useRef<HTMLDivElement>(null);
   const handleClick = () => {
     setIsError(false);
     setIsNotify(false);
   }
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (EditRef.current && !EditRef.current.contains(event.target as Node))
+    {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [onClose]);
 
   const [isUsernameVisible, setIsUsernameVisible] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -234,8 +249,8 @@ const EditProfileShow = () => {
   return (
     <>
     <div className="addChannelOverlay flex flex-col  justify-center items-center text-center  ">
-    {/* <div ref={EditRef}></div> */}
       <div
+        ref={EditRef}
         style={gradientStyle}
         className=" max-w-lg sm:w-2/3 w-80 p-1 rounded-md sm:block px-20  overflow-y-auto"
       >
@@ -298,6 +313,6 @@ const EditProfileShow = () => {
       </div>
     </>
   );
-};
+});
 
 export default EditProfileShow;

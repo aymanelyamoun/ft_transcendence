@@ -7,12 +7,15 @@ export interface SearchU {
     members: {
         user: {
             profilePic: string;
+            id: string;
         };
     }[];
-  
+    banedUsers?: {
+      id: string;
+  }[];
     id: string;
-    username?: string;
-    profilePic?: string;
+    username: string;
+    profilePic: string;
     channelName: string;
     channelPic: string;
     creatorId: string;
@@ -26,16 +29,17 @@ export interface SearchU {
     members: {
       user: {
         profilePic: string;
+        id: string;
       };
     }[];
     
     id: string;
-    username?: string;
-    profilePic?: string;
-    channelName?: string;
-    channelPic?: string;
+    username: string;
+    profilePic: string;
+    channelName: string;
+    channelPic: string;
     // creatorId: string;
-    channelType?: string;
+    channelType: string;
     hash?: string;
     isBlocked: boolean;
     group: boolean;
@@ -45,50 +49,61 @@ export interface SearchU {
 
     export interface GroupComponentProps<>
     {
-      bannedUsers: {
+      banedUsers: {
         id: string;
-      }[];
+    }[];
+    id: string;
+    channelName: string;
+    channelPic: string;
+    channelType: string;
+    members: {
+      user: {
+        profilePic: string;
         id: string;
-        channelName?:string;
-        channelPic?: string;
-        channelType?: string;
-        members?: {
-              user: {
-                    profilePic: string;
-          };
-      }[];
+      };
+            }[];
         setChannelFriendSearchU: React.Dispatch<React.SetStateAction<SearchU[]>>;
         setChannelFriendSearch: React.Dispatch<React.SetStateAction<AddSearchInterface[]>>;
         ShowGroups: boolean;
       }
 
-export interface StatisticsInterface
+export interface StatisticsPieInterface
 {
   wins: number;
   losses: number;
   total: number;
 }
 
+export interface StatisticsChartInterface
+{
+  daysOfWeek: {
+    day: string;
+    gamesPlayed: number;
+  }[];
+}
 export interface AddSearchInterface
 {
-    bannedUsers: {
+    banedUsers: {
         id: string;
     }[];
     id: string;
     channelName: string;
     channelPic: string;
-    creatorId: string;
     channelType: string;
-    hash: string;
     members: {
       user: {
         profilePic: string;
+        id: string;
       };
     }[];
+    creatorId: string;
+    hash: string;
 }
 
 export interface ProtectedPassProps
 {
   setInputPassword: React.Dispatch<SetStateAction<string>>;
   setPasswordSent: React.Dispatch<SetStateAction<boolean>>;
+  setOpenPassComp: React.Dispatch<SetStateAction<boolean>>;
+  inputPassword: string;
 }

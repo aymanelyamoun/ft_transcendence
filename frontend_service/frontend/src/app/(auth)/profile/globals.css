@@ -23,7 +23,7 @@
   justify-content: center;
   align-items: center;
   font-family: 'Inter', sans-serif;
-  z-index: auto;
+  /* z-index: auto; */
 }
 
 .AppGlass
@@ -38,7 +38,7 @@
   grid-column-end: 5;
   grid-template-columns: 2rem 25rem auto 40rem 2rem;
   grid-template-rows: repeat(3, 1fr);
-  z-index: auto;
+  /* z-index: auto; */
 }
 
 @media (min-width: 1300px) and (max-width: 1900px) {

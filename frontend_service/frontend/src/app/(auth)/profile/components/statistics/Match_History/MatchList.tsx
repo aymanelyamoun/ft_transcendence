@@ -4,6 +4,8 @@ import styles from './Match_History.module.css'
 import { match } from 'assert';
 import MatchItem from './MatchItem';
 import {MatchProps} from './match_history_interfaces'
+import styled from 'styled-components';
+import { GiAstronautHelmet } from 'react-icons/gi';
 
 // interface Match {
 //   xp: number;
@@ -11,6 +13,24 @@ import {MatchProps} from './match_history_interfaces'
 //   concededGoals: number;
 // }
 
+const NoGroupsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 15vh;
+  color: #fff;
+`;
+
+const NoGroupIcon = styled.div`
+  font-size: 11vh;
+  color: #fff;
+`;
+
+const NoGroupSpan = styled.span`
+font-size: 3vh;
+`;
 
 const MatchList: React.FC<MatchProps> = (props) => {
 
@@ -19,7 +39,7 @@ const MatchList: React.FC<MatchProps> = (props) => {
     return (
       <div className={styles['match-list']}>
         <ul>
-          {matches ? (
+          {matches  && matches.length ? (
             matches.map((match, index: number) => (
               <MatchItem
                 key={index}
@@ -31,7 +51,14 @@ const MatchList: React.FC<MatchProps> = (props) => {
                 UserProfileStyling={UserProfileStyling}
               />
             ))
-          ) : null}
+          ) : 
+          <NoGroupsContainer>
+          <NoGroupIcon>
+            <GiAstronautHelmet />
+          </NoGroupIcon>
+          <NoGroupSpan>No Available Matches</NoGroupSpan>
+        </NoGroupsContainer>
+          }
         </ul>
       </div>
     );

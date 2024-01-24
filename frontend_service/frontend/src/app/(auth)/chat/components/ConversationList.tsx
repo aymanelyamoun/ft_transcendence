@@ -63,11 +63,12 @@ const ConversationIthem = (props: ConversationIthemProps) => {
         // alt={conversationProps.name}
         alt={conversationProps.name}
       />
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-[4%}">
         <p className="friendsName">{conversationProps.name}</p>
         <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">
           {
-            "tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."
+            // "tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."
+            conversationProps.lastMessage
           }
         </p>
       </div>
@@ -76,12 +77,14 @@ const ConversationIthem = (props: ConversationIthemProps) => {
 };
 
 export const ConversationList = ({
+  setRefresh,
   isChannel,
   setShowAddChannel,
 }: // rowData,
 // conversation,
 // setConversation,
 {
+  setRefresh:React.Dispatch<React.SetStateAction<boolean>>;
   isChannel: boolean;
   setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
   // rowData: Conversation[];
@@ -91,6 +94,7 @@ export const ConversationList = ({
   // >;
 }) => {
   const ConversationListData = useContext(ConversationListContext);
+  // const lastConv = useContext(LstConversationStateContext);
   if (!isChannel) {
     {
       return (
@@ -138,17 +142,22 @@ export const ConversationList = ({
           }
         })}
       {isChannel && (
-        <CreateChannelButton setShowAddChannel={setShowAddChannel} />
+        <CreateChannelButton 
+        setShowAddChannel={setShowAddChannel} 
+        setRefresh={setRefresh} 
+        />
       )}
     </ul>
   );
 };
 
 export const Conversations = ({
+  setRefresh,
   // conversationList,
   // setConversationList,
   children,
 }: {
+  setRefresh:React.Dispatch<React.SetStateAction<boolean>>;
   // conversationList: ConversationIthemProps[];
   // setConversationList: React.Dispatch<
   // React.SetStateAction<ConversationIthemProps[]>
@@ -272,6 +281,7 @@ export const Conversations = ({
     fetchFun();
   };
 
+    // console.log("refresh in channels : ", setRefres)
 
   // console.log("goToCreateChannel", goToCreateChannel);
 
@@ -291,6 +301,7 @@ export const Conversations = ({
                   // setChannelSearch={setChannelSearch}
                 /> */}
           <ConversationList
+            setRefresh={setRefresh}
             isChannel={isChannel}
             setShowAddChannel={setShowAddChannel}
             // conversationListData={conversationList}
@@ -310,7 +321,9 @@ export const Conversations = ({
           {goToCreateChannel && (
             <CreateChannel
               selectedFriends={selectedFriends}
+              setSelectedFriends={setSelectedFriends}
               setChannelCreated={setGoToCreateChannel}
+              setRefresh={setRefresh}
             />
           )}
           {editChannel && <EditChannel setEditChannel={setEditChannel} />}
@@ -318,7 +331,7 @@ export const Conversations = ({
             <AlertMessage
               onClick={handleExitChannel}
               message={
-                "are you sure you want to exit groupName you can no longer send or see messages in this group"
+                `are you sure you want to exit ${conversationProps.name} you can no longer send or see messages in this group .`
               }
               type={"exit"}
             />
@@ -327,7 +340,7 @@ export const Conversations = ({
             <AlertMessage
               onClick={handleDeleteChannel}
               message={
-                "are you sure you want to delete groupName, all the messages will be lost"
+                `are you sure you want to delete ${conversationProps.name}, all the messages will be lost .`
               }
               type={"delete"}
             />
@@ -371,7 +384,7 @@ export const ChatToggel = ({
 
   const handleChannelClick = () => {
     setIsChannel(true);
-  };
+  };``
 
   return !isChannel ? (
     // add space-evenly using tailwindcss

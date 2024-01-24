@@ -325,6 +325,8 @@ export class UserService {
             const userId = user.id;
             let  { username } = body;
             username = username.trim();
+            console.log(username);
+            console.log(user.username);
             if(username.length < 4)
              throw new UnauthorizedException('Username must be at least 4 characters long.');
             if (username.length > 20)
@@ -344,7 +346,8 @@ export class UserService {
         }catch (error)
         {
             if (error instanceof UnauthorizedException) {
-                throw new UnauthorizedException('New username is the same as the current username');
+                throw new UnauthorizedException("can't update the username");
+                // throw new UnauthorizedException('New username is the same as the current username');
               } else if (error instanceof ConflictException) {
                   throw new ConflictException('Username is already taken');
               } else {
@@ -471,10 +474,11 @@ export class UserService {
                     totalXp : 'desc'
                 },
                 select : {
-                    username : true,
-                    totalXp : true,
+                    id: true,
                     profilePic : true,
+                    username : true,
                     title : true,
+                    totalXp : true,
                 }
             })
             return ranks;
@@ -545,20 +549,23 @@ export class UserService {
         }
     }
 
-    async GamesWeek(@Req() req: Request)
+
+    
+
+    async GamesWeek(username: string, @Req() req: Request)
     {
         try
         {
-            const user = req['user'] as User;
-            const userid = user.id;
+             const user = await this.findByUsername(username);
+             const userid = user.id;
+
             const today = new Date();
             const daysOfWeek = [];
 
-            for (let i = 0; i < 7; i++)
+            for (let i = 6; i >= 0; i--)
             {
               const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
               const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-        
               const gamesOfDay = await this.prisma.gameRecord.count({
                 where: {
                   userId : userid,

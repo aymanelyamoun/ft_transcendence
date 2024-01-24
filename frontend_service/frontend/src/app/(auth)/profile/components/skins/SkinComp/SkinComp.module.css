@@ -1,54 +1,158 @@
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 132deg;
+  inherits: false;
+}
+
+.SkinCompRoot
+{
+  position: relative;
+  width: 12vw;
+  height: 42vh;
+  padding: 0.875vw 0 0.875vw 0;
+  /* position: relative; */
+  margin: 5rem 2rem;
+}
+
 .SkinComp {
-    /* transition: width 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
-      border-radius 2s ease-in-out,
-      background 2s ease-in-out,
-      box-shadow 2s ease-in-out;
-    transition-property: all; */
-    border: none;
-    cursor: pointer;
-    width: 12vw;
-    height: 42vh;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  /* background: rgba(30, 35, 61, 0.7); */
+  background: #1b2136;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  overflow: hidden;
+  }
+  
+  /* .SkinComp:hover {
+    width: 13vw;
+    height: 46vh;
+    transform: scaleX(1.1) scaleY(1.1);
+    transition: width 2s heigh 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
+    border-radius 2s ease-in-out,
+    background 2s ease-in-out,
+    box-shadow 2s ease-in-out;
+    transition-property: all;
+    border: 1px solid #C2FF86;
+  } */
+
+  .rotateanimation
+  {
+    width: 100%;
+    height: 100%;
+    z-index: auto;
     border-radius: 10px;
-    background: rgba(30, 35, 61, 0.7);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin: 0 1.875vw 0 1.875vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.875vw 0 0.875vw 0;
-    position: relative;
-    overflow: hidden;
-    margin: 5rem 2rem;
+    /* padding: 0.875vw 0 0.875vw 0; */
+    /* position: relative; */
+    /* margin: 5rem 2rem; */
+    box-sizing: border-box;
   }
 
-  .SkinComp:active
+  .rotateanimation:hover
   {
-    border: 1px solid #C2FF86;
+    content: "";
+    width: 13vw;
+    height: 51.5vh;
+    padding: 2.5rem 1.3rem;
+    transform: scaleX(1.1) scaleY(1.1);
+    border-radius: 8px;
+    background-image: linear-gradient( var(--rotate) , #5ddcff, #3c67e3 43%, #4e00c2);
+    z-index: -1;
+    animation: spin 2.5s linear infinite;
+    color: rgb(88 199 250 / 100%);
+    transition: color 1s;
+  }
+
+  .rotateanimation.active
+  {
+    content: "";
+    width: 13vw;
+    height: 51.5vh;
+    padding: 2.5rem 1.3rem;
+    transform: scaleX(1.1) scaleY(1.1);
+    border-radius: 8px;
+    background-image: linear-gradient( var(--rotate) , #5ddcff, #3c67e3 43%, #4e00c2);
+    z-index: -1;
+    animation: spin 2.5s linear infinite;
+    color: rgb(88 199 250 / 100%);
+    transition: color 1s;
+  }
+
+  .rotateanimation.active::after {
+    content: "";
+    position: absolute;
+    top: calc(0vh / 6);
+    left: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    transform: scale(0.8);
+    filter: blur(calc(51.5vh / 6));
+    background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
+    opacity: 1;
+    transition: opacity 0.5s;
+    animation: spin 2.5s linear infinite;
+  }
+  .rotateanimation:hover::after {
+    content: "";
+    position: absolute;
+    top: calc(0vh / 6);
+    left: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    transform: scale(0.8);
+    filter: blur(calc(51.5vh / 6));
+    background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
+    opacity: 1;
+    transition: opacity 0.5s;
+    animation: spin 2.5s linear infinite;
+  }
+  
+  /* .rotateanimation:hover::after {
+    animation: none;
+    opacity: 0;
+  } */
+
+  /* .rotateanimation:hover:before, .rotateanimation:hover:after {
+    animation: none;
+    opacity: 0;
+  } */
+  .SkinComp:hover
+  {
+    transform: scaleX(1.1) scaleY(1.1);
+    position: relative;
   }
 
   .SkinComp.active
   {
-    border: 1px solid #C2FF86;
-    width: 13vw;
-    height: 46vh;
     transform: scaleX(1.1) scaleY(1.1);
-    transition: width 2s heigh 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
-    border-radius 2s ease-in-out,
-    background 2s ease-in-out,
-    box-shadow 2s ease-in-out;
-    transition-property: all;
+    position: relative;
   }
 
-  .SkinComp:hover {
-    width: 13vw;
-    height: 46vh;
-    transform: scaleX(1.1) scaleY(1.1);
-    transition: width 2s heigh 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
-    border-radius 2s ease-in-out,
-    background 2s ease-in-out,
-    box-shadow 2s ease-in-out;
-    transition-property: all;
+  .card:hover:before, .card:hover:after {
+    animation: none;
+    opacity: 0;
+  }
+
+  @keyframes spin {
+    0% {
+      --rotate: 0deg;
+    }
+    100% {
+      --rotate: 360deg;
+    }
   }
   
   .skin-name {
@@ -60,3 +164,23 @@
     font-size: 30px;
     font-weight: bold;
   }
+
+
+@media (max-width: 1500px), (max-height: 900px) {
+  .rotateanimation
+  {
+    width: 15vw;
+    height: 56vh;
+    /* z-index: auto; */
+    border-radius: 10px;
+    /* padding: 0.875vw 0 0.875vw 0; */
+    /* position: relative; */
+    margin: 0rem 1rem;
+    box-sizing: border-box;
+  }
+
+  .SkinComp:hover
+  {
+    transform: scaleX(1.25) scaleY(1.25);
+  }
+}

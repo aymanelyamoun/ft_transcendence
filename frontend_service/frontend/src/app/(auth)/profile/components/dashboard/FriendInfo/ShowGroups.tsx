@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
@@ -5,8 +7,10 @@ import { Backend_URL } from '@/lib/Constants';
 import { AddSearchInterface, SearchU } from '../interfaces';
 import GroupComponent from '../Header/GroupComponent';
 
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { toggleShowGroups } from '@/features/booleans/booleanActions';
+import { setSelectedUserId } from '@/features/strings/stringActions';
+import { GiAstronautHelmet } from 'react-icons/gi';
 // const ShowGroupsContainer = styled.div`
 // background: rgba(154, 155, 211, 0.2);
 // display: flex;
@@ -55,6 +59,25 @@ const ShowGroupsContainer = styled.div`
   border-radius: 15px;
 `;
 
+const NoGroupsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 15vh;
+  color: #fff;
+`;
+
+const NoGroupIcon = styled.div`
+  font-size: 11vh;
+  color: #fff;
+`;
+
+const NoGroupSpan = styled.span`
+font-size: 3vh;
+`;
+
 interface showGroupProps
 {
   onClose: () => void;
@@ -71,6 +94,7 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
   const [ChannelFriendSearch, setChannelFriendSearch] = useState<AddSearchInterface[]>([]);
   const [ShowGroups, setShowGroups] = useState(true);
   const showRef = useRef<HTMLDivElement>(null);
+  const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId)
 
   const fetchChannelGroups = async () => {
     try {
@@ -95,10 +119,10 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
       console.error("Error fetching data: ", error);
     }
   };
-
+  
   useEffect(() => {
     fetchChannelGroups();
-  }, []);
+  }, [ChannelFriendSearch]);
 
   const handleClickOutside = (event: any) => {
     if (showRef.current && !showRef.current.contains(event.target as Node))
@@ -112,19 +136,30 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose])
+  }, [onClose]);
 
-  useEffect(() => {
-    console.log("data friend: ", ChannelFriendSearch);
-  })
+  function isUserMember(members: { user: { profilePic: string, id: string}}[], userId: string)
+  {
+    if (members)
+      return (members.some(member => member.user.id === userId));
+  };
+
+  // const isMember = isUserMember(, selectedUserId);
+
+  // useEffect(() => {
+  //   console.log("Heeeere is member: ", isMember);
+  // })
 
 
   return (
     <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">
       <div ref={showRef} className={styles['info-container']}>
         <ShowGroupsList>
-          {ChannelFriendSearch.map((friend) => {
+          {ChannelFriendSearch.length ? (
+          ChannelFriendSearch.map((friend) => {
             return (
+              <>
+                {!isUserMember(friend.members, selectedUserId) ? (
               <ShowGroupsContainer>
               <GroupComponent
                 key={friend.id}
@@ -132,17 +167,29 @@ const ShowGroups = React.forwardRef<HTMLDivElement, showGroupProps>((props) => {
                 channelName={friend.channelName}
                 channelPic={friend.channelPic}
                 channelType={friend.channelType}
-                // members={friend.members}
-                members={[]}
-                bannedUsers={friend.bannedUsers}
+                members={friend.members}
+                banedUsers={friend.banedUsers}
                 setChannelFriendSearch={setChannelFriendSearch}
                 ShowGroups={ShowGroups}
                 setChannelFriendSearchU={function (value: React.SetStateAction<SearchU[]>): void {
                   throw new Error('Function not implemented.')
                 } }/>
                 </ShowGroupsContainer>
+                ) : null}
+                {/* idea hna hiya ndir chi number variable and it will keep incrementing and when it gets to the
+                ChannelFriendSearch.length it will sho the `No available groups` */}
+                </>
             );
-          })}
+          })
+          ) : (
+            <NoGroupsContainer>
+              <NoGroupIcon>
+                <GiAstronautHelmet />
+              </NoGroupIcon>
+              <NoGroupSpan>No Available groups</NoGroupSpan>
+            </NoGroupsContainer>
+          )
+        }
         </ShowGroupsList>
       </div>
     </div>

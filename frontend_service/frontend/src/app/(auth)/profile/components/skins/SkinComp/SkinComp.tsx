@@ -35,28 +35,20 @@ const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, setActive
     {
       setActiveSkin(Name);
     }
-    // const body = await response.text();
-    // console.log("skin body: ", response);
-    // if(response.ok){
-    //   // console.log("skin body: ", body);
-    //   alert("the skin has been sent");
-      // setIsActive(!isActive);
-    // }else {
-    //   alert("the skin has not been sent");
-    // }
   } catch (error) {
     alert(error);
   }
   }
-  // useEffect(() => {
-  //   console.log("active: ", active);
-  // },[setActiveSkin]);
   return (
-    <div className={`${styles.SkinComp} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
-      <SkinImg>
-        <img src={svgImage.src} alt={Name} />
-      </SkinImg>
-        <span className={styles['skin-name']}>{Name}</span>
+    <div className={styles.SkinCompRoot}>
+      <div className={`${styles.rotateanimation} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
+        <div className={`${styles.SkinComp} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
+          <SkinImg>
+            <img src={svgImage.src} alt={Name} />
+          </SkinImg>
+            <span className={styles['skin-name']}>{Name}</span>
+        </div>
+      </div>
     </div>
   );
 };

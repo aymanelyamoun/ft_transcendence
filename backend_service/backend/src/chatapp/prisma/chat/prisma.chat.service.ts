@@ -187,14 +187,20 @@ export class PrismaChatService{
           }
         }
 
-        async getAllChannels(){
+        async getAllChannels(@Req() req:Request){
           try{
+            const user = req['user'] as User;
             const channels = await this.prisma.channel.findMany({where:{
               OR:[
                 {channelType:"public"},
                 {channelType:"protected"},
               ],
-            }, include:{members:{select:{user:{select:{profilePic:true}}}}, creator:{select:{id:true, }}}});
+              banedUsers: {
+                none: {
+                  id : user.id
+                }
+              }
+            }, include:{members:{select:{user:{select:{id : true, profilePic:true}}}}, creator:{select:{id:true, }}}});
             return channels.map((channel)=>{
               return{
                 ...channel,
@@ -210,7 +216,7 @@ export class PrismaChatService{
         async addUserToChannelSearch(@Req() req:Request){
           try{
             const user = req['user'] as User;
-            const channel = await this.prisma.channel.findMany({where:{members:{some:{userId:user.id, isAdmin:true}}}, include:{banedUsers:{select:{id:true}}}});
+            const channel = await this.prisma.channel.findMany({where:{members:{some:{userId:user.id, isAdmin:true}}}, include:{members:{select:{user:{select:{id:true, profilePic:true}}}}, banedUsers:{select:{id:true}} } });
             if (!channel) throw new NotFoundException("channel does not exist");
             return channel;
           }
@@ -322,11 +328,13 @@ export class PrismaChatService{
 
             const requestedChannel = await this.getChannelWithProp(channelData.channelId);
             const userIsBanned = requestedChannel.banedUsers.some((user)=> user.id === loggedUser.id);
-
+            console.log("user is banned: ", userIsBanned);
             if (userIsBanned) throw new ForbiddenException("you are banned from this channel");
-
-
+            // if (requestedChannel.channelType === "public")
+            //   return await this.addChannelToUser(loggedUser.id, channelData.channelId);
             const correctPass = await bcrypt.compare(channelData.password, requestedChannel.hash);
+            console.log("correctPass: ", correctPass);
+            console.log("user is banned: ", userIsBanned);
 
             if (correctPass) {const joinedchannel =  await this.addChannelToUser(loggedUser.id, channelData.channelId);}
             else

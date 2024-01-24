@@ -31,7 +31,6 @@ model User{
   table String @default("default")
   paddle String @default("default")
   ball String @default("default")
-
   totalXp Int @default(0)
 
   userDMs Conversation[]

@@ -130,7 +130,7 @@ export class ChatGateway implements OnGatewayConnection {
     }
     else if (socket['inQueue'] == true)
     {
-      this.gameService.removeFromQueue(socket) // remove from queue if in queues
+      this.gameService.removeFromQueueID(socket.id) // remove from queue if in queues
       console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
     }
     // else{
@@ -182,13 +182,16 @@ export class ChatGateway implements OnGatewayConnection {
     client["user"] = await this.getUserData(client) as User;
     client['inQueue'] = true;
     client.on('CancelQueue', () => {
+      console.log('Got event CancelQueue from client: ', client['user'].username)
       this.gameService.removeFromQueue(client);
+      this.gameService.clearFinishedGames();
       client.disconnect(true);
       return ;
     });
     this.gameService.clearFinishedGames();
     if (this.gameService.inGameCheck(client))
     {
+        console.log("canceling queue cause user is still in game: ", client['user'].username);
         client.emit('CancelQueue')
         client.disconnect(true);
         return ;
@@ -230,7 +233,7 @@ export class ChatGateway implements OnGatewayConnection {
     setTimeout(()=>{
       console.log("removing invite socket from map after 10sec.")
       this.gatewayService.removeInviteSocketFromMap(sender, data.id);
-    }, 20000); 
+    }, 10000); 
     this.gatewayService.addInviteSocketToMap(sender, data.id);
     console.log("sending invite to: ", data.id)
     // loop throught connected socket map and find the socket with id = data.id
@@ -255,8 +258,14 @@ export class ChatGateway implements OnGatewayConnection {
       console.log('GAME INVITE ACCEPTED BETWEEN ', user.id, ' and ', data.senderId);
       const sender = this.gatewayService.getSocketByUserId(data.senderId);
       if (sender){
+        if (this.gameService.inGameCheckByID(user.id) || this.gameService.inGameCheckByID(sender.id))
+          return; 
+        const matchID : string = sender['user'].username + 
+            receiver['user'].username + Math.random().toString();
        sender.emit('gameInviteAccepted', {id: user.id, username: user.username});
-       receiver.emit('gameInviteAccepted', {id: data.senderId, username: sender['user'].username});    
+       receiver.emit('gameInviteAccepted', {id: data.senderId, username: sender['user'].username});
+       sender.emit('redirect', '/game/match?matchID=' + matchID);
+        receiver.emit('redirect', '/game/match?matchID=' + matchID);
       }
     }
     else

@@ -8,6 +8,9 @@ import { UilSetting } from '@iconscout/react-unicons';
 import { FaGoogleWallet } from 'react-icons/fa';
 import Settings from '../Settings/Settings';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { setLoggedInUserId } from '@/features/strings/stringActions';
+import Link from 'next/link';
 
 interface SidebarInfo {
   id: string;
@@ -21,10 +24,43 @@ interface SidebarProps {
   sidebar: SidebarInfo;
   ShowSettings: boolean;
   setShowEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoggedInUserId: (id: string) => void;
   // onSidebarItemClick: (id: string) => void;
 }
 
-const SidebarRoot = styled.div`
+const SidebarRootUserProfile = styled.div`
+  grid-row-start: 1;
+  grid-column-start: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 4vh;
+  transition: all 300ms ease;
+
+  @media (max-width: 1000px) {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 5vh;
+    transition: all 300ms ease;
+  }
+
+  @media (max-width: 550px) {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 4vh;
+    transition: all 300ms ease;
+    width: 85%;
+    height: 20.5rem;
+  }
+  `;
+
+  const SidebarRootStandard = styled.div`
   grid-row-start: 1;
   grid-row-end: 4;
   grid-column-start: 2;
@@ -43,7 +79,6 @@ const SidebarRoot = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    top: 5vh;
     transition: all 300ms ease;
   }
 
@@ -83,6 +118,12 @@ const ProfileHeader = styled.div`
 
   @media (max-width: 1000px) {
     width: 93%;
+    top: 1vh;
+  }
+  @media (max-width: 550px)
+  {
+    width: 93%;
+    height: 73%;
     top: 1vh;
   }
 `;
@@ -157,17 +198,31 @@ const WalletValue = styled.span`
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
 
-  const { ShowSettings } = props; // Destructure the props object to get the ShowSettings property
+  const { ShowSettings, setLoggedInUserId } = props; // Destructure the props object to get the ShowSettings property
   const setShowEditProfile = props.setShowEditProfile;
-  useEffect (() => {
-  },[]);
+  useEffect(() => {
+    if (props.sidebar && props.sidebar.id) {
+      const loggedInUserId = props.sidebar.id;
+      setLoggedInUserId(loggedInUserId);
+    }
+  }, [props.sidebar, setLoggedInUserId]);
+
+  const SidebarRoot = ShowSettings ? SidebarRootStandard : SidebarRootUserProfile;
+
+
+  // useEffect(() => 
+  // {
+  //   console.log("props sideBar: ", props.sidebar);
+  // })
 
   return (
         <SidebarRoot>
         <SidebarContainer>
           <ProfileHeader>
           <ProfileImage>
+            <Link href="/profile/statistics">
             <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+            </Link>
             {/* <OnlineStatus online={props.sidebar.online}>
             </OnlineStatus> */}
             <Username>{props.sidebar.username}</Username>
@@ -185,4 +240,15 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   );
 };
 
-export default Sidebar;
+const mapStateToProps = (state: RootState) => 
+{
+  return {
+    setLoggedInUserId: state.strings.loggedInUserId,
+  };
+};
+
+const mapDispatchToProps = {
+  setLoggedInUserId,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

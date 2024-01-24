@@ -257,9 +257,8 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
       const token = req['Token'];
       await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
       res.clearCookie('access_token');
-      res.status(200).json({ message: 'Logout successful' });
-    }
-    catch(error)
+      return res.redirect('http://localhost:3000/')
+    }catch(error)
     {
       throw new UnauthorizedException();
     }

@@ -6,10 +6,10 @@ import RatingItem from './RatingItem';
 
 interface Rating {
     id: string;
-    player_profile: string;
-    player_name: string;
-    player_title: string;
-    rating: number;
+    profilePic: string;
+    username: string;
+    title: string;
+    totalXp: number;
 }
 
 interface RatingListProps {
@@ -24,10 +24,10 @@ const Global_RatingList: React.FC<RatingListProps> = ({ ratings }) => {
             <RatingItem
                 key={rating.id}
                 id={rating.id}
-                player_profile={rating.player_profile}
-                player_name={rating.player_name}
-                player_title={rating.player_title}
-                rating={rating.rating}
+                profilePic={rating.profilePic}
+                username={rating.username}
+                title={rating.title}
+                totalXp={rating.totalXp}
             />
             ))}
         </ul>

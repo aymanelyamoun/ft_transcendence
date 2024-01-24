@@ -22,8 +22,9 @@ interface FriendItemProps {
 }
 
 const MoreIconStyle = styled.div`
-  margin-left: auto;
-  margin-righ: auto;
+margin-left: auto;
+position: relative;
+top: 0.5vh;
   `;
 
   

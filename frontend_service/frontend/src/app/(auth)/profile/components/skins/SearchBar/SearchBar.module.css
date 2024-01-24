@@ -73,3 +73,9 @@
     position: relative;
     left: -5000px;
   }
+
+  @media (max-width: 1500px), (max-height: 900px) {
+    .searchIconContainer {
+      font-size: 2rem;
+    }
+  }

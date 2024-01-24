@@ -68,9 +68,10 @@ div span.friends-title {
 {
     background: rgba(154, 155, 211, 0.2);
     display: flex;
+    align-items: flex-start;
     width: 94%;
     box-sizing: border-box;
-    height: 97px;
+    height: 80px;
     border-bottom: 1px solid rgba(154, 155, 211, 0.2);
     margin: 15px 10px;
     border-radius: 15px;
@@ -93,8 +94,8 @@ div span.friends-title {
 
 .friendReq-image
 {
-    width: fit-content;
-    height: fit-content;
+    width: 4.9rem;
+    height: 4.9rem;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
@@ -231,7 +232,6 @@ div span.friends-title {
         display: flex;
         flex-direction: column;
         position: relative;
-        top: 5vh;
         left: 4vw;
         transition: all 300ms ease;
     }
@@ -245,7 +245,6 @@ div span.friends-title {
     .friendItem-container
     {
         width: 92%;
-        margin: 15px 50px;
     }
 }
 

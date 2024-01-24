@@ -12,11 +12,15 @@ import Animation from '../components/dashboard/Animation/Animation';
 
 import { socket } from "../../../../socket"
 import EditProfileShow from '../components/dashboard/EditProfile/EditProfileShow';
-import { StatisticsInterface } from '../components/dashboard/interfaces';
+import { StatisticsChartInterface, StatisticsPieInterface } from '../components/dashboard/interfaces';
+import { useRouter } from "next/navigation";
+import { useUser } from '../../layout';
 
 // import store and redux provider
 import { Provider } from 'react-redux'
 import store from './../../../../store';
+import { AlertMessage } from '../../chat/components/alertMessage';
+import Navbar from '../../game/components/Navbar';
 
 
 
@@ -29,6 +33,12 @@ interface SearchU
     group: boolean;
     groupMembers?: string[];
 }
+
+const NavRoot = styled.div`
+    position: absolute;
+    top: 0;
+    width: 100%;
+`;
 
 
 const SearchDiv = styled.div`
@@ -72,7 +82,7 @@ const AppGlass = styled.div`
     overflow: hidden;
     grid-template-columns: repeat(2, 1fr); /* Two columns with equal size */
     // grid-gap: 4rem; /* Space between columns (margin + margin) */
-    grid-template-rows: 15rem 11rem auto;
+    grid-template-rows: auto 11rem 19rem;
     z-index: auto;
   }
   @media screen and (max-width: 450px)
@@ -84,14 +94,22 @@ const AppGlass = styled.div`
     justify-content: flex-start;
   }
 `;
-
+interface InviteInterface {
+  id: string;
+  username: string;
+}
 export const SocketUseContext = React.createContext(socket);
 
 function App() {
 
+  const [PlayPopUp , setplayPopUp] = useState<boolean>(false);
+  const popUpTimeout = useRef<NodeJS.Timeout>(null!);
   const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
   const EditRef = useRef<HTMLDivElement>(null);
+  const inviterData = useRef<InviteInterface>(null!);
   const [SidebarDone, setSidebarDone] = useState<boolean>(false);
+  const [PieDone, setPieDone] = useState<boolean>(false);
+  const [ChartDone, setChartDone] = useState<boolean>(false);
   const [SidebarInfo, setSidebarInfo] = useState({
     id: "",
     username: "",
@@ -100,15 +118,31 @@ function App() {
     wallet: 0,
   });
 
-  const [StatisticsProps, setStatisticsProps] = useState<StatisticsInterface>({
+  const [statisticsPieProps, setStatisticsPieProps] = useState<StatisticsPieInterface>({
     wins: 0,
     losses: 0,
     total: 0,
   });
+  const [statisticsChartProps, setStatisticsChartProps] = useState<StatisticsChartInterface>({
+    daysOfWeek: [],
+  });
 
-  const fetchStatistics = async () => {
+  const router = useRouter();
+  const [username, setUsername] = useState<string | null>(null);
+  const user = useUser();
+  useEffect(() => {
+    const checkAuthentication = async () => {
+        if (user) {
+          setUsername(user.username);
+        }
+    };
+    checkAuthentication();
+  }, [user, router]); 
+
+  const fetchStatisticsPie = async () => 
+  {
     try {
-      const res = await fetch(`${Backend_URL}user/winsLoses/${SidebarInfo.username}`, {
+      const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -117,34 +151,70 @@ function App() {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      if (res.ok) {
-        // console.log("username : ", SidebarInfo.username);
-        // console.log("here" + res);
-        // console.log("---------------------");
+      const data = await res.json();
+      setStatisticsPieProps(data);
+      setPieDone(false);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    } finally
+    {
+      setPieDone(true);
+    }
+  };
+
+  const fetchStatisticsChart = async () => 
+  {
+    try {
+      const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok)
+      {
         const data = await res.json();
-        setStatisticsProps(data);
-        // console.log("data : ", data);
-        // console.log("data statistics ylh bismillah : ", StatisticsProps);
-          setSidebarDone(false);
-      }
-      else {
-        console.log("----------error-----------");
-        alert("error");
+        setStatisticsChartProps(data);
+        // setChartDone(true);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
-    } finally {
-      // console.log("data statistics ylh  : ", StatisticsProps);
+    } finally
+    {
+      setChartDone(true);
     }
   };
+
   
   useEffect(() => {
     socket.connect();
     socket.on("connect", () => {
       console.log("Connected to server");
     });
+    socket.on('gameInvite', (data : any) => {
+      inviterData.current = data;
+      setplayPopUp(true);
+      popUpTimeout.current = setTimeout(() => {
+        setplayPopUp(false);
+      }, 10000);
+      console.log("A notification of an invtation of a game : ", inviterData.current);
+    })
+
+    socket.on('gameInviteAccepted', (data : any) => {
+      console.log("A GAME HAS BEEN ACCEPTED : ", data);
+    })
+    socket.on('redirect', (destination : any) => {
+      router.push(destination)
+      console.log("redirecting to : ", destination);
+    })
     return () => {
       console.log("calling disconnect")
+      socket.off('redirect')
+      socket.off('gameInvite');
+      socket.off('gameInviteAccepted');
       socket.disconnect();
     }
   }, []);
@@ -182,10 +252,14 @@ function App() {
   useEffect(() => {
     fetchUserData();
     if (SidebarDone)
-      fetchStatistics();
+    {
+
+    }
     // fetchReqData();
     // fetchUsers();
   }, [SidebarDone]);
+
+  
 
   const handleClickOutside = (event: MouseEvent) => {
     if (EditRef.current && !EditRef.current.contains(event.target as Node))
@@ -201,21 +275,37 @@ function App() {
       document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [])
+
+  useEffect(() => 
+  {
+    if (username)
+    {
+      fetchStatisticsPie();
+      fetchStatisticsChart();
+    }
+  }, [PieDone, ChartDone, username]);
   
   return (
-    <>
+    <> 
     <Provider store={store}>
-      {ShowEditProfile && <EditProfileShow />}
-      <div className="App">
+      {ShowEditProfile && <EditProfileShow onClose={() => setShowEditProfile(false)} />}
+
+       <div className="App">
         <SocketUseContext.Provider value={socket}>
+        {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
           <SearchDiv >
             <SearchHeader />
           </SearchDiv>
+          {/* <NavRoot>
+            <Navbar/>
+          </NavRoot> */}
           <AppGlass>
             <Sidebar sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
             <Skins />
             <Animation />
-            <Statistics statistics={StatisticsProps} />
+            {PieDone && ChartDone &&
+                <Statistics StatisticsPie={statisticsPieProps} StatisticsChart={statisticsChartProps} UserProfile={false}/>
+                }
             <Friends
             />
           </AppGlass>

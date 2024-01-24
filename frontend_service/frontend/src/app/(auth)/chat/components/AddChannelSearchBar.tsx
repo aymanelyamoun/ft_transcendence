@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-"use client"
-
-import React from 'react'
-=======
-
->>>>>>> origin/chat_front
 import Image from 'next/image'
 import { useState, ChangeEvent, useRef, useEffect } from 'react';
 import searchBarInAddChannel from "../../../../../public/iconSearchInAddChannel.png";

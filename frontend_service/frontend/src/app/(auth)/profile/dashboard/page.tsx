@@ -1,37 +1,37 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState, ReactNode, useRef} from 'react';
-import Sidebar from '../components/dashboard/sidebar/sidebar';
-import Skins from '../components/dashboard/skins/skins';
-import Friends from '../components/dashboard/friends/friends';
-import Statistics from '../components/dashboard/statistics/statistics';
-import { Backend_URL } from '@/lib/Constants';
-import SearchHeader from '../components/dashboard/Header/SearchHeader';
-import styled from 'styled-components';
-import Animation from '../components/dashboard/Animation/Animation';
+import React, { useEffect, useState, ReactNode, useRef } from "react";
+import Sidebar from "../components/dashboard/sidebar/sidebar";
+import Skins from "../components/dashboard/skins/skins";
+import Friends from "../components/dashboard/friends/friends";
+import Statistics from "../components/dashboard/statistics/statistics";
+import { Backend_URL } from "@/lib/Constants";
+import SearchHeader from "../components/dashboard/Header/SearchHeader";
+import styled from "styled-components";
+import Animation from "../components/dashboard/Animation/Animation";
 
-import { socket } from "../../../../socket"
-import EditProfileShow from '../components/dashboard/EditProfile/EditProfileShow';
-import { StatisticsChartInterface, StatisticsPieInterface } from '../components/dashboard/interfaces';
+import { socket } from "../../../../socket";
+import EditProfileShow from "../components/dashboard/EditProfile/EditProfileShow";
+import {
+  StatisticsChartInterface,
+  StatisticsPieInterface,
+} from "../components/dashboard/interfaces";
 import { useRouter } from "next/navigation";
-import { useUser } from '../../layout';
+import { useUser } from "../../layout";
 
 // import store and redux provider
 import { Provider } from 'react-redux'
 import store from './../../../../store';
 import { AlertMessage } from '../../chat/components/alertMessage';
 import Navbar from '../../game/components/Navbar';
+// import { SocketUseContext } from "@/utils/socketUseContext";
 
-
-
-
-interface SearchU
-{
-    id: number;
-    username: string;
-    profilePic: string;
-    group: boolean;
-    groupMembers?: string[];
+interface SearchU {
+  id: number;
+  username: string;
+  profilePic: string;
+  group: boolean;
+  groupMembers?: string[];
 }
 
 const NavRoot = styled.div`
@@ -87,8 +87,7 @@ const AppGlass = styled.div`
     grid-template-rows: auto 11rem 19rem;
     z-index: auto;
   }
-  @media screen and (max-width: 450px)
-  {
+  @media screen and (max-width: 450px) {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -120,29 +119,30 @@ function App() {
     wallet: 0,
   });
 
-  const [statisticsPieProps, setStatisticsPieProps] = useState<StatisticsPieInterface>({
-    wins: 0,
-    losses: 0,
-    total: 0,
-  });
-  const [statisticsChartProps, setStatisticsChartProps] = useState<StatisticsChartInterface>({
-    daysOfWeek: [],
-  });
+  const [statisticsPieProps, setStatisticsPieProps] =
+    useState<StatisticsPieInterface>({
+      wins: 0,
+      losses: 0,
+      total: 0,
+    });
+  const [statisticsChartProps, setStatisticsChartProps] =
+    useState<StatisticsChartInterface>({
+      daysOfWeek: [],
+    });
 
   const router = useRouter();
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | undefined>();
   const user = useUser();
   useEffect(() => {
     const checkAuthentication = async () => {
-        if (user) {
-          setUsername(user.username);
-        }
+      if (user) {
+        setUsername(user.username);
+      }
     };
     checkAuthentication();
-  }, [user, router]); 
+  }, [user, router]);
 
-  const fetchStatisticsPie = async () => 
-  {
+  const fetchStatisticsPie = async () => {
     try {
       const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
         method: "GET",
@@ -158,14 +158,12 @@ function App() {
       setPieDone(false);
     } catch (error) {
       console.error("Error fetching data: ", error);
-    } finally
-    {
+    } finally {
       setPieDone(true);
     }
   };
 
-  const fetchStatisticsChart = async () => 
-  {
+  const fetchStatisticsChart = async () => {
     try {
       const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
         method: "GET",
@@ -176,27 +174,24 @@ function App() {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      if (res.ok)
-      {
+      if (res.ok) {
         const data = await res.json();
         setStatisticsChartProps(data);
         // setChartDone(true);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
-    } finally
-    {
+    } finally {
       setChartDone(true);
     }
   };
 
-  
   useEffect(() => {
     socket.connect();
     socket.on("connect", () => {
       console.log("Connected to server");
     });
-    socket.on('gameInvite', (data : any) => {
+    socket.on("gameInvite", (data: any) => {
       inviterData.current = data;
       setplayPopUp(true);
       popUpTimeout.current = setTimeout(() => {
@@ -205,25 +200,24 @@ function App() {
       console.log("A notification of an invtation of a game : ", inviterData.current);
     })
 
-    socket.on('gameInviteAccepted', (data : any) => {
+    socket.on("gameInviteAccepted", (data: any) => {
       console.log("A GAME HAS BEEN ACCEPTED : ", data);
-    })
-    socket.on('redirect', (destination : any) => {
-      router.push(destination)
+    });
+    socket.on("redirect", (destination: any) => {
+      router.push(destination);
       console.log("redirecting to : ", destination);
-    })
+    });
     return () => {
-      console.log("calling disconnect")
-      socket.off('redirect')
-      socket.off('gameInvite');
-      socket.off('gameInviteAccepted');
+      console.log("calling disconnect");
+      socket.off("redirect");
+      socket.off("gameInvite");
+      socket.off("gameInviteAccepted");
       socket.disconnect();
-    }
+    };
   }, []);
-  
+
   // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
   // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
-  
 
   const fetchUserData = async () => {
     try {
@@ -243,50 +237,40 @@ function App() {
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
-    } finally
-    {
+    } finally {
       setSidebarDone(true);
     }
   };
 
-
-  
   useEffect(() => {
     fetchUserData();
-    if (SidebarDone)
-    {
-
+    if (SidebarDone) {
     }
     // fetchReqData();
     // fetchUsers();
   }, [SidebarDone]);
 
-  
-
   const handleClickOutside = (event: MouseEvent) => {
-    if (EditRef.current && !EditRef.current.contains(event.target as Node))
-    {
+    if (EditRef.current && !EditRef.current.contains(event.target as Node)) {
       // Click outside the FriendInfo component, hide it
       setShowEditProfile(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  useEffect(() => 
-  {
-    if (username)
-    {
+  useEffect(() => {
+    if (username) {
       fetchStatisticsPie();
       fetchStatisticsChart();
     }
   }, [PieDone, ChartDone, username]);
-  
+
   return (
     <> 
     <Provider store={store}>
@@ -315,6 +299,6 @@ function App() {
       </Provider>
     </>
   );
-};
+}
 
 export default App;

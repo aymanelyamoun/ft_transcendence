@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from "react";
-import TypeMsg from "./TypeMsg";
 import { useState, useEffect, useRef } from "react";
 import {
   ConversationListContextSet,
@@ -7,20 +6,15 @@ import {
   MessagesContext,
 } from "./ConversationInfo";
 // import { v4 as uuidv4 } from "uuid";
-import {
-  ConversationIthemProps,
-  MessageProps,
-} from "../../../../../../../backend_service/backend/types/chatTypes";
+import { ConversationIthemProps, MessageProps } from "@/utils/types/chatTypes";
 import avatar from "../../../../../public/garou-kid.jpeg";
-import jake from "../../../../public/jakeWithHeadPhones.jpg";
 import Image from "next/image";
 import { socket } from "../../../../socket";
 
-import { userId, isAdmin } from "./ConversationInfo";
 import sendIcon from "../../../../../public/sendButton.png";
 // import { isAdmin } from "./ConversationInfo";
-import { UserContext } from "../page";
-import { RiChatOffLine } from "react-icons/ri";
+import { SiWechat } from "react-icons/si";
+import { UserContext } from "@/utils/createContext";
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>
@@ -56,7 +50,10 @@ export const ConversationChatSection = () => {
 
   let maxId = 0;
   if (messages.length !== 0) {
-    maxId = messages.reduce((max, message) => Math.max(max, message.id),messages[0].id );
+    maxId = messages.reduce(
+      (max, message) => Math.max(max, message.id),
+      messages[0].id
+    );
   }
   const conversation = useContext(LstConversationStateContext);
   // const [data, setData] = useState<string>("");
@@ -82,9 +79,9 @@ export const ConversationChatSection = () => {
       if (newMessage.conversationId === conversation?.id)
         setMessages((prevMessages) => [...prevMessages, newMessage]);
 
-      setConversationList((prevConversationList) => [
+      setConversationList((prevConversationList: any) => [
         createConversationListIthem(newMessage),
-        ...prevConversationList.filter((conversation) => {
+        ...prevConversationList.filter((conversation: any) => {
           return conversation.id !== newMessage.conversationId;
         }),
       ]);
@@ -99,18 +96,21 @@ export const ConversationChatSection = () => {
   useEffect(() => {
     // Scroll to the bottom when new messages are added
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
   // console.log("data:", data);
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
-    { 
-      lastConversation !== undefined ? 
-        <div ref={chatContainerRef} className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12">  
+      {lastConversation !== undefined ? (
+        <div
+          ref={chatContainerRef}
+          className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12"
+        >
           {messages
-            .filter((message) => message.message.trim() !== '')
+            .filter((message) => message.message.trim() !== "")
             .map((message) => {
               // if (message.senderId === userId) {
               return <Message key={message.id} message={message} />;
@@ -118,27 +118,22 @@ export const ConversationChatSection = () => {
             })
             .reverse()}
         </div>
-      : 
-        null
-      }
+      ) : null}
       <ConversationMessagesContextSet.Provider value={setMessages}>
         <ConversationMessagesContextStat.Provider value={messages}>
-          {
-            lastConversation !== undefined ? <TypeMessage maxId={maxId} />
-            :
-            (
-              // <div className="mt-[300px] ml-[400px]">
-              // <div className="h-full w-full">
-                <div className="flex flex-col items-center h-full w-full">
-                  < RiChatOffLine size={360} color="#FEFFFF" className="  opacity-40 " />
-                  <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center opacity-40">
-                      No Chat Is Selected
-                  </h1>
-                </div>
-              // </div>
-
-            )
-          }
+          {lastConversation !== undefined ? (
+            <TypeMessage maxId={maxId} />
+          ) : (
+            // <div className="mt-[300px] ml-[400px]">
+            // <div className="h-full w-full">
+            <div className="flex flex-col items-center h-full w-full">
+              <SiWechat size={360} color="#FEFFFF" className=" opacity-40 " />
+              <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center">
+                Welcome To The Chat Section
+              </h1>
+            </div>
+            // </div>
+          )}
           {/* <TypeMsg
             userId={userId}
             conversationId={conversation?.id}
@@ -153,7 +148,7 @@ export const ConversationChatSection = () => {
 };
 
 const Message = ({ message }: { message: MessageProps }) => {
-  const userId = useContext(UserContext)?.id;
+  const userId = useContext(UserContext).user?.id;
   if (message.senderId === userId) {
     return <MessageChat message={message} type="sendMsg" />;
   }
@@ -189,12 +184,12 @@ const TypeMessage = ({ maxId }: { maxId: number }) => {
   const setMessages = useContext(ConversationMessagesContextSet);
   const messages = useContext(ConversationMessagesContextStat);
   const conversation = useContext(LstConversationStateContext);
-  const userId = useContext(UserContext)?.id as string;
+  const userId = useContext(UserContext).user?.id;
 
   const newMessage: MessageProps = {
     id: maxId + 1,
     message: inputValue,
-    senderId: userId,
+    senderId: userId ?? "",
     conversationId: conversation?.id ?? "", // Provide a default value for conversationId
     createdAt: new Date(),
     sender: {

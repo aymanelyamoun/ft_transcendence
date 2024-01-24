@@ -1,18 +1,14 @@
-import React, { use, useContext } from "react";
-import { ConversationIthemProps } from "../../../../../../../backend_service/backend/types/chatTypes";
-import { useState, useEffect, createContext } from "react";
+import React, { useContext } from "react";
+import { ConversationIthemProps } from "@/utils/types/chatTypes";
+import { useState, createContext } from "react";
 import Image from "next/image";
-import msg from "../../../../public/msg_icon.png";
-import msgs from "../../../../public/msgs_icons.png";
-import msg2 from "../../../../public/msg2_icon.png";
-import msgs2 from "../../../../public/msgs2_icons.png";
+
 import avatar from "../../../../../public/garou-kid.jpeg";
 import splitBar from "../../../../../public/splitBar.png";
 
 import { HiMiniChatBubbleLeftRight } from "react-icons/hi2";
 import { HiMiniChatBubbleLeft } from "react-icons/hi2";
-import { Console } from "console";
-// import SearchBar from "./SearchBar";
+
 import {
   ButtonInfo,
   ConversationListContext,
@@ -29,16 +25,14 @@ import {
 
 export const IsChannelContext = createContext(false);
 
-import { userId, isAdmin } from "./ConversationInfo";
 // import { AlertMessage } from "./AlertMessage";
 import CreateChannel from "./CreateChannel";
-import { FaRunning } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
 import CreateChannelButton from "./CreateChannelButton";
 import AddNewChannel from "./AddNewChannel";
-import { Friend, UserContext } from "../page";
+import { Friend } from "../page";
 import EditChannel from "./EditChannel";
-import { AlertMessage } from "./alertMessage";
+import { AlertMessage } from "./AlertMessage";
+import { UserContext } from "@/utils/createContext";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -84,7 +78,7 @@ export const ConversationList = ({
 // conversation,
 // setConversation,
 {
-  setRefresh:React.Dispatch<React.SetStateAction<boolean>>;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   isChannel: boolean;
   setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
   // rowData: Conversation[];
@@ -142,9 +136,9 @@ export const ConversationList = ({
           }
         })}
       {isChannel && (
-        <CreateChannelButton 
-        setShowAddChannel={setShowAddChannel} 
-        setRefresh={setRefresh} 
+        <CreateChannelButton
+          setShowAddChannel={setShowAddChannel}
+          setRefresh={setRefresh}
         />
       )}
     </ul>
@@ -157,7 +151,7 @@ export const Conversations = ({
   // setConversationList,
   children,
 }: {
-  setRefresh:React.Dispatch<React.SetStateAction<boolean>>;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   // conversationList: ConversationIthemProps[];
   // setConversationList: React.Dispatch<
   // React.SetStateAction<ConversationIthemProps[]>
@@ -222,7 +216,7 @@ export const Conversations = ({
   // console.log("userInfo?.id: ----------", userInfo?.id);
   const handleExitChannel = () => {
     const channelData = {
-      channelId: conversationProps.channelId,
+      channelId: conversationProps?.channelId,
       // userId:  userInfo?.id,
       userId2: "some_random_id",
     };
@@ -253,7 +247,7 @@ export const Conversations = ({
 
   const handleDeleteChannel = () => {
     const channelData = {
-      channelId: conversationProps.channelId,
+      channelId: conversationProps?.channelId,
       userId2: "some_random_id",
     };
     console.log("channelData of Delete: ", channelData);
@@ -281,7 +275,7 @@ export const Conversations = ({
     fetchFun();
   };
 
-    // console.log("refresh in channels : ", setRefres)
+  // console.log("refresh in channels : ", setRefres)
 
   // console.log("goToCreateChannel", goToCreateChannel);
 
@@ -330,18 +324,14 @@ export const Conversations = ({
           {exitChannel && (
             <AlertMessage
               onClick={handleExitChannel}
-              message={
-                `are you sure you want to exit ${conversationProps.name} you can no longer send or see messages in this group .`
-              }
+              message={`are you sure you want to exit ${conversationProps?.name} you can no longer send or see messages in this group .`}
               type={"exit"}
             />
           )}
           {deleteChannel && (
             <AlertMessage
               onClick={handleDeleteChannel}
-              message={
-                `are you sure you want to delete ${conversationProps.name}, all the messages will be lost .`
-              }
+              message={`are you sure you want to delete ${conversationProps?.name}, all the messages will be lost .`}
               type={"delete"}
             />
           )}
@@ -384,7 +374,8 @@ export const ChatToggel = ({
 
   const handleChannelClick = () => {
     setIsChannel(true);
-  };``
+  };
+  ``;
 
   return !isChannel ? (
     // add space-evenly using tailwindcss

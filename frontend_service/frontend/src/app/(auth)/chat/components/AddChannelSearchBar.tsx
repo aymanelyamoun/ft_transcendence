@@ -1,15 +1,14 @@
+<<<<<<< HEAD
 "use client"
 
 import React from 'react'
+=======
+
+>>>>>>> origin/chat_front
 import Image from 'next/image'
 import { useState, ChangeEvent, useRef, useEffect } from 'react';
-// import { Friend, friendsData} from '../page';
 import searchBarInAddChannel from "../../../../../public/iconSearchInAddChannel.png";
-import { BsSearch } from "react-icons/bs";
-// import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
-// import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
-
-import { Friend} from "../page";
+import { Friend } from "../page";
 
 interface FriendListProps {
   // setFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;

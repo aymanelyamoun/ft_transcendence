@@ -1,31 +1,15 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-// import FriendList from './chat/components/FriendList'
-import FriendList from "./components/FriendList";
-// import ChatSection from "./components/ChatSection";
-import ProfileInfos from "./components/ProfileInfos";
+
 import { StaticImageData } from "next/image";
-// import avatar from '../../public/garou-kid.jpeg';
-import avatar from "../../../public/garou-kid.jpeg";
-import ChannelPic from "../../../public/group_pic.jpg";
-import jake from "../../../public/jakeWithHeadPhones.jpg";
-// import avatar from '../../../public/garou-kid.jpeg';
-// import ChannelPic from '../../../public/group_pic.jpg';
-// import jake from '../../../public/jakeWithHeadPhones.jpg';
 import { createContext, useEffect, useRef, useState } from "react";
 import {useRouter} from 'next/navigation'
-import ConversationList, {
-  ChatToggel,
-  Conversations,
-} from "./components/ConversationList";
-import { ChatPage, ConversationInfo } from "./components/ConversationInfo";
-// import { CONVERSATION_TYP } from "../../../../../backend_service/backend/types/chatTypes";
+import { ChatPage } from "./components/ConversationInfo";
+// import { ChatPage } from "./components/conversationInfo";
 import './spinoza.css'
 import { socket } from "../../../socket";
-import { AlertMessage } from "./components/alertMessage";
-
-// import Message from './Message'
+import { AlertMessage } from "./components/AlertMessage";
+import { UserContext } from "@/utils/createContext";
+import { SocketContext } from "@/utils/socketContext";
 
 export interface Channel {
   id: number;
@@ -51,8 +35,6 @@ interface User {
   isConfirmed2Fa: Boolean;
 }
 
-export const UserContext = createContext<User | null>(null);
-export const SocketContext = createContext<typeof socket>(socket);
 
 
 export default function Home() {
@@ -114,23 +96,12 @@ export default function Home() {
   
   return (
     <>
-      <UserContext.Provider value={user}>
+      {/* <UserContext.Provider value={user} */}
         <SocketContext.Provider value={socket}>
             {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
            <ChatPage />
         </SocketContext.Provider>
-      </UserContext.Provider>
-      {/* <ChatPage /> */}
+      {/* </UserContext.Provider> */}
     </>
-    // <main className="main flex justify-center items-center h-full w-full ">
-    //   <div className="h-full basis-1/4 flex">
-    //     <Conversations>{/* <ConversationList /> */}</Conversations>
-    //   </div>
-    //   <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
-    //     <ChatSection />
-    //     {/* <ProfileInfos /> */}
-    //     <ConversationInfo type="D"></ConversationInfo>
-    //   </div>
-    // </main>
   );
 }

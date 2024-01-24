@@ -1,4 +1,5 @@
 import React, {
+  SetStateAction,
   createContext,
   use,
   useContext,
@@ -6,31 +7,31 @@ import React, {
   useState,
 } from "react";
 import Image, { StaticImageData } from "next/image";
+// import avatar from "../../../../../public/garou-kid.jpeg";
 import avatar from "../../../../../public/garou-kid.jpeg";
 import { MdDelete, MdPersonAddAlt1 } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { MdGroupAdd } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { FaRunning } from "react-icons/fa";
-import ChatSection, { ConversationChatSection } from "./ChatSection";
-import { jwtDecode } from "jwt-decode";
+import { ConversationChatSection } from "./ChatSection";
 import { Conversations } from "./ConversationList";
-import Cookies from "js-cookie";
 
 import {
   ConversationIthemProps,
   MemberProps,
   MessageProps,
-} from "../../../../../../backend_service/backend/types/chatTypes";
+} from "@/utils//types/chatTypes";
 import { SlOptions } from "react-icons/sl";
 
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { MdArrowForwardIos } from "react-icons/md";
-import { SocketContext, UserContext } from "../page";
+import { SocketContext } from "@/utils/socketContext";
 import { GiAstronautHelmet } from "react-icons/gi";
 import { FaUserAstronaut } from "react-icons/fa";
-import { ChannelInfoProps } from "../../../../../../../backend_service/backend/types/chatTypes";
+import { ChannelInfoProps } from "@/utils/types/chatTypes";
+import { UserContext } from "@/utils/createContext";
 // export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 // export const isAdmin = false;
 
@@ -124,8 +125,8 @@ export const ConversationInfo = ({ type }: { type: string }) => {
     },[lastConversation]);
     
     // lastConversation?.
-    const recieverUserId = members.filter((member) => member.user.id !== userInfo?.id)[0]?.user.id;
-    const recieverUserName = members.filter((member) => member.user.id !== userInfo?.id)[0]?.user.username;
+    const recieverUserId = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.id;
+    const recieverUserName = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.username;
 
   //   console.log("recieverUserId :", recieverUserId);
     
@@ -258,9 +259,9 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         </ConversationInfoWrapper>
       ) : (
         <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
-          <div className="mt-10 flex justify-center items-center gap-10 flex-col opacity-40">
+          <div className="mt-10 flex justify-center items-center gap-10 flex-col">
             {/* <GiAstronautHelmet size={120} /> */}
-            <FaUserAstronaut size={140} color='#FEFFFF' />
+            <FaUserAstronaut size={140} color='#FEFFFF' className="opacity-40" />
             <h1 className="font-poppins text-lg text-[#FEFFFF]">
               {" "}
               No Conversation Is Selected{" "}
@@ -328,8 +329,8 @@ const MemberIthem = ({
       if (subOption === "5 min") {
         // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
         const userData = {
-          channelId: conversationProps.channelId,
-          userToMute: userId,
+          channelId: conversationProps?.channelId,
+          userToMute: userId, 
           muteUntil: addMinutes(new Date(), 1),
         };
         console.log("userData Mute :", userData);
@@ -359,7 +360,7 @@ const MemberIthem = ({
         setAsAdmin(!asAdmin);
         console.log("isAdmin:", asAdmin);
         const userData = {
-          channelId: conversationProps.channelId,
+          channelId: conversationProps?.channelId,
           userId2: userId,
         };
         fetch("http://localhost:3001/api/channels/addAdmin", {
@@ -374,7 +375,7 @@ const MemberIthem = ({
         setAsAdmin(!asAdmin);
         console.log("isAdmin:", asAdmin);
         const userData = {
-          channelId: conversationProps.channelId,
+          channelId: conversationProps?.channelId,
           userId2: userId,
         };
         fetch("http://localhost:3001/api/channels/removeAdmin", {
@@ -388,7 +389,7 @@ const MemberIthem = ({
       } else if (option.action === "ban") {
         console.log("BANNING A USER");
         const userData = {
-          channelId: conversationProps.channelId,
+          channelId: conversationProps?.channelId,
           userId2: userId,
         };
         fetch("http://localhost:3001/api/channels/banUser", {
@@ -402,7 +403,7 @@ const MemberIthem = ({
       } else if (option.action === "kick") {
         console.log("KICKING A USER");
         const userData = {
-          channelId: conversationProps.channelId,
+          channelId: conversationProps?.channelId,
           userId2: userId,
         };
         fetch("http://localhost:3001/api/channels/removeUserFromChannel", {
@@ -574,7 +575,7 @@ const MemberList = ({
 
     const fetchFun2 = async () => {
       await fetch(
-        `http://localhost:3001/api/channels/channelInfos/${conversationProps.channelId}`,
+        `http://localhost:3001/api/channels/channelInfos/${conversationProps?.channelId}`,
         {
           method: "GET",
           credentials: "include",
@@ -601,18 +602,18 @@ const MemberList = ({
 
   const isAdmin = (): boolean => {
     return membersInfo.members?.some(
-      (member) => member.userId === userInfo?.id && member.isAdmin === true
+      (member) => member.userId === userInfo.user?.id && member.isAdmin === true
     );
   };
   const isCreator = (): boolean => {
-    return membersInfo.creator?.id === userInfo?.id;
+    return membersInfo.creator?.id === userInfo.user?.id;
   };
 
   if (isCreator()) setIsCreator(true);
 
   console.log("membersInfo:", membersInfo);
-  console.log("userInfo?.id:", userInfo?.id);
-  console.log("userInfo?.name:", userInfo?.username);
+  console.log("userInfo?.id:", userInfo.user?.id);
+  console.log("userInfo?.name:", userInfo.user?.username);
   // console.log("isSet:", isSet);
   console.log("members:", members);
   return (
@@ -620,9 +621,10 @@ const MemberList = ({
       <MemberSeparator />
       {isSet &&
         // members.filter((member => member.user.id !== membersInfo.creator?.id)).map((member) => {
-        members.filter((member => member.user.id !== userInfo?.id)).map((member) => {
+        members.filter((member => member.user.id !== userInfo.user?.id)).map((member) => {
           return (
             <MemberIthem
+              key={member.user.id}
               imgUrl="some/url"
               name={member.user.username}
               isAdmin={isAdmin()}
@@ -735,7 +737,7 @@ export const setShowDeleteChannelContext = createContext(
 );
 
 export const ConversationListContextSet = createContext(
-  {} as React.Dispatch<React.SetStateAction<ConversationIthemProps[]>>
+  {} as any
 );
 
 export const ChatPage = () => {
@@ -744,7 +746,7 @@ export const ChatPage = () => {
     ConversationIthemProps[]
   >([]);
   const [conversation, setConversation] = useState<ConversationIthemProps>();
-  const userInfo = useContext(UserContext) as User;
+  const userInfo = useContext(UserContext);
   // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
   // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
 
@@ -759,7 +761,7 @@ export const ChatPage = () => {
       const isAdmin = true; // Replace true with your desired value
 
       await fetch(
-        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userInfo.id}&isAdmin=${isAdmin}`,
+        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userInfo.user?.id}&isAdmin=${isAdmin}`,
         {
           method: "GET",
           credentials: "include",
@@ -773,12 +775,12 @@ export const ChatPage = () => {
       
           // const data: Conversation[];
         })
-        .then((data: ConversationIthemProps[]) => {
+        .then((data) => {
           console.log("channels members data:", data);
           setConversationList(
-            data.sort((a, b) => {
-              const bDate = new Date(b.updatedAt);
-              const aDate = new Date(a.updatedAt);
+            data.sort((a: ConversationIthemProps, b :ConversationIthemProps) => {
+              const bDate = new Date(b?.updatedAt as Date);
+              const aDate = new Date(a?.updatedAt as Date);
               return bDate.getTime() - aDate.getTime();
             })
             );

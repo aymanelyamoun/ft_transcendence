@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
-import { AlertMessage } from './alertMessage';
+import { AlertMessage } from './AlertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
 import { ConversationListContext, LstConversationStateContext } from './ConversationInfo';
 
@@ -58,7 +58,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
   };
 
   useEffect(() => {
-    const channelId = conversationProps.channelId;
+    const channelId = conversationProps?.channelId;
     // here i should fetch the channelName and channelPic and channelType and else ... from the backend
     console.log("channelId ??????????: ", channelId);
     fetch(`http://localhost:3001/api/channels/channelInfos/${channelId}`, {
@@ -121,7 +121,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         channelName: saveChannelName,
         password: savePassword,
         type: selectedOption,
-        channelId: conversationProps.channelId,
+        channelId: conversationProps?.channelId,
         // channelPic: "some link",
         // creator: creatorInfo?.id,
         // here i should add the selected friends

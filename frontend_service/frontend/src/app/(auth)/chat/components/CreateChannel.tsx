@@ -5,7 +5,7 @@ import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
 import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";
 import removeFriends from "../../../../public/removeFriends_Icon.png";
 // import { Friend, friendsData } from "../../../app/(notRoot)/chat/page";
-import { Friend, UserContext} from "../page";
+import { Friend} from "../page";
 
 // import chooseFriendIcon from "../../../../public/chooseFriendIcon.png";
 // import notchoosenFriendIcon from "../../../../public/notChoosenFriendIcon.png";
@@ -18,8 +18,9 @@ import passwordParameter from "../../../../../public/passwordParameterIcon.png";
 // import channleImage from "../../../../public/group_pic.jpg";
 // import passwordParameter from "../../../../public/passwordParameterIcon.png";
 
-import AddChannelSearchBar from "./AddChannelSearchBar";
-import { AlertMessage } from "./alertMessage";
+import { AlertMessage } from "./AlertMessage";
+
+import { UserContext } from "@/utils/createContext";
 
 const CreateChannel = ({
   selectedFriends,

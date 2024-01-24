@@ -8,32 +8,22 @@ import { useRouter } from "next/navigation";
 import Confirm from "./confirm/page";
 import ConfirmAuth from "./confirmauth/page";
 import Navbar from "./game/components/Navbar";
+import { UserContext } from "@/utils/createContext";
+
 // import './globals.css'
 // import '../../../src/app/'
 
 
 interface User {
-  id: string;
-  email: string;
-  username: string;
+  id?: string;
+  email?: string;
+  username?: string;
   profilePic?: string;
-  hash: string;
-  typeLog: string;
-  isTwoFactorEnabled: boolean;
-  isConfirmed2Fa: boolean;
+  hash?: string;
+  typeLog?: string;
+  isTwoFactorEnabled?: boolean;
+  isConfirmed2Fa?: boolean;
 }
-
-interface UserContextValue {
-  user: User | null;
-  setUser: (user: User | null) => void;
-}
-
-
-const UserContext = createContext<UserContextValue>({
-  user: null as User | null,
-  setUser: (user: User | null) => { },
-});
-
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);

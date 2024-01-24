@@ -84,11 +84,11 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
       const checkAuthentication = async () => {
           if (user) {
             setUserData({
-              username: user.username,
-              profilePic: user.profilePic,
-              hash: user.hash,
-               typeLog: user.typeLog,
-               isTwoFactorEnabled: user.isTwoFactorEnabled
+              username: user.username ?? "",
+              profilePic: user.profilePic ?? "",
+              hash: user.hash ?? "",
+               typeLog: user.typeLog ?? "",
+               isTwoFactorEnabled: user.isTwoFactorEnabled ?? false,
 
             });
           }

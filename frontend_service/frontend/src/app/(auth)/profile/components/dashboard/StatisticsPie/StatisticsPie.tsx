@@ -1,84 +1,96 @@
-"use client"
+"use client";
 
-import React, { use, useEffect } from 'react';
-import * as echarts from 'echarts';
-import ReactEcharts from 'echarts-for-react';
-import styles from './StatisticsPie.module.css';
-import { StatisticsPieInterface } from  "../../../components/dashboard/interfaces";
+import React, { use, useEffect } from "react";
+import * as echarts from "echarts";
+import ReactEcharts from "echarts-for-react";
+import styles from "./StatisticsPie.module.css";
+import { StatisticsPieInterface } from "../interfaces";
 
 interface StatisticsPieProps {
-    statistics: StatisticsPieInterface;
+  statistics: StatisticsPieInterface;
 }
 
-const StatisticsPie: React.FC<StatisticsPieProps> = (props: { statistics: any; }) => {
+const StatisticsPie: React.FC<StatisticsPieProps> = (props: {
+  statistics: any;
+}) => {
+  const statistics = props.statistics;
+  const WinPercentage =
+    statistics.total !== 0 ? (statistics.wins * 100) / statistics.total : 0;
+  const LosePercentage =
+    statistics.total !== 0 ? (statistics.losses * 100) / statistics.total : 0;
 
-    const statistics = props.statistics;
-    const WinPercentage = statistics.total !== 0 ? (statistics.wins * 100) / statistics.total : 0;
-    const LosePercentage = statistics.total !== 0 ? (statistics.losses * 100) / statistics.total : 0;
-    
-    // console.log("data statistics ylh bismillah : ", statistics);
-    // console.log("data total games: ", statistics.totalGames);
+  // console.log("data statistics ylh bismillah : ", statistics);
+  // console.log("data total games: ", statistics.totalGames);
 
-    const option = {
-        color: ['var(--blue 500)'],
-        toolbox: {
-            feature: {
-                saveAsImage: {},
-            }
+  const option = {
+    color: ["var(--blue 500)"],
+    toolbox: {
+      feature: {
+        saveAsImage: {},
+      },
+    },
+    tooltip: {
+      trigger: "item",
+      formatter: "{a} <br/>{b}: {c} ({d}%)",
+    },
+    legend: {
+      orient: "vertical",
+      left: 10,
+      data: ["Failure", "Success"],
+    },
+    series: [
+      {
+        name: "Status",
+        type: "pie",
+        radius: ["50%", "70%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: "center",
         },
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: "30",
+            fontWeight: "bold",
+          },
         },
-        legend: {
-            orient: 'vertical',
-            left: 10,
-            data: ['Failure', 'Success']
+        labelLine: {
+          show: false,
         },
-        series: [
-            {
-                name: 'Status',
-                type: 'pie',
-                radius: ['50%', '70%'],
-                avoidLabelOverlap: false,
-                label: {
-                    show: false,
-                    position: 'center'
+        showSymbol: false,
+        data: [
+          {
+            value: WinPercentage,
+            name: "Success",
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "rgba(154, 155, 211, 0)",
                 },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '30',
-                        fontWeight: 'bold'
-                    }
+                {
+                  offset: 1,
+                  color: "#9A9BD3",
                 },
-                labelLine: {
-                    show: false
-                },
-                showSymbol: false,
-                data: [
-                    {value: WinPercentage, name: 'Success', itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        {
-                            offset: 0,
-                            color: 'rgba(154, 155, 211, 0)',
-                        },
-                        {
-                            offset: 1,
-                            color: '#9A9BD3'
-                        }
-                    ]), }},
-                    {value: LosePercentage, name: 'Failure', itemStyle: { color: 'black' }}
-                ]
-            }
-        ]
-    };
-    return (
-        <div className={styles['widgetContainer']}>
-          <ReactEcharts option={option} style={{ height: '100%', width: '100%' }} />
-          {/* Other children, if applicable */}
-        </div>
-      );
+              ]),
+            },
+          },
+          {
+            value: LosePercentage,
+            name: "Failure",
+            itemStyle: { color: "black" },
+          },
+        ],
+      },
+    ],
+  };
+  return (
+    <div className={styles["widgetContainer"]}>
+      <ReactEcharts option={option} style={{ height: "100%", width: "100%" }} />
+      {/* Other children, if applicable */}
+    </div>
+  );
 };
-
 
 export default StatisticsPie;

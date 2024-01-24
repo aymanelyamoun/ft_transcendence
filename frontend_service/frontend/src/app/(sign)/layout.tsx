@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useContext, useEffect, useState, createContext } from "react";
 import Loading from "@/app/components/Loading";
 import { Backend_URL } from "@/lib/Constants";
@@ -58,7 +58,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   
         return () => clearTimeout(timeout);
       }
-    }, [isRouting]);
+    }, [isRouting, path]);
 
   
     if (authenticated === null) {

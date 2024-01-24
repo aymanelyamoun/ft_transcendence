@@ -1,4 +1,4 @@
-'use client'
+'use client';;
 import React, { useContext, useEffect, useState, createContext } from "react";
 import Loading from "@/app/components/Loading";
 import { Backend_URL } from "@/lib/Constants";
@@ -25,13 +25,13 @@ interface User {
 
 interface UserContextValue {
   user: User | null;
-  setUser: (user: User | null) => void; 
+  setUser: (user: User | null) => void;
 }
 
 
 const UserContext = createContext<UserContextValue>({
   user: null as User | null,
-  setUser: (user: User | null) => {},
+  setUser: (user: User | null) => { },
 });
 
 function RootLayout({ children }: { children: React.ReactNode }) {
@@ -39,34 +39,32 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [twoFa, setTwoFa] = useState<boolean>(false)
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-  const pathname = usePathname();  
+  const pathname = usePathname();
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
         const res = await fetch(Backend_URL + "auth/check", {
-            method: "GET",
-            mode: "cors",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          });
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
         if (res.ok) {
-            const data = await res.json();
-            setUser(data);
-            setAuthenticated(true);
-            if (data?.isTwoFactorEnabled  && !data.isConfirmed2Fa)
-            {
-                setTwoFa(true);
-                return ; 
-            }
-          } 
-          else
-          {  
-            router.push("/");
-            return <Loading />;
+          const data = await res.json();
+          setUser(data);
+          setAuthenticated(true);
+          if (data?.isTwoFactorEnabled && !data.isConfirmed2Fa) {
+            setTwoFa(true);
+            return;
           }
+        }
+        else {
+          router.push("/");
+          return <Loading />;
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -77,29 +75,29 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="h-screen w-screen bg-[#050A27]">
 
-    <UserContext.Provider value={value}>
-      <>
-    {authenticated ? (
-      twoFa ? (
-        // Render Confirm component when authenticated and twoFa is true
-        <ConfirmAuth />
-      ) : (
-        // Render children if user is authenticated and !user.hash is true
-        !user?.hash ? (
-          <Confirm /> // Replace with your component for 2FA confirmation
-        ) : (
-          <> 
-            <Navbar />
-            {children}
-          </>
-        )
-      )
-    ) : (
-      // Render Loading component when not authenticated
-      <Loading />
-    )}
-  </>
-    </UserContext.Provider>
+      <UserContext.Provider value={value}>
+        <>
+          {authenticated ? (
+            twoFa ? (
+              // Render Confirm component when authenticated and twoFa is true
+              <ConfirmAuth />
+            ) : (
+              // Render children if user is authenticated and !user.hash is true
+              !user?.hash ? (
+                <Confirm /> // Replace with your component for 2FA confirmation
+              ) : (
+                <>
+                  <Navbar />
+                  {children}
+                </>
+              )
+            )
+          ) : (
+            // Render Loading component when not authenticated
+            <Loading />
+          )}
+        </>
+      </UserContext.Provider>
     </main>
   );
 }

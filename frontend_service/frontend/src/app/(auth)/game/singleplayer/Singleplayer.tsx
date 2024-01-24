@@ -1,4 +1,4 @@
-'use client';
+'use client';;
 import { useEffect, useRef} from "react";
 import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
 import * as Skins from '../utils/Skins';

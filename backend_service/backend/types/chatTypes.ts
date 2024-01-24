@@ -1,4 +1,4 @@
-import { Prisma, $Enums } from "@prisma/client";
+// import { Prisma, $Enums } from "@prisma/client";
 // export interface Conversation {
 //     id: string;
 //     email: string;

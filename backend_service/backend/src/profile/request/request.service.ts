@@ -12,30 +12,31 @@ export class RequestService {
     
 
     async handleSendRequest(userId: string, recieverId: string, message: string, typ: NOTIF_TYPE) {
-        try {
-        const existingNotification = await this.prisma.notification.findFirst({
-            where: {
-                userId: recieverId,
-                senderId: userId,
-                type: typ,
-            },
-        });
-        if (!existingNotification)
+        try 
         {
-                const  sender = await this.userService.findById(userId);            
-                const notif =  await this.prisma.notification.create({
-                data: {
+            const existingNotification = await this.prisma.notification.findFirst({
+                where: {
+                    userId: recieverId,
+                    senderId: userId,
                     type: typ,
-                    title: sender.username,
-                    discription: sender.username + ' sent you friend request',
-                    userId : recieverId,
-                    senderId : userId,
                 },
             });
-            return { message: 'request sended successfully' };
-        }else{
-            return { message: 'the request already sended' };
-        }
+            if (!existingNotification)
+            {
+                    const  sender = await this.userService.findById(userId);            
+                    const notif =  await this.prisma.notification.create({
+                    data: {
+                        type: typ,
+                        title: sender.username,
+                        discription: sender.username + ' sent you friend request',
+                        userId : recieverId,
+                        senderId : userId,
+                    },
+                });
+                return { message: 'request sended successfully' };
+            }else{
+                return { message: 'the request already sended' };
+            }
         } catch (error)
         {
             throw new NotFoundException(error);
@@ -52,11 +53,11 @@ export class RequestService {
             });
             if (!notification)
                 throw new NotFoundException();
-                const isBlocked = await this.isBlocked(notification.userId, notification.senderId);
-                if (isBlocked) {
-                    throw new Error('Friend is blocked by the user');
-                }
-            return await this.prisma.$transaction(async (prisma) => {
+            const isBlocked = await this.isBlocked(notification.userId, notification.senderId);
+            if (isBlocked)
+                throw new Error('Friend is blocked by the user');
+            return await this.prisma.$transaction(async (prisma) => 
+            {
                 await prisma.user.update({
                 where: { id: notification.userId},
                 data: { friends: { connect: { id: notification.senderId } } },

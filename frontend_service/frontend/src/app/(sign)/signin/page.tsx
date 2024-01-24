@@ -13,6 +13,9 @@ import Loading from '@/app/components/Loading';
 import InputField from '@/app/components/InputField';
 import Button from '@/app/components/Button';
 import { fetchAPI } from '@/utils/api';
+import MyIcon from '@/app/components/42Icon';
+import { Si42 } from "react-icons/si";
+
 
 let data : any;
 type FormInputs = {
@@ -88,7 +91,8 @@ export default function Signin() {
                 <FaGoogle className="text-sm text-white" /> 
               </Link>
               <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
-                <FaLinkedinIn className="text-sm text-white" />
+                <Si42 className="text-sm text-white" />
+                {/* <MyIcon /> */}
               </Link>
               </div>
               <Link href="/signup" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-[#999BD3]'>Create Account</Link>

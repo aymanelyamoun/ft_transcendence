@@ -36,15 +36,16 @@ export class UserService {
                 data: {
                     ...dto,
                     hash: await bcrypt.hash(dto.hash, 10),
-                    title: "snouae rfa3 ta7di",
-                    profilePic: "https://i.imgur.com/GJvG1b.png",
+                    profilePic: "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg",
                     wallet: 10,
                     typeLog: LOG_TYPE.locallylog
                 },
             });
             const { hash, ...result } = newUser;
             return result;
-        }catch (error) {
+        }
+        catch (error)
+        {
             if (error instanceof UnauthorizedException) {
               throw new UnauthorizedException('the password and the confirm password are not the same');
             } else if (error instanceof ConflictException) {
@@ -121,8 +122,6 @@ export class UserService {
                     },
                 },
             },
-            
-            
             });
             const blockedUsers = await this.BlockList(userloged);
             const usersWithBlockedFlag = users.map((user) => ({
@@ -326,6 +325,12 @@ export class UserService {
             const userId = user.id;
             let  { username } = body;
             username = username.trim();
+            console.log(username);
+            console.log(user.username);
+            if(username.length < 4)
+             throw new UnauthorizedException('Username must be at least 4 characters long.');
+            if (username.length > 20)
+             throw new UnauthorizedException('Username cannot be longer than 20 characters.');
             if (user.username === username) {
                 throw new UnauthorizedException('New username is the same as the current username');
             }
@@ -341,7 +346,8 @@ export class UserService {
         }catch (error)
         {
             if (error instanceof UnauthorizedException) {
-                throw new UnauthorizedException('New username is the same as the current username');
+                throw new UnauthorizedException("can't update the username");
+                // throw new UnauthorizedException('New username is the same as the current username');
               } else if (error instanceof ConflictException) {
                   throw new ConflictException('Username is already taken');
               } else {
@@ -543,43 +549,9 @@ export class UserService {
         }
     }
 
-    // async SelectPaddle(paddle : string, @Req() req: Request)
-    // {
-    //     try
-    //     {
-    //         const user = req['user'] as User;
-    //         const userid = user.id;
-    //         const result = await this.prisma.user.update({
-    //             where : {id : userid},
-    //             data: { paddle: paddle }
-    //         })
-    //         return (result);
-    //     }
-    //     catch (error)
-    //     {
-    //         throw new UnauthorizedException('Internal server error');
-    //     }
-    // }
 
-    // async SelectTable(table : string, @Req() req: Request)
-    // {
-    //     try
-    //     {
-    //         const user = req['user'] as User;
-    //         const userid = user.id;
-    //         const result = await this.prisma.user.update({
-    //             where : {id : userid},
-    //             data: { table: table }
-    //         })
-    //         return (result);
-    //     }
-    //     catch (error)
-    //     {
-    //         throw new UnauthorizedException('Internal server error');
-    //     }
-    // }
     
-    
+
     async GamesWeek(username: string, @Req() req: Request)
     {
         try

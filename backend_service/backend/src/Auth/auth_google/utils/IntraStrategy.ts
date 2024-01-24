@@ -15,19 +15,21 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
       ){
         super({
             clientID:
-                'u-s4t2ud-ae38f95888699e53a0d1e83d0112945b049d14a0d11d467ebb5d373db96cd2be',
+                process.env.IntraClinetId,
             clientSecret:
-                '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',
-            callbackURL: 'http://localhost:3001/api/auth/google/redirect42',
+                process.env.IntraClientSecret,
+            callbackURL:
+                process.env.IntraCallbackURL,
         });
     }
 
-    async authenticate(request: any, options?: any): Promise<any> {
+    async authenticate(request: any, options?: any): Promise<any>
+    {
         if (request.query && request.query.error === 'access_denied') {
           return request.res.redirect('http://localhost:3000');
         }
         return super.authenticate(request, options);
-      }
+    }
     
 
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
@@ -36,7 +38,7 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
       if (profile._json.image.link)
            pic  = profile._json.image.link;
       else 
-          pic = "https://i.imgur.com/GJvG1b.png";
+          pic = "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg";
       const user = await  this.authGoogleService.validateUser({
         email: profile.emails[0].value,
           username: profile._json.login,

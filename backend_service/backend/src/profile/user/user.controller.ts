@@ -32,16 +32,8 @@ export class UserController {
   @UseGuards(JwtGuard)
   async check(@Req() req: Request, @Res() res: Response)
   {
-    try {
       const user = req['user'] as User;;
-      if (!user) {
-        throw new UnauthorizedException();
-      }
       res.status(200).send(user);
-    } catch (error)
-    {
-          res.status(500).json({ message: 'Error finding user' });
-    }
   }
 
   @Get('all')

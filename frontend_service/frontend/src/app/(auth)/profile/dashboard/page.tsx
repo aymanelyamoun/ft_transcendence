@@ -288,9 +288,9 @@ function App() {
   return (
     <> 
     <Provider store={store}>
-      {ShowEditProfile && <EditProfileShow />}
+      {ShowEditProfile && <EditProfileShow onClose={() => setShowEditProfile(false)} />}
 
-      <div className="App">
+       <div className="App">
         <SocketUseContext.Provider value={socket}>
         {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
           <SearchDiv >

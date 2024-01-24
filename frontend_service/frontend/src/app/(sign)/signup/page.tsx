@@ -10,6 +10,7 @@ import { AlertMessage } from '@/app/components/alertMessage';
 import InputField from '@/app/components/InputField';
 import Button from '@/app/components/Button';
 import { fetchAPI } from '@/utils/api';
+import { Si42 } from "react-icons/si";
 
 let response : any;
   type FormInputs = {
@@ -83,7 +84,7 @@ let response : any;
               <FaGoogle className="text-sm text-white" /> 
             </Link>
             <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
-              <FaLinkedinIn className="text-sm text-white" />
+            <Si42 className="text-sm text-white" />
             </Link>
             </div>
               <Link href="/signin" className=' text-white  px-12 py-2 inline-block font-semibold mb-2 hover:text-[#999BD3]'>Sign in</Link>

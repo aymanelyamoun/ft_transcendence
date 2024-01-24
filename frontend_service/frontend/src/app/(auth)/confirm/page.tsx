@@ -203,7 +203,7 @@ export default function Confirm() {
                  </Link>
                </div>
              </div>
-             {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : isNotify === true ? <AlertMessage onClick={handleClick} message={"User Confirmed!"} type="notify" /> : ""}
+             {isError === true ? <AlertMessage onClick={handleClick} message={data.message} type="error" /> : ""}
 
            </div>
          </div>

@@ -33,9 +33,7 @@ export class JwtGuard implements CanActivate{
             throw new UnauthorizedException();
         }
         return true;
-
     }
-
     private extractTokenFromHeader (req: Request){
         let token = null;
         if (req && req.cookies) {

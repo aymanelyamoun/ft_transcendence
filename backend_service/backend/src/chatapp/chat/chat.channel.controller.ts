@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, Request, UseGuards } from "@nestjs/common";
 import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, MuteUserDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { JoinChannel } from "./types/channel";
@@ -140,6 +140,11 @@ export class ChannelController{
     @Get("/channelInfos/:id")
     async getChannelInfo(@Param('id') channelId:string, @Req() req:Request){
         return await this.prismaChatService.getChannelInfos(channelId, req);
+    }
+    
+    @Get("blockedUsers")
+    async getBlockedUsers(@Req() req: Request) {
+        return await this.prismaChatService.getBlockedUsers(req);
     }
 
 

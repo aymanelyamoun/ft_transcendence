@@ -7,7 +7,9 @@ export class RedisService {
 
     constructor() {
         this.redisClient = new Redis({
-            host: 'redis',
+            // host: 'redis',
+            // host: '172.19.0.3',
+            host: 'localhost',
             port: 6379,
         });
     }

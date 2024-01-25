@@ -14,6 +14,7 @@ import AddChannelSearchBar from "./AddChannelSearchBar";
 import { channel } from "diagnostics_channel";
 
 import avatar from "../../../../../public/garou-kid.jpeg";
+// import channelPic from "../../../../../public/group_pic.jpg";
 import { Friend} from "../page";
 
 const AddNewChannel = ({
@@ -150,6 +151,8 @@ const AddNewChannel = ({
                   className=" w-[45px] h-[45px] rounded-full"
                   src={avatar}
                   alt={friend.username}
+                  width={45}
+                  height={45}
                 />
                 <p className="friendsName">{friend.username}</p>
                 <Image
@@ -158,8 +161,10 @@ const AddNewChannel = ({
                       ? chooseFriendIcon
                       : notchoosenFriendIcon
                   }
-                  alt=""
+                  alt="test"
                   className="shooseFriend"
+                  width={27}
+                  height={27}
                 />
               </li>
             ))}

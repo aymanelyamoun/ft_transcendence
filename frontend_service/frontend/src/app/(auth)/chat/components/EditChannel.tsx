@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
-import { AlertMessage } from './AlertMessage';
+import { AlertMessage } from './alertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
 import { ConversationListContext, LstConversationStateContext } from './ConversationInfo';
+import channelPic from "../../../../../public/group_pic.jpg";
+
 
 interface channelInfos{
   id: number;
@@ -122,6 +124,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         password: savePassword,
         type: selectedOption,
         channelId: conversationProps?.channelId,
+        channelPic: channelPic,
         // channelPic: "some link",
         // creator: creatorInfo?.id,
         // here i should add the selected friends
@@ -237,6 +240,8 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
                 className="channelImage"
                 src={channleImage}
                 alt={"channelImage"}
+                width={120}
+                height={120}
               />
             </div>
             <div className="">

@@ -6,8 +6,7 @@ const Play = () => {
     
   
   return (
-    <div className='playContainer cursor-pointer'
-          onClick={invteToPlay}>
+    <div className='playContainer cursor-pointer'>
       
         <Image className='playIcon' src={playFriend} alt='play'/>
     </div>

@@ -34,7 +34,7 @@ import CreateChannelButton from "./CreateChannelButton";
 import AddNewChannel from "./AddNewChannel";
 import { Friend } from "../page";
 import EditChannel from "./EditChannel";
-import { AlertMessage } from "./AlertMessage";
+import { AlertMessage } from "./alertMessage";
 import { UserContext } from "@/utils/createContext";
 import ShowGroups from "../../profile/components/dashboard/FriendInfo/ShowGroups";
 
@@ -48,6 +48,7 @@ const ConversationIthem = (props: ConversationIthemProps) => {
   const handleChatClick = () => {
     setConversationList(conversationProps);
   };
+ console.log("conversationProps.Pic: ", conversationProps.profilePic);
   return (
     <li
       onClick={handleChatClick}
@@ -57,9 +58,12 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       <Image
         className=" w-[49px] h-[49px] rounded-full"
         src={avatar}
+        // src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
         // src={conversationProps.profilePic}
         // alt={conversationProps.name}
         alt={conversationProps.name}
+        width={49}
+        height={49}
       />
       <div className="flex flex-col mb-[4%}">
         <p className="friendsName">{conversationProps.name}</p>
@@ -409,7 +413,7 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`white`} />
       </ChatButton>
 
-      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
+      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar" height={20} width={20}></Image>
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight
@@ -424,7 +428,7 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`rgba(154, 155, 211, 0.5)`} />
       </ChatButton>
 
-      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
+      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar" width={20} height={20}></Image>
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight size={22} color={`white`} />

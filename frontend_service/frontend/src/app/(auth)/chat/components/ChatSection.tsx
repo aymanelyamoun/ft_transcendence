@@ -238,6 +238,8 @@ const TypeMessage = ({ maxId }: { maxId: number }) => {
         className="sendIcon"
         src={sendIcon}
         alt="sendIcone"
+        width={27}
+        height={27}
       />
     </div>
   );

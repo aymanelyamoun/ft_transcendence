@@ -481,6 +481,7 @@ const MemberIthem = ({
           src={avatar}
           alt={"avatar"}
           width={40}
+          height={40}
         />
         <h3>{name}</h3>
       </div>
@@ -1023,7 +1024,7 @@ const ProfileInfos = ({
   console.log("name------------ :", name);
   return (
     <div className="flex flex-col items-center ">
-      <Image className="avatar" src={avatar} alt={"avatar"} />
+      <Image className="avatar" src={avatar} alt={"avatar"}/>
       <h4 className="nameInfo"> {name} </h4>
       {children}
     </div>

@@ -15,12 +15,14 @@ import { Friend} from "../page";
 import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
+import channelPic from "../../../../../public/group_pic.jpg";
 // import channleImage from "../../../../public/group_pic.jpg";
 // import passwordParameter from "../../../../public/passwordParameterIcon.png";
 
-import { AlertMessage } from "./AlertMessage";
+import { AlertMessage } from "./alertMessage";
 
 import { UserContext } from "@/utils/createContext";
+// import { act } from "react-dom/test-utils";
 
 const CreateChannel = ({
   selectedFriends,
@@ -42,6 +44,7 @@ const CreateChannel = ({
   const [selectedOption, setSelectedOption] = useState<string>("public");
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [noPass, setNoPass] = useState<boolean>(false);
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
   
@@ -74,6 +77,12 @@ const CreateChannel = ({
     
       if(saveChannelName === "")
           setChannelName(true);
+      if(selectedOption === 'protected' && savePassword === "")
+      {
+        setNoPass(true);
+        setShowNotify(false);
+        return;
+      }
 
       const members = selectedFriends.map((friend) => ({
         userId: friend.id,
@@ -82,7 +91,9 @@ const CreateChannel = ({
 
       const channelData = {
         channelName: saveChannelName,
-        channelPic: "some link",
+        // channelPic: "some link",
+        channelPic: channelPic,
+        // channelPic: need to put the actual link of the channel pic,
         password: savePassword,
         type: selectedOption,
         // creator: creatorInfo?.id,
@@ -159,11 +170,14 @@ const CreateChannel = ({
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
             {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setChannelCreated(false);}} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
             {notCreated && (<AlertMessage onClick={() => {setNotCreated(false); setChannelCreated(false);}} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
+            
             <div>
               <Image
                 className="channelImage"
                 src={channleImage}
                 alt={"channelImage"}
+                width={120}
+                height={120}
               />
             </div>
             <div className="">

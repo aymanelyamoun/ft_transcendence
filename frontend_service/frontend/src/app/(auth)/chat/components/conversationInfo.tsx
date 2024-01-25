@@ -32,23 +32,35 @@ import { GiAstronautHelmet } from "react-icons/gi";
 import { FaUserAstronaut } from "react-icons/fa";
 import { ChannelInfoProps } from "@/utils/types/chatTypes";
 import { UserContext } from "@/utils/createContext";
+import { Backend_URL } from '@/lib/Constants';
 // export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 // export const isAdmin = false;
 
 // import { $Enums } from "@prisma/client";
 // import { CONVERSATION_TYPE } from "../../../../../../backend_service/backend/types/chatTypes";
 // import { CONVERSATION_TYP } from "../../../../../../backend_service/backend/types/chatTypes";
-
+interface Friend {
+  id: string;
+  username: string;
+  profilePic: string;
+  title? : string;
+  status: string;
+}
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
   const ConversationListData = useContext(ConversationListContext); 
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
+  const setAlertInviteFriend = useContext(setAlertInviteFriendContext);
   const editChannel = useContext(showEditChannelContext);
   const userInfo = useContext(UserContext);
   const lastConversation = useContext(LstConversationStateContext);
   const [isCreator, setIsCreator] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
+  const setShowInviteToChannel = useContext(setInviteFriendToChannelContext);
+// fore invite friend to channel
+  const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
 
   const socket = useContext(SocketContext);
 
@@ -94,6 +106,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   // }
   
   
+  
   useEffect(() => {
     const fetchFun = async () => {
       await fetch(
@@ -116,18 +129,61 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           console.log("hereeeeeeeeeee");
           // if (data) setIsSet(true);
         });
-    };
-    // console.log("Members data:", data);
-    
-    if (lastConversation?.id !== undefined) {
-      fetchFun();
+      };
+      // console.log("Members data:", data);
+      
+      if (lastConversation?.id !== undefined) {
+        fetchFun();
       }
     },[lastConversation]);
     
     // lastConversation?.
     const recieverUserId = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.id;
     const recieverUserName = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.username;
+    
+    // const inviteFriend = () => {
+    const inviteFriend = async () => {
+      console.log("invite friend");
+      // useEffect(() => {
+        // const fetchFun = async () => {
+        const fetchFun = async () => {
+          await fetch(
+            `${Backend_URL}request/send/${recieverUserId}`, {
+              method: "POST",
+              mode: "cors",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+          }
+          )
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error("Network response was not ok");
+            }
+            else {
+              // setRequestSent(true);
+              setAlertInviteFriend(true);
+              // alert("the request has been sent");
+            }
+          }
+          )
+          .catch((error) => {
+            console.error("Error during fetch:", error);
+          });
+        }   
+  
+        if (lastConversation?.id !== undefined) {
+          fetchFun();
+        }
+      // }, [lastConversation]);
+    }
 
+    const inviteFriendTochannel = () => {
+      console.log("add friends to channel");
+      setShowInviteToChannel(true);
+    }
   //   console.log("recieverUserId :", recieverUserId);
     
   // console.log("***************ConversationListData :", ConversationListData);
@@ -158,7 +214,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           <ButtonInfo width="10" hight="10">
             <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10 mx-12">
               <CostumeButton
-                onClick={() => console.log("add friend")}
+                onClick={() => inviteFriend()}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-20"
@@ -168,7 +224,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
-                onClick={() => console.log("add friends")}
+                onClick={() => inviteFriendTochannel()}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-20"
@@ -727,10 +783,22 @@ export const showEditChannelContext = createContext({} as boolean);
 export const setShowEditChannelContext = createContext(
   {} as React.Dispatch<React.SetStateAction<boolean>>
 );
+
 export const showExitChannelContext = createContext({} as boolean);
 export const setShowExitChannelContext = createContext(
   {} as React.Dispatch<React.SetStateAction<boolean>>
 );
+
+export const alertInviteFriendContext = createContext({} as boolean);
+export const setAlertInviteFriendContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
+
+export const inviteFriendToChannelContext = createContext({} as boolean);
+export const setInviteFriendToChannelContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
+
 export const showDeleteChannelContext = createContext({} as boolean);
 export const setShowDeleteChannelContext = createContext(
   {} as React.Dispatch<React.SetStateAction<boolean>>
@@ -753,6 +821,8 @@ export const ChatPage = () => {
   const [showEditChannel, setShowEditChannel] = useState<boolean>(false);
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
+  const [showInviteFriend, setShowInviteFriend] = useState<boolean>(false);
+  const [showInviteFriendToChannel, setShowInviteFriendToChannel] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   // console.log("conversationId:", conversation?.id);
   console.log(" refresh : ", refresh);
@@ -839,18 +909,35 @@ export const ChatPage = () => {
                         <showDeleteChannelContext.Provider
                           value={showDeleteChannel}
                         >
-                          <div className="h-full basis-1/4 flex">
-                            <Conversations 
-                            setRefresh={setRefresh}
+                          <setAlertInviteFriendContext.Provider
+                            value={setShowInviteFriend}
                             >
-                              {" "}
-                              {/* <ConversationList /> */}
-                            </Conversations>
-                            {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
-                          </div>
-                          <MessagesContext.Provider value={messages}>
-                            <Conversation />
-                          </MessagesContext.Provider>
+                            <alertInviteFriendContext.Provider
+                              value={showInviteFriend}
+                              >
+                                <setInviteFriendToChannelContext.Provider
+                                  value={setShowInviteFriendToChannel}
+                                  >
+                                  <inviteFriendToChannelContext.Provider
+                                    value={showInviteFriendToChannel}
+                                    >
+                                      <div className="h-full basis-1/4 flex">
+                                        <Conversations 
+                                        setRefresh={setRefresh}
+                                        >
+                                          {" "}
+                                          {/* <ConversationList /> */}
+                                        </Conversations>
+                                        {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
+                                      </div>
+                                      <MessagesContext.Provider value={messages}>
+                                        <Conversation />
+                                      </MessagesContext.Provider>
+                                    </inviteFriendToChannelContext.Provider>
+
+                                  </setInviteFriendToChannelContext.Provider>
+                            </alertInviteFriendContext.Provider>
+                          </setAlertInviteFriendContext.Provider>
                         </showDeleteChannelContext.Provider>
                       </setShowDeleteChannelContext.Provider>
                     </showExitChannelContext.Provider>

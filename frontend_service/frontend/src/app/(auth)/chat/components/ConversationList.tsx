@@ -15,6 +15,9 @@ import {
   CostumeButton,
   LstConversationSetStateContext,
   LstConversationStateContext,
+  alertInviteFriendContext,
+  inviteFriendToChannelContext,
+  setAlertInviteFriendContext,
   setShowDeleteChannelContext,
   setShowEditChannelContext,
   setShowExitChannelContext,
@@ -33,6 +36,7 @@ import { Friend } from "../page";
 import EditChannel from "./EditChannel";
 import { AlertMessage } from "./AlertMessage";
 import { UserContext } from "@/utils/createContext";
+import ShowGroups from "../../profile/components/dashboard/FriendInfo/ShowGroups";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -163,15 +167,20 @@ export const Conversations = ({
   const editChannel = useContext(showEditChannelContext);
   const exitChannel = useContext(showExitChannelContext);
   const deleteChannel = useContext(showDeleteChannelContext);
-
+  const inviteFriend = useContext(alertInviteFriendContext);
   const userInfo = useContext(UserContext);
 
   // setstates
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
+  const setInviteFriend = useContext(setAlertInviteFriendContext);
 
   const conversationProps = useContext(LstConversationStateContext);
+
+  // for add friend to channel
+  const showInviteFriendToChannel = useContext(inviteFriendToChannelContext);
+  const setInviteFriendToChannel = useContext(setAlertInviteFriendContext);
 
   // const [conversation, setConversation] = useState<ConversationIthemProps[]>(
   //   []
@@ -335,6 +344,22 @@ export const Conversations = ({
               type={"delete"}
             />
           )}
+          {
+            inviteFriend && (
+              <AlertMessage
+                onClick={() => setInviteFriend(false)}
+                message={`you sent an invite request to ${conversationProps?.name} .`}
+                type={"notify"}
+              />
+            )
+          }
+          {
+            showInviteFriendToChannel && (
+              <ShowGroups
+              parentType="AddUser"
+              onClose={() => setInviteFriendToChannel(false)}/>
+            )
+          }
 
           {/* {children} */}
           {/* </ul> */}

@@ -165,7 +165,7 @@ const setSkins = (selfData: any) => {
 };
 
 const MatchScene = () => {
-  const socketRef = useRef<Socket>(null!);
+  const socketRef = useRef<Socket | null>(null);
   const render = useRef<Render>(null);
   const router = useRouter();
   const engine = useRef<Engine>(Matter.Engine.create());
@@ -203,7 +203,7 @@ const MatchScene = () => {
       socketRef.current?.off("redirect");
       socketRef.current?.off("startFriendGame");
       socketRef.current?.disconnect();
-      // socketRef.current = null!; 39l 3la hadi
+      socketRef.current = null; // 39l 3awtani
       if (render.current !== null) Render.stop(render.current);
       if (engine.current !== null) Matter.Engine.clear(engine.current);
       document.removeEventListener("keydown", (e) =>

@@ -2,6 +2,7 @@
 import React from 'react'
 import styles from './Global_Rating.module.css'
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Rating {
     id: string;
@@ -20,7 +21,7 @@ const RatingItem: React.FC<Rating> = ({id, profilePic, username, title, totalXp}
         <div className={styles['rating-container']}>
             <Link href={`/profile/FriendProfile?username=${username}`}>
                 <div className={styles['player-profile']}>
-                    <img src={profilePic} alt="Profile" className={styles['rounded-lg']} />
+                    <Image src={profilePic} alt="Profile" className={styles['rounded-lg']} />
                 </div>
             </Link>
                 <div className={styles['username-container']}>

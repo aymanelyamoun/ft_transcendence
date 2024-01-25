@@ -124,15 +124,16 @@ const ShowGroups = (props : showGroupProps) => {
     fetchChannelGroups();
   }, [ChannelFriendSearch]);
 
-  const handleClickOutside = (event: any) => {
-    if (showRef.current && !showRef.current.contains(event.target as Node))
-    {
-      onClose();
-      toggleShowGroups();
-    }
-  };
-
+  
   useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (showRef.current && !showRef.current.contains(event.target as Node))
+      {
+        onClose();
+        toggleShowGroups();
+      }
+    };
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };

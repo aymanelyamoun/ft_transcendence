@@ -57,7 +57,7 @@ function App() {
       });
 
     const router = useRouter();
-    const [username, setUsername] = useState<string | null>(null);
+    const [username, setUsername] = useState<string | undefined>();
     const user = useUser();
     useEffect(() => {
       const checkAuthentication = async () => {
@@ -67,84 +67,67 @@ function App() {
       };
       checkAuthentication();
     }, [user, router]); 
-    const fetchGlobalRating = async () =>
-    {
-      try {
-        const res = await fetch(Backend_URL+"user/globalRating", {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        if (res.ok)
-        {
-          console.log("Global rating is okay");
-          const data = await res.json();
-          setGlobalRating(data);
-        }
-        else
-        {
-          console.log("Global rating isn't okay");
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally
-      {
-        setGlobalRatingDone(true);
-      }
-  };
 
-    const fetchStatisticsPie = async () => 
-    {
-      try {
-        const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        const data = await res.json();
-        setStatisticsPieProps(data);
-        setPieDone(false);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally
+    
+    useEffect(() => {
+      const fetchGlobalRating = async () =>
       {
-        setPieDone(true);
-      }
+        try {
+          const res = await fetch(Backend_URL+"user/globalRating", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if (res.ok)
+          {
+            console.log("Global rating is okay");
+            const data = await res.json();
+            setGlobalRating(data);
+          }
+          else
+          {
+            console.log("Global rating isn't okay");
+          }
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally
+        {
+          setGlobalRatingDone(true);
+        }
     };
 
-    const fetchStatisticsChart = async () => 
-    {
-      try {
-        const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        if (res.ok)
-        {
-          const data = await res.json();
-          setStatisticsChartProps(data);
-          // setChartDone(true);
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally
-      {
-        setChartDone(true);
-      }
-    };
+      const fetchMatchHistory = async () => {
+        try {
+            const res = await fetch(`${Backend_URL}user/profil/${username}`, {
+              method: "GET",
+              mode: "cors",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            });
+            if (res.ok) { 
+              const parseData = await res.json();
+              console.log('Match History fetching is okay');
+              // console.log(parseData);
+              setMatchHistory(parseData);
+              setIsMatchLoading(false);
+                // console.log(SidebarInfo);
+            } else {
+              alert("Match History fetching isn't okay"); 
+            }
+            } catch (err) {
+              console.log(err);
+            } finally {
+              setIsMatchLoading(true);
+            }
+            // {console.log(username)}
+    }
 
     const fetchUserData = async () => {
       try {
@@ -170,9 +153,18 @@ function App() {
       }
     };
 
-    const fetchMatchHistory = async () => {
-      try {
-          const res = await fetch(`${Backend_URL}user/profil/${username}`, {
+      if (username)
+        fetchMatchHistory();
+        fetchGlobalRating();
+      fetchUserData();
+    }, [SidebarDone, globalRatingDone, IsLoading, IsMatchLoading, username]);
+
+    useEffect(() => 
+    {
+      const fetchStatisticsPie = async () => 
+      {
+        try {
+          const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -181,34 +173,43 @@ function App() {
               "Access-Control-Allow-Origin": "*",
             },
           });
-          if (res.ok) { 
-            const parseData = await res.json();
-            console.log('Match History fetching is okay');
-            // console.log(parseData);
-            setMatchHistory(parseData);
-            setIsMatchLoading(false);
-              // console.log(SidebarInfo);
-          } else {
-            alert("Match History fetching isn't okay"); 
+          const data = await res.json();
+          setStatisticsPieProps(data);
+          setPieDone(false);
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally
+        {
+          setPieDone(true);
+        }
+      };
+  
+      const fetchStatisticsChart = async () => 
+      {
+        try {
+          const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if (res.ok)
+          {
+            const data = await res.json();
+            setStatisticsChartProps(data);
+            // setChartDone(true);
           }
-          } catch (err) {
-            console.log(err);
-          } finally {
-            setIsMatchLoading(true);
-          }
-          // {console.log(username)}
-  }
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally
+        {
+          setChartDone(true);
+        }
+      };
 
-    
-    useEffect(() => {
-      if (username)
-        fetchMatchHistory();
-        fetchGlobalRating();
-      fetchUserData();
-    }, [SidebarDone, globalRatingDone,!IsLoading,!IsMatchLoading, username]);
-
-    useEffect(() => 
-    {
       if (username)
       {
         fetchStatisticsPie();

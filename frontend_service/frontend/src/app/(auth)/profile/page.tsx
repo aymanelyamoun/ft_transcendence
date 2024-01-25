@@ -133,7 +133,7 @@ function App() {
   });
 
   const router = useRouter();
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | undefined>();
   const user = useUser();
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -143,55 +143,6 @@ function App() {
     };
     checkAuthentication();
   }, [user, router]); 
-
-  const fetchStatisticsPie = async () => 
-  {
-    try {
-      const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      const data = await res.json();
-      setStatisticsPieProps(data);
-      setPieDone(false);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally
-    {
-      setPieDone(true);
-    }
-  };
-
-  const fetchStatisticsChart = async () => 
-  {
-    try {
-      const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok)
-      {
-        const data = await res.json();
-        setStatisticsChartProps(data);
-        // setChartDone(true);
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally
-    {
-      setChartDone(true);
-    }
-  };
 
   
   useEffect(() => {
@@ -222,7 +173,7 @@ function App() {
       socket.off('gameInviteAccepted');
       socket.disconnect();
     }
-  }, []);
+  }, [router]);
   
   // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
   // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
@@ -266,15 +217,16 @@ function App() {
 
   
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (EditRef.current && !EditRef.current.contains(event.target as Node))
-    {
-      // Click outside the FriendInfo component, hide it
-      setShowEditProfile(false);
-    }
-  };
-
+  
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (EditRef.current && !EditRef.current.contains(event.target as Node))
+      {
+        // Click outside the FriendInfo component, hide it
+        setShowEditProfile(false);
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -283,6 +235,55 @@ function App() {
 
   useEffect(() => 
   {
+    const fetchStatisticsPie = async () => 
+    {
+      try {
+        const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        const data = await res.json();
+        setStatisticsPieProps(data);
+        setPieDone(false);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally
+      {
+        setPieDone(true);
+      }
+    };
+  
+    const fetchStatisticsChart = async () => 
+    {
+      try {
+        const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.ok)
+        {
+          const data = await res.json();
+          setStatisticsChartProps(data);
+          // setChartDone(true);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally
+      {
+        setChartDone(true);
+      }
+    };
+  
     if (username)
     {
       fetchStatisticsPie();

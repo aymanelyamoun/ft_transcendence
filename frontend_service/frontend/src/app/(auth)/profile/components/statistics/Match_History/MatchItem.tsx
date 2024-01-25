@@ -3,15 +3,15 @@ import React, { use, useEffect, useState } from 'react'
 import styles from './Match_History.module.css'
 import MatchXp from './MatchXp';
 import styled from 'styled-components';
-import aoumad from "/goinfre/aoumad/ft_transcendence/frontend_service/frontend/src/app/(auth)/profile/imgs/snouae.jpeg"
+import Image from 'next/image';
 
 interface MatchListProps {
     xp: number;
     scoredGoals: number;
     concededGoals: number;
     UserProfileStyling: boolean;
-    opponnetProfilePic?: string;
-    userProfilePic?: string;
+    opponnetProfilePic: string;
+    userProfilePic: string;
 }
 
 const matchItemContainer = styled.div`
@@ -50,11 +50,11 @@ const MatchItem: React.FC<MatchListProps> = (props) => {
   return (
     <ItemContainer>
         <div className={styles['matchItem-player1']}>
-            <img src={match.userProfilePic} alt="Profile" className="rounded-lg" />
+            <Image src={match.userProfilePic} alt="Profile" className="rounded-lg" />
         </div>
         <span className={styles['matchItem-vs']}>vs</span>
         <div className={styles['matchItem-player2']}>
-            <img src={match.opponnetProfilePic} alt="Profile" className="rounded-lg" />
+        <Image src={match.opponnetProfilePic} alt="Profile" className="rounded-lg" />
         </div>
         <div className={styles['matchItem-result']}>
             {match.scoredGoals > match.concededGoals ? (

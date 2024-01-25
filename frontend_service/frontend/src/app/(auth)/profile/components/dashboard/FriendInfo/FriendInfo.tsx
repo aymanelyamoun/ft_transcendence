@@ -12,7 +12,7 @@ import Sidebar from '../sidebar/sidebar';
 import FriendProfile from '../../../FriendProfile/page';
 import Link from 'next/link';
 import ShowGroups from './ShowGroups';
-
+import Image from 'next/image';
 // redux part
 import { connect, useSelector } from 'react-redux';
 import { toggleShowGroups } from '@/features/booleans/booleanActions';
@@ -139,15 +139,16 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
   //   };
   // }, [props.id, props.username, props.profilePic, showGroups]);
 
-  const handleClickOutside = (event: any) => {
-    console.log('Clicked outside');
-    if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
-      // Click outside the FriendInfo component, hide it
-      onClose();
-    }
-  };
-
+  
   useEffect(() => {
+    
+    const handleClickOutside = (event: any) => {
+      console.log('Clicked outside');
+      if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
+        // Click outside the FriendInfo component, hide it
+        onClose();
+      }
+    };
 
     if (!showGroups) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -217,7 +218,7 @@ return (
         <div ref={infoRef} className={styles['info-container']}>
           <Link href={`/profile/FriendProfile?username=${props.username}`}>
             <div className={styles['info-picture']}>
-              <img src={props.profilePic} alt="" className={styles['info-picture']} />
+              <Image src={props.profilePic} alt="" className={styles['info-picture']} />
             </div>
           </Link>
           <InfoName>

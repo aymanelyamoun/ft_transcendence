@@ -8,7 +8,7 @@ import { CgUnblock } from "react-icons/cg";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import Link from 'next/link';
 import { SearchU } from '../interfaces';
-
+import Image from 'next/image';
 // interface SearchU {
 //     id: string;
 //     username: string;
@@ -152,15 +152,16 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             console.log(error);
         }
     };
-
+    
     useEffect(() => {
+
         fetchIcon();
     }, [props.setSearchUsers]);
   return (
     <>
         <Link href={`/profile/FriendProfile?username=${props.username}`}>
         <FriendImage>
-            <img src={props.profilePic} alt="Profile" className="rounded-full" />
+            <Image src={props.profilePic} alt="Profile" className="rounded-full" />
         </FriendImage>
         </Link>
         <FriendName>

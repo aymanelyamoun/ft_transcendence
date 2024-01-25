@@ -133,11 +133,9 @@ function App() {
             }
             // {console.log(username)}
     }
-    useEffect(() => { fetchSidebar(); 
-      // console.log('after fetch');
-      // console.log(SidebarInfo);
-      // console.log('----------');
-    }, [!IsLoading]);
+    useEffect(() => {
+       fetchSidebar(); 
+    }, [IsLoading]);
 
   const [statisticsPieProps, setStatisticsPieProps] = useState<StatisticsPieInterface>({
     wins: 0,
@@ -235,7 +233,8 @@ function App() {
       fetchStatisticsPie();
       fetchStatisticsChart();
     }
-  }, [PieDone, ChartDone, username, !IsMatchLoading]);
+  }, [PieDone, ChartDone, IsMatchLoading]);
+  // }, [PieDone, ChartDone, username, IsMatchLoading]); should check this username if it affects the code 
 
     return (
       <>

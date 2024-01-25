@@ -142,49 +142,6 @@ function App() {
     checkAuthentication();
   }, [user, router]);
 
-  const fetchStatisticsPie = async () => {
-    try {
-      const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      const data = await res.json();
-      setStatisticsPieProps(data);
-      setPieDone(false);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally {
-      setPieDone(true);
-    }
-  };
-
-  const fetchStatisticsChart = async () => {
-    try {
-      const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setStatisticsChartProps(data);
-        // setChartDone(true);
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally {
-      setChartDone(true);
-    }
-  };
 
   useEffect(() => {
     socket.connect();
@@ -208,13 +165,12 @@ function App() {
       console.log("redirecting to : ", destination);
     });
     return () => {
-      console.log("calling disconnect");
       socket.off("redirect");
       socket.off("gameInvite");
       socket.off("gameInviteAccepted");
       socket.disconnect();
     };
-  }, []);
+  }, [router, ]);
 
   // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
   // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
@@ -265,6 +221,50 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const fetchStatisticsPie = async () => {
+      try {
+        const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        const data = await res.json();
+        setStatisticsPieProps(data);
+        setPieDone(false);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally {
+        setPieDone(true);
+      }
+    };
+  
+    const fetchStatisticsChart = async () => {
+      try {
+        const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setStatisticsChartProps(data);
+          // setChartDone(true);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally {
+        setChartDone(true);
+      }
+    };
+    
     if (username) {
       fetchStatisticsPie();
       fetchStatisticsChart();

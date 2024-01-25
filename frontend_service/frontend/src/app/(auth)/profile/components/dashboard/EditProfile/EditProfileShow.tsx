@@ -33,18 +33,21 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
     setIsNotify(false);
   }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (EditRef.current && !EditRef.current.contains(event.target as Node))
-    {
-      onClose();
-    }
-  };
-
+  
   useEffect(() => {
+  
+    const handleClickOutside = (event: MouseEvent) => {
+      if (EditRef.current && !EditRef.current.contains(event.target as Node))
+      {
+        onClose();
+      }
+    };
+  
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     }
+  
   }, [onClose]);
 
   const [isUsernameVisible, setIsUsernameVisible] = useState(false);

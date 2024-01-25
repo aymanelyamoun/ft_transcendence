@@ -2,7 +2,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { useState, ChangeEvent, useRef, useEffect } from 'react';
-import { Friend, friendsData} from '../../../../chat/page';
+import { Friend} from '../../../../chat/page';
 import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 // import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
@@ -58,7 +58,8 @@ interface FriendListProps {
   // setFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
   addChannelSearch: boolean;
   setAddChannelSearch: React.Dispatch<React.SetStateAction<boolean>>;
-  setChannelFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
+  // setChannelFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
+  setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
   setFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 

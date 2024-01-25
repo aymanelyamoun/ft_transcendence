@@ -55,7 +55,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
     return (members.some(member => member.user.id === userId));
   }
 
-  const isMember = isUserMember(props.members, loggedInUserId);
+  const isMember= isUserMember(props.members, loggedInUserId) as boolean;
 
   // useEffect(() =>
   // {
@@ -76,7 +76,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
           members={props.members}
           setChannelFriendSearchU={props.setChannelFriendSearch}
           ShowGroups={false}
-          bannedUsers={[]}
+          banedUsers={props.banedUsers}
           setChannelFriendSearch={function (value: React.SetStateAction<AddSearchInterface[]>): void {
             throw new Error('Function not implemented.');
           }}

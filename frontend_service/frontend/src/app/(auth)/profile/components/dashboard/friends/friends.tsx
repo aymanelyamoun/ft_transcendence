@@ -21,7 +21,7 @@ interface Friend {
 
 interface FriendProps {
   showGroups: boolean;
-  onClose: () => void;
+  // onClose: () => void;
 }
 
 

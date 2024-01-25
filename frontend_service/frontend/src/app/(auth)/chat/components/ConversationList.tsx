@@ -24,7 +24,7 @@ import {
   showDeleteChannelContext,
   showEditChannelContext,
   showExitChannelContext,
-} from "./ConversationInfo";
+} from "./conversationInfo";
 
 export const IsChannelContext = createContext(false);
 
@@ -34,7 +34,7 @@ import CreateChannelButton from "./CreateChannelButton";
 import AddNewChannel from "./AddNewChannel";
 import { Friend } from "../page";
 import EditChannel from "./EditChannel";
-import { AlertMessage } from "./AlertMessage";
+import { AlertMessage } from "./alertMessage";
 import { UserContext } from "@/utils/createContext";
 import ShowGroups from "../../profile/components/dashboard/FriendInfo/ShowGroups";
 

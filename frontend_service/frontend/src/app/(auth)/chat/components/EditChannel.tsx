@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
-import { AlertMessage } from './AlertMessage';
+import { AlertMessage } from './alertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
-import { ConversationListContext, LstConversationStateContext } from './ConversationInfo';
+import { ConversationListContext, LstConversationStateContext } from './conversationInfo';
 
 interface channelInfos{
   id: number;

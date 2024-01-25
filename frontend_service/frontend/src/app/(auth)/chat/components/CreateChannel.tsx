@@ -18,7 +18,7 @@ import passwordParameter from "../../../../../public/passwordParameterIcon.png";
 // import channleImage from "../../../../public/group_pic.jpg";
 // import passwordParameter from "../../../../public/passwordParameterIcon.png";
 
-import { AlertMessage } from "./AlertMessage";
+import { AlertMessage } from "../components/alertMessage";
 
 import { UserContext } from "@/utils/createContext";
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { CostumeButton } from './ConversationInfo'
+import { CostumeButton } from './conversationInfo'
 import { FaRunning } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { SocketContext } from '@/utils/socketContext';

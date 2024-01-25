@@ -75,15 +75,15 @@ width: 12rem;
 const Skins: React.FC = () => {
   return (
     <div className={styles.Skins}>
-      <div className={styles['skins-container']}>
+      <div className={`${styles['skins-container']} group hover:cursor-pointer hover:opacity-[0.8]`}>
         <SpanContainer>
         <Link href="/profile/skins">
         <span className={styles['skins-title']}>Skins</span>
         </Link>
         </SpanContainer>
-        <div className={styles['Skins-rectangle']}>
-          <div className={styles['Skins-circle']}></div>
-          <div className={styles['Skins-stick']}></div>
+        <div className={`${styles['Skins-rectangle']} group-hover:animate-[spin_2s_ease-in-out_infinite]`}>
+          <div className={`${styles['Skins-circle']} `}></div>
+          <div className={`${styles['Skins-stick']} `}></div>
         </div>
       </div>
     </div>

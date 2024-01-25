@@ -76,12 +76,12 @@ function App() {
   const [ChartDone, setChartDone] = useState<boolean>(false);
   const [IsLoading, setIsLoading] = useState(false);
   const [SidebarInfo, setSidebarInfo] = useState({
-        id: "",
-        username: "",
-        title: "",
-        profilePic: "",
-        wallet: 0,
-        gameRecords : []
+      id: "",
+      username: "",
+      title: "",
+      profilePic: "",
+      wallet: 0,
+      totalXp: 0,
     });
 
     const [IsMatchLoading, setIsMatchLoading] = useState<boolean>(false);

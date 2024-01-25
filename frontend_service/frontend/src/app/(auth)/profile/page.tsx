@@ -19,8 +19,9 @@ import { useUser } from '../layout';
 // import store and redux provider
 import { Provider } from 'react-redux'
 // import store from '../../../../store';
+// import { AlertMessage } from '../chat/components/alertMessage';
 import { AlertMessage } from '../chat/components/alertMessage';
-import Navbar from '../game/components/Navbar';
+// import Navbar from '../game/coponents/Navbar';
 import store from '@/store';
 import './globals.css'
 
@@ -102,7 +103,7 @@ interface InviteInterface {
   id: string;
   username: string;
 }
-export const SocketUseContext = React.createContext(socket);
+// export const SocketUseContext = React.createContext(socket);
 
 function App() {
 
@@ -297,7 +298,7 @@ function App() {
       {ShowEditProfile && <EditProfileShow onClose={() => setShowEditProfile(false)} />}
 
        <div className="App">
-        <SocketUseContext.Provider value={socket}>
+        {/* <SocketUseContext.Provider value={socket}> */}
         {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
           <SearchDiv >
             <SearchHeader />
@@ -314,7 +315,7 @@ function App() {
                 }
             <Friends/>
           </AppGlass>
-        </SocketUseContext.Provider>
+        {/* </SocketUseContext.Provider> */}
       </div>
       </Provider>
     </>

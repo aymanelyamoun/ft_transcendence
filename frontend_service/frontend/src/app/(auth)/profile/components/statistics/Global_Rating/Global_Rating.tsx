@@ -3,15 +3,7 @@ import React from 'react'
 import styles from './Global_Rating.module.css'
 import Global_RatingList from './Global_RatingList';
 import { GiSettingsKnobs } from "react-icons/gi";
-
-interface Rating {
-    id: string;
-    profilePic: string;
-    username: string;
-    title: string;
-    totalXp: number;
-}
-
+import { Rating } from "../interfaces";
 interface RatingListProps {
     ratings: Rating[];
 }

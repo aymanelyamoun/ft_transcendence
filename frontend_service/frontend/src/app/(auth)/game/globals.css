@@ -1,4 +1,9 @@
 /* add a media for .text-fit to resize every resolution */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 body {
     background: #050A27;
   }

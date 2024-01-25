@@ -4,7 +4,7 @@ import {
   ConversationListContextSet,
   LstConversationStateContext,
   MessagesContext,
-} from "./ConversationInfo";
+} from "./conversationInfo";
 // import { v4 as uuidv4 } from "uuid";
 import { ConversationIthemProps, MessageProps } from "@/utils/types/chatTypes";
 import avatar from "../../../../../public/garou-kid.jpeg";

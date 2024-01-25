@@ -14,6 +14,7 @@ import { StatisticsPieInterface, StatisticsChartInterface } from '../components/
 import { Backend_URL } from '@/lib/Constants';
 import { useRouter } from "next/navigation";
 import { useUser } from '../../layout';
+import { Rating } from "./../components/statistics/interfaces";
 
 function App() {
     const [SidebarDone,setSidebarDone] = useState<boolean>(false);
@@ -37,13 +38,15 @@ function App() {
       wallet: 0,
     });
 
-    const [globalRating, setGlobalRating] = useState({
-      id: "",
-      profilePic: "",
-      username: "",
-      title: "",
-      totalXp: 0,
-    })
+    // const [globalRating, setGlobalRating] = useState({
+    //   id: "",
+    //   profilePic: "",
+    //   username: "",
+    //   title: "",
+    //   totalXp: 0,
+    // })[]
+
+    const [globalRating, setGlobalRating] = useState<Rating[]>([]);
 
     const [IsLoading, setIsLoading] = useState<boolean>(false);
     const [IsMatchLoading, setIsMatchLoading] = useState<boolean>(false);
@@ -209,7 +212,7 @@ function App() {
           setChartDone(true);
         }
       };
-
+  
       if (username)
       {
         fetchStatisticsPie();

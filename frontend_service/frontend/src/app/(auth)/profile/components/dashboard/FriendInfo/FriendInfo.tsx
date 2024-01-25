@@ -139,16 +139,16 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
   //   };
   // }, [props.id, props.username, props.profilePic, showGroups]);
 
+  const handleClickOutside = (event: any) => {
+    console.log('Clicked outside');
+    if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
+      // Click outside the FriendInfo component, hide it
+      onClose();
+    }
+  };
   
   useEffect(() => {
     
-    const handleClickOutside = (event: any) => {
-      console.log('Clicked outside');
-      if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
-        // Click outside the FriendInfo component, hide it
-        onClose();
-      }
-    };
 
     if (!showGroups) {
       document.addEventListener('mousedown', handleClickOutside);

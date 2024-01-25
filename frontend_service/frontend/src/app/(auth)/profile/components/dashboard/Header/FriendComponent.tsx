@@ -22,7 +22,7 @@ interface FriendComponentProps {
     id: string;
     username?: string;
     isBlocked: boolean;
-    profilePic?: string;
+    profilePic: string;
     setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 

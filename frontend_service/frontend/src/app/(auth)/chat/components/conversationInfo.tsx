@@ -39,7 +39,13 @@ import { Backend_URL } from '@/lib/Constants';
 // import { $Enums } from "@prisma/client";
 // import { CONVERSATION_TYPE } from "../../../../../../backend_service/backend/types/chatTypes";
 // import { CONVERSATION_TYP } from "../../../../../../backend_service/backend/types/chatTypes";
-
+interface Friend {
+  id: string;
+  username: string;
+  profilePic: string;
+  title? : string;
+  status: string;
+}
 export const ConversationInfo = ({ type }: { type: string }) => {
   const conversationProps = useContext(LstConversationStateContext);
   const ConversationListData = useContext(ConversationListContext); 
@@ -52,6 +58,9 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   const lastConversation = useContext(LstConversationStateContext);
   const [isCreator, setIsCreator] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
+  const setShowInviteToChannel = useContext(setInviteFriendToChannelContext);
+// fore invite friend to channel
+  const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
 
   const socket = useContext(SocketContext);
 
@@ -170,6 +179,11 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         }
       // }, [lastConversation]);
     }
+
+    const inviteFriendTochannel = () => {
+      console.log("add friends to channel");
+      setShowInviteToChannel(true);
+    }
   //   console.log("recieverUserId :", recieverUserId);
     
   // console.log("***************ConversationListData :", ConversationListData);
@@ -210,7 +224,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
               </CostumeButton>
 
               <CostumeButton
-                onClick={() => console.log("add friends")}
+                onClick={() => inviteFriendTochannel()}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
                 width="w-20"
@@ -780,6 +794,11 @@ export const setAlertInviteFriendContext = createContext(
   {} as React.Dispatch<React.SetStateAction<boolean>>
 );
 
+export const inviteFriendToChannelContext = createContext({} as boolean);
+export const setInviteFriendToChannelContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
+
 export const showDeleteChannelContext = createContext({} as boolean);
 export const setShowDeleteChannelContext = createContext(
   {} as React.Dispatch<React.SetStateAction<boolean>>
@@ -803,6 +822,7 @@ export const ChatPage = () => {
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
   const [showInviteFriend, setShowInviteFriend] = useState<boolean>(false);
+  const [showInviteFriendToChannel, setShowInviteFriendToChannel] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   // console.log("conversationId:", conversation?.id);
   console.log(" refresh : ", refresh);
@@ -889,26 +909,35 @@ export const ChatPage = () => {
                         <showDeleteChannelContext.Provider
                           value={showDeleteChannel}
                         >
-                          <setAlertInviteFriend.Provider
+                          <setAlertInviteFriendContext.Provider
                             value={setShowInviteFriend}
                             >
-                            <alertInviteFriend.Provider
+                            <alertInviteFriendContext.Provider
                               value={showInviteFriend}
                               >
-                              <div className="h-full basis-1/4 flex">
-                                <Conversations 
-                                setRefresh={setRefresh}
-                                >
-                                  {" "}
-                                  {/* <ConversationList /> */}
-                                </Conversations>
-                                {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
-                              </div>
-                              <MessagesContext.Provider value={messages}>
-                                <Conversation />
-                              </MessagesContext.Provider>
-                            </alertInviteFriend.Provider>
-                          </setAlertInviteFriend.Provider>
+                                <setInviteFriendToChannelContext.Provider
+                                  value={setShowInviteFriendToChannel}
+                                  >
+                                  <inviteFriendToChannelContext.Provider
+                                    value={showInviteFriendToChannel}
+                                    >
+                                      <div className="h-full basis-1/4 flex">
+                                        <Conversations 
+                                        setRefresh={setRefresh}
+                                        >
+                                          {" "}
+                                          {/* <ConversationList /> */}
+                                        </Conversations>
+                                        {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
+                                      </div>
+                                      <MessagesContext.Provider value={messages}>
+                                        <Conversation />
+                                      </MessagesContext.Provider>
+                                    </inviteFriendToChannelContext.Provider>
+
+                                  </setInviteFriendToChannelContext.Provider>
+                            </alertInviteFriendContext.Provider>
+                          </setAlertInviteFriendContext.Provider>
                         </showDeleteChannelContext.Provider>
                       </setShowDeleteChannelContext.Provider>
                     </showExitChannelContext.Provider>

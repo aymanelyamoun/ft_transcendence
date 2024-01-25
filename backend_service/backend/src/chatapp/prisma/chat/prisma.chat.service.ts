@@ -1,4 +1,4 @@
-import { ConsoleLogger, ForbiddenException, Injectable, NotFoundException, Req } from "@nestjs/common";
+import { ConsoleLogger, ForbiddenException, Injectable, NotFoundException, Req, Request } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { Conversation,Prisma, User } from "@prisma/client";
 // import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "chatapp/server_chatapp/chat/types/channel";
@@ -998,6 +998,19 @@ export class PrismaChatService{
             throw error;
           }
         }
+  async getBlockedUsers(@Req() req: Request) { 
+    try {
+      const user = req['user'] as User;
+      const blockedUsers = await this.prisma.user.findUnique({
+        where: { id: user.id },
+        include: { blockedUsers: {select:{id:true}} },
+      });
+      return blockedUsers.blockedUsers;
+    }
+    catch(error){
+      throw error;
+    }
+  }
 
         async isAdminOnChannel(userId:string, channelId:string){
           try{

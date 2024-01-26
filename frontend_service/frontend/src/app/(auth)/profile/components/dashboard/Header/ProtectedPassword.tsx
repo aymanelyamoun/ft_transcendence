@@ -31,10 +31,6 @@ const ProtectedPassword = (props : ProtectedPassProps) => {
         setPasswordSent(true);
         setOpenPassComp(false);
       }
-      else
-      {
-        alert("fikra ghalata a Imane!");
-      }
     }
   };
   
@@ -46,15 +42,12 @@ const ProtectedPassword = (props : ProtectedPassProps) => {
           <div className={styles['span-container']}>
             <span className={styles['span-description']}>{"This channel is protected by a password"}</span>
           </div>
-          {/* <div className={styles['input-container']}> */}
           <input className={styles['input-container']}
               type="password"
               placeholder="Enter password"
-              // value={passwordInput}
               onChange={handlePasswordChange}
               onKeyPress={handleKeyPress}
             />
-          {/* </div> */}
         </div>
       </div>
     </>
@@ -62,5 +55,3 @@ const ProtectedPassword = (props : ProtectedPassProps) => {
 };
 
 export default ProtectedPassword;
-
-// I need to check if the password is correct or not in this comp

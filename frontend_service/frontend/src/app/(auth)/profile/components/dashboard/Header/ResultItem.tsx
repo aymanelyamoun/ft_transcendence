@@ -76,7 +76,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
           members={props.members}
           setChannelFriendSearchU={props.setChannelFriendSearch}
           ShowGroups={false}
-          banedUsers={props.banedUsers}
+          banedUsers={[]}
           setChannelFriendSearch={function (value: React.SetStateAction<AddSearchInterface[]>): void {
             throw new Error('Function not implemented.');
           }}

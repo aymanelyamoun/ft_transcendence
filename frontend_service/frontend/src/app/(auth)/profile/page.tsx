@@ -85,8 +85,7 @@ const AppGlass = styled.div`
     width: 90%;
     border-radius: 2rem;
     overflow: hidden;
-    grid-template-columns: repeat(2, 1fr); /* Two columns with equal size */
-    // grid-gap: 4rem; /* Space between columns (margin + margin) */
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto 11rem 19rem;
     z-index: auto;
   }

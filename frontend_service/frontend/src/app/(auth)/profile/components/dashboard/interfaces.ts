@@ -10,9 +10,9 @@ export interface SearchU {
             id: string;
         };
     }[];
-    banedUsers: {
-      id: string;
-  }[];
+  //   banedUsers: {
+  //     id: string;
+  // }[];
     id: string;
     username: string;
     profilePic: string;

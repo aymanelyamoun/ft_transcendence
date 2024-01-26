@@ -145,12 +145,6 @@ const ShowGroups = (props : showGroupProps) => {
       return (members.some(member => member.user.id === userId));
   };
 
-  // const isMember = isUserMember(, selectedUserId);
-
-  // useEffect(() => {
-  //   console.log("Heeeere is member: ", isMember);
-  // })
-
 
   return (
     <div onClick={handleClickOutside} className="addChannelOverlay flex justify-center items-center ">

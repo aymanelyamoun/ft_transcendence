@@ -34,8 +34,9 @@ const SettingsContainer = styled.div`
         background: rgba(5, 10, 39, 0.55);
     }
 
-    @media (max-width: 1000px) {
-    display: none;
+    @media (max-width: 1000px)
+    {
+      top: 1rem;
     }
 `;
 
@@ -95,9 +96,6 @@ const Settings: React.FC<SettingsProps> = (props) => {
 
     const handleClick = () => {
         setOpen(!open);
-        // if (onClick) {
-        //     onClick();
-        // }
     };
 
     const LogOutReq = async () => {

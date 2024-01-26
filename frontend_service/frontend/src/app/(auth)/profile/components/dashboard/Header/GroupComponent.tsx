@@ -239,43 +239,19 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       else
       {
         const err = await res.json();
+        setPasswordSent(false);
+        // setOpenPassComp(true);
         console.log("error in sending the request to join me: ", err);
+        // {message: 'wrong password please check again', error: 'Forbidden', statusCode: 403}
       }
     }
     catch (error)
     {
       console.log("error in sending the request to join CATCH me: ", error);
+    } finally {
+      setPasswordSent(false);
     }
   };
-
-  // const fetchIcon = async () => {
-  //   try {
-  //     const res = await fetch( Backend_URL+"channels/toAddSearch", {
-  //       method: "GET",
-  //       mode: "cors",
-  //       credentials: "include",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //       },
-  //     });
-  //     if (res.ok) {
-  //       const data = await res.json();
-  //       setChannelFriendSearch(data);
-  //     } else
-  //     {
-  //       // alert("Error fetching data: ");
-  //       // console.error("Error fetching data: ", res.statusText);
-  //     }
-  //   } catch (error) {
-  //     // console.error("Error fetching data: ", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchIcon();
-  // },[setChannelFriendSearch]);
-
 
   const handleOpenPassComp = (event: any) =>
   {

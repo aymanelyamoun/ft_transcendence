@@ -44,7 +44,7 @@ const CreateChannel = ({
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
-  
+  const [noPass, setNoPass] = useState<boolean>(false);
   const creatorInfo = useContext(UserContext);
 
   const handleOptionChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
@@ -73,8 +73,13 @@ const CreateChannel = ({
       setShowAlert(true);
     
       if(saveChannelName === "")
-          setChannelName(true);
-
+      setChannelName(true);
+      if(selectedOption === 'protected' && savePassword === "")
+      {
+        setNoPass(true);
+        setShowNotify(false);
+        return;
+      }
       const members = selectedFriends.map((friend) => ({
         userId: friend.id,
         isAdmin: false,
@@ -159,6 +164,7 @@ const CreateChannel = ({
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
             {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setChannelCreated(false);}} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
             {notCreated && (<AlertMessage onClick={() => {setNotCreated(false); setChannelCreated(false);}} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
+            {noPass && (<AlertMessage onClick={() => setNoPass(false)} message={"Please Enter Password"} type={"error"}> </AlertMessage>)}
             <div>
               <Image
                 className="channelImage"
@@ -198,7 +204,7 @@ const CreateChannel = ({
                   <div>
                     <div className="fixPasswordBg">
                       <div className="setPassWord relative">
-                        password
+                        <span className="relative left-[0.5rem]">password</span>
                         <div
                           onClick={() => {setPassword(false); setAllowTyping(false) }}
                           className="passwordParameter absolute right-[3%] top-[18%]"

@@ -141,6 +141,7 @@ export const ConversationChatSection = () => {
   }, [blockedUsers])
   // console.log("data:", data);
   console.log("blockedUsers:", blockedUsers);
+
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (
@@ -150,6 +151,10 @@ export const ConversationChatSection = () => {
         >
           {messages
             .filter((message) => message.message.trim() !== "")
+            .filter((message) => {
+              // return !blockedUsers.id.includes(message.senderId);
+              return !blockedUsers.some((blockedUser) => blockedUser.id === message.senderId);
+            })
             .map((message) => {
               // if (message.senderId === userId) {
               return <Message key={message.id} message={message} />;

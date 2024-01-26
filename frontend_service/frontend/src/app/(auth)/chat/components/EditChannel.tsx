@@ -271,7 +271,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
                     <div>
                       <div className="fixPasswordBg">
                         <div className="setPassWord relative">
-                          <span className='relative left-[0.5rem]'> assword </span>
+                          <span className='relative left-[0.5rem]'> password </span>
                           <div
                             onClick={() => {setPassword(false); setAllowTyping(false) }}
                             className="passwordParameter absolute right-[3%] top-[18%]"

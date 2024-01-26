@@ -313,8 +313,8 @@ export default function Singleplayer (){
         <div id="parentDiv" className="flex flex-col h-full w-full items-center gap-[5vh] mt-[5vh]">
             {/* <Navbar /> */}
             <div id="SingleMatch" className="flex flex-col items-center" />
-            <div id="scoreDisplay" className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 ">
-                <img id="playerOneImage" className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" />
+            <div id="scoreDisplay" className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 rounded-xl">
+                <img id="playerOneImage" className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" src="/pFinger.png" />
                 <div id="scoreOne" className="flex items-center justify-center text-lg font-bold w-[4vw] h-16 text-white text-center">0</div>
                 <div className="splitter"></div>
                 <div id="scoreTwo" className="flex items-center justify-center text-lg font-bold w-[4vw] h-16 text-white text-center">0</div>

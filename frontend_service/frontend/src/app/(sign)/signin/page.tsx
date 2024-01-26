@@ -48,12 +48,15 @@ export default function Signin() {
         },
       });
 
-      if (res.isTwoFactorEnabled) {
-        router.push('/confirmauth');
-      } else {
-        setIsNotify(true);
+      // if (res.isTwoFactorEnabled) {
+      //   console.log("im here 1");
+      //   router.push('/confirmauth');
+      // } else {
+      //   console.log("im here 2");
+      //   setIsNotify(true);
+      // if(res.ok)
         router.push('/profile');
-      }
+      // }
     } catch (error) {
       data = error;
       setIsError(true);

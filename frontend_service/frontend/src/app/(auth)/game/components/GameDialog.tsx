@@ -16,8 +16,8 @@ export default function GameDialog({picture} : {picture : string}){
                 WINNER IS
             </div>
             <img src={picture} alt="Winner Picture" className="absolute top-[30%]  h-[150px] w-[150px] rounded-xl bg-gray-400"/>
-            <button className="absolute top-[45%] h-[30px] w-[120px] bg-[#050A27] rounded-full hover:opacity-[.8] text-white"
-            onClick={() => {backToMenu()}}>Back To Menu</button>
+            {/* <button className="absolute top-[45%] h-[30px] w-[120px] bg-[#050A27] rounded-full hover:opacity-[.8] text-white"
+            onClick={() => {backToMenu()}}>Back To Menu</button> */}
         </>
     )
 }

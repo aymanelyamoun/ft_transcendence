@@ -19,7 +19,7 @@ import { fa } from '@faker-js/faker';
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
   
-@WebSocketGateway({namespace: "api/chat",cors : {origin : "http://localhost:3000", credentials: true}})
+@WebSocketGateway({namespace: "api/chat",cors : {origin : process.env.FRONT_URL, credentials: true}})
 export class ChatGateway implements OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService, private readonly jwtService: JwtService,

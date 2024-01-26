@@ -56,11 +56,11 @@ export class AuthGoogleController
         res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
         const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
         if (user.isTwoFactorEnabled)
-          return res.redirect('http://localhost:3000/confirmauth')
-      else if (user.hash != '') {
-          return res.redirect('http://localhost:3000/profile')
+          return res.redirect(process.env.FRONT_URL+'/confirmauth')
+        else if (user.hash != '') {
+          return res.redirect(process.env.FRONT_URL+'/profile')
         }
-        return res.redirect('http://localhost:3000/confirm')
+        return res.redirect(process.env.FRONT_URL+'/confirm')
       }
       catch (error)
       {
@@ -85,11 +85,11 @@ export class AuthGoogleController
         res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
         const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
         if (user.isTwoFactorEnabled)
-          return res.redirect('http://localhost:3000/confirmauth')
+          return res.redirect(process.env.FRONT_URL+'/confirmauth')
         else if (user.hash != '') {
-          return res.redirect('http://localhost:3000/profile')
+          return res.redirect(process.env.FRONT_URL+'/profile')
         }
-        return res.redirect('http://localhost:3000/confirm')
+        return res.redirect(process.env.FRONT_URL+'/confirm')
       }
       catch (error)
       {
@@ -224,7 +224,8 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
           secret: process.env.jwtSecretKey,
       });
       res.cookie('access_token', accessToken, { httpOnly : false });
-      return res.status(200).json('User validate');
+      return res.redirect(process.env.FRONT_URL)
+       //return res.status(200).json('User validate');
     }
     catch(error)
     {
@@ -245,7 +246,9 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
 
       const data = await this.authGoogleService.login(dto);
       res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
-      return res.status(200).send(data); 
+      // if (data.user.isTwoFactorEnabled)
+      //   return res.redirect(process.env.FRONT_URL+'/confirmauth')
+      return res.status(200).send(data);
   }
         
   @Get('logout')
@@ -257,7 +260,7 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
       const token = req['Token'];
       await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
       res.clearCookie('access_token');
-      return res.redirect('http://localhost:3000/')
+      return res.redirect(process.env.FRONT_URL)
     }catch(error)
     {
       throw new UnauthorizedException();

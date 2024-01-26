@@ -61,7 +61,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       }
     };
     checkAuthentication();
-  }, [pathname]);
+  });
   const [prevPath, setPrevPath] = useState("/");
   const [isRouting, setisRouting] = useState(false);
   // useEffect(() => {
@@ -79,19 +79,20 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   //   }
   // }, [pathname, router]);
   const value = { user, setUser };
+  // if(twoFa)
+  //   return (<ConfirmAuth />);
   return (
     <main className="h-screen w-screen bg-[#050A27]">
 
       <UserContext.Provider value={value}>
         <>
           {authenticated ? (
-            twoFa ? (
-              // Render Confirm component when authenticated and twoFa is true
+            user?.isTwoFactorEnabled && !user.isConfirmed2Fa? (
               <ConfirmAuth />
-            ) : (
-              // Render children if user is authenticated and !user.hash is true
+            ) : 
+            (
               !user?.hash ? (
-                <Confirm /> // Replace with your component for 2FA confirmation
+                <Confirm /> 
               ) : (
                 <>
                   <Navbar />

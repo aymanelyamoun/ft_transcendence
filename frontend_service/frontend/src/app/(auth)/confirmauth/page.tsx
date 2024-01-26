@@ -8,8 +8,13 @@ import Loading from "@/app/components/Loading";
 import { fetchAPI } from "@/utils/api";
 import { AlertMessage } from "@/app/components/alertMessage";
 
-let response : any;
-export default function ConfirmAuth() {
+ let response : any;
+// interface ConfirmAuthProps {
+//   setTwoFa: React.Dispatch<React.SetStateAction<boolean>>;
+// }
+//  export default function ConfirmAuth ({setTwoFa} : {setTwoFa: React.Dispatch<React.SetStateAction<boolean>>}) {
+export default function ConfirmAuth () {
+
   const [isError, setIsError] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState<boolean>(false);
   const handleClick = () => {
@@ -49,7 +54,10 @@ export default function ConfirmAuth() {
         },
       });
       setIsNotify(true);
+      console.log("heeeeere");
+      // setTwoFa(false);
       router.push("/profile");
+      return <Loading />;
     }
     catch (error)
     {
@@ -89,7 +97,7 @@ export default function ConfirmAuth() {
             }}
           />
         </div>
-        {isError == true ? <AlertMessage onClick={handleClick} message={response} type="error" /> : isNotify == true ? <AlertMessage onClick={handleClick} message={"Two-factor authentication code is correct!"} type="notify" /> : ""}
+        {isError == true ? <AlertMessage onClick={handleClick} message={response} type="error" />  : ""}
       </div>
     </div>
   );

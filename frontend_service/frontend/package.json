@@ -13,6 +13,7 @@
     "@iconscout/react-unicons": "^2.0.2",
     "@types/matter-js": "^0.19.5",
     "@types/socket.io-client": "^3.0.0",
+    "dotenv": "^16.4.1",
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
     "framer-motion": "^10.18.0",

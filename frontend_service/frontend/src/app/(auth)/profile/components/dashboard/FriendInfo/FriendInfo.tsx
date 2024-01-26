@@ -7,7 +7,7 @@ import { MdGroupAdd } from "react-icons/md";
 import { IoPersonRemoveSharp } from "react-icons/io5";
 import { IoGameController } from "react-icons/io5";
 import { BsPersonFillSlash } from "react-icons/bs";
-import { Backend_URL } from '@/lib/Constants';
+ 
 import Sidebar from '../sidebar/sidebar';
 import FriendProfile from '../../../FriendProfile/page';
 import Link from 'next/link';
@@ -161,7 +161,7 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
 
   const SendDeclineReq = async (id: string) => {
     try {
-      const response = await fetch(`${Backend_URL}user/remove/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/remove/${id}`, {
         method: "DELETE",
         mode: "cors",
         credentials: "include",
@@ -182,7 +182,7 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
 
   const SendBlockUser = async (id: string) => {
     try {
-      const response = await fetch(`${Backend_URL}request/block/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/block/${id}`, {
         method: "DELETE",
         mode: "cors",
         credentials: "include",

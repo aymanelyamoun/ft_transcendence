@@ -1,5 +1,5 @@
 "use client"
-import { Backend_URL } from '@/lib/Constants';
+ 
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react'
 import { IoSettingsOutline } from "react-icons/io5";
@@ -116,7 +116,7 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
             if (data1 && data1.secure_url) {
               profilePic = data1.secure_url;
           
-              const response = await fetch(Backend_URL + 'user/update/image', {
+              const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + 'user/update/image', {
                 method: 'PATCH',
                 mode: 'cors',
                 credentials: 'include',
@@ -152,7 +152,7 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
   const handlUpdateUsername = async () => {
     try {
       await fetchAPI({
-        url : Backend_URL + "user/update/username",
+        url : process.env.NEXT_PUBLIC_BACKEND_URL + "user/update/username",
         method: "PATCH",
         body: {
           username: username,
@@ -172,7 +172,7 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
     try
     {
       await fetchAPI({
-        url : Backend_URL + "user/update/password",
+        url : process.env.NEXT_PUBLIC_BACKEND_URL + "user/update/password",
         method: "PATCH",
         body : {
             oldPass: userPass?.oldPass,
@@ -196,7 +196,7 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
       try
       {
         await fetchAPI({
-          url : Backend_URL + "auth/2FA/enable",
+          url : process.env.NEXT_PUBLIC_BACKEND_URL + "auth/2FA/enable",
           method: "POST",
           body : {
             token: codeTwoFa,
@@ -217,7 +217,7 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
       try
       {
          await fetchAPI ({
-          url : Backend_URL + "auth/2FA/disable",
+          url : process.env.NEXT_PUBLIC_BACKEND_URL + "auth/2FA/disable",
           method: "POST",
          });
         notify = "2FA disabled successfully";
@@ -236,7 +236,7 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
       {
         try { 
           const res =  await fetchAPI({
-            url: Backend_URL + "auth/2FA/generate",
+            url: process.env.NEXT_PUBLIC_BACKEND_URL + "auth/2FA/generate",
             method: "GET",
           });
           setQrCode(res);

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Sidebar from '../components/dashboard/sidebar/sidebar';
 import Match_History from '../components/statistics/Match_History/Match_History';
 import Statistics from '../components/dashboard/statistics/statistics';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { Match } from '../components/statistics/Match_History/match_history_interfaces';
 import { StatisticsChartInterface, StatisticsPieInterface } from '../components/dashboard/interfaces';
 import { useRouter } from "next/navigation";
@@ -97,7 +97,7 @@ function App() {
 
     const fetchSidebar = async () => {
         try {
-            const res = await fetch(`${Backend_URL}user/profil/${username}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/profil/${username}`, {
               method: "GET",
               mode: "cors",
               credentials: "include",
@@ -149,7 +149,7 @@ function App() {
   const fetchStatisticsPie = async () => 
   {
     try {
-      const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/winsLoses/${username}`, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -172,7 +172,7 @@ function App() {
   const fetchStatisticsChart = async () => 
   {
     try {
-      const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/games/week/${username}`, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -197,7 +197,7 @@ function App() {
 
   const fetchMatchHistory = async () => {
     try {
-        const res = await fetch(`${Backend_URL}user/profil/${username}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/profil/${username}`, {
           method: "GET",
           mode: "cors",
           credentials: "include",

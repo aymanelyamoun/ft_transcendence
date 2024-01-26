@@ -7,7 +7,7 @@ import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 // import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 import styled from 'styled-components';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import SearchHeader from '../Header/SearchHeader';
 import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
@@ -87,7 +87,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
   const Searchusers = async (username: string) => {
     try {
       console.log("fetching user entered");
-      const res = await fetch( Backend_URL+"user/"+username, {
+      const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL+"user/"+username, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -107,7 +107,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
 
   const fetchChannel = async (channelName: string) => {
     try {
-      const res = await fetch( Backend_URL+"channels/search/"+channelName, {
+      const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL+"channels/search/"+channelName, {
         method: "GET",
         mode: "cors",
         credentials: "include",

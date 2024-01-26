@@ -5,7 +5,7 @@ import Sidebar from './components/dashboard/sidebar/sidebar';
 import Skins from './components/dashboard/skins/skins';
 import Friends from './components/dashboard/friends/friends';
 import Statistics from './components/dashboard/statistics/statistics';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import SearchHeader from './components/dashboard/Header/SearchHeader';
 import styled from 'styled-components';
 import Animation from './components/dashboard/Animation/Animation';
@@ -181,7 +181,7 @@ function App() {
 
   const fetchUserData = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/user/profile", {
+      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"user/profile", {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -238,7 +238,7 @@ function App() {
     const fetchStatisticsPie = async () => 
     {
       try {
-        const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/winsLoses/${username}`, {
           method: "GET",
           mode: "cors",
           credentials: "include",
@@ -261,7 +261,7 @@ function App() {
     const fetchStatisticsChart = async () => 
     {
       try {
-        const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/games/week/${username}`, {
           method: "GET",
           mode: "cors",
           credentials: "include",

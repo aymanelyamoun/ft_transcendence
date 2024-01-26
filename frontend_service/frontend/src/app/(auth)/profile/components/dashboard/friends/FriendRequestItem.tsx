@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import styles from './friends.module.css'
 import { FcOk } from "react-icons/fc";
 import { FcCancel } from "react-icons/fc";
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { PiHandshakeBold } from "react-icons/pi";
 import { FaHandshakeAltSlash } from "react-icons/fa";
 import styled from 'styled-components';
@@ -58,7 +58,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
 
   const fetchAcceptRequest = async (props: FriendRequestItemProps) => {
     try {
-      const res = await fetch(`${Backend_URL}request/accept/${props.id}`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/accept/${props.id}`,
         {
           method: 'POST',
           mode: "cors",
@@ -83,7 +83,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
 
   const fetchRefuseRequest = async (props: FriendRequestItemProps) => {
     try {
-      const res = await fetch(`${Backend_URL}request/refuse/${props.id}`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/refuse/${props.id}`,
         {
           method: 'POST',
           mode: "cors",

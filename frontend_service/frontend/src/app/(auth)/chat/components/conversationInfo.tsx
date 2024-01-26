@@ -32,7 +32,7 @@ import { GiAstronautHelmet } from "react-icons/gi";
 import { FaUserAstronaut } from "react-icons/fa";
 import { ChannelInfoProps } from "@/utils/types/chatTypes";
 import { UserContext } from "@/utils/createContext";
-import { Backend_URL } from '@/lib/Constants';
+ 
 // export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 // export const isAdmin = false;
 
@@ -110,7 +110,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   useEffect(() => {
     const fetchFun = async () => {
       await fetch(
-        `http://localhost:3001/api/channels/getConversationMembers/${lastConversation?.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${lastConversation?.id}`,
         {
           method: "GET",
           credentials: "include",
@@ -148,7 +148,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         // const fetchFun = async () => {
         const fetchFun = async () => {
           await fetch(
-            `${Backend_URL}request/send/${recieverUserId}`, {
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}request/send/${recieverUserId}`, {
               method: "POST",
               mode: "cors",
               credentials: "include",
@@ -390,7 +390,7 @@ const MemberIthem = ({
           muteUntil: addMinutes(new Date(), 1),
         };
         console.log("userData Mute :", userData);
-        fetch("http://localhost:3001/api/channels/muteUser", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/muteUser", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -419,7 +419,7 @@ const MemberIthem = ({
           channelId: conversationProps?.channelId,
           userId2: userId,
         };
-        fetch("http://localhost:3001/api/channels/addAdmin", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/addAdmin", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -434,7 +434,7 @@ const MemberIthem = ({
           channelId: conversationProps?.channelId,
           userId2: userId,
         };
-        fetch("http://localhost:3001/api/channels/removeAdmin", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/removeAdmin", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -448,7 +448,7 @@ const MemberIthem = ({
           channelId: conversationProps?.channelId,
           userId2: userId,
         };
-        fetch("http://localhost:3001/api/channels/banUser", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/banUser", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -462,7 +462,7 @@ const MemberIthem = ({
           channelId: conversationProps?.channelId,
           userId2: userId,
         };
-        fetch("http://localhost:3001/api/channels/removeUserFromChannel", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/removeUserFromChannel", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -607,7 +607,7 @@ const MemberList = ({
   useEffect(() => {
     const fetchFun = async () => {
       await fetch(
-        `http://localhost:3001/api/channels/getConversationMembers/${conversation?.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${conversation?.id}`,
         {
           method: "GET",
           credentials: "include",
@@ -631,7 +631,7 @@ const MemberList = ({
 
     const fetchFun2 = async () => {
       await fetch(
-        `http://localhost:3001/api/channels/channelInfos/${conversationProps?.channelId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/channelInfos/${conversationProps?.channelId}`,
         {
           method: "GET",
           credentials: "include",
@@ -831,7 +831,7 @@ export const ChatPage = () => {
       const isAdmin = true; // Replace true with your desired value
 
       await fetch(
-        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userInfo.user?.id}&isAdmin=${isAdmin}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getUserConversationsIthemList?userId=${userInfo.user?.id}&isAdmin=${isAdmin}`,
         {
           method: "GET",
           credentials: "include",
@@ -867,7 +867,7 @@ export const ChatPage = () => {
     if (conversation?.id === undefined) return;
     const fetchFun = async () => {
       await fetch(
-        `http://localhost:3001/api/channels/conversation/${conversation?.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/conversation/${conversation?.id}`,
         {
           method: "GET",
           credentials: "include",

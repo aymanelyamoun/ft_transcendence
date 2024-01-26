@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { Backend_URL } from "@/lib/Constants";
+
 import { useRouter } from "next/navigation";
 import { useUser } from "../layout";
 import Loading from "@/app/components/Loading";
@@ -42,7 +42,7 @@ export default function ConfirmAuth() {
   const handleValidateTwoFa = async () => {
     try {
       await fetchAPI({
-        url: Backend_URL + "auth/2FA/validate",
+        url: process.env.NEXT_PUBLIC_BACKEND_URL + "auth/2FA/validate",
         method: "POST",
         body: {
           token : codeTwoFa,

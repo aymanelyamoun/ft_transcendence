@@ -8,7 +8,7 @@ import Link from 'next/link';
 const LogOut: React.FC = () => {
   return (
     <>
-    <Link href="http://localhost:3001/api/auth/logout">
+    <Link href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/logout"}>
     <div className={styles.LogOut}>
         <IoIosLogOut />
         <div className='logout-text'>Log Out</div>

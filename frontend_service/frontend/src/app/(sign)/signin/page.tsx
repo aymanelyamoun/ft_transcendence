@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { FaFacebook, FaLinkedinIn, FaGoogle, FaEnvelope, FaRegEnvelope } from 'react-icons/fa'
 import { MdLabelOutline } from 'react-icons/md'
 import Link from "next/link";
-import { Backend_URL } from '@/lib/Constants';
 import { useRef, useState } from 'react';
 
 import { useEffect } from 'react';
@@ -15,7 +14,9 @@ import Button from '@/app/components/Button';
 import { fetchAPI } from '@/utils/api';
 import MyIcon from '@/app/components/42Icon';
 import { Si42 } from "react-icons/si";
+import { config } from 'dotenv';
 
+config();
 
 let data : any;
 type FormInputs = {
@@ -39,7 +40,7 @@ export default function Signin() {
   const log = async () => {
     try {
       const res = await fetchAPI({
-        url: Backend_URL + 'auth/login',
+        url: process.env.NEXT_PUBLIC_BACKEND_URL + 'auth/login',
         method: 'POST',
         body: {
           email: formData.email,
@@ -87,10 +88,10 @@ export default function Signin() {
             <Button onClick={log} text="LOG" />
             <div className="border-2 border-white w-10 inline-block mb-7"></div>
             <div className="flex justify-center mb-7 ">
-              <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
+              <Link href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/google/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
                 <FaGoogle className="text-sm text-white" /> 
               </Link>
-              <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
+              <Link  href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/42/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
                 <Si42 className="text-sm text-white" />
                 {/* <MyIcon /> */}
               </Link>

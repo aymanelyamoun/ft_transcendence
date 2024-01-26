@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React, { useRef, useEffect, useState, use } from "react";
 import "./globals.css";
 import Matter, {
@@ -14,6 +14,7 @@ import Matter, {
 import { Socket, io } from "socket.io-client";
 import { useRouter } from "next/navigation";
 import * as Skins from "../utils/Skins";
+import GameDialog from "../components/GameDialog";
 
 // TO DO LIST:
 // 1. fix the profile pictures "border-radius" and "image not showing" issue. DONE
@@ -52,7 +53,8 @@ var paddleSkin = Skins.defaultPaddle;
 var tableSkin = Skins.defaultTable;
 var parsedBodies: Matter.Body[] = [];
 
-const handleEndGame = (endGameData: any, router: any) => {
+const handleEndGame = (endGameData: any, router: any, winnerImg :React.MutableRefObject<string>) => {
+  // setGameEnd(true);
   const winner =
     endGameData.winner === "1"
       ? document.getElementById("playerOneImage")!
@@ -61,10 +63,10 @@ const handleEndGame = (endGameData: any, router: any) => {
     endGameData.winner === "1"
       ? document.getElementById("playerTwoImage")!
       : document.getElementById("playerOneImage")!;
+  const winnerImage = winner as HTMLImageElement;
+  winnerImg.current = winnerImage.src;
   winner.style.border = "5px solid green";
-  // winner.style.borderRadius = '50%';
   loser.style.border = "5px solid red";
-  // loser.style.borderRadius = '50%';
   setTimeout(() => {
     router.push("/game");
   }, 3000);
@@ -168,13 +170,15 @@ const MatchScene = () => {
   const socketRef = useRef<Socket | null>(null);
   const render = useRef<Render>(null);
   const router = useRouter();
+  const [gameEnd, setGameEnd] = useState(false);
   const engine = useRef<Engine>(Matter.Engine.create());
+  const winnerImg = useRef<string>("");
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const matchID = queryParams.get("matchID");
     if (matchID === null) router.push("/game");
     if (socketRef.current === null) {
-      socketRef.current = io("http://localhost:3001/api/chat", {
+      socketRef.current = io(process.env.NEXT_PUBLIC_BACKEND_URL+"chat", {
         withCredentials: true,
       });
       socketRef.current.emit("joinMatch", matchID);
@@ -184,9 +188,11 @@ const MatchScene = () => {
       router.push(destination);
     });
     socketRef.current.on("startFriendGame", (playersData: any) => {
+      console.log('GAME STARTING')
       socketRef.current!.on("selfData", setSkins);
       socketRef.current!.on("endGame", (eData: any) => {
-        handleEndGame(eData, router);
+        handleEndGame(eData, router, winnerImg);
+        setGameEnd(true);
       });
       document.addEventListener("keydown", (e) =>
         pressHandle(e, socketRef.current!)
@@ -216,7 +222,6 @@ const MatchScene = () => {
   }, []);
 
   return (
-    // isLoaded ? (
     <div
       id="parentDiv"
       className="flex flex-col h-full w-full justify-center items-center gap-[5vh] mt-[5vh]"
@@ -248,8 +253,8 @@ const MatchScene = () => {
           className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2"
         />
       </div>
+        {gameEnd && <GameDialog picture={winnerImg.current}/>}
     </div>
-    // ) : null
   );
 };
 

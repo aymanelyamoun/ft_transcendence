@@ -4,7 +4,7 @@
 
 
 
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import React from 'react'
@@ -19,7 +19,7 @@ export default function Authorization()
     useEffect(() => {
     const checkAuthentication = async () => {
         try {
-          const res = await fetch(Backend_URL + "auth/check", {
+          const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/check", {
             method: "GET",
             mode: "cors",
             credentials: "include",

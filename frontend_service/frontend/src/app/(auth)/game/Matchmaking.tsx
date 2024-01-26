@@ -22,7 +22,7 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
     setInQueue(true);
     if (!socketRef.current) {
       console.log("socket is null, creating new socket");
-      socketRef.current = io("http://localhost:3001/api/chat", {
+      socketRef.current = io(process.env.NEXT_PUBLIC_BACKEND_URL+"chat", {
         withCredentials: true,
       });
       socketRef.current.emit("matchmaking");

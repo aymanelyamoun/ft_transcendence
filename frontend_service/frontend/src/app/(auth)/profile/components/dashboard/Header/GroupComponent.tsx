@@ -6,7 +6,7 @@ import { StaticImageData } from 'next/image'
 import { MdGroupAdd } from "react-icons/md";
 import { SearchU } from '../interfaces';
 import { GroupComponentProps } from '../interfaces';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { BsFillPersonCheckFill, BsPersonFillDash } from "react-icons/bs";
 import { AddSearchInterface } from '../interfaces';
 import { connect } from 'react-redux';
@@ -128,7 +128,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const SendRequestUser = async (props: GroupComponentProps) => {
     try {
-      const res = await fetch(Backend_URL+"channels/addUserToChannel", {
+      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/addUserToChannel", {
         method: "PATCH",
         mode: "cors",
         credentials: "include",
@@ -156,7 +156,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const SendRequestMe = async (props: GroupComponentProps) => {
     try {
-      const res = await fetch (Backend_URL+"channels/joinChannel", {
+      const res = await fetch (process.env.NEXT_PUBLIC_BACKEND_URL+"channels/joinChannel", {
         method: "PATCH",
         mode: "cors",
         credentials: "include",
@@ -189,7 +189,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const UnbanUser = async (props: GroupComponentProps) => {
     try {
-      const res = await fetch(Backend_URL+"channels/unbanUser", {
+      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/unbanUser", {
         method: "PATCH",
         mode: "cors",
         credentials: "include",
@@ -218,7 +218,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const SendRequestUserProtected = async (props: GroupComponentProps) => {
     try {
-      const res = await fetch (Backend_URL+"channels/joinChannel", {
+      const res = await fetch (process.env.NEXT_PUBLIC_BACKEND_URL+"channels/joinChannel", {
         method: "PATCH",
         mode: "cors",
         credentials: "include",

@@ -1,5 +1,5 @@
 "use client";
-import { Backend_URL } from '@/lib/Constants';
+ 
 import Link from "next/link";
 import Image from 'next/image'
 import { FaFacebook, FaLinkedinIn, FaGoogle, FaEnvelope, FaRegEnvelope } from 'react-icons/fa'
@@ -11,6 +11,10 @@ import InputField from '@/app/components/InputField';
 import Button from '@/app/components/Button';
 import { fetchAPI } from '@/utils/api';
 import { Si42 } from "react-icons/si";
+
+import { config } from 'dotenv';
+
+config();
 
 let response : any;
   type FormInputs = {
@@ -33,7 +37,7 @@ let response : any;
   const register = async () => {
     try {
       await fetchAPI({
-        url: Backend_URL + 'auth/register',
+        url: process.env.NEXT_PUBLIC_BACKEND_URL + 'auth/register',
         method: 'POST',
         body: {
           username: formData.username,
@@ -80,10 +84,10 @@ let response : any;
           <Button onClick={register} text="Sign up" />
           <div className="border-2 border-white w-10 inline-block mb-7"></div>
           <div className="flex justify-center mb-7 ">
-            <Link href="http://localhost:3001/api/auth/google/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
+            <Link href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/google/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
               <FaGoogle className="text-sm text-white" /> 
             </Link>
-            <Link  href="http://localhost:3001/api/auth/42/login" className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
+            <Link  href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/42/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
             <Si42 className="text-sm text-white" />
             </Link>
             </div>

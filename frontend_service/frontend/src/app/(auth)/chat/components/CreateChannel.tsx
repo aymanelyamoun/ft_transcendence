@@ -113,7 +113,7 @@ const CreateChannel = ({
         //   .then((data) => {
         //     console.log("data : ", data);
         //   });
-        fetch("http://localhost:3001/api/channels/createChannel", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/createChannel", {
           method: "POST",
           mode: "cors",
           credentials: "include",

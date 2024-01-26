@@ -11,7 +11,7 @@ import yamon from '../imgs/ael-yamo.jpeg'
 import snouae from '../imgs/snouae.jpeg'
 import Global_Rating from '../components/statistics/Global_Rating/Global_Rating';
 import { StatisticsPieInterface, StatisticsChartInterface } from '../components/dashboard/interfaces';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { useRouter } from "next/navigation";
 import { useUser } from '../../layout';
 import { Rating } from "./../components/statistics/interfaces";
@@ -76,7 +76,7 @@ function App() {
       const fetchGlobalRating = async () =>
       {
         try {
-          const res = await fetch(Backend_URL+"user/globalRating", {
+          const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"user/globalRating", {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -105,7 +105,7 @@ function App() {
 
       const fetchMatchHistory = async () => {
         try {
-            const res = await fetch(`${Backend_URL}user/profil/${username}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/profil/${username}`, {
               method: "GET",
               mode: "cors",
               credentials: "include",
@@ -134,7 +134,7 @@ function App() {
 
     const fetchUserData = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/user/profile", {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"/user/profile", {
           method: "GET",
           mode: "cors",
           credentials: "include",
@@ -167,7 +167,7 @@ function App() {
       const fetchStatisticsPie = async () => 
       {
         try {
-          const res = await fetch(`${Backend_URL}user/winsLoses/${username}`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/winsLoses/${username}`, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -190,7 +190,7 @@ function App() {
       const fetchStatisticsChart = async () => 
       {
         try {
-          const res = await fetch(`${Backend_URL}user/games/week/${username}`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/games/week/${username}`, {
             method: "GET",
             mode: "cors",
             credentials: "include",

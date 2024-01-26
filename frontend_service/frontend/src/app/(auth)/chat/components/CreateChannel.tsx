@@ -170,7 +170,7 @@ const CreateChannel = ({
             {showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"The Password Confirmation Does Not Match"} type={"error"}> </AlertMessage>)}
             {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setChannelCreated(false);}} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
             {notCreated && (<AlertMessage onClick={() => {setNotCreated(false); setChannelCreated(false);}} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
-            
+            {noPass && (<AlertMessage onClick={() => setNoPass(false)} message={"Please Enter Password"} type={"error"}> </AlertMessage>)}
             <div>
               <Image
                 className="channelImage"

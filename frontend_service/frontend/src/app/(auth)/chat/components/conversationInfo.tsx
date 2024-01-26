@@ -757,6 +757,10 @@ interface User {
   isConfirmed2Fa: Boolean;
 }
 
+export interface BlockedUser{
+  id: string;
+}[]
+
 const Conversation = () => {
   return (
     <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
@@ -808,6 +812,10 @@ export const setShowDeleteChannelContext = createContext(
 export const ConversationListContextSet = createContext(
   {} as any
 );
+export const blockedUsersContext = createContext({} as BlockedUser[]);
+export const setBlockedUsersContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<BlockedUser[]>>
+);
 
 export const ChatPage = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
@@ -825,6 +833,7 @@ export const ChatPage = () => {
   const [showInviteFriend, setShowInviteFriend] = useState<boolean>(false);
   const [showInviteFriendToChannel, setShowInviteFriendToChannel] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
   // console.log("conversationId:", conversation?.id);
   console.log(" refresh : ", refresh);
   useEffect(() => {
@@ -922,20 +931,27 @@ export const ChatPage = () => {
                                   <inviteFriendToChannelContext.Provider
                                     value={showInviteFriendToChannel}
                                     >
-                                      <div className="h-full basis-1/4 flex">
-                                        <Conversations 
-                                        setRefresh={setRefresh}
+                                      <setBlockedUsersContext.Provider
+                                        value={setBlockedUsers}
                                         >
-                                          {" "}
-                                          {/* <ConversationList /> */}
-                                        </Conversations>
-                                        {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
-                                      </div>
-                                      <MessagesContext.Provider value={messages}>
-                                        <Conversation />
-                                      </MessagesContext.Provider>
+                                          <blockedUsersContext.Provider
+                                            value={blockedUsers}
+                                            > 
+                                              <div className="h-full basis-1/4 flex">
+                                                <Conversations 
+                                                setRefresh={setRefresh}
+                                                >
+                                                  {" "}
+                                                  {/* <ConversationList /> */}
+                                                </Conversations>
+                                                {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
+                                              </div>
+                                              <MessagesContext.Provider value={messages}>
+                                                <Conversation />
+                                              </MessagesContext.Provider>
+                                          </blockedUsersContext.Provider>
+                                        </setBlockedUsersContext.Provider>
                                     </inviteFriendToChannelContext.Provider>
-
                                   </setInviteFriendToChannelContext.Provider>
                             </alertInviteFriendContext.Provider>
                           </setAlertInviteFriendContext.Provider>

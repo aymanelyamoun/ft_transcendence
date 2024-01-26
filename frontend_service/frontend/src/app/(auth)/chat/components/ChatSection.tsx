@@ -4,6 +4,8 @@ import {
   ConversationListContextSet,
   LstConversationStateContext,
   MessagesContext,
+  blockedUsersContext,
+  setBlockedUsersContext,
 } from "./ConversationInfo";
 // import { v4 as uuidv4 } from "uuid";
 import { ConversationIthemProps, MessageProps } from "@/utils/types/chatTypes";
@@ -22,6 +24,10 @@ export const ConversationMessagesContextSet = createContext(
 export const ConversationMessagesContextStat = createContext(
   {} as MessageProps[]
 );
+
+// export interface BlockedUser{
+//   id: string;
+// }[]
 
 function createConversationListIthem(
   Message: MessageProps
@@ -47,6 +53,8 @@ export const ConversationChatSection = () => {
   const userInfo = useContext(UserContext);
   // const chatContainerRef = useRef(null!);
   const chatContainerRef = useRef<HTMLDivElement>(null!);
+  const blockedUsers = useContext(blockedUsersContext);
+  const setBlockedUsers = useContext(setBlockedUsersContext);
 
   let maxId = 0;
   if (messages.length !== 0) {
@@ -101,7 +109,38 @@ export const ConversationChatSection = () => {
     }
   }, [messages]);
 
+  // const blockedUsers:BlockedUser[] = [];
+  useEffect (() => {
+    console.log("chat section useEffect");
+    const fetchFun = async () => {
+      const response = await fetch("http://localhost:3001/api/channels/blockedUsers", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          },
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("data:", data);
+            if (data)
+            {
+              // const blockedUsers = data;
+              setBlockedUsers(data);
+            }
+            else
+            {
+              // const blockedUsers = [];
+              setBlockedUsers([]);
+            }
+          });
+    }
+    fetchFun();
+  }, [blockedUsers])
   // console.log("data:", data);
+  console.log("blockedUsers:", blockedUsers);
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (

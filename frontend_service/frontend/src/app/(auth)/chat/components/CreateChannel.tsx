@@ -91,8 +91,8 @@ const CreateChannel = ({
 
       const channelData = {
         channelName: saveChannelName,
-        // channelPic: "some link",
-        channelPic: channelPic,
+        channelPic: "some link",
+        // channelPic: channelPic,
         // channelPic: need to put the actual link of the channel pic,
         password: savePassword,
         type: selectedOption,

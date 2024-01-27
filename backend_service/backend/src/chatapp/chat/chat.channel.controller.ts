@@ -53,6 +53,8 @@ export class ChannelController{
 
     @Patch('editChannel')
     async editChannel(@Body() data:ChangeChannelDataDto, @Req() req:Request){
+        console.log("getting to edit the channel");
+    
         await this.prismaChatService.editChannel(data, req);
     }
 

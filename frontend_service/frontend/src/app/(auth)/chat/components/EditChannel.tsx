@@ -3,10 +3,11 @@ import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
 import { AlertMessage } from './alertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
-import { ConversationListContext, LstConversationStateContext } from './conversationInfo';
+import { ConversationListContext, LstConversationSetStateContext, LstConversationStateContext } from './conversationInfo';
 import channelPic from "../../../../../public/group_pic.jpg";
 import ProfilePicUpload from '@/app/components/ProfilePicUpload';
 import { Backend_URL } from '@/lib/Constants';
+import { ConversationIthemProps } from '@/utils/types/chatTypes';
 
 
 interface channelInfos{
@@ -22,14 +23,21 @@ interface channelInfos{
 }
 
 
-const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const EditChannel = (
+  {setEditChannel,
+   setRefresh}
+   :
+   {setEditChannel: React.Dispatch<React.SetStateAction<boolean>>,
+    setRefresh: React.Dispatch<React.SetStateAction<boolean>>
+  }) => {
 
   const [saveChannelName, setSaveChannelName] = useState<string>("");
   // selectedOption need to be intialized with the channel type by fetching it from the backend
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [channelName, setChannelName] = useState<boolean>(false);
+  const setConversationList = useContext(LstConversationSetStateContext);
 
-
+  
   const [savePassword, setSavePassword] = useState<string>("");
   const [password, setPassword] = useState<boolean>(false);
   const [allowTyping, setAllowTyping] = useState<boolean>(false);
@@ -38,8 +46,10 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
   const [useChannelPic, setUseChannelPic] = useState<string>("");
-
+  
   const conversationProps = useContext(LstConversationStateContext);
+  const lastConversation = useContext(LstConversationStateContext);
+  const lastConvId = lastConversation?.id; 
 
   const cancelEditChannel = useRef<HTMLDivElement>(null);
 
@@ -123,11 +133,14 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         
       const channelData = {
         channelName: saveChannelName,
+        // channelPic: "some link",
         password: savePassword,
         type: selectedOption,
         channelId: conversationProps?.channelId,
-        channelPic: useChannelPic,
-        // channelPic: "some link",
+        removeAdmins: [],
+        addAdmins: [],
+
+        // channelPic: useChannelPic,
         // creator: creatorInfo?.id,
         // here i should add the selected friends
       };
@@ -135,8 +148,9 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
       console.log("channelData of Edited: ", channelData);
       // const fetchPostFun = async () => {
         fetch("http://localhost:3001/api/channels/editChannel", {
-          method: "PATCH",
+            method: "PATCH",
             credentials: "include",
+
             headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -148,7 +162,31 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
-          setEditChannel(false);
+          else
+          {
+            setRefresh(true);
+            // setEditChannel(false);
+            // const updatedConversation = {
+            //   ...setConversationList,
+            //   name: channelData.channelName,
+            // };
+            const newName = channelData.channelName;
+          //   setConversationList((prevConversation: ConversationIthemProps | undefined ) => {
+          //     if (prevConversation?.id === lastConvId) {
+          //       return { ...prevConversation, name: updatedConversation.name };
+          //     }
+          //     return prevConversation;
+          // });
+          setConversationList((prevConversation: ConversationIthemProps | undefined) => {
+            if (prevConversation && prevConversation.id === lastConvId) {
+              return {
+                ...prevConversation,
+                name: newName,
+              };
+            }
+            return prevConversation;
+          });
+          }
         })
         .catch((error) => {
           console.error("Error during fetch:", error);

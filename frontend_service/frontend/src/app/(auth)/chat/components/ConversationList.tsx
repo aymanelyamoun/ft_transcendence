@@ -335,7 +335,7 @@ export const Conversations = ({
               setRefresh={setRefresh}
             />
           )}
-          {editChannel && <EditChannel setEditChannel={setEditChannel} />}
+          {editChannel && <EditChannel setEditChannel={setEditChannel} setRefresh={setRefresh} />}
           {exitChannel && (
             <AlertMessage
               onClick={handleExitChannel}

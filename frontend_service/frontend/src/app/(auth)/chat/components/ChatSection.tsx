@@ -130,11 +130,11 @@ export const ConversationChatSection = () => {
               // const blockedUsers = data;
               setBlockedUsers(data);
             }
-            else
-            {
-              // const blockedUsers = [];
-              setBlockedUsers([]);
-            }
+            // else
+            // {
+            //   // const blockedUsers = [];
+            //   setBlockedUsers([]);
+            // }
           });
     }
     // if (userInfo.user?.id)
@@ -142,7 +142,7 @@ export const ConversationChatSection = () => {
     //   fetchFun();
     // }
     fetchFun();
-  })
+  },[])
   // }, [blockedUsers])
   // console.log("data:", data);
   // console.log("blockedUsers:", blockedUsers);

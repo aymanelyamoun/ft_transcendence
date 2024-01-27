@@ -21,37 +21,15 @@ interface Friend {
 
 interface FriendProps {
   showGroups: boolean;
-  // onClose: () => void;
 }
-
 
 const Friends: React.FC<FriendProps>  = ({ showGroups }) => {
   const [showRequest, setRequest] = React.useState(false);
   const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
-  const [closeGroups, setCloseGroups] = useState(false);
-  // const infoRef = useRef<HTMLDivElement>(null);
 
-  const handleRequestClick = () => {
+const handleRequestClick = () => {
     setRequest((prevShowRequest) => !prevShowRequest);
-  };
-
-  // const handleClickOutside = (event: MouseEvent) => {
-  //   if (infoRef.current && !infoRef.current.contains(event.target as Node))
-  //   {
-  //     // Click outside the FriendInfo component, hide it
-  //     setSelectedFriend(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   document.addEventListener('mousedown', handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   }
-  // });
-  // useEffect(() => {
-  //   console.log("ShowGroups: ", showGroups);
-  // }, [showGroups]);
+};
 
   return (
     <>
@@ -81,9 +59,7 @@ const Friends: React.FC<FriendProps>  = ({ showGroups }) => {
           username={selectedFriend.username}
           profilePic={selectedFriend.profilePic}
           title={selectedFriend.title}
-          // setSelectedFriend={setSelectedFriend}
           onClose={() => setSelectedFriend(false)}
-          // ref={infoRef}
         />)}
     { showGroups &&
     <ShowGroups

@@ -18,7 +18,6 @@ interface Friend {
 }
 
   interface FriendsProps {
-    // onFriendItemClick: Friend | false;
     onFriendItemClick: any;
   }
 
@@ -94,11 +93,10 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
 
   return (
     <div className={styles['friends-list']}>
-      {/* <Suspense fallback={<p>Loading friends...</p>}> */}
     {FriendsList.length ? (
     <ul>
         {FriendsList.map((friend) => (
-          <FriendItem 
+          <FriendItem
             key={friend.id}
             friend={friend}
             onFriendItemClick={onFriendItemClick}
@@ -112,9 +110,8 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
           <NoFriendsSpan>No friends yet</NoFriendsSpan>
       </NoFriendContainer>
     )}
-      {/* </Suspense> */}
     </div>
   );
-}
+};
 
 export default FriendList;

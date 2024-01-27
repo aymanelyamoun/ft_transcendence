@@ -123,7 +123,6 @@ const Settings: React.FC<SettingsProps> = (props) => {
         <SettingsContainer
           onClick={handleClick}
         >
-          {/* <div className={styles['settings-container']}> */}
           <OpenBarContainer >
             <UilSetting/>
             <SettingSpan> Settings</SettingSpan>
@@ -133,11 +132,7 @@ const Settings: React.FC<SettingsProps> = (props) => {
                 <div className={styles.otherBar}>
                     <EditProfile setShowEditProfile={setShowEditProfile}/>
                 </div>
-                {/* <div className={styles.otherBar}> */}
-                  {/* <div className={styles.otherBar}> */}
                       <LogOut />
-                  {/* </div> */}
-                {/* </div> */}
             </OpenedBar>
           )}
           </SettingsContainer>

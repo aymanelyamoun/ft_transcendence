@@ -3,7 +3,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import { IoMdPersonAdd } from "react-icons/io";
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { CgUnblock } from "react-icons/cg";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import Link from 'next/link';
@@ -73,7 +73,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
 
     const SendRequest = async (props: FriendComponentProps) => {
         try {
-            const response = await fetch(`${Backend_URL}request/send/${props.id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/send/${props.id}`, {
                 method: "POST",
                 mode: "cors",
                 credentials: "include",
@@ -98,7 +98,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
     const UnblockFriend = async (props: FriendComponentProps) => {
         try {
             console.log(props.id);
-            const response = await fetch(`${Backend_URL}request/deblock/${props.id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/deblock/${props.id}`, {
                 method: "POST",
                 mode: "cors",
                 credentials: "include",
@@ -122,7 +122,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
     const fetchIcon = useCallback(async () => {
         try
         {
-            const res = await fetch( Backend_URL + "user/all", {
+            const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/all", {
                 method: "GET",
                 mode: "cors",
                 credentials: "include",

@@ -231,7 +231,7 @@ export const Conversations = ({
     };
     // console.log("channelData: ", channelData);
     const fetchFun = async () => {
-      await fetch("http://localhost:3001/api/channels/leaveChannel", {
+      await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/leaveChannel", {
         method: "PATCH",
         credentials: "include",
         headers: {
@@ -261,7 +261,7 @@ export const Conversations = ({
     };
     console.log("channelData of Delete: ", channelData);
     const fetchFun = async () => {
-      await fetch("http://localhost:3001/api/channels/deleteChannel", {
+      await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/deleteChannel", {
         method: "POST",
         credentials: "include",
         headers: {

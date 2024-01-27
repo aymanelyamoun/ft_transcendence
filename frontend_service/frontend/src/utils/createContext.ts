@@ -9,6 +9,7 @@ interface User {
   typeLog?: string;
   isTwoFactorEnabled?: boolean;
   isConfirmed2Fa?: boolean;
+  title?: string;
 }
 
 interface UserContextValue {

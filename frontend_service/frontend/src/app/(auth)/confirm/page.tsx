@@ -1,5 +1,4 @@
 "use client";
-import { Backend_URL } from "@/lib/Constants";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -64,7 +63,7 @@ export default function Confirm() {
 
     try {
       await fetchAPI({
-        url: Backend_URL + "user/confirm",
+        url: process.env.NEXT_PUBLIC_BACKEND_URL + "user/confirm",
         method: 'PATCH',
         body: {
           username: userData?.username,

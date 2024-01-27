@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchModal from './SearchModal';
 import { BsSearch } from "react-icons/bs";
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { SearchU } from '../interfaces';
 import { connect, useSelector } from 'react-redux';
 import { toggleSearchFetch } from '@/features/booleans/booleanActions';
@@ -59,12 +59,11 @@ const SearchHeader = () => {
     {
       dispatch(toggleSearchFetch());
     }
-
     
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-              const res = await fetch( Backend_URL + "user/all", {
+              const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/all", {
                 method: "GET",
                 mode: "cors",
                 credentials: "include",
@@ -88,7 +87,7 @@ const SearchHeader = () => {
     
           const fetchChannel = async (channelName: string) => {
             try {
-              const res = await fetch( Backend_URL+"channels/search/"+channelName, {
+              const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL+"channels/search/"+channelName, {
                 method: "GET",
                 mode: "cors",
                 credentials: "include",

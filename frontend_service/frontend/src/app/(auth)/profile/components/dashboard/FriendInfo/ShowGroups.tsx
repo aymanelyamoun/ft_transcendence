@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { AddSearchInterface, SearchU } from '../interfaces';
 import GroupComponent from '../Header/GroupComponent';
 
@@ -98,7 +98,7 @@ const ShowGroups = (props : showGroupProps) => {
 
   const fetchChannelGroups = async () => {
     try {
-      const res = await fetch( Backend_URL+"channels/toAddSearch", {
+      const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL+"channels/toAddSearch", {
         method: "GET",
         mode: "cors",
         credentials: "include",

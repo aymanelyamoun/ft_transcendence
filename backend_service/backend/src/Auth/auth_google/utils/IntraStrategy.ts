@@ -26,7 +26,7 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
     async authenticate(request: any, options?: any): Promise<any>
     {
         if (request.query && request.query.error === 'access_denied') {
-          return request.res.redirect('http://localhost:3000');
+          return request.res.redirect(process.env.FRONT_URL);
         }
         return super.authenticate(request, options);
     }

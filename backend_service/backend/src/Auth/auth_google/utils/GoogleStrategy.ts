@@ -25,7 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 
     async authenticate(request: any, options?: any): Promise<any> {
         if (request.query && request.query.error === 'access_denied') {
-          return request.res.redirect('http://localhost:3000');
+          return request.res.redirect(process.env.FRONT_URL);
         }
         return super.authenticate(request, options);
       }
@@ -37,11 +37,6 @@ This method is part of the strategy and is called automatically by Passport.js. 
     
     async validate(accessToken: string, refreshToken : string, profile: Profile, res: Response)
     {
-       var pic : String;
-        // if (profile._json.picture)
-        //      pic  = profile._json.picture;
-        // else 
-        // pic = "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg";
         const user = await  this.authGoogleService.validateUser({
                 email: profile.emails[0].value,
                 username: profile.emails[0].value.split('@')[0],

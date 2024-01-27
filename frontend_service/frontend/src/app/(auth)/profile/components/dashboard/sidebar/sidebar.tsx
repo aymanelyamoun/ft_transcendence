@@ -226,13 +226,13 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             )}
             <Username>{props.sidebar.username}</Username>
             {props.sidebar.title === 'Bronze' ? (
-              <GiSkullShield className='text-5xl text-orange-950' />
+              <IoShieldSharp className='text-5xl text-amber-700' />
           ) : props.sidebar.title === 'Silver' ? (
-            <IoShieldSharp className='text-5xl text-red-400' />
+            <GiRosaShield className='text-5xl text-gray-500' />
           ) : props.sidebar.title === 'Gold' ? (
-            <GiRosaShield className='text-5xl text-amber-500' />
+            <GiBorderedShield className='text-5xl text-yellow-500' />
           ) : props.sidebar.title === 'Master' ? (
-            <GiBorderedShield className='text-5xl text-amber-200' />
+            <GiSkullShield className='text-5xl text-red-600' />
           ) : (
             null
           )}

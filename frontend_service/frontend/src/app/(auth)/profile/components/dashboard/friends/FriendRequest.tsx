@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './friends.module.css';
 import FriendRequestItem from './FriendRequestItem';
 import { useState, useEffect } from 'react';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { GiAstronautHelmet } from "react-icons/gi";
 import styled from 'styled-components';
 
@@ -43,7 +43,7 @@ const FriendRequest = () => {
   useEffect(() => {
     const fetchReqData = async () => {
       try {
-        const res = await fetch( Backend_URL + "user/notifications", {
+        const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/notifications", {
           method: "GET",
           mode: "cors",
           credentials: "include",

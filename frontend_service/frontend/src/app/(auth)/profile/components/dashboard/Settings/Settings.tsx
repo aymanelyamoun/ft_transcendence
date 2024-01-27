@@ -6,7 +6,7 @@ import { UilSetting } from '@iconscout/react-unicons';
 import LogOut from '../LogOut/LogOut';
 import EditProfile from '../EditProfile/EditProfile';
 import styled from 'styled-components';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { useRouter } from "next/navigation";
 
 const SettingsContainer = styled.div`
@@ -100,7 +100,7 @@ const Settings: React.FC<SettingsProps> = (props) => {
 
     const LogOutReq = async () => {
         try {
-            const response = await fetch(`${Backend_URL}auth/logout`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}auth/logout`, {
                 method: "GET",
                 mode: "cors",
                 credentials: "include",

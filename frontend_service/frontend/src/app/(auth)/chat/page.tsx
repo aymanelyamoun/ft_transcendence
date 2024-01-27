@@ -48,7 +48,7 @@ export default function Home() {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/" + "auth/check", {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/check", {
             method: "GET",
             mode: "cors",
             credentials: "include",

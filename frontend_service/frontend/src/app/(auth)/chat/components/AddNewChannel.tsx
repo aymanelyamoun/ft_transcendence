@@ -44,7 +44,7 @@ const AddNewChannel = ({
     
   useEffect(() => {
     const fetchFriendsListData = async () => {
-      fetch("http://localhost:3001/api/user/friends", {
+      fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"user/friends", {
         method: "GET",
         mode: "cors",
         credentials: "include",

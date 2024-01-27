@@ -8,7 +8,6 @@ import avatar from "../../../../../../../public/garou-kid.jpeg";
 import jake from '../../../../../../../public/jakeWithHeadPhones.jpg';
 import { StaticImageData } from 'next/image'
 import ResultItem from './ResultItem';
-import { Backend_URL } from "@/lib/Constants";
 import { on } from "events";
 import { SearchU } from "../interfaces";
 import styles from './search.module.css';

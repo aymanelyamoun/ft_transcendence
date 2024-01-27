@@ -201,6 +201,10 @@ export class GameInstance {
     }
 
 
+    async update_skins(winnerData : User, loserData : User, prisma : PrismaService) : Promise<void> {
+        // 
+    }
+
     async update_achievement(winnerData : User, loserData : User, prisma : PrismaService) : Promise<void> {
         // handle winner title
         const winnerTitle = this.getTitle(winnerData.totalXp);
@@ -224,6 +228,7 @@ export class GameInstance {
     }
 
     async endGame (state : EndGameState) : Promise<void> {
+        console.log('gameEnded : ' ,state)
         this.gameOver = true;
         this.gameEnded = true;
         if (state.reason == 'score')
@@ -286,6 +291,7 @@ export class GameInstance {
                     },
                 });
                 await this.update_achievement(winnerData, loserData, prismaService)
+                await this.update_skins(winnerData, loserData, prismaService)
                 console.log('database updated')
         }
             catch (error) {
@@ -299,13 +305,14 @@ export class GameInstance {
                 winner: winner,
             });
         }
-        setTimeout(() => {
+        // setTimeout(() => {
+            console.log('runner off')
             Events.off(this.engine, 'collisionStart', this.collisionDetect);
             Events.off(this.runner, "beforeTick", this.animationFrame);
             Runner.stop(this.runner);
             World.clear(this.engine.world, false);
             Engine.clear(this.engine);
-        }, 5000);
+        // }, 5000);
     }
     gameLoop = () => {
         if (this.gameOver == true)
@@ -366,8 +373,10 @@ export class GameInstance {
         );
     }
     animationFrame = () => {
+        console.log('frame playing')
         this.gameLoop();
         this.sendFrame();
+        console.log('frame played')
     }
 
 

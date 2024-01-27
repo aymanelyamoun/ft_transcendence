@@ -1,15 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { Backend_URL } from "@/lib/Constants";
+
 import { useRouter } from "next/navigation";
 import { useUser } from "../layout";
 import Loading from "@/app/components/Loading";
 import { fetchAPI } from "@/utils/api";
 import { AlertMessage } from "@/app/components/alertMessage";
 
-let response : any;
-export default function ConfirmAuth() {
+ let response : any;
+// interface ConfirmAuthProps {
+//   setTwoFa: React.Dispatch<React.SetStateAction<boolean>>;
+// }
+//  export default function ConfirmAuth ({setTwoFa} : {setTwoFa: React.Dispatch<React.SetStateAction<boolean>>}) {
+export default function ConfirmAuth () {
+
   const [isError, setIsError] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState<boolean>(false);
   const handleClick = () => {
@@ -42,14 +47,17 @@ export default function ConfirmAuth() {
   const handleValidateTwoFa = async () => {
     try {
       await fetchAPI({
-        url: Backend_URL + "auth/2FA/validate",
+        url: process.env.NEXT_PUBLIC_BACKEND_URL + "auth/2FA/validate",
         method: "POST",
         body: {
           token : codeTwoFa,
         },
       });
       setIsNotify(true);
+      console.log("heeeeere");
+      // setTwoFa(false);
       router.push("/profile");
+      return <Loading />;
     }
     catch (error)
     {
@@ -89,7 +97,7 @@ export default function ConfirmAuth() {
             }}
           />
         </div>
-        {isError == true ? <AlertMessage onClick={handleClick} message={response} type="error" /> : isNotify == true ? <AlertMessage onClick={handleClick} message={"Two-factor authentication code is correct!"} type="notify" /> : ""}
+        {isError == true ? <AlertMessage onClick={handleClick} message={response} type="error" />  : ""}
       </div>
     </div>
   );

@@ -83,10 +83,13 @@ export class GatewayService{
     }
 
     removeConnectedSocketFromMap(connectedSocket:ConnectedSocketInfo){
-        this.connectedSocketsMap.get(connectedSocket.userId).delete(connectedSocket.socket);
-        connectedSocket.socket.leave(connectedSocket.userId);
-        if (this.connectedSocketsMap.get(connectedSocket.userId).size == 0)
+        if(this.connectedSocketsMap.get(connectedSocket.userId))
+        {
+            this.connectedSocketsMap.get(connectedSocket.userId).delete(connectedSocket.socket);
+            if (this.connectedSocketsMap.get(connectedSocket.userId).size == 0)
             this.connectedSocketsMap.delete(connectedSocket.userId);
+        }
+        connectedSocket.socket.leave(connectedSocket.userId);
     }
 
     addConnectedSocket(connectedSocket:ConnectedSocketInfo){

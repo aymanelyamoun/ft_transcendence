@@ -61,7 +61,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
     const channelId = conversationProps?.channelId;
     // here i should fetch the channelName and channelPic and channelType and else ... from the backend
     console.log("channelId ??????????: ", channelId);
-    fetch(`http://localhost:3001/api/channels/channelInfos/${channelId}`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}channels/channelInfos/${channelId}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -129,7 +129,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
 
       console.log("channelData of Edited: ", channelData);
       // const fetchPostFun = async () => {
-        fetch("http://localhost:3001/api/channels/editChannel", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/editChannel", {
           method: "PATCH",
             credentials: "include",
             headers: {
@@ -271,7 +271,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
                     <div>
                       <div className="fixPasswordBg">
                         <div className="setPassWord relative">
-                          <span className='relative left-[0.5rem]'> assword </span>
+                          <span className='relative left-[0.5rem]'> password </span>
                           <div
                             onClick={() => {setPassword(false); setAllowTyping(false) }}
                             className="passwordParameter absolute right-[3%] top-[18%]"

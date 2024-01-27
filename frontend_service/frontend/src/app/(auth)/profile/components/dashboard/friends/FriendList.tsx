@@ -4,7 +4,7 @@ import React, { Suspense } from 'react'
 import styles from './friends.module.css'
 import FriendItem from './FriendItem';
 import { useState, useEffect } from 'react';
-import { Backend_URL } from '@/lib/Constants';
+ 
 import { FaUserAstronaut } from "react-icons/fa6";
 import styled from 'styled-components';
 import { SocketUseContext } from "@/utils/socketUseContext";
@@ -51,7 +51,7 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   useEffect(() => {
     const fetchFriendsListData = async () => {
       try {
-        const res = await fetch( Backend_URL + "user/friends", {
+        const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/friends", {
           method: "GET",
           mode: "cors",
           credentials: "include",

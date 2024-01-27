@@ -1,7 +1,6 @@
-'use client';;
+'use client';
 import React, { useContext, useEffect, useState, createContext } from "react";
 import Loading from "@/app/components/Loading";
-import { Backend_URL } from "@/lib/Constants";
 import Authorization from "@/utils/auth";
 import { redirect, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ interface User {
   typeLog?: string;
   isTwoFactorEnabled?: boolean;
   isConfirmed2Fa?: boolean;
+  title?: string;
 }
 
 function RootLayout({ children }: { children: React.ReactNode }) {
@@ -34,7 +34,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const res = await fetch(Backend_URL + "auth/check", {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/check", {
           method: "GET",
           mode: "cors",
           credentials: "include",
@@ -61,7 +61,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       }
     };
     checkAuthentication();
-  }, [pathname]);
+  });
   const [prevPath, setPrevPath] = useState("/");
   const [isRouting, setisRouting] = useState(false);
   // useEffect(() => {
@@ -79,19 +79,20 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   //   }
   // }, [pathname, router]);
   const value = { user, setUser };
+  // if(twoFa)
+  //   return (<ConfirmAuth />);
   return (
     <main className="h-screen w-screen bg-[#050A27]">
 
       <UserContext.Provider value={value}>
         <>
           {authenticated ? (
-            twoFa ? (
-              // Render Confirm component when authenticated and twoFa is true
+            user?.isTwoFactorEnabled && !user.isConfirmed2Fa? (
               <ConfirmAuth />
-            ) : (
-              // Render children if user is authenticated and !user.hash is true
+            ) : 
+            (
               !user?.hash ? (
-                <Confirm /> // Replace with your component for 2FA confirmation
+                <Confirm /> 
               ) : (
                 <>
                   <Navbar />

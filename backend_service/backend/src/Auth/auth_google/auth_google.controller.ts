@@ -116,6 +116,23 @@ async check(@Req() req: Request, @Res() res: Response)
   }
 }
 
+@Get('checkAuth')
+@UseGuards(JwtGuard)
+async check_auth(@Req() req: Request, @Res() res: Response)
+{
+  try {
+    const isConfirmed2Fa =  req['isConfirmed2Fa'] 
+    const user = req['user'] as User;
+    (user as any).isConfirmed2Fa = isConfirmed2Fa;
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    res.status(200).send(user);
+  } catch (error)
+  {
+    throw new UnauthorizedException();
+  }
+}
 
 @Get('2FA/generate')
 @UseGuards(JwtGuard)
@@ -149,7 +166,6 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
   {
     const user = req['user'] as User;
     const { token } = body;
-    console.log(user);
     if  (user.isTwoFactorEnabled)
       return res.status(401).json({message : 'Two-factor is already enabled'});
     const isValidToken = this.authGoogleService.validateTwoFactorAuthenticationToken(
@@ -224,8 +240,7 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
           secret: process.env.jwtSecretKey,
       });
       res.cookie('access_token', accessToken, { httpOnly : false });
-      return res.redirect(process.env.FRONT_URL)
-       //return res.status(200).json('User validate');
+       return res.status(200).json('User validate');
     }
     catch(error)
     {
@@ -248,7 +263,7 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
       res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
       // if (data.user.isTwoFactorEnabled)
       //   return res.redirect(process.env.FRONT_URL+'/confirmauth')
-      return res.status(200).send(data);
+      return res.status(200).send(data.user);
   }
         
   @Get('logout')

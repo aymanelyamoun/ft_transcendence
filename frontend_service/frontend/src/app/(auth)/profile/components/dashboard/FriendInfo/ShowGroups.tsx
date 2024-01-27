@@ -112,7 +112,7 @@ const ShowGroups = (props : showGroupProps) => {
         setChannelFriendSearch(data);
       } else
       {
-        alert("Error fetching data: ");
+        // alert("Error fetching data: ");
         console.error("Error fetching data: ", res.statusText);
       }
     } catch (error) {

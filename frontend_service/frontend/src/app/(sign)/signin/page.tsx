@@ -55,8 +55,11 @@ export default function Signin() {
       //   console.log("im here 2");
       //   setIsNotify(true);
       // if(res.ok)
-        router.push('/profile');
-      // }
+      if(res?.isTwoFactorEnabled && !res?.isConfirmed2Fa)
+        router.push('/confirmauth');
+      else
+      router.push('/profile');
+
     } catch (error) {
       data = error;
       setIsError(true);

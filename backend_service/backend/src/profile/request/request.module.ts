@@ -7,6 +7,7 @@ import { RequestController } from "./request.controller";
 import { RequestService } from "./request.service";
 import { RedisService } from "src/redis/redis.service";
 
+
 @Module({
     providers: [PrismaService, JwtService, UserService,
         {

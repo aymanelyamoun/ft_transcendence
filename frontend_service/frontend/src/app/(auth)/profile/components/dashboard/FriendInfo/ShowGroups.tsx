@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
@@ -124,20 +124,28 @@ const ShowGroups = (props : showGroupProps) => {
     fetchChannelGroups();
   }, [ChannelFriendSearch]);
 
-  const handleClickOutside = (event: any) => {
+  // const handleClickOutside = (event: any) => {
+  //   if (showRef.current && !showRef.current.contains(event.target as Node))
+  //   {
+  //     onClose();
+  //     toggleShowGroups();
+  //   }
+  // };
+
+  const handleClickOutside = useCallback((event: any) => {
     if (showRef.current && !showRef.current.contains(event.target as Node))
     {
       onClose();
       toggleShowGroups();
     }
-  };
+  }, [onClose, toggleShowGroups]);
   
   useEffect(() => {
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [handleClickOutside]);
 
   function isUserMember(members: { user: { profilePic: string, id: string}}[], userId: string)
   {

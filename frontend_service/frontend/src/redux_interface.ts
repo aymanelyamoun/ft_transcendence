@@ -3,6 +3,7 @@ interface RootState
     booleans:
     {
         showGroups: boolean;
+        activeFetch: boolean
         // other properties
     };
     // other features

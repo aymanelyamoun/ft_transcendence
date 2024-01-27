@@ -108,8 +108,6 @@ function App() {
             });
             if (res.ok) { 
               const parseData = await res.json();
-              console.log('parseData');
-              // console.log(parseData);
               setSidebarInfo(
                 parseData
                 // id: parseData.id,
@@ -121,7 +119,6 @@ function App() {
                 );
                 setIsLoading(true);
                 
-                // console.log(SidebarInfo);
             } else {
               alert("error"); 
             }
@@ -131,7 +128,6 @@ function App() {
             } finally {
               setIsLoading(true);
             }
-            // {console.log(username)}
     }
     useEffect(() => {
        fetchSidebar(); 
@@ -208,11 +204,8 @@ function App() {
         });
         if (res.ok) { 
           const parseData = await res.json();
-          console.log('Match History fetching is okay');
-          // console.log(parseData);
           setMatchHistory(parseData);
           setIsMatchLoading(false);
-            // console.log(SidebarInfo);
         } else {
           alert("Match History fetching isn't okay"); 
         }
@@ -221,7 +214,6 @@ function App() {
         } finally {
           setIsMatchLoading(true);
         }
-        // {console.log(username)}
 }
 
 

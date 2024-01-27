@@ -113,7 +113,6 @@ const Settings: React.FC<SettingsProps> = (props) => {
                 router.push("/");
             }else {
                alert("the logout has not been sent");
-               console.log("hadchi rah mahowach");
               }
         } catch (error) {
             console.log(error);

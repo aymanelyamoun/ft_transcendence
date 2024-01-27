@@ -116,11 +116,8 @@ function App() {
             });
             if (res.ok) { 
               const parseData = await res.json();
-              console.log('Match History fetching is okay');
-              // console.log(parseData);
               setMatchHistory(parseData);
               setIsMatchLoading(false);
-                // console.log(SidebarInfo);
             } else {
               alert("Match History fetching isn't okay"); 
             }
@@ -129,7 +126,6 @@ function App() {
             } finally {
               setIsMatchLoading(true);
             }
-            // {console.log(username)}
     }
 
     const fetchUserData = async () => {
@@ -159,7 +155,7 @@ function App() {
       if (username)
         fetchMatchHistory();
         fetchGlobalRating();
-      fetchUserData();
+        fetchUserData();
     }, [SidebarDone, globalRatingDone, IsLoading, IsMatchLoading, username]);
 
     useEffect(() => 
@@ -203,7 +199,6 @@ function App() {
           {
             const data = await res.json();
             setStatisticsChartProps(data);
-            // setChartDone(true);
           }
         } catch (error) {
           console.error("Error fetching data: ", error);
@@ -219,19 +214,10 @@ function App() {
         fetchStatisticsChart();
       }
     }, [PieDone, ChartDone, username]);
-
-    useEffect(() => 
-    {
-      console.log("Pie: ",statisticsPieProps);
-      console.log("PieDone: ", PieDone);
-      console.log("Chart: ", statisticsChartProps)
-      console.log("ChartDone :", ChartDone );
-    });
   
   return (
       <>
             <div className={styles['statistics']}>
-              {/* <div className={`${styles['statistics']} ${styles['left-panel']}`}> */}
               <div className={styles['left-panel']}>
                 {PieDone && ChartDone &&
                  <Statistics StatisticsPie={statisticsPieProps} StatisticsChart={statisticsChartProps}/>
@@ -246,7 +232,6 @@ function App() {
                 }
               </div>
             </div>
-        {/* {children} */}
         </>
     )
 }

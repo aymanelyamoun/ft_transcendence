@@ -57,7 +57,6 @@ font-size: 3vh;
 const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers, ChannelFriendSearch, setChannelFriendSearch}) => {
     const [friendSearch, setFriendSearch] = useState<SearchU[]>(searchUsers);
     const cancelAddChannel = useRef<HTMLDivElement>(null);
-    const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
 
     const handleCancelAddChannel = (event: any) => {
         if (cancelAddChannel.current && !cancelAddChannel.current.contains(event.target)) {
@@ -70,7 +69,7 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
           <div onClick={handleCancelAddChannel} className="addChannelOverlay flex justify-center items-center">
             <div ref={cancelAddChannel} id="AddchannelContainer" className={styles['addChannelModaloumad']}>
               <ResultList>
-                  <SearchFriends addChannelSearch={addChannelSearch} setAddChannelSearch={setAddChannelSearch} setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch} />
+                  <SearchFriends setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch} />
                 {[...friendSearch, ...ChannelFriendSearch].map((friend) => (
                   <ResultItem
                     key={friend.id}

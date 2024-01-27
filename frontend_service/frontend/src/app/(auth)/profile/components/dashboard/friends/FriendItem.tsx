@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { FaGamepad } from "react-icons/fa6";
 import { BsCircleFill } from "react-icons/bs";
 import Friends from './friends';
+import Image from 'next/image';
 
 interface Friend {
   id: string;
@@ -93,15 +94,15 @@ ${({ status }) =>
     // console.log('friend ' + friend.username + ' status: ' + friend.status);
   // const IconContainer = friend.status === "2" ? <FaGamepad color="green" /> : (friend.status === "0" ? <BsCircleFill color="grey"/> : <BsCircleFill color="green"/>);
 
-  // const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);
+  const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);
   return (
     <div className={styles['friendItem-container']}
     >
       <div className={styles['friend-image']}>
-        <img src={friend.profilePic} alt="Profile" className="rounded-full" />
+        <Image src={friend.profilePic} alt="Profile" className="rounded-full" />
       </div>
       <ContainerStatus status={friend.status}>
-      <IconContainer status={friend.status}></IconContainer>
+      <IconContainer {...friend.status === "2" ? <FaGamepad color="green" /> : (friend.status === "0" ? <BsCircleFill color="grey" /> : <BsCircleFill color="green" />)}></IconContainer>
       </ContainerStatus>
       <div className={styles['friend-name']}>
         <span className={styles['friend-name']}>{friend.username}</span>

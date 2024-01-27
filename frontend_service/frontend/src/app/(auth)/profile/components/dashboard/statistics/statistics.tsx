@@ -72,11 +72,6 @@ const StatisticsStandard = styled.div`
 const Statistics: React.FC<StatisticsProps> = (props) => {
   const statistics = props;
   const UserProfile = props.UserProfile;
-  // useEffect(() =>
-  // {
-  //   console.log("Pie stati: ",props.StatisticsPie);
-  //   console.log("Chart stati: ", props.StatisticsChart);
-  // });
 
   const StatisticsRoot = UserProfile
     ? StatisticsUserProfile

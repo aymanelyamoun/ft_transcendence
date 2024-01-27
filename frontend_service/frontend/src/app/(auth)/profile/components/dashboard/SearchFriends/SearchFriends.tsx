@@ -13,18 +13,6 @@ import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
 import { SearchU } from '../interfaces';
 
-// const SearchContainer = styled.div`
-//   position: relative;
-//   top: 2vh;
-//   margin: 0 auto;
-//   // display: flex;
-//   width: 50%;
-//   height: 5vh;
-//   width: 50%;
-//   display: flex;
-//   margin-left: auto;
-// `;
-
 const SearchContainer = styled.div`
   position: relative;
   top: 1vh;
@@ -35,58 +23,20 @@ const SearchContainer = styled.div`
   align-items: center;
 `;
 
-// export interface SearchU {
-//   creator: {
-//       id: string;
-//   };
-//   members: {
-//       user: {
-//           profilePic: string;
-//       };
-//   }[];
-
-//   id: string;
-//   channelName: string;
-//   channelPic: string;
-//   creatorId: string;
-//   channelType: string;
-//   hash: string;
-
-// }
 
 interface FriendListProps {
-  // setFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
-  addChannelSearch: boolean;
-  setAddChannelSearch: React.Dispatch<React.SetStateAction<boolean>>;
-  // setChannelFriendSearch: React.Dispatch<React.SetStateAction<Friend[]>>;
   setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
   setFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
-// interface SearchU
-// {
-//   id: string;
-//   username?: string;
-//   channelName?:string;
-//   profilePic?: string;
-//   channelPic?: string;
-//   isBlocked: boolean;
-//   group: boolean;
-//   Members?: string[];
-// }
 
+const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
 
-const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
-
-  // const SearchBar = useRef<HTMLDivElement>(null);
-  const SearchIcon = useRef<HTMLDivElement>(null);
   const [searchText, setSearchText] = useState<string>('');
-  const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
 
 
   const Searchusers = async (username: string) => {
     try {
-      console.log("fetching user entered");
       const res = await fetch( Backend_URL+"user/"+username, {
         method: "GET",
         mode: "cors",
@@ -137,20 +87,18 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
       
     else
     {
-
       Searchusers('all');
       fetchChannel('all');
     }
     setSearchText(e.target.value);
   };
 
-return ( 
+return (
        <SearchContainer>
           <input type="text" className="seachBarAddChannel flex " 
          value={searchText}
          onChange={handleInputChange}
          />
-
         </SearchContainer>
 )
 }

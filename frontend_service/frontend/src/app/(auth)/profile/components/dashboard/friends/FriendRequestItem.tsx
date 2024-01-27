@@ -8,6 +8,10 @@ import { Backend_URL } from '@/lib/Constants';
 import { PiHandshakeBold } from "react-icons/pi";
 import { FaHandshakeAltSlash } from "react-icons/fa";
 import styled from 'styled-components';
+import Image from 'next/image';
+import { connect } from 'react-redux';
+import { toggleSearchFetch } from '@/features/booleans/booleanActions';
+import {useDispatch } from 'react-redux';
 
 interface FriendR
 {
@@ -55,6 +59,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
 
   const [officiallyFriends, setOfficiallyFriends] = React.useState(false);
   const [NotFriends, setNotFriends] = React.useState(false);
+  const dispatch = useDispatch();
 
   const fetchAcceptRequest = async (props: FriendRequestItemProps) => {
     try {
@@ -72,7 +77,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
           const data = await res.json();
           props.setfriendRequests(data);
           setOfficiallyFriends(true);
-          alert("the accept request has been sent");
+          dispatch(toggleSearchFetch());
       }else {
          alert("the accept request has not been sent");
         }
@@ -109,7 +114,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
   return (
     <div className={styles['friendReqItem']}>
         <div className={styles['friendReq-image']}>
-            <img src={props.profilePic} alt="Profile" className="rounded-lg" />
+            <Image src={props.profilePic} alt="Profile" className="rounded-lg" />
         </div>
         <UserInfoContainer>
         <div className={styles['friendReq-name']}>

@@ -57,12 +57,6 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
 
   const isMember= isUserMember(props.members, loggedInUserId) as boolean;
 
-  // useEffect(() =>
-  // {
-  //  console.log("member: ", props.members);
-  //  console.log("loggedUser: ", loggedInUserId); 
-  // })
-
   return (
     <ItemContainer isMember={isMember}>
     {props.group ? (

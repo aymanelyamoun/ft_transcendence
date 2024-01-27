@@ -49,7 +49,6 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   const socket = React.useContext(SocketUseContext);
 
   useEffect(() => {
-    console.log ('fetching friends list');
     const fetchFriendsListData = async () => {
       try {
         const res = await fetch( Backend_URL + "user/friends", {
@@ -88,18 +87,9 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
 
 
     return () => {
-      // document.removeEventListener('keydown', (e) => {console.log(FriendsList)})
       socket.off("friendStatus");
     }
-  }, []);
-
-
-  // useEffect(() => {
-  //   console.log ('listening to friendStatus');
-      
-  //     // document.addEventListener('keydown', (e) => {console.log(FriendsList)})
-
-  // },[]);
+  }, [socket]);
 
 
   return (

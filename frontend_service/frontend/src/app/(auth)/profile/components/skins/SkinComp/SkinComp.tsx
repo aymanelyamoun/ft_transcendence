@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import styles from './SkinComp.module.css';
 import styled from 'styled-components';
 import { Backend_URL } from '@/lib/Constants';
+import Image from 'next/image';
 
 interface SkinProps {
   svgImage: any;
@@ -44,7 +45,7 @@ const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, setActive
       <div className={`${styles.rotateanimation} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
         <div className={`${styles.SkinComp} ${active === Name ? styles.active : ''}`} onClick={() => SendSkin(Name, Type)}>
           <SkinImg>
-            <img src={svgImage.src} alt={Name} />
+            <Image src={svgImage.src} alt={Name} />
           </SkinImg>
             <span className={styles['skin-name']}>{Name}</span>
         </div>

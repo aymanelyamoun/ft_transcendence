@@ -16,12 +16,8 @@ import { StatisticsChartInterface, StatisticsPieInterface } from './components/d
 import { useRouter } from "next/navigation";
 import { useUser } from '../layout';
 
-// import store and redux provider
 import { Provider } from 'react-redux'
-// import store from '../../../../store';
-// import { AlertMessage } from '../chat/components/alertMessage';
 import { AlertMessage } from '../chat/components/alertMessage';
-// import Navbar from '../game/coponents/Navbar';
 import store from '@/store';
 import './globals.css'
 
@@ -102,16 +98,13 @@ interface InviteInterface {
   id: string;
   username: string;
 }
-// export const SocketUseContext = React.createContext(socket);
 
 function App() {
 
   const [PlayPopUp , setplayPopUp] = useState<boolean>(false);
   const popUpTimeout = useRef<NodeJS.Timeout>(null!);
   const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
-  const EditRef = useRef<HTMLDivElement>(null);
   const inviterData = useRef<InviteInterface>(null!);
-  const [SidebarDone, setSidebarDone] = useState<boolean>(false);
   const [PieDone, setPieDone] = useState<boolean>(false);
   const [ChartDone, setChartDone] = useState<boolean>(false);
   const [SidebarInfo, setSidebarInfo] = useState({
@@ -175,63 +168,6 @@ function App() {
     }
   }, [router]);
   
-  // const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
-  // const [AcceptRequest, setAcceptRequest] = useState<FriendR>([]);
-  
-
-  const fetchUserData = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/api/user/profile", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setSidebarInfo(data);
-        setSidebarDone(true);
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally
-    {
-      setSidebarDone(true);
-    }
-  };
-
-
-  
-  useEffect(() => {
-    fetchUserData();
-    if (SidebarDone)
-    {
-
-    }
-    // fetchReqData();
-    // fetchUsers();
-  }, [SidebarDone]);
-
-  
-
-  
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (EditRef.current && !EditRef.current.contains(event.target as Node))
-      {
-        // Click outside the FriendInfo component, hide it
-        setShowEditProfile(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [])
 
   useEffect(() => 
   {
@@ -274,7 +210,6 @@ function App() {
         {
           const data = await res.json();
           setStatisticsChartProps(data);
-          // setChartDone(true);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -283,7 +218,28 @@ function App() {
         setChartDone(true);
       }
     };
-  
+    
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/user/profile", {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setSidebarInfo(data);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchUserData();
     if (username)
     {
       fetchStatisticsPie();
@@ -295,16 +251,11 @@ function App() {
     <> 
     <Provider store={store}>
       {ShowEditProfile && <EditProfileShow onClose={() => setShowEditProfile(false)} />}
-
        <div className="App">
-        {/* <SocketUseContext.Provider value={socket}> */}
         {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
           <SearchDiv >
             <SearchHeader />
           </SearchDiv>
-          {/* <NavRoot>
-            <Navbar/>
-          </NavRoot> */}
           <AppGlass>
             <Sidebar sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
             <Skins />
@@ -314,7 +265,6 @@ function App() {
                 }
             <Friends/>
           </AppGlass>
-        {/* </SocketUseContext.Provider> */}
       </div>
       </Provider>
     </>

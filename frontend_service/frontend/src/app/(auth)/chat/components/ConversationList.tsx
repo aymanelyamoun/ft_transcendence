@@ -24,7 +24,7 @@ import {
   showDeleteChannelContext,
   showEditChannelContext,
   showExitChannelContext,
-} from "./ConversationInfo";
+} from "./conversationInfo";
 
 export const IsChannelContext = createContext(false);
 

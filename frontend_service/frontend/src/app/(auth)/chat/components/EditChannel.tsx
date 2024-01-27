@@ -3,7 +3,7 @@ import Image from "next/image";
 import channleImage from "../../../../../public/group_pic.jpg";
 import { AlertMessage } from './alertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
-import { ConversationListContext, LstConversationStateContext } from './ConversationInfo';
+import { ConversationListContext, LstConversationStateContext } from './conversationInfo';
 import channelPic from "../../../../../public/group_pic.jpg";
 import ProfilePicUpload from '@/app/components/ProfilePicUpload';
 import { Backend_URL } from '@/lib/Constants';

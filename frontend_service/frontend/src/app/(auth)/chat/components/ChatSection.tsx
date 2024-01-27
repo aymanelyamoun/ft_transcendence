@@ -6,7 +6,7 @@ import {
   MessagesContext,
   blockedUsersContext,
   setBlockedUsersContext,
-} from "./ConversationInfo";
+} from "./conversationInfo";
 // import { v4 as uuidv4 } from "uuid";
 import { ConversationIthemProps, MessageProps } from "@/utils/types/chatTypes";
 import avatar from "../../../../../public/garou-kid.jpeg";
@@ -111,7 +111,7 @@ export const ConversationChatSection = () => {
 
   // const blockedUsers:BlockedUser[] = [];
   useEffect (() => {
-    console.log("chat section useEffect");
+    // console.log("chat section useEffect");
     const fetchFun = async () => {
       const response = await fetch("http://localhost:3001/api/channels/blockedUsers", {
         method: "GET",
@@ -137,10 +137,15 @@ export const ConversationChatSection = () => {
             }
           });
     }
+    // if (userInfo.user?.id)
+    // {
+    //   fetchFun();
+    // }
     fetchFun();
-  }, [blockedUsers])
+  })
+  // }, [blockedUsers])
   // console.log("data:", data);
-  console.log("blockedUsers:", blockedUsers);
+  // console.log("blockedUsers:", blockedUsers);
 
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
@@ -153,6 +158,7 @@ export const ConversationChatSection = () => {
             .filter((message) => message.message.trim() !== "")
             .filter((message) => {
               // return !blockedUsers.id.includes(message.senderId);
+              if (blockedUsers.length === 0) return true;
               return !blockedUsers.some((blockedUser) => blockedUser.id === message.senderId);
             })
             .map((message) => {
@@ -206,14 +212,24 @@ const MessageChat = ({
   message: MessageProps;
   type: string;
 }) => {
+  const userPic = useContext(UserContext).user?.profilePic;
   return (
     <div className={type}>
       <div className="">
+        {/* <img
+          className={`rounded-full w-[43] h-[43]${
+            type == "rcvMsg" ? "float-left" : "float-right"
+          } mr-[10px] mt-[4px] border-[1.5px] border-[#202345]`}
+          src={`${type == "rcvMsg" ? message.sender.profilePic : userPic}`}
+          alt="profile pic"
+          // width={43}
+          // height={43}
+        /> */}
         <Image
           className={`rounded-full ${
             type == "rcvMsg" ? "float-left" : "float-right"
           } mr-[10px] mt-[4px] border-[1.5px] border-[#202345]`}
-          src={avatar}
+          src={`${type == "rcvMsg" ? message.sender.profilePic : userPic}`}
           alt="profile pic"
           width={43}
           height={43}

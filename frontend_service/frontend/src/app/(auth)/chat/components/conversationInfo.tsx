@@ -209,7 +209,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         <ConversationInfoWrapper
           name={conversationProps?.name}
           title={conversationProps?.title}
-          imgUrl={avatar}
+          imgUrl={conversationProps.profilePic}
         >
           <ButtonInfo width="10" hight="10">
             <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10 mx-12">
@@ -249,7 +249,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         <ConversationInfoWrapper
           name={conversationProps?.name}
           title=""
-          imgUrl={avatar}
+          imgUrl={conversationProps?.profilePic}
         >
           <MemberList setIsCreator={setIsCreator} />
           {isCreator && (
@@ -476,12 +476,19 @@ const MemberIthem = ({
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
       <div className="flex  justify-between items-center ">
-        <Image
+        {/* <Image
           className="avatar-small mr-[10px]"
-          src={avatar}
+          src={imgUrl}
           alt={"avatar"}
           width={40}
           height={40}
+        /> */}
+        <img
+          className="w-[40px] h-[40px] avatar-small mr-[10px]"
+          src={imgUrl}
+          alt={"avatar"}
+          // width={40}
+          // height={40}
         />
         <h3>{name}</h3>
       </div>
@@ -681,8 +688,8 @@ const MemberList = ({
         members.filter((member => member.user.id !== userInfo.user?.id)).map((member) => {
           return (
             <MemberIthem
+              imgUrl={member.user.profilePic}
               key={member.user.id}
-              imgUrl="some/url"
               name={member.user.username}
               isAdmin={isAdmin()}
               userId={member.user.id}
@@ -723,7 +730,7 @@ const ConversationInfoWrapper = ({
 }: {
   name: string;
   title: string;
-  imgUrl: StaticImageData;
+  imgUrl: string;
   children: React.ReactNode;
 }) => {
   const conversationProps = useContext(LstConversationStateContext);
@@ -731,13 +738,13 @@ const ConversationInfoWrapper = ({
   return (
     <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96">
       {title !== "" ? (
-        <ProfileInfos name={name}>
+        <ProfileInfos name={name} picUrl={imgUrl}>
           {/* {" "} */}
           <p className="titleInfo">{title}</p>
           {/* {" "} */}
         </ProfileInfos>
       ) : (
-        <ProfileInfos name={name}>
+        <ProfileInfos name={name} picUrl={imgUrl}>
           <></>
         </ProfileInfos>
       )}
@@ -867,7 +874,7 @@ export const ChatPage = () => {
           });
         };
         fetchFun();
-      }, [refresh]);
+  }, [refresh]);
       
       // console.log("channels data:", ConversationList);
       console.log(" refresh 2 : ", refresh);
@@ -1032,15 +1039,19 @@ export const ButtonInfo = ({
 
 const ProfileInfos = ({
   name,
+  picUrl,
   children,
 }: {
   name: string | undefined;
+  picUrl: string;
   children: React.ReactNode;
 }) => {
+
   console.log("name------------ :", name);
   return (
-    <div className="flex flex-col items-center ">
-      <Image className="avatar" src={avatar} alt={"avatar"}/>
+    <div className="flex flex-col items-center">
+      {/* <Image className="avatar" src={picUrl} alt={"avatar"}/> */}
+      <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/>
       <h4 className="nameInfo"> {name} </h4>
       {children}
     </div>

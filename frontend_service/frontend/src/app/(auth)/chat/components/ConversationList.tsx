@@ -55,16 +55,18 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       // key={props.id}
       className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
     >
-      <Image
+      {/* <Image
         className=" w-[49px] h-[49px] rounded-full"
-        src={avatar}
-        // src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
-        // src={conversationProps.profilePic}
+       // src={avatar}
+        //src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
+         src={conversationProps.profilePic}
         // alt={conversationProps.name}
         alt={conversationProps.name}
         width={49}
         height={49}
-      />
+      /> */}
+      {/* <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : "../../../../../public/garou-kid.jpeg"}`} alt="hh"  /> */}
+      <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`} alt="hh"  />
       <div className="flex flex-col mb-[4%}">
         <p className="friendsName">{conversationProps.name}</p>
         <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">
@@ -101,7 +103,7 @@ export const ConversationList = ({
     {
       return (
         <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-          {ConversationListData &&
+          {Array.isArray(ConversationListData) &&
             ConversationListData.map((conv) => {
               if (conv.type === "DIRECT") {
                 return (
@@ -125,7 +127,7 @@ export const ConversationList = ({
   }
   return (
     <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-      {ConversationListData &&
+      {Array.isArray(ConversationListData) &&
         ConversationListData.map((conv) => {
           if (conv.type === "CHANNEL_CHAT") {
             return (
@@ -357,13 +359,13 @@ export const Conversations = ({
               />
             )
           }
-          {
+          {/* {
             showInviteFriendToChannel && (
               <ShowGroups
               parentType="AddUser"
               onClose={() => setInviteFriendToChannel(false)}/>
             )
-          }
+          } */}
 
           {/* {children} */}
           {/* </ul> */}

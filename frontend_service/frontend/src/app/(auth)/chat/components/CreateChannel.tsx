@@ -22,6 +22,8 @@ import channelPic from "../../../../../public/group_pic.jpg";
 import { AlertMessage } from "./alertMessage";
 
 import { UserContext } from "@/utils/createContext";
+import ProfilePicUpload from "@/app/components/ProfilePicUpload";
+import { Backend_URL } from "@/lib/Constants";
 // import { act } from "react-dom/test-utils";
 
 const CreateChannel = ({
@@ -47,6 +49,7 @@ const CreateChannel = ({
   const [noPass, setNoPass] = useState<boolean>(false);
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
+  const [useChannelPic, setUseChannelPic] = useState<string>("https://i.imgur.com/GJvG1b.png");
   
   const creatorInfo = useContext(UserContext);
 
@@ -91,7 +94,7 @@ const CreateChannel = ({
 
       const channelData = {
         channelName: saveChannelName,
-        channelPic: "some link",
+        channelPic: useChannelPic,
         // channelPic: channelPic,
         // channelPic: need to put the actual link of the channel pic,
         password: savePassword,
@@ -159,6 +162,30 @@ const CreateChannel = ({
   console.log("saveChannelName: ", saveChannelName);
   console.log("savePassword: ", savePassword);
   console.log("notify after: ", showNotify);
+  const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let profilePic : any
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'imagesus');
+        const resCLoud = await fetch(`https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`, {
+          method: 'POST',
+          body: formData,
+        } );
+        if (resCLoud.ok) {
+          const data1 = await resCLoud.json();
+          if (data1 && data1.secure_url) {
+            profilePic = data1.secure_url;
+            setUseChannelPic(profilePic);
+          }
+       }
+      } catch (error) {
+        console.error('Error updating image:', error);
+      }
+    }
+  };
   
   return (
     <div className=" createChannelOverlay flex justify-center items-center ">
@@ -171,7 +198,7 @@ const CreateChannel = ({
             {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setChannelCreated(false);}} message={"Channel Has Been Created Successfully"} type={'notify'}> </AlertMessage>)}
             {notCreated && (<AlertMessage onClick={() => {setNotCreated(false); setChannelCreated(false);}} message={"Channel Not Created"} type={'error'}> </AlertMessage>)}
             {noPass && (<AlertMessage onClick={() => setNoPass(false)} message={"Please Enter Password"} type={"error"}> </AlertMessage>)}
-            <div>
+            {/* <div>
               <Image
                 className="channelImage"
                 src={channleImage}
@@ -179,7 +206,9 @@ const CreateChannel = ({
                 width={120}
                 height={120}
               />
-            </div>
+            </div> */}
+     <ProfilePicUpload profilePic={useChannelPic} handlePicUpdate={handlePicUpdate} />
+
             <div className="">
               <input
                 className="channelName  placeholder-[#545781]"

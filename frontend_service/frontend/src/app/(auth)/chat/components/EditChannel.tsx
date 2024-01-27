@@ -5,6 +5,8 @@ import { AlertMessage } from './alertMessage';
 import passwordParameter from "../../../../../public/passwordParameterIcon.png";
 import { ConversationListContext, LstConversationStateContext } from './ConversationInfo';
 import channelPic from "../../../../../public/group_pic.jpg";
+import ProfilePicUpload from '@/app/components/ProfilePicUpload';
+import { Backend_URL } from '@/lib/Constants';
 
 
 interface channelInfos{
@@ -35,6 +37,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
+  const [useChannelPic, setUseChannelPic] = useState<string>("");
 
   const conversationProps = useContext(LstConversationStateContext);
 
@@ -84,8 +87,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
           // console.log("data??????????: ", data);
           setSaveChannelName(data.channelName);
           setSelectedOption(data.channelType);
-
-
+          setUseChannelPic(data.channelPic);
         }
       })
       .catch((error) => {
@@ -124,7 +126,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
         password: savePassword,
         type: selectedOption,
         channelId: conversationProps?.channelId,
-        channelPic: channelPic,
+        channelPic: useChannelPic,
         // channelPic: "some link",
         // creator: creatorInfo?.id,
         // here i should add the selected friends
@@ -214,6 +216,55 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
             // });
         
       }
+      const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        // let profilePic : any
+        // const file = e.target.files?.[0];
+        // if (file) {
+        //   try {
+        //     const formData = new FormData();
+        //     formData.append('file', file);
+        //     formData.append('upload_preset', 'imagesus');
+        //     const resCLoud = await fetch(`https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`, {
+        //       method: 'POST',
+        //       body: formData,
+        //     } );
+        //     if (resCLoud.ok) {
+        //       const data1 = await resCLoud.json();
+        //       if (data1 && data1.secure_url) {
+        //         profilePic = data1.secure_url;
+            
+        //         const response = await fetch(Backend_URL + 'user/update/image', {
+        //           method: 'PATCH',
+        //           mode: 'cors',
+        //           credentials: 'include',
+        //           body: JSON.stringify({ pic: profilePic }),
+        //           headers: {
+        //             'Content-Type': 'application/json',
+        //             'Access-Control-Allow-Origin': '*',
+        //           },
+        //         });
+            
+        //         data = await response.json();
+        //         if (response.ok) {
+        //           notify = 'Your new profile picture has been successfully updated';
+        //           setUserData(data.newupdat);
+        //           setIsNotify(true);
+        //         } else {
+        //           setIsError(true);
+        //         }
+        //       } else {
+        //         console.error('Cloudinary response does not contain secure_url:', data);
+        //         setIsError(true);
+        //       }
+        //     } else {
+        //       console.error('Cloudinary upload failed:', resCLoud);
+        //       setIsError(true);
+        //     }
+        //   } catch (error) {
+        //     console.error('Error updating image:', error);
+        //   }
+        // }
+      };
       
   const handleCancelAddChannel = (event: any) => {
     if (
@@ -235,7 +286,7 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
             {showNotify && (<AlertMessage onClick={() => {setShowNotify(false); setEditChannel(false);}} message={"Channel Has Been Edited Successfully"} type={'notify'}> </AlertMessage>)}
             {notCreated && (<AlertMessage onClick={() => {setNotCreated(false); setEditChannel(false);}} message={"Channel Not Edited"} type={'error'}> </AlertMessage>)}
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
-          <div>
+          {/* <div>
               <Image
                 className="channelImage"
                 src={channleImage}
@@ -243,7 +294,12 @@ const EditChannel = ({setEditChannel}:{setEditChannel: React.Dispatch<React.SetS
                 width={120}
                 height={120}
               />
-            </div>
+              
+            </div> */}
+              <div>
+                <img src={useChannelPic} alt="channelPic" className=' w-[120px] h-[120px] channelImage ' />
+              </div>
+            {/* <ProfilePicUpload profilePic="/goinfre/aadnane/ft_transcendence/frontend_service/frontend/public/group_pic.jpg" handlePicUpdate={handlePicUpdate} /> */}
             <div className="">
               <input
                 className="channelName  placeholder-[#545781]"

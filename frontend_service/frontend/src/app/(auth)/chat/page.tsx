@@ -3,11 +3,11 @@
 import { StaticImageData } from "next/image";
 import { createContext, useEffect, useRef, useState } from "react";
 import {useRouter} from 'next/navigation'
-import { ChatPage } from "./components/ConversationInfo";
+import { ChatPage } from "./components/conversationInfo";
 // import { ChatPage } from "./components/conversationInfo";
 import './spinoza.css'
 import { socket } from "../../../socket";
-import { AlertMessage } from "./components/AlertMessage";
+import { AlertMessage } from "./components/alertMessage";
 import { UserContext } from "@/utils/createContext";
 import { SocketContext } from "@/utils/socketContext";
 

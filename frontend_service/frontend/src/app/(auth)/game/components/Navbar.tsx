@@ -27,7 +27,7 @@ export default function Navbar()
   
         return () => clearTimeout(timeout);
       }
-    }, [isRouting]);
+    }, [isRouting, path]);
     return (
         <div className="w-full h-[5vh] flex flex-row justify-center items-center z-[99999999999]">
             <div className="w-1/3 max-w-xs max-h-[5vh] min-h-[5vh] bg-[#282C4E] rounded-b-lg flex flex-row justify-center items-center"> 

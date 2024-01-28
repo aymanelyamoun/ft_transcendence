@@ -88,7 +88,7 @@ export default function Home() {
       socket.off('gameInviteAccepted');
       socket.disconnect();
     };
-  }, []);
+  }, [router]);
     // console.log("user data: ",user);
     if (!user) {
     return <div>not authorized</div>;

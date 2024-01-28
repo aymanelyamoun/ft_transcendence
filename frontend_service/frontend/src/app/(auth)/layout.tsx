@@ -31,36 +31,37 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const pathname = usePathname();
-  const checkAuthentication = async () => {
-    try {
-      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/checkAuth", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
-        setAuthenticated(true);
-        if (data?.isTwoFactorEnabled && !data.isConfirmed2Fa) {
-          setTwoFa(true);
-          return;
-        }
-      }
-      else {
-        router.push("/");
-        return <Loading />;
-      }
-    } catch (error) {
-    }
-  };
+ 
   useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/checkAuth", {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+          setAuthenticated(true);
+          if (data?.isTwoFactorEnabled && !data.isConfirmed2Fa) {
+            setTwoFa(true);
+            return;
+          }
+        }
+        else {
+          router.push("/");
+          return <Loading />;
+        }
+      } catch (error) {
+      }
+    };
     checkAuthentication();
-  }, [pathname]);
+  }, [pathname, router]);
   const value = { user, setUser };
   return (
     <main className="h-screen w-screen bg-[#050A27]">

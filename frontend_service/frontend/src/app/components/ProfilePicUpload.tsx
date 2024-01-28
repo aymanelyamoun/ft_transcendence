@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 interface ProfilePicUploadProps {
@@ -12,10 +13,10 @@ const ProfilePicUpload: React.FC<ProfilePicUploadProps> = ({
   return (
     <div className="flex items-center shrink-0 mb-8">
       <label htmlFor="fileInput" className="cursor-pointer">
-      <img
+      <Image
       id="preview_img"
       className="w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48"
-      src={profilePic}
+      src={profilePic!}
       alt="Current profile photo"
     />
 

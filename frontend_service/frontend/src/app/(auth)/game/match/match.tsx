@@ -204,6 +204,8 @@ const MatchScene = () => {
       engine.current.gravity.y = 0;
       handleGameLoop(socketRef.current!, engine.current, render.current!);
     });
+    const renderPointer = render.current;
+    const enginePointer = engine.current;
     return () => {
       socketRef.current?.off("endGame");
       socketRef.current?.off("updateFrames");
@@ -211,8 +213,8 @@ const MatchScene = () => {
       socketRef.current?.off("startFriendGame");
       socketRef.current?.disconnect();
       socketRef.current = null; // 39l 3awtani
-      if (render.current !== null) Render.stop(render.current);
-      if (engine.current !== null) Matter.Engine.clear(engine.current);
+      if (renderPointer !== null) Render.stop(renderPointer);
+      if (enginePointer !== null) Matter.Engine.clear(enginePointer);
       document.removeEventListener("keydown", (e) =>
         pressHandle(e, socketRef.current!)
       );

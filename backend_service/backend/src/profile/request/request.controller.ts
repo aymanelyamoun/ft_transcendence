@@ -24,10 +24,11 @@ export class RequestController {
     }
 
 
-    @Post('accept/:notificationid')
+    @Post('accept/:notificationId')
     @UseGuards(JwtGuard)
-    async acceptRequest(@Req() req: Request, @Res() res: Response, @Param('notificationid') notificationId: number)
+    async acceptRequest(@Req() req: Request, @Res() res: Response, @Param('notificationId') notificationId: number)
     {
+      console.log("hdfkhdsjkfhdjksfgjksgfjdgsfjs");
       const result = await this.requestService.handleAcceptRequest(req, notificationId);
 
       if (result === undefined)
@@ -37,9 +38,9 @@ export class RequestController {
     }
 
 
-    @Post('refuse/:notificationid')
+    @Post('refuse/:notificationId')
     @UseGuards(JwtGuard)
-    async refuse(@Param('notificationid') notificationId: number, @Res() res: Response)
+    async refuse(@Param('notificationId') notificationId: number, @Res() res: Response)
     {
        const result = await this.requestService.handleRefuseRequest(notificationId);
 

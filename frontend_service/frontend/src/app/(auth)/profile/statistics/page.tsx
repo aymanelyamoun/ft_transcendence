@@ -129,7 +129,7 @@ function App() {
 
     const fetchUserData = async () => {
       try {
-        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"/user/profile", {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"user/profile", {
           method: "GET",
           mode: "cors",
           credentials: "include",

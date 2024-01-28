@@ -46,21 +46,25 @@ export class RequestService {
     async handleAcceptRequest(@Req() req: Request, notificationid: number)
     {
         try {
+            console.log("the number is" ,notificationid)
             const user = req['user'] as User;
             const userId = user.id;
             const notification = await this.prisma.notification.findUnique({
-                where: { id: notificationid },
+                where: { id: +notificationid },
             });
             if (!notification)
+            {
+                console.log("ana hna")
                 throw new NotFoundException();
+            }
             const isBlocked = await this.isBlocked(notification.userId, notification.senderId);
             if (isBlocked)
                 throw new Error('Friend is blocked by the user');
             return await this.prisma.$transaction(async (prisma) => 
             {
                 await prisma.user.update({
-                where: { id: notification.userId},
-                data: { friends: { connect: { id: notification.senderId } } },
+                    where: { id: notification.userId},
+                    data: { friends: { connect: { id: notification.senderId } } },
                 });
 
                 await prisma.user.update({
@@ -81,6 +85,7 @@ export class RequestService {
             });
         } catch (error)
         {
+            console.log(error.message);
             throw new NotFoundException(error);
         }
   }
@@ -90,7 +95,7 @@ export class RequestService {
         try {
 
             const notification = await this.prisma.notification.findUnique({
-                where: { id: notificationid },
+                where: { id: +notificationid },
             });
             await this.prisma.notification.deleteMany({
                 where: {

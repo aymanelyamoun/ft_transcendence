@@ -48,7 +48,8 @@ const ConversationIthem = (props: ConversationIthemProps) => {
   const handleChatClick = () => {
     setConversationList(conversationProps);
   };
- console.log("conversationProps.Pic: ", conversationProps.profilePic);
+//  console.log("conversationProps.Pic: ", conversationProps.profilePic);
+//  const avatar = "frontend_service/frontend/public/garou-kid.jpeg";
   return (
     <li
       onClick={handleChatClick}
@@ -58,15 +59,16 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       {/* <Image
         className=" w-[49px] h-[49px] rounded-full"
        // src={avatar}
-        //src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
-         src={conversationProps.profilePic}
+        src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
+        //  src={conversationProps.profilePic}
         // alt={conversationProps.name}
         alt={conversationProps.name}
         width={49}
         height={49}
       /> */}
       {/* <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : "../../../../../public/garou-kid.jpeg"}`} alt="hh"  /> */}
-      <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`} alt="hh"  />
+      {/* <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`} alt="hh"  /> */}
+      <img className=" w-[49px] h-[49px] rounded-full" src={conversationProps.profilePic} alt="hh"  />
       <div className="flex flex-col mb-[4%}">
         <p className="friendsName">{conversationProps.name}</p>
         <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">
@@ -247,7 +249,7 @@ export const Conversations = ({
         body: JSON.stringify(channelData),
       })
         .then((res) => {
-          console.log("res: ", res);
+          // console.log("res: ", res);
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
@@ -265,7 +267,7 @@ export const Conversations = ({
       channelId: conversationProps?.channelId,
       userId2: "some_random_id",
     };
-    console.log("channelData of Delete: ", channelData);
+    // console.log("channelData of Delete: ", channelData);
     const fetchFun = async () => {
       await fetch("http://localhost:3001/api/channels/deleteChannel", {
         method: "POST",
@@ -277,7 +279,7 @@ export const Conversations = ({
         body: JSON.stringify(channelData),
       })
         .then((res) => {
-          console.log("res: ", res);
+          // console.log("res: ", res);
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
@@ -415,7 +417,8 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`white`} />
       </ChatButton>
 
-      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar" height={20} width={20}></Image>
+      <Image className="" src={splitBar} alt="splitBar" height={5} width={1}       layout="responsive"
+      style={{ width: 'auto', height: 'auto' }}></Image>
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight
@@ -430,7 +433,8 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`rgba(154, 155, 211, 0.5)`} />
       </ChatButton>
 
-      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar" width={20} height={20}></Image>
+      <Image className="" src={splitBar} alt="splitBar" width={1} height={5}       layout="responsive"
+      style={{ width: 'auto', height: 'auto' }}></Image>
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight size={22} color={`white`} />

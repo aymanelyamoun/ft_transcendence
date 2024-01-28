@@ -50,8 +50,18 @@ const CreateChannel = ({
   const [notCreated, setNotCreated] = useState<boolean>(false);
   const [showNotify, setShowNotify] = useState<boolean>(false);
   const [useChannelPic, setUseChannelPic] = useState<string>("https://i.imgur.com/GJvG1b.png");
-  
+  const cancelCreateChannel = useRef<HTMLDivElement>(null);
   const creatorInfo = useContext(UserContext);
+
+
+  const handleCancelAddChannel = (event: any) => {
+    if (
+      cancelCreateChannel.current &&
+      !cancelCreateChannel.current.contains(event.target)
+    ) {
+      setChannelCreated(false);
+    }
+  };
 
   const handleOptionChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
     if (saveChannelName === "")
@@ -105,7 +115,8 @@ const CreateChannel = ({
         // here i should add the selected friends
       };
 
-        console.log("channelData : ", channelData);
+      // console.log("channelData : ", channelData);
+
         // fetch("http://localhost:3001/api/channels/createChannel", {
         //   method: "POST",
         //   mode: "cors",
@@ -138,7 +149,7 @@ const CreateChannel = ({
             throw new Error("Network response was not ok");
           }
           else{
-            console.log("refresh in add new channel: ")
+            // console.log("refresh in add new channel: ")
             setRefresh((prev) => !prev);
 
           }
@@ -159,9 +170,9 @@ const CreateChannel = ({
     }
   // }
   
-  console.log("saveChannelName: ", saveChannelName);
-  console.log("savePassword: ", savePassword);
-  console.log("notify after: ", showNotify);
+  // console.log("saveChannelName: ", saveChannelName);
+  // console.log("savePassword: ", savePassword);
+  // console.log("notify after: ", showNotify);
   const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let profilePic : any
     const file = e.target.files?.[0];
@@ -188,9 +199,9 @@ const CreateChannel = ({
   };
   
   return (
-    <div className=" createChannelOverlay flex justify-center items-center ">
+    <div onClick={handleCancelAddChannel} className=" createChannelOverlay flex justify-center items-center ">
       <div
-        className="addChannelModal felx justify-between rounded-[10px] "
+        ref={cancelCreateChannel} className="addChannelModal felx justify-between rounded-[10px] "
         >
         <div className=" px-24 pt-4">
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
@@ -207,7 +218,7 @@ const CreateChannel = ({
                 height={120}
               />
             </div> */}
-     <ProfilePicUpload profilePic={useChannelPic} handlePicUpdate={handlePicUpdate} />
+          <ProfilePicUpload profilePic={useChannelPic} handlePicUpdate={handlePicUpdate} />
 
             <div className="">
               <input
@@ -229,7 +240,7 @@ const CreateChannel = ({
 
                 (!password ? (
                   <div className="passWord relative">
-                    password
+                    <span> password </span>
                     <div
                       onClick={() => setPassword(true)}
                       className="passwordParameter absolute right-[3%] top-[18%]"
@@ -241,7 +252,7 @@ const CreateChannel = ({
                   <div>
                     <div className="fixPasswordBg">
                       <div className="setPassWord relative">
-                        password
+                        <span> password </span>
                         <div
                           onClick={() => {setPassword(false); setAllowTyping(false) }}
                           className="passwordParameter absolute right-[3%] top-[18%]"
@@ -253,7 +264,6 @@ const CreateChannel = ({
                     <div className={`typePassword ${(!allowTyping || selectedOption !== 'protected') ? 'h-[55px]' : 'h-[215px]'}`}>
                       <div className="flex justify-between">
                         <p className="requiredPasswordText items-end">
-                          {" "}
                           required password
                         </p>
                         <div className="mt-[15px] mr-[10px]">
@@ -277,7 +287,7 @@ const CreateChannel = ({
                         <>
                           <div>
                             <div>
-                              <p className="password">password</p>
+                              <p className="password"> password</p>
                             </div>
                             <input
                               className="passwordInput pl-[12px]"

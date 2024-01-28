@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { CostumeButton } from './ConversationInfo'
+import React, { useContext, useRef } from 'react'
+import { CostumeButton, setShowDeleteChannelContext, setShowExitChannelContext } from './conversationInfo'
 import { FaRunning } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { SocketContext } from '@/utils/socketContext';
@@ -7,13 +7,28 @@ import { SocketContext } from '@/utils/socketContext';
 
 export const AlertMessage = ({onClick , message , type, children, id = ""} : { onClick: () => void ,  message:string, type:string , children?:React.ReactNode, id?:string}) => {
   const socket = useContext(SocketContext);
+  const setExitChannel = useContext(setShowExitChannelContext);
+  const setDeleteChannel = useContext(setShowDeleteChannelContext);
+
   const handlePlay = () => {
     socket.emit('acceptGameInvite', {senderId: id})
-    console.log('play');
+    // console.log('play');
   }
+  const cancelAlert = useRef<HTMLDivElement>(null);
+
+  const handleCancelAlert = (event: any) => {
+    if (
+      cancelAlert.current &&
+      !cancelAlert.current.contains(event.target)
+    ) {
+      // setShowAddChannel(false);
+      setExitChannel(false);
+      setDeleteChannel(false);
+    }
+  };
   return (
-    <div className=" alertOverlay flex justify-center items-center ">
-      <div className="alertModal felx justify-between rounded-[10px] ">
+    <div onClick={type === 'exit' || type === 'delete' ? handleCancelAlert : undefined} className="alertOverlay flex justify-center items-center">
+      <div ref={cancelAlert} className="alertModal felx justify-between rounded-[10px]">
         <div className=" px-[55px] py-[65px]">
           <div className=" relative flex flex-col rounded-t-[10px] h-[250px] ">
             <div className='flex justify-center items-center'>

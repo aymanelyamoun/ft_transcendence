@@ -86,7 +86,12 @@ const AddNewChannel = ({
       setShowAddChannel(false);
     }
   };
-
+  // const removeFriends = "frontend_service/frontend/public/removeFriends_Icon.png";
+  // // const avatar = "/garou-kid.jpeg";
+  // // const avatar = "/garou-kid.jpeg";
+  // const avatar = "frontend_service/frontend/public/garou-kid.jpeg";
+  // const chooseFriendIcon = "frontend_service/frontend/public/chooseFriendIcon.png";
+  // const notchoosenFriendIcon = "/notChoosenFriendIcon.png";
   return (
     <div
       onClick={handleCancelAddChannel}

@@ -75,7 +75,7 @@ const EditChannel = (
   useEffect(() => {
     const channelId = conversationProps?.channelId;
     // here i should fetch the channelName and channelPic and channelType and else ... from the backend
-    console.log("channelId ??????????: ", channelId);
+    // console.log("channelId ??????????: ", channelId);
     fetch(`http://localhost:3001/api/channels/channelInfos/${channelId}`, {
       method: "GET",
       credentials: "include",
@@ -85,7 +85,7 @@ const EditChannel = (
       },
     })
     .then((res) => {
-        console.log("res: ", res);
+        // console.log("res: ", res);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }
@@ -108,7 +108,7 @@ const EditChannel = (
   // console.log("conversationInfo ????????????????? : ", conversationInfo);
     // setSelectedOption(data.type);
 
-    console.log("saveChannelName ????????????????? : ", saveChannelName);
+    // console.log("saveChannelName ????????????????? : ", saveChannelName);
     // console.log("selectedOption ????????????????? : ", selectedOption);
     
     
@@ -116,17 +116,17 @@ const EditChannel = (
     
     const handleEditButton = () => {
       
-      console.log("saveChannelName ++++++++++++++++++++++ : ", saveChannelName);
+      // console.log("saveChannelName ++++++++++++++++++++++ : ", saveChannelName);
       if (passwordMatch && saveChannelName !== ""){
         setShowNotify(true);
       }
       if (!passwordMatch){
-        console.log("!passwordMatch: ", passwordMatch);
+        // console.log("!passwordMatch: ", passwordMatch);
         setShowAlert(true);
       }
       
       if(saveChannelName === ""){
-        console.log("saveChannelName ===  : ", saveChannelName);
+        // console.log("saveChannelName ===  : ", saveChannelName);
         setChannelName(true);
       }
       
@@ -137,18 +137,18 @@ const EditChannel = (
         password: savePassword,
         type: selectedOption,
         channelId: conversationProps?.channelId,
-        removeAdmins: [],
-        addAdmins: [],
+        // removeAdmins: [],
+        // addAdmins: [],
 
         // channelPic: useChannelPic,
         // creator: creatorInfo?.id,
         // here i should add the selected friends
       };
 
-      console.log("channelData of Edited: ", channelData);
+      // console.log("channelData of Edited: ", channelData);
       // const fetchPostFun = async () => {
         fetch("http://localhost:3001/api/channels/editChannel", {
-            method: "PATCH",
+            method: "POST",
             credentials: "include",
 
             headers: {
@@ -158,7 +158,7 @@ const EditChannel = (
           body: JSON.stringify(channelData),
         })
         .then((res) => {
-          console.log("res: ", res);
+          // console.log("res: ", res);
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
@@ -191,69 +191,9 @@ const EditChannel = (
         .catch((error) => {
           console.error("Error during fetch:", error);
         });
-          // };
-          // fetchPostFun();
-        
-        // const members = selectedFriends.map((friend) => ({
-        //   userId: friend.id,
-        //   isAdmin: false,
-        // }));
-
-        // const channelData = {
-          //   channelName: saveChannelName,
-          //   channelPic: "some link",
-          //   creator: creatorInfo?.id,
-          //   type: selectedOption,
-          //   password: savePassword,
-          //   members: members,
-          //   admines: [creatorInfo],
-          // here i should add the selected friends
-          // };
-          
-          // console.log("channelData : ", channelData);
-          
-          // fetch("http://localhost:3001/api/channels/createChannel", {
-            //   method: "POST",
-            //   mode: "cors",
-            //   credentials: "include",
-            //   headers: {
-              //     "Content-Type": "application/json",
-              //     "Access-Control-Allow-Origin": "*",
-              //   },
-              //   body: JSON.stringify(channelData),
-              // })
-              //   .then((res) => {
-                //     return res.json();
-                //   })
-                //   .then((data) => {
-                  //     console.log("data : ", data);
-                  //   });
-                  // fetch("http://localhost:3001/api/channels/createChannel", {
-          //   method: "POST",
-          //   mode: "cors",
-          //   credentials: "include",
-          //   headers: {
-            //     "Content-Type": "application/json",
-          //     "Access-Control-Allow-Origin": "*",
-          //   },
-          //   body: JSON.stringify(channelData),
-          // })
-          // .then((res) => {
-          //   if (!res.ok) {
-          //     setNotCreated(true);
-          //     throw new Error("Network response was not ok");
-          //   }
-          //   // console.log("res: ", res);
-          //   // return res.json();
-          // })
-          // // .then((data) => {
-          // //   console.log("data: ", data);
-          // // })
-          // .catch((error) => {
-            //   console.error("Error during fetch:", error);
-            // });
         
       }
+
       const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
         // let profilePic : any
         // const file = e.target.files?.[0];
@@ -314,7 +254,7 @@ const EditChannel = (
   };
   
   return (
-    <div className=" editChannelOverlay flex justify-center items-center ">
+    <div onClick={handleCancelAddChannel} className=" editChannelOverlay flex justify-center items-center ">
       <div
         className="editChannelModal felx justify-between rounded-[10px] "
         ref={cancelEditChannel}
@@ -433,15 +373,15 @@ const EditChannel = (
                   )
                   )
             }
-            <div className="passWord relative mt-[15px]">
-              Administrators
-              <div
-                onClick={() => setPassword(true)}
-                className="passwordParameter absolute right-[3%] top-[18%]"
-                >
-                <Image src={passwordParameter} alt="password" />
-              </div>
-              </div>
+              {/* <div className="passWord relative mt-[15px]">
+                Administrators
+                <div
+                  onClick={() => setPassword(true)}
+                  className="passwordParameter absolute right-[3%] top-[18%]"
+                  >
+                  <Image src={passwordParameter} alt="password" />
+                </div>
+              </div> */}
           </div>
         </div>
         <button onClick={handleEditButton} className="next w-[526px] h-[73px] bg-[#9A9BD3] rounded-b-[10px]">

@@ -72,12 +72,12 @@ export const ConversationChatSection = () => {
     // new
     // set uuid
     // newMessage.id = "5";
-    console.log("chat sockets");
+    // console.log("chat sockets");
     socket.connect();
 
     socket.on("connect", () => {
       // socket.emit("userData", { userId: userInfo?.id, isAdmin: "false" });
-      console.log("connected to server");
+      // console.log("connected to server");
     });
 
     socket.on("rcvMessage", (data) => {
@@ -124,7 +124,7 @@ export const ConversationChatSection = () => {
           })
           .then((res) => res.json())
           .then((data) => {
-            console.log("data:", data);
+            // console.log("data:", data);
             if (data)
             {
               // const blockedUsers = data;

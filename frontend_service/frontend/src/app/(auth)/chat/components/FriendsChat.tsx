@@ -30,7 +30,7 @@ const FriendsChat = ({onClickFriendsChat, activeState, setFriendsChatIcon, frien
 
   const toggleImageImage = () => {
     onClickFriendsChat();
-    console.log(activeState.current);
+    // console.log(activeState.current);
     if (activeState.current === 'friend')
     {
       setChannelChatIcon(msgs2);

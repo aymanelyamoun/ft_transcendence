@@ -73,14 +73,14 @@ export default function Home() {
       popUpTimeout.current = setTimeout(() => {
         setplayPopUp(false);
       }, 10000);
-      console.log("A notification of an invtation of a game : ", inviterData.current);
+      // console.log("A notification of an invtation of a game : ", inviterData.current);
     })
     socket.on('gameInviteAccepted', (data : any) => {
-      console.log("A GAME HAS BEEN ACCEPTED : ", data);
+      // console.log("A GAME HAS BEEN ACCEPTED : ", data);
     })
     socket.on('redirect', (destination : any) => {
       router.push(destination)
-      console.log("redirecting to : ", destination);
+      // console.log("redirecting to : ", destination);
     })
     return () => {
       socket.off('redirect')

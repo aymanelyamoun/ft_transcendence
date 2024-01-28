@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { IoSettingsOutline } from 'react-icons/io5';
+import Image from 'next/image';
 
 interface TwoFaSettingsProps {
   isTofaVisible: boolean;
@@ -86,7 +87,7 @@ const TwoFaSettings: React.FC<TwoFaSettingsProps> = ({
                 className="flex flex-col items-center"
               >
                 <div className="mb-7 mt-3">
-                  <img src={qrCode} alt="QR Code" />
+                  <Image src={qrCode} alt="QR Code" />
                 </div>
                 <span
                   className="outline-none text-sm flex-1 text-white mb-2"

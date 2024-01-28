@@ -1,16 +1,25 @@
 'use client';;
-import { useEffect, useRef} from "react";
+import { useEffect, useRef, useState} from "react";
 import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
 import * as Skins from '../utils/Skins';
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { socket } from "../../../../socket";
+import { AlertMessage } from "../../chat/components/alertMessage";
 
 
+interface User {
+    id: string;
+    email: string;
+    username: string;
+    profilePic?: string;
+    hash: string;
+    typeLog: string;
+    isTwoFactorEnabled: Boolean;
+  } // use the exported interface instead
+  
 const HEIGHT : number = 800;
 const WIDTH : number = 1500;
-const WALLHEIGHT : number = 1;
-const PADDLEWIDTH : number = 15;
-const PADDLEHEIGHT : number = 90;
-const BALLRADIUS : number = 10;
 const BALLSPEED : number = 12;
 const PERCENTWIDTH : number = 100;
 const PERCENTHEIGHT : number = 70;
@@ -269,7 +278,23 @@ const checkGoals = (engine: Matter.Engine, render : Render) => {
 
 export default function Singleplayer (){
     const engine = useRef(Matter.Engine.create({ enableSleeping: false, gravity: { x: 0, y: 0 }}));
+    const router = useRouter();
+    const [playPopUp, setplayPopUp] = useState<boolean>(false);
+    const popUpTimeout = useRef<NodeJS.Timeout>(null!);
+    const inviterData = useRef<User>(null!);
+    
     useEffect(() => {
+        socket.connect()
+        socket.on('redirect', (destination : string) => {
+            router.push(destination)
+        })
+        socket.on('gameInvite', (data : any) => {
+            inviterData.current = data;
+            setplayPopUp(true);
+            popUpTimeout.current = setTimeout(() => {
+            setplayPopUp(false);
+            }, 10000);
+        })
         const render = Render.create({
           element: document.getElementById('SingleMatch') as HTMLElement,
           engine: engine.current,
@@ -313,8 +338,11 @@ export default function Singleplayer (){
             Engine.clear(enginePointer)
             render.canvas.remove()
             render.textures = {}
+            socket.disconnect();
+            socket.off('redirect')
+            socket.off('gameInvite');
         }
-      }, [])
+      }, [router])
 
     return (
         <div id="parentDiv" className="flex flex-col h-full w-full items-center gap-[5vh] mt-[5vh]">
@@ -327,6 +355,9 @@ export default function Singleplayer (){
                 <div id="scoreTwo" className="flex items-center justify-center text-lg font-bold w-[4vw] h-16 text-white text-center">0</div>
                 <Image alt="" id="playerTwoImage" className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 mb-2" src='/GameAssets/aiIcon.png'/>
             </div>
+            {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)}
+            message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
+            type="wannaPlay" id={`${inviterData.current.id}`}/>)}
         </div>
     )
 }

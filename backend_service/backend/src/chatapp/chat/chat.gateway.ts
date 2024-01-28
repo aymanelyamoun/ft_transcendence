@@ -133,7 +133,6 @@ export class ChatGateway implements OnGatewayConnection {
       this.gameService.removeFromQueueID(socket.id) // remove from queue if in queues
       console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
     }
-    // else{
       console.log("------- REMOVING CONNECTED SOCKET TO MAP --------")
     this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
     if (this.gatewayService.userIsConnected(socket['user'].id)){
@@ -145,22 +144,11 @@ export class ChatGateway implements OnGatewayConnection {
     }
     else
       this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
-    // }
-
+    if (this.gameService.inGameCheckByID(socket['user'].id))
+      this.gameService.stopGameEvent(socket);
   }
 }
 
-  // handleDisconnect(socket: Socket) {
-  //   if (socket['user'] !== undefined)
-  //   {
-      
-
-  //   }
-  //   else
-  //     console.log("user is now disconnected(need to emit): ", socket.id);
-  //     socket.emit('redirect', '/', 'You are not logged in');
-  // }
-  
   @SubscribeMessage('joinMatch')
   async joinMatch(client: Socket, matchID: string) {
     

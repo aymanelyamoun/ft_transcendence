@@ -38,7 +38,7 @@ const TwoFaSettings: React.FC<TwoFaSettingsProps> = ({
         <div>
           <span
             className="text-white text-xs"
-            style={{ fontFamily: 'Poppins', fontSize: '1rem' }}
+            style={{ fontFamily: 'var(--font-poppins)', fontSize: '1rem' }}
           >
             2FA
           </span>
@@ -59,7 +59,7 @@ const TwoFaSettings: React.FC<TwoFaSettingsProps> = ({
             <div className="justify-between flex items-center">
               <div>
                 <span
-                  style={{ fontFamily: 'Poppins', fontSize: '0.9rem' }}
+                  style={{ fontFamily: 'var(--font-poppins)', fontSize: '0.9rem' }}
                   className="ms-3 text-sm font-medium text-white dark:text-gray-300"
                 >
                   activate 2FA
@@ -91,7 +91,7 @@ const TwoFaSettings: React.FC<TwoFaSettingsProps> = ({
                 </div>
                 <span
                   className="outline-none text-sm flex-1 text-white mb-2"
-                  style={{ fontFamily: 'Poppins', fontSize: '0.9rem' }}
+                  style={{ fontFamily: 'var(--font-poppins)', fontSize: '0.9rem' }}
                 >
                   CODE
                 </span>

@@ -180,7 +180,7 @@ body {
 
 .nameInfo {
   color: #feffff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
@@ -189,7 +189,7 @@ body {
 
 .titleInfo {
   color: #feffff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
@@ -371,7 +371,7 @@ body {
   padding-left: 15px;
   padding-right: 47px;
 
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 10px;
   font-style: normal;
   font-weight: 275;
@@ -606,7 +606,7 @@ body {
 
 .alertMessage{
   text-align: center;
-  /* font-family: Poppins; */
+  /* font-family: var(--font-poppins); */
   /* font-size: 18px; */
   font-style: normal;
   /* font-weight: 175; */
@@ -719,7 +719,7 @@ i    --linear-blue_purble,
 
 .next {
   color: #fff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 22px;
   font-style: normal;
   font-weight: 600;
@@ -769,7 +769,7 @@ i    --linear-blue_purble,
   margin-bottom: 35px;
 
   color: #feffff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 18px;
   padding-left: 12px;
   font-style: normal;
@@ -786,7 +786,7 @@ i    --linear-blue_purble,
   background: rgba(154, 155, 211, 0.2);
 
   color: #feffff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -812,7 +812,7 @@ i    --linear-blue_purble,
   background: rgba(154, 155, 211, 0.2);
 
   color: #feffff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -840,7 +840,7 @@ i    --linear-blue_purble,
   background: rgba(5, 10, 39, 0.55);
 
   color: #feffff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -870,7 +870,7 @@ i    --linear-blue_purble,
 
 .requiredPasswordText {
   color: #fff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
@@ -897,7 +897,7 @@ i    --linear-blue_purble,
 
 .password {
   color: #fff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

@@ -77,7 +77,7 @@ const OpenedBar = styled.div`
 
 const SettingSpan = styled.span`
     color: #FEFFFF;
-    font-family: Poppins;
+    font-family: var(--font-poppins);
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 400;

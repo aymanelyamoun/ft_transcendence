@@ -135,7 +135,7 @@ const ProfileImage = styled.div`
 
 const Username = styled.span<{isDashboard: boolean}>`
 color: #FEFFFF;
-font-family: Poppins;
+font-family: var(--font-poppins);
 font-size: 1.5rem;
 font-style: normal;
 font-weight: 400;
@@ -152,7 +152,7 @@ line-height: normal;
 
 const UserId = styled.span<{isDashboard: boolean}>`
   color: #FEFFFF;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;

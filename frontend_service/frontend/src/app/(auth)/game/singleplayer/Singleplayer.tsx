@@ -16,7 +16,7 @@ interface User {
     hash: string;
     typeLog: string;
     isTwoFactorEnabled: Boolean;
-  } // use the exported interface instead
+} // use the exported interface instead
   
 const HEIGHT : number = 800;
 const WIDTH : number = 1500;
@@ -35,7 +35,6 @@ var PADDLEMOVE : number = 0;
 const maxSpin = 1;
 
 const addBodies = (engine: Matter.Engine, cw: number, ch: number) => {
-    // add a pong game bodies
     const ball = Bodies.circle(cw / 2, ch / 2, 10, { isStatic: false, restitution: 1,
     render:{fillStyle: "white"}})
     const paddleA = Bodies.rectangle(10, ch / 2, 15, 90, { isStatic: true,
@@ -63,7 +62,6 @@ function ballPrediction(engine : Engine)
     if (ball.velocity.y > 0)
         revDir = -1;
     PredictedBallY = y0 + vy * timeToReachTarget;
-    // predictOffset = Math.random() * midBar * revDir;
 }
 
 function botMove(engine : Engine)

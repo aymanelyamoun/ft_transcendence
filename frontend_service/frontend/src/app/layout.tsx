@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       
-      <body className={poppins.className + "h-screen w-screen bg-[#050A27]"}>{children}</body>
+      <body className={poppins.className + " h-screen w-screen bg-[#050A27]"}>{children}</body>
     </html>
   )
 }

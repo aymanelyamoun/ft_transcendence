@@ -65,6 +65,8 @@ const handleEndGame = (endGameData: any, router: any, winnerImg :React.MutableRe
       ? document.getElementById("playerTwoImage")!
       : document.getElementById("playerOneImage")!;
   const winnerImage = winner as HTMLImageElement;
+  if (winnerImage.src === "" || winnerImage.src === undefined || winnerImage.src === null)
+    winnerImage.src = "/pFinger.png";
   winnerImg.current = winnerImage.src;
   winner.style.border = "5px solid green";
   loser.style.border = "5px solid red";
@@ -185,7 +187,7 @@ const MatchScene = () => {
       socketRef.current.emit("joinMatch", matchID);
     }
     socketRef.current.on("redirect", (destination: string, reason: string) => {
-      alert(reason);
+      console.log(reason);
       router.push(destination);
     });
     socketRef.current.on("startFriendGame", (playersData: any) => {
@@ -232,11 +234,11 @@ const MatchScene = () => {
       <div id="RenderMatch" className="flex flex-col items-center" />
       <div
         id="scoreDisplay"
-        className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 "
+        className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 rounded-xl"
       >
         <Image alt="img" src={""}
           id="playerOneImage"
-          className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2"
+          className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2 rounded-l-xl"
         />
         <div
           id="scoreOne"
@@ -253,7 +255,7 @@ const MatchScene = () => {
         </div>
         <Image alt="img" src={""}
           id="playerTwoImage"
-          className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2"
+          className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2 rounded-r-xl"
         />
       </div>
         {gameEnd && <GameDialog picture={winnerImg.current}/>}

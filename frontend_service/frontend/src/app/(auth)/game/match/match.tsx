@@ -65,6 +65,8 @@ const handleEndGame = (endGameData: any, router: any, winnerImg :React.MutableRe
       ? document.getElementById("playerTwoImage")!
       : document.getElementById("playerOneImage")!;
   const winnerImage = winner as HTMLImageElement;
+  if (winnerImage.src === "" || winnerImage.src === undefined || winnerImage.src === null)
+    winnerImage.src = "/pFinger.png";
   winnerImg.current = winnerImage.src;
   winner.style.border = "5px solid green";
   loser.style.border = "5px solid red";

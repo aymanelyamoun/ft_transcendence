@@ -6,7 +6,7 @@ import styled from 'styled-components';
 // import avatar from '../../../../../../public/garou-kid.jpeg';
 import avatar from "../../../../../../../public/garou-kid.jpeg";
 import jake from '../../../../../../../public/jakeWithHeadPhones.jpg';
-import { StaticImageData } from 'next/image'
+import { StaticImageData } from "next/legacy/image"
 import ResultItem from './ResultItem';
 import { on } from "events";
 import { SearchU } from "../interfaces";

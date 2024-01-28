@@ -1,13 +1,15 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, Query, Req, Request, UseGuards } from "@nestjs/common";
 import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, MuteUserDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
-import { JoinChannel } from "./types/channel";
+import { ChangeChannelData, JoinChannel } from "./types/channel";
 import { ChatChannelAdminGuard } from "./chat.channel.guard";
 import { Role, Roles } from "./roles.decorator";
 import { PrismaChatService } from "../prisma/chat/prisma.chat.service";
 import { user } from "./types/user";
 import { JwtGuard } from "src/Auth/auth_google/utils/jwt.guard";
 
+import { plainToClass } from 'class-transformer';
+import { validate } from "class-validator";
 interface joinChannelInterface
 {
     channelId : string;
@@ -51,8 +53,17 @@ export class ChannelController{
         await this.prismaChatService.leaveChannel(data, req);
     }
 
-    @Patch('editChannel')
-    async editChannel(@Body() data:ChangeChannelDataDto, @Req() req:Request){
+    @Post('editChannel')
+    async editChannel(@Body() data: ChangeChannelDataDto, @Req() req:Request){
+        // const tmp = plainToClass(ChangeChannelDataDto, data);
+        console.log("getting to edit the channel");
+        console.log("the bknd data is : ", data);
+        // const errors = await validate(ChangeChannelDataDto);
+        // if (errors.length > 0) {
+        //   // If validation fails, throw an exception with the validation errors
+        //   throw new HttpException({ message: 'Validation failed', errors }, HttpStatus.BAD_REQUEST);
+        // }
+        // await this.prismaChatService.editChannel(tmp, req);
         await this.prismaChatService.editChannel(data, req);
     }
 
@@ -140,6 +151,11 @@ export class ChannelController{
     @Get("/channelInfos/:id")
     async getChannelInfo(@Param('id') channelId:string, @Req() req:Request){
         return await this.prismaChatService.getChannelInfos(channelId, req);
+    }
+    
+    @Get("blockedUsers")
+    async getBlockedUsers(@Req() req: Request) {
+        return await this.prismaChatService.getBlockedUsers(req);
     }
 
 

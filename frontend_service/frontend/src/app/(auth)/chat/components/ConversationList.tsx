@@ -48,19 +48,27 @@ const ConversationIthem = (props: ConversationIthemProps) => {
   const handleChatClick = () => {
     setConversationList(conversationProps);
   };
+//  console.log("conversationProps.Pic: ", conversationProps.profilePic);
+//  const avatar = "frontend_service/frontend/public/garou-kid.jpeg";
   return (
     <li
       onClick={handleChatClick}
       // key={props.id}
       className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
     >
-      <Image
+      {/* <Image
         className=" w-[49px] h-[49px] rounded-full"
-        src={avatar}
-        // src={conversationProps.profilePic}
+       // src={avatar}
+        src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
+        //  src={conversationProps.profilePic}
         // alt={conversationProps.name}
         alt={conversationProps.name}
-      />
+        width={49}
+        height={49}
+      /> */}
+      {/* <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : "../../../../../public/garou-kid.jpeg"}`} alt="hh"  /> */}
+      {/* <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`} alt="hh"  /> */}
+      <img className=" w-[49px] h-[49px] rounded-full" src={conversationProps.profilePic} alt="hh"  />
       <div className="flex flex-col mb-[4%}">
         <p className="friendsName">{conversationProps.name}</p>
         <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">
@@ -97,7 +105,7 @@ export const ConversationList = ({
     {
       return (
         <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-          {ConversationListData &&
+          {Array.isArray(ConversationListData) &&
             ConversationListData.map((conv) => {
               if (conv.type === "DIRECT") {
                 return (
@@ -121,7 +129,7 @@ export const ConversationList = ({
   }
   return (
     <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-      {ConversationListData &&
+      {Array.isArray(ConversationListData) &&
         ConversationListData.map((conv) => {
           if (conv.type === "CHANNEL_CHAT") {
             return (
@@ -241,7 +249,7 @@ export const Conversations = ({
         body: JSON.stringify(channelData),
       })
         .then((res) => {
-          console.log("res: ", res);
+          // console.log("res: ", res);
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
@@ -259,7 +267,7 @@ export const Conversations = ({
       channelId: conversationProps?.channelId,
       userId2: "some_random_id",
     };
-    console.log("channelData of Delete: ", channelData);
+    // console.log("channelData of Delete: ", channelData);
     const fetchFun = async () => {
       await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/deleteChannel", {
         method: "POST",
@@ -271,7 +279,7 @@ export const Conversations = ({
         body: JSON.stringify(channelData),
       })
         .then((res) => {
-          console.log("res: ", res);
+          // console.log("res: ", res);
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
@@ -329,7 +337,7 @@ export const Conversations = ({
               setRefresh={setRefresh}
             />
           )}
-          {editChannel && <EditChannel setEditChannel={setEditChannel} />}
+          {editChannel && <EditChannel setEditChannel={setEditChannel} setRefresh={setRefresh} />}
           {exitChannel && (
             <AlertMessage
               onClick={handleExitChannel}
@@ -353,13 +361,13 @@ export const Conversations = ({
               />
             )
           }
-          {
+          {/* {
             showInviteFriendToChannel && (
               <ShowGroups
               parentType="AddUser"
               onClose={() => setInviteFriendToChannel(false)}/>
             )
-          }
+          } */}
 
           {/* {children} */}
           {/* </ul> */}
@@ -409,7 +417,8 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`white`} />
       </ChatButton>
 
-      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
+      {/* <Image className="" src={splitBar} alt="splitBar" height={5} width={1}></Image> */}
+      <div className="w-[1px] h-[20px] bg-white"></div>
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight
@@ -424,7 +433,8 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`rgba(154, 155, 211, 0.5)`} />
       </ChatButton>
 
-      <Image className="h-[20px] w-[1px]" src={splitBar} alt="splitBar"></Image>
+      <div className="w-[1px] h-[20px] bg-white"></div>
+      {/* <Image className="" src={splitBar} alt="splitBar" width={1} height={5}></Image> */}
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight size={22} color={`white`} />

@@ -65,9 +65,9 @@ export class ChangeChannelDataDto{
     @IsString()
     channelName: string;
     
-    @IsNotEmpty()
+    // @IsNotEmpty()
     @IsString()
-    password?: string;
+    password?:string;
 
     @IsNotEmpty()
     @IsString()
@@ -81,8 +81,8 @@ export class ChangeChannelDataDto{
     // @IsString()
     // userId: string
 
-    removeAdmins?: user[];
-    addAdmins?: user[];
+    // removeAdmins?: user[];
+    // addAdmins?: user[];
 }
 
 export class JoinChannelDto{

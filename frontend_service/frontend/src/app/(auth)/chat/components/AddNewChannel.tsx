@@ -14,7 +14,8 @@ import AddChannelSearchBar from "./AddChannelSearchBar";
 import { channel } from "diagnostics_channel";
 
 import avatar from "../../../../../public/garou-kid.jpeg";
-import { Friend} from "../page";
+// import channelPic from "../../../../../public/group_pic.jpg";
+import { Friend } from "../page";
 
 const AddNewChannel = ({
   setShowAddChannel,
@@ -29,19 +30,18 @@ const AddNewChannel = ({
 }) => {
   const activeChat = useRef<"friend" | "channel">("friend");
 
-  const [channelFriends, setChannelFriends] =
-    useState<Friend[]>([]);
-    // const [showAddChannel, setShowAddChannel] = useState(false);
-    const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
-    // const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
-    const cancelAddChannel = useRef<HTMLDivElement>(null);
-    const [ChannelFriendSearch, setChannelFriendSearch] = useState<Friend[]>([]);
-    
-    // to store friends list to reuse it in search bar if it nothisg is written in the search bar
-    // const [rowData, setRowData] = useState<Friend[]>([]);
-    
-    // const goToCreateChannel = useRef<boolean>(false);
-    
+  const [channelFriends, setChannelFriends] = useState<Friend[]>([]);
+  // const [showAddChannel, setShowAddChannel] = useState(false);
+  const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
+  // const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
+  const cancelAddChannel = useRef<HTMLDivElement>(null);
+  const [ChannelFriendSearch, setChannelFriendSearch] = useState<Friend[]>([]);
+
+  // to store friends list to reuse it in search bar if it nothisg is written in the search bar
+  // const [rowData, setRowData] = useState<Friend[]>([]);
+
+  // const goToCreateChannel = useRef<boolean>(false);
+
   useEffect(() => {
     const fetchFriendsListData = async () => {
       fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"user/friends", {
@@ -53,17 +53,17 @@ const AddNewChannel = ({
           "Access-Control-Allow-Origin": "*",
         },
       })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setChannelFriends(data);
-        // setRowData(data);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setChannelFriends(data);
+          // setRowData(data);
+        });
     };
     fetchFriendsListData();
   }, []);
-  
+
   // console.log("channelFriends : ", channelFriends);
   const handleSelectFriend = (friend: Friend) => {
     if (selectedFriends.includes(friend)) {
@@ -85,7 +85,12 @@ const AddNewChannel = ({
       setShowAddChannel(false);
     }
   };
-
+  // const removeFriends = "frontend_service/frontend/public/removeFriends_Icon.png";
+  // // const avatar = "/garou-kid.jpeg";
+  // // const avatar = "/garou-kid.jpeg";
+  // const avatar = "frontend_service/frontend/public/garou-kid.jpeg";
+  // const chooseFriendIcon = "frontend_service/frontend/public/chooseFriendIcon.png";
+  // const notchoosenFriendIcon = "/notChoosenFriendIcon.png";
   return (
     <div
       onClick={handleCancelAddChannel}
@@ -150,6 +155,8 @@ const AddNewChannel = ({
                   className=" w-[45px] h-[45px] rounded-full"
                   src={avatar}
                   alt={friend.username}
+                  width={45}
+                  height={45}
                 />
                 <p className="friendsName">{friend.username}</p>
                 <Image
@@ -158,8 +165,10 @@ const AddNewChannel = ({
                       ? chooseFriendIcon
                       : notchoosenFriendIcon
                   }
-                  alt=""
+                  alt="test"
                   className="shooseFriend"
+                  width={27}
+                  height={27}
                 />
               </li>
             ))}

@@ -2,16 +2,28 @@
 import React from 'react'
 import Image from 'next/image'
 import { useState, ChangeEvent, useRef, useEffect } from 'react';
-import { Friend} from '../../../../chat/page';
+import { Friend, friendsData} from '../../../../chat/page';
 import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 // import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 import styled from 'styled-components';
- 
+import { Backend_URL } from '@/lib/Constants';
 import SearchHeader from '../Header/SearchHeader';
 import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
 import { SearchU } from '../interfaces';
+
+// const SearchContainer = styled.div`
+//   position: relative;
+//   top: 2vh;
+//   margin: 0 auto;
+//   // display: flex;
+//   width: 50%;
+//   height: 5vh;
+//   width: 50%;
+//   display: flex;
+//   margin-left: auto;
+// `;
 
 const SearchContainer = styled.div`
   position: relative;
@@ -29,15 +41,31 @@ interface FriendListProps {
   setFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
 }
 
+// interface SearchU
+// {
+//   id: string;
+//   username?: string;
+//   channelName?:string;
+//   profilePic?: string;
+//   channelPic?: string;
+//   isBlocked: boolean;
+//   group: boolean;
+//   Members?: string[];
+// }
 
-const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
 
+const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
+
+  // const SearchBar = useRef<HTMLDivElement>(null);
+  const SearchIcon = useRef<HTMLDivElement>(null);
   const [searchText, setSearchText] = useState<string>('');
+  const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
 
 
   const Searchusers = async (username: string) => {
     try {
-      const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL+"user/"+username, {
+      console.log("fetching user entered");
+      const res = await fetch( Backend_URL+"user/"+username, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -47,7 +75,7 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
         },
       });
       if (res.ok) {
-        const data = await res.json() as SearchU[];
+        const data = (await res.json()) as SearchU[];
         setFriendSearch(data);
       }
       else
@@ -61,7 +89,7 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
 
   const fetchChannel = async (channelName: string) => {
     try {
-      const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL+"channels/search/"+channelName, {
+      const res = await fetch( Backend_URL+"channels/search/"+channelName, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -71,7 +99,7 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
         },
       });
       if (res.ok) {
-        const data = await res.json() as SearchU[];
+        const data = (await res.json()) as SearchU[];
         setChannelFriendSearch(data);
       }
       else
@@ -83,30 +111,30 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
     }
   };
 
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-   let username : string = e.target.value;
+    let username: string = e.target.value;
     username = username.trim();
-    if (username)
-    {
-      Searchusers('search/'+username);
+    if (username) {
+      Searchusers("search/" + username);
       fetchChannel(username);
     }
       
     else
     {
+
       Searchusers('all');
       fetchChannel('all');
     }
     setSearchText(e.target.value);
   };
 
-return (
+return ( 
        <SearchContainer>
           <input type="text" className="seachBarAddChannel flex " 
          value={searchText}
          onChange={handleInputChange}
          />
+
         </SearchContainer>
 )
 }

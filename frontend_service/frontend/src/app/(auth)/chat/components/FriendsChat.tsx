@@ -1,7 +1,7 @@
 import React from 'react'
 import splitBar from '../../../public/splitBar.png'
 // import splitBar from '../../../../public/splitBar.png'
-import Image, { StaticImageData } from 'next/image'
+import Image, { StaticImageData } from "next/legacy/image"
 import { NextPage } from 'next';
 import msg from '../../../../public/msg_icon.png'
 import msgs from '../../../../public/msgs_icons.png'
@@ -30,7 +30,7 @@ const FriendsChat = ({onClickFriendsChat, activeState, setFriendsChatIcon, frien
 
   const toggleImageImage = () => {
     onClickFriendsChat();
-    console.log(activeState.current);
+    // console.log(activeState.current);
     if (activeState.current === 'friend')
     {
       setChannelChatIcon(msgs2);

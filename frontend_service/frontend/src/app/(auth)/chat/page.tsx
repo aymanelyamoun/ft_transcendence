@@ -97,10 +97,10 @@ export default function Home() {
   return (
     <>
       {/* <UserContext.Provider value={user} */}
-        <SocketContext.Provider value={socket}>
+      <SocketContext.Provider value={socket}>
             {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
            <ChatPage />
-        </SocketContext.Provider>
+           </SocketContext.Provider>
       {/* </UserContext.Provider> */}
     </>
   );

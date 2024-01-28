@@ -97,7 +97,7 @@
 .player-title
 {
     color: white;
-    font-family: Poppins;
+    font-family: var(--font-poppins);
     font-size: 18px;
     font-weight: 300;
     line-height: 27px;
@@ -108,7 +108,7 @@
 .player-rating
 {
     color: white;
-    font-family: Poppins;
+    font-family: var(--font-poppins);
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;

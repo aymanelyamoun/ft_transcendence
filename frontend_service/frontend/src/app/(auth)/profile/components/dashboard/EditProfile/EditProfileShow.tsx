@@ -269,7 +269,7 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
                 >
                   <span
                     className="outline-none text-sm flex-1 text-white mb-2 mt-2"
-                    style={{ fontFamily: 'Poppins', fontSize: '0.9rem' }}
+                    style={{ fontFamily: 'var(--font-poppins)', fontSize: '0.9rem' }}
                   >
                     new username
                   </span>

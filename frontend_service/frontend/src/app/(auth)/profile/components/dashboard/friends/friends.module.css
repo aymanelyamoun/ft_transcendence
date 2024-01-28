@@ -115,7 +115,7 @@ div span.friends-title {
 
 .friendReq-name
 {
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-poppins);
     font-weight: 400;
     font-size: 20px;
     color: aliceblue;
@@ -212,7 +212,7 @@ div span.friends-title {
 .friendReqSent
 {
     color: #FFF;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-poppins);
     font-size: 10px;
     font-style: normal;
     font-weight: 100;

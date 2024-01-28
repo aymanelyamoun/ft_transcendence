@@ -30,7 +30,7 @@ const InputSection: React.FC<InputSectionProps> = ({
         <div>
           <span
             className="text-white text-xs"
-            style={{ fontFamily: 'Poppins', fontSize: '1rem' }}
+            style={{ fontFamily: 'var(--font-poppins)', fontSize: '1rem' }}
           >
             {title}
           </span>

@@ -226,7 +226,6 @@ function App() {
       fetchStatisticsChart();
     }
   }, [PieDone, ChartDone, IsMatchLoading]);
-  // }, [PieDone, ChartDone, username, IsMatchLoading]); should check this username if it affects the code 
 
     return (
       <>

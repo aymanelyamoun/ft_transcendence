@@ -97,7 +97,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
     
     const UnblockFriend = async (props: FriendComponentProps) => {
         try {
-            console.log(props.id);
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/deblock/${props.id}`, {
                 method: "POST",
                 mode: "cors",

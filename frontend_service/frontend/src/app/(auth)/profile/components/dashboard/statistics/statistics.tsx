@@ -56,17 +56,6 @@ const StatisticsStandard = styled.div`
     /* padding-bottom: 2rem; */
     transition: all 300ms ease;
   }
-
-  @media (max-width: 550px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 27.5rem;
-    width: 79%;
-    height: 30%;
-    transition: all 300ms ease;
-  }
 `;
 
 const Statistics: React.FC<StatisticsProps> = (props) => {

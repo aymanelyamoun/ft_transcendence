@@ -217,7 +217,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       {
         alert("I the user have been added successfully!");
         setMeAdded(true);
-        dispatch(toggleSearchFetch());
+        // dispatch(toggleSearchFetch());
       }
       else
       {
@@ -227,6 +227,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     }
     catch (error)
     {
+      console.log(error);
     } finally {
       setPasswordSent(false);
     }

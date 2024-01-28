@@ -56,7 +56,6 @@ const FriendRequest = () => {
           const data = await res.json() as FriendR[];
           setFriendRequests(data);
         }
-      
       } catch (error)
       {
         console.error("Error fetching data: ", error);

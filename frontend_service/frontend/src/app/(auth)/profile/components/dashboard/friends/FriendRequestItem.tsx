@@ -56,9 +56,6 @@ align-items: center;
 `;
 
 const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
-
-  const [officiallyFriends, setOfficiallyFriends] = React.useState(false);
-  const [NotFriends, setNotFriends] = React.useState(false);
   const dispatch = useDispatch();
 
   const fetchAcceptRequest = async (props: FriendRequestItemProps) => {
@@ -76,8 +73,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       if(res.ok){
           const data = await res.json();
           props.setfriendRequests(data);
-          setOfficiallyFriends(true);
-          dispatch(toggleSearchFetch());
+          // dispatch(toggleSearchFetch());
       }else {
          alert("the accept request has not been sent");
         }
@@ -100,9 +96,8 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       });
       if(res.ok){
         const data : FriendR[] = await res.json();
-        console.log(data);
+
         props.setfriendRequests(data);
-        setNotFriends(true);
           alert("the refuse request has been sent");
       }else {
          alert("the refuse request has not been sent");

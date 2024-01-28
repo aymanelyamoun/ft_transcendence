@@ -64,32 +64,3 @@
     height: 50%;
   }
 }
-
-@media (max-width: 550px)
-{
-  .statistics
-  {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 27.5rem;
-    width: 79%;
-    height: 30%;
-    transition: all 300ms ease;
-  }
-
-  .container
-  {
-    height: 90%;
-    width: 100%;
-    overflow: hidden;
-    margin: 0 auto;
-  }
-
-  .chart
-  {
-    width: 60%;
-    height: 50%;
-  }
-}

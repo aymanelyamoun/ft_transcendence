@@ -35,14 +35,6 @@ overflow-y: auto;
 justify-content: flex-start;
 align-items: center;
 
-  // @media (max-height: 1100px) and (min-height: 700px)
-  // {
-
-  // }
-  // @media (max-width: 550px)
-  // {
-
-  // }
 `;
 
 const ShowGroupsContainer = styled.div`

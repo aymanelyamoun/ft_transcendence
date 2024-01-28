@@ -234,7 +234,7 @@ function App() {
         <Root>
           <RootGlass>
           {IsLoading &&
-            <Sidebar sidebar={SidebarInfo} ShowSettings={false} setShowEditProfile={setShowEditProfile}/>
+            <Sidebar dashboard={false} sidebar={SidebarInfo} ShowSettings={false} setShowEditProfile={setShowEditProfile}/>
           }
           <MatchesContainer>
           {IsMatchLoading && 

@@ -21,18 +21,6 @@ import { AlertMessage } from '../chat/components/alertMessage';
 import store from '@/store';
 import './globals.css'
 
-
-
-
-interface SearchU
-{
-    id: number;
-    username: string;
-    profilePic: string;
-    group: boolean;
-    groupMembers?: string[];
-}
-
 const NavRoot = styled.div`
     position: absolute;
     top: 0;
@@ -84,14 +72,6 @@ const AppGlass = styled.div`
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto 11rem 19rem;
     z-index: auto;
-  }
-  @media screen and (max-width: 450px)
-  {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: flex-start;
   }
 `;
 interface InviteInterface {
@@ -257,7 +237,7 @@ function App() {
             <SearchHeader />
           </SearchDiv>
           <AppGlass>
-            <Sidebar sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
+            <Sidebar dashboard={true} sidebar={SidebarInfo} ShowSettings={true} setShowEditProfile={setShowEditProfile}/>
             <Skins />
             <Animation />
             {PieDone && ChartDone &&

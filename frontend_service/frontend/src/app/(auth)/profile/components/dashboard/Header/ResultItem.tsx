@@ -9,26 +9,6 @@ import { AddSearchInterface, SearchU } from '../interfaces'
 import { ResultItemProps } from '../interfaces'
 import { connect } from 'react-redux';
 import { useSelector } from 'react-redux';
-// import { SearchU } from '../SearchFriends/SearchFriends'
-
-// interface SearchU {
-//   id: number;
-//   name: string;
-//   profilePic: StaticImageData;
-//   group: boolean;
-//   groupMembers?: StaticImageData[];
-// }
-// interface SearchU {
-//   id: string;
-//   channelName?:string;
-//   username?: string;
-//   profilePic?: string;
-//   channelPic?: string;
-//   isBlocked: boolean;
-//   group: boolean;
-//   Members?: string[];
-// }
-
 
 
 const ItemContainer = styled.div<{ isMember: boolean}>`

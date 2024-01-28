@@ -50,8 +50,12 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
         const data = await res.json() as SearchU[];
         setFriendSearch(data);
       }
+      else
+      {
+        console.log("Error fetching data: Users dual snoaue");
+      }
     } catch (error) {
-      console.error("Err1or fetching data: ", error);
+      console.error("Error fetching data: Users dual snoaue", error);
     }
   };
 
@@ -70,8 +74,12 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
         const data = await res.json() as SearchU[];
         setChannelFriendSearch(data);
       }
+      else
+      {
+        console.log("Error fetching data: 3nd CHANNELS SEARCH");
+      }
     } catch (error) {
-      console.error("Error fetching data: ", error);
+      console.error("Error fetching data: 3nd CHANNELS SEARCH ", error);
     }
   };
 

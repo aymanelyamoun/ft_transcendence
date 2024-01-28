@@ -25,13 +25,14 @@ interface SidebarInfo {
 }
 
 interface SidebarProps {
+  dashboard: boolean;
   sidebar: SidebarInfo;
   ShowSettings: boolean;
   setShowEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   setLoggedInUserId: (id: string) => void;
 }
 
-const SidebarRootUserProfile = styled.div`
+const SidebarRootUserProfile = styled.div<{isDashboard: boolean}>`
   grid-row-start: 1;
   grid-row-end: 3;
   grid-column-start: 1;
@@ -40,30 +41,24 @@ const SidebarRootUserProfile = styled.div`
   position: relative;
   transition: all 300ms ease;
 
-  @media (max-width: 1000px) {
-    grid-row-start: 1;
-    grid-row-end: 2;
-    grid-column-start: 1;
-    grid-column-end: 2;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    top: 5vh;
-    transition: all 300ms ease;
-  }
-
-  @media (max-width: 550px) {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    top: 4vh;
-    transition: all 300ms ease;
-    width: 85%;
-    height: 20.5rem;
+    ${props => (props.isDashboard
+      ?`
+      @media (max-width: 1000px) {
+        grid-row-start: 1;
+        grid-row-end: 2;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        top: 5vh;
+        transition: all 300ms ease;
+      `
+      : '')}
   }
   `;
 
-  const SidebarRootStandard = styled.div`
+  const SidebarRootStandard = styled.div<{isDashboard: boolean}>`
   grid-row-start: 1;
   grid-row-end: 4;
   grid-column-start: 2;
@@ -74,6 +69,8 @@ const SidebarRootUserProfile = styled.div`
   top: 4vh;
   transition: all 300ms ease;
 
+  ${props => (props.isDashboard
+    ? `
   @media (max-width: 1000px) {
     grid-row-start: 1;
     grid-row-end: 2;
@@ -83,20 +80,12 @@ const SidebarRootUserProfile = styled.div`
     flex-direction: column;
     position: relative;
     transition: all 300ms ease;
-  }
-
-  @media (max-width: 550px) {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    top: 5vh;
-    transition: all 300ms ease;
-    width: 85%;
-    height: 40%;
-  }
+    }
+    `
+    : '')}
   `;
   
-  const SidebarContainer = styled.div`
+  const SidebarContainer = styled.div<{isDashboard: boolean}>`
   background: linear-gradient(169.75deg, rgba(255, 255, 255, 0) -50.22%, #040924 -9.3%, #111534 -1.17%, rgba(68, 71, 111, 0.957018) 83.26%, rgba(154, 155, 211, 0.9) 136.85%);
   height: 95%;
   display: flex;
@@ -105,30 +94,31 @@ const SidebarRootUserProfile = styled.div`
   align-items: center;
   border-radius: 15px;
 
-  @media (max-width: 1000px) {
-    height: 88%;
-    width: 100%;
-  }
+  ${props => (props.isDashboard
+    ? `
+      @media (max-width: 1000px) {
+        height: 88%;
+        width: 100%;
+      }
+    `
+    : '')}
 `;
 
-const ProfileHeader = styled.div`
+const ProfileHeader = styled.div<{isDashboard: boolean}>`
   border-radius: 10px;
   background: rgba(5, 10, 39, 0.55);
   width: 80%;
   height: 40%;
   position: relative;
   top: 3vh;
-
+  ${props => (props.isDashboard
+    ? `
   @media (max-width: 1000px) {
     width: 93%;
     top: 1vh;
   }
-  @media (max-width: 550px)
-  {
-    width: 93%;
-    height: 73%;
-    top: 1vh;
-  }
+  `
+  : '')}
 `;
 
 const ProfileImage = styled.div`
@@ -143,21 +133,24 @@ const ProfileImage = styled.div`
   align-items: center;
 `;
 
-const Username = styled.span`
+const Username = styled.span<{isDashboard: boolean}>`
 color: #FEFFFF;
 font-family: Poppins;
 font-size: 1.5rem;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
-
-@media (max-width: 1000px) {
-  position: relative;
-  bottom: 6vh;
-}
+  ${props => (props.isDashboard
+    ? `
+    @media (max-width: 1000px) {
+      position: relative;
+      bottom: 6vh;
+    }
+  `
+  : '')}
 `;
 
-const UserId = styled.span`
+const UserId = styled.span<{isDashboard: boolean}>`
   color: #FEFFFF;
   font-family: Poppins;
   font-size: 1rem;
@@ -165,14 +158,17 @@ const UserId = styled.span`
   font-weight: 400;
   line-height: normal;
 
-
-  @media (max-width: 1000px) {
-    position: relative;
-    bottom: 6vh;
-  }
+  ${props => (props.isDashboard
+    ? `
+    @media (max-width: 1000px) {
+      position: relative;
+      bottom: 6vh;
+    }
+  `
+  : '')}
 `;
 
-const Wallet = styled.div`
+const Wallet = styled.div<{isDashboard: boolean}>`
   color: aliceblue;
   position: relative;
   top: 5vh;
@@ -183,10 +179,13 @@ const Wallet = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (max-width: 1000px) {
-    display: none;
-  }
+  ${props => (props.isDashboard
+    ? `
+    @media (max-width: 1000px) {
+      display: none;
+    }
+  `
+  : '')}
 `;
 
 const WalletIcon = styled(FaGoogleWallet)`
@@ -203,6 +202,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 
   const { ShowSettings, setLoggedInUserId } = props;
   const setShowEditProfile = props.setShowEditProfile;
+  const isDashboard = props.dashboard;
   useEffect(() => {
     if (props.sidebar && props.sidebar.id) {
       const loggedInUserId = props.sidebar.id;
@@ -213,9 +213,9 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   const SidebarRoot = ShowSettings ? SidebarRootStandard : SidebarRootUserProfile;
 
   return (
-        <SidebarRoot>
-        <SidebarContainer>
-          <ProfileHeader>
+        <SidebarRoot isDashboard={isDashboard}>
+        <SidebarContainer isDashboard={isDashboard}>
+          <ProfileHeader isDashboard={isDashboard}>
           <ProfileImage>
             {!ShowSettings ? (
               <Image src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
@@ -224,7 +224,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             <Image src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
             </Link>
             )}
-            <Username>{props.sidebar.username}</Username>
+            <Username isDashboard={isDashboard}>{props.sidebar.username}</Username>
             {props.sidebar.title === 'Bronze' ? (
               <IoShieldSharp className='text-5xl text-amber-700' />
           ) : props.sidebar.title === 'Silver' ? (
@@ -236,12 +236,12 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
           ) : (
             null
           )}
-            <UserId >
+            <UserId isDashboard={isDashboard}>
                 {props.sidebar.title}
             </UserId>
           </ProfileImage>
         </ProfileHeader>
-        <Wallet>
+        <Wallet isDashboard={isDashboard}>
             <WalletIcon />
             <WalletValue>{props.sidebar.totalXp} XP </WalletValue>
         </Wallet>

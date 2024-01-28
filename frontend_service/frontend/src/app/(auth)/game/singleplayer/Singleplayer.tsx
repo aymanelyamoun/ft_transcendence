@@ -19,6 +19,7 @@ var aiDirection : number = Math.random() < 0.5 ? 1 : -1;
 var PredictedBallY : number = 0;
 var predictOffset : number = 0;
 var ballSpeed : number = BALLSPEED;
+var hittedTimes : number = 0;
 var ballVelocity : Matter.Vector = Vector.create(-5, 0);
 var PADDLESPEED : number = 6;
 var PADDLEMOVE : number = 0;
@@ -114,7 +115,9 @@ const collisionDetect = (engine : Engine ,event: Matter.IEventCollision<Matter.E
                 aiDirection = Math.random() < 0.5 ? 1 : -1;
                 aiPredict = false;
             }
-            ballSpeed = ballSpeed + 0.2;
+            hittedTimes++;
+            if (hittedTimes <= 10)
+                ballSpeed = ballSpeed + 0.2;
             let ballPosition = ball.position;
             let paddlePosition = bodyB.position
             let deltaY = ballPosition.y - paddlePosition.y;
@@ -315,11 +318,11 @@ export default function Singleplayer (){
             {/* <Navbar /> */}
             <div id="SingleMatch" className="flex flex-col items-center" />
             <div id="scoreDisplay" className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 rounded-xl">
-                <Image alt="" id="playerOneImage" className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" src="/pFinger.png" />
+                <Image alt="" id="playerOneImage" className="min-w-[64px] max-w-[64px] w-[4vw] h-16 mb-2" src="/pFinger.png" />
                 <div id="scoreOne" className="flex items-center justify-center text-lg font-bold w-[4vw] h-16 text-white text-center">0</div>
                 <div className="splitter"></div>
                 <div id="scoreTwo" className="flex items-center justify-center text-lg font-bold w-[4vw] h-16 text-white text-center">0</div>
-                <Image alt="" id="playerTwoImage" className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" src='/GameAssets/aiIcon.png'/>
+                <Image alt="" id="playerTwoImage" className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 mb-2" src='/GameAssets/aiIcon.png'/>
             </div>
         </div>
     )

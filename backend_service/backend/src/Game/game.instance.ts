@@ -121,20 +121,6 @@ export class GameInstance {
           }
         });
     }
-
-    addSpectator = (socket: Socket) => {
-        
-        socket.join(this.gameInfo.gameRoom);
-        socket.emit('startGame', {
-            playersScore: [this.playerOne.score, this.playerTwo.score],
-            barA_data: [this.playerOne.paddle.bar.position, this.playerOne.paddle.bar.velocity],
-            barB_data: [this.playerTwo.paddle.bar.position, this.playerTwo.paddle.bar.velocity],
-            topWall_data: [this.canvas.topWall.position, this.canvas.topWall.velocity],
-            bottomWall_data: [this.canvas.bottomWall.position, this.canvas.bottomWall.velocity],
-            ball_data: [this.ball.ball.position, this.ball.ball.velocity]
-        });
-        console.log('spectator added')
-    }
     
     wallWalk (player: Player)  {
         if ((player.paddle.bar.position.y - player.paddle.barHeight / 2 <= this.canvas.wallHeight) && player.paddle.move == -1)
@@ -201,9 +187,9 @@ export class GameInstance {
     }
 
 
-    async update_skins(winnerData : User, loserData : User, prisma : PrismaService) : Promise<void> {
-        // 
-    }
+    // async update_skins(winnerData : User, loserData : User, prisma : PrismaService) : Promise<void> {
+    //     // 
+    // }
 
     async update_achievement(winnerData : User, loserData : User, prisma : PrismaService) : Promise<void> {
         // handle winner title
@@ -291,11 +277,10 @@ export class GameInstance {
                     },
                 });
                 await this.update_achievement(winnerData, loserData, prismaService)
-                await this.update_skins(winnerData, loserData, prismaService)
-                console.log('database updated')
+                // await this.update_skins(winnerData, loserData, prismaService)
         }
             catch (error) {
-                console.log("error : ",error.message);
+                console.log("error at updating database in game : ",error.message);
             }
         }
         else if (state.reason == 'disconnect')
@@ -305,14 +290,11 @@ export class GameInstance {
                 winner: winner,
             });
         }
-        // setTimeout(() => {
-            console.log('runner off')
-            Events.off(this.engine, 'collisionStart', this.collisionDetect);
-            Events.off(this.runner, "beforeTick", this.animationFrame);
-            Runner.stop(this.runner);
-            World.clear(this.engine.world, false);
-            Engine.clear(this.engine);
-        // }, 5000);
+        Events.off(this.engine, 'collisionStart', this.collisionDetect);
+        Events.off(this.runner, "beforeTick", this.animationFrame);
+        Runner.stop(this.runner);
+        World.clear(this.engine.world, false);
+        Engine.clear(this.engine);
     }
     gameLoop = () => {
         if (this.gameOver == true)
@@ -373,17 +355,15 @@ export class GameInstance {
         );
     }
     animationFrame = () => {
-        console.log('frame playing')
         this.gameLoop();
         this.sendFrame();
-        console.log('frame played')
     }
 
 
     startGame = () => {
+        console.log('Game started between ' + this.playerOne.playerData.username + ' and ' + this.playerTwo.playerData.username)
         this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerOne.playerData.id, status: '2'})
         this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerTwo.playerData.id, status: '2'})
-        console.log('Game started between ' + this.playerOne.playerData.username + ' and ' + this.playerTwo.playerData.username)
         this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('startFriendGame',
             [this.playerOne.playerData, this.playerTwo.playerData]);
         this.playerOne.playerSocket[0].emit('selfData', this.playerOne.playerData);

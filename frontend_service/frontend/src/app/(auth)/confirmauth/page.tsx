@@ -49,20 +49,22 @@ export default function ConfirmAuth () {
       await fetchAPI({
         url: process.env.NEXT_PUBLIC_BACKEND_URL + "auth/2FA/validate",
         method: "POST",
+
         body: {
           token : codeTwoFa,
         },
       });
       setIsNotify(true);
-      console.log("heeeeere");
+     // console.log("heeeeere");
       // setTwoFa(false);
       router.push("/profile");
       return <Loading />;
     }
     catch (error)
     {
-      response = "Two-factor authentication code is incorrect!";
+      // console.log('hhhhhhh:' + error);
       setIsError(true);
+      response = "Two-factor authentication code is incorrect!";
     }
   };
 

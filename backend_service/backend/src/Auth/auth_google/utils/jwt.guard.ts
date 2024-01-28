@@ -5,6 +5,9 @@ import { JwtService } from "@nestjs/jwt";
 import { AuthGoogleService } from "../auth_google.service";
 import { RedisService } from "src/redis/redis.service";
 
+
+
+
 @Injectable()
 export class JwtGuard implements CanActivate{
     constructor (private readonly jwtService: JwtService,
@@ -13,6 +16,7 @@ export class JwtGuard implements CanActivate{
             ){}
     async canActivate(context: ExecutionContext): Promise<boolean>{
         const request =  context.switchToHttp().getRequest();
+        const response = context.switchToHttp().getResponse();
         const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();
         try {
@@ -28,18 +32,24 @@ export class JwtGuard implements CanActivate{
             request['Token'] = token;
             request['user'] = user;
             request['isConfirmed2Fa'] = payload.isConfirmed2Fa;
+            const routeName = context.getHandler().name;
+            if (routeName !== 'check_auth' && routeName !== 'validateTwoFactorAuth') {
+                if (!payload.isConfirmed2Fa && payload.isTwoFactorEnabled)
+                 throw new UnauthorizedException('Two-factor authentication not confirmed');
+            }    
         }
         catch {
             throw new UnauthorizedException();
         }
         return true;
     }
-    private extractTokenFromHeader (req: Request){
+    private extractTokenFromHeader (req: Request)
+    {
         let token = null;
         if (req && req.cookies) {
           token = req.cookies['access_token'];
         }
         return token ;
-      }
+    }
 }
 

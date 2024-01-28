@@ -31,65 +31,46 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const pathname = usePathname();
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/check", {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-          setAuthenticated(true);
-          if (data?.isTwoFactorEnabled && !data.isConfirmed2Fa) {
-            setTwoFa(true);
-            return;
-          }
+  const checkAuthentication = async () => {
+    try {
+      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/checkAuth", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+        setAuthenticated(true);
+        if (data?.isTwoFactorEnabled && !data.isConfirmed2Fa) {
+          setTwoFa(true);
+          return;
         }
-        else {
-          router.push("/");
-          return <Loading />;
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
       }
-    };
+      else {
+        router.push("/");
+        return <Loading />;
+      }
+    } catch (error) {
+    }
+  };
+  useEffect(() => {
     checkAuthentication();
   }, [pathname]);
-  const [prevPath, setPrevPath] = useState("/");
-  const [isRouting, setisRouting] = useState(false);
-  // useEffect(() => {
-  //   if (prevPath !== pathname) {
-  //     setisRouting(true);
-  //   }
-  // }, [pathname, prevPath]);
-  // useEffect(() => {
-  //   // Redirect to '/' on the client side without adding to the history
-  //   if (isRouting)
-  //   {
-  //     setPrevPath(pathname);
-  //     setisRouting(false);
-  //    window.history.replaceState({}, document.title, '/');
-  //   }
-  // }, [pathname, router]);
   const value = { user, setUser };
-  // if(twoFa)
-  //   return (<ConfirmAuth />);
   return (
     <main className="h-screen w-screen bg-[#050A27]">
-
       <UserContext.Provider value={value}>
         <>
           {authenticated ? (
             user?.isTwoFactorEnabled && !user.isConfirmed2Fa? (
               <ConfirmAuth />
-            ) : 
+            ) 
+            : 
             (
               !user?.hash ? (
                 <Confirm /> 
@@ -101,7 +82,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
               )
             )
           ) : (
-            // Render Loading component when not authenticated
             <Loading />
           )}
         </>

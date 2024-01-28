@@ -21,7 +21,7 @@ export class AuthGoogleService {
 async login(dto:LoginDto)
 {
   try {
-    const user = await this.validateUserlogin(dto);
+    let user = await this.validateUserlogin(dto);
     const payload = {
       id: user.id,
       email: user.email,
@@ -29,6 +29,7 @@ async login(dto:LoginDto)
       isConfirmed2Fa: false,
     };
     const backendTokens = await this.generateJwt(payload)
+    user['isConfirmed2Fa'] = payload.isConfirmed2Fa;
     return {
       user,
       backendTokens

@@ -108,7 +108,7 @@ const EditChannel = ({
       .catch((error) => {
         console.error("Error during fetch:", error);
       });
-  }, []);
+  }, [conversationProps?.channelId]);
 
   // console.log("conversationInfo ????????????????? : ", conversationInfo);
   // setSelectedOption(data.type);
@@ -307,7 +307,7 @@ const EditChannel = ({
               
             </div> */}
             <div>
-              <img
+              <Image
                 src={useChannelPic}
                 alt="channelPic"
                 className=" w-[120px] h-[120px] channelImage "

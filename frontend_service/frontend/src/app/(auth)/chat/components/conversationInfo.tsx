@@ -657,7 +657,7 @@ const MemberList = ({
       fetchFun();
       fetchFun2();
     }
-  }, [conversation, isSet]);
+  }, [conversation, isSet, conversationProps?.channelId]);
 
   const isAdmin = (): boolean => {
     return membersInfo.members?.some(
@@ -682,7 +682,7 @@ const MemberList = ({
     if (membersInfo.creator?.id === userInfo.user?.id) {
       setIsCreator(true);
     }
-  }, [membersInfo]);
+  }, [membersInfo, userInfo.user?.id, setIsCreator]);
 
   // console.log("membersInfo:", membersInfo);
   // console.log("userInfo?.id:", userInfo.user?.id);
@@ -883,7 +883,7 @@ export const ChatPage = () => {
           });
         };
         fetchFun();
-  }, [refresh]);
+  }, [refresh, userInfo.user?.id]);
       
 
   useEffect(() => {
@@ -1067,9 +1067,3 @@ const ProfileInfos = ({
     </div>
   );
 };
-
-
-function componentDidMount() {
-  throw new Error("Function not implemented.");
-}
-// export default conversationInfo;

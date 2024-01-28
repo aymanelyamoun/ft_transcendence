@@ -62,7 +62,7 @@ linear-gradient(0deg, rgba(154, 155, 211, 0.05), rgba(154, 155, 211, 0.05));
   width: 80%;
   height: 20%;
   color: #feffff;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 18px;
   padding-left: 12px;
   font-style: normal;

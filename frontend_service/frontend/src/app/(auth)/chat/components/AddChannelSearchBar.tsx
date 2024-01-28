@@ -34,7 +34,7 @@ const AddChannelSearchBar = ({addChannelSearch, setAddChannelSearch,setChannelFr
       AddchannelContainer?.removeEventListener("click", handleClickOutside);
     };
 
-    }, [])
+    }, [setAddChannelSearch])
 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

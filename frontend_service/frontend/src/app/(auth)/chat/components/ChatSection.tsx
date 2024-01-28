@@ -66,9 +66,9 @@ export const ConversationChatSection = () => {
   const conversation = useContext(LstConversationStateContext);
   // const [data, setData] = useState<string>("");
 
-  let newMessage: MessageProps;
-
+  
   useEffect(() => {
+    let newMessage: MessageProps;
     // new
     // set uuid
     // newMessage.id = "5";
@@ -99,7 +99,7 @@ export const ConversationChatSection = () => {
       socket.off("rcvMessage");
       socket.disconnect();
     };
-  }, [messagesData]);
+  }, [messagesData, conversation?.id, setConversationList]);
 
   useEffect(() => {
     // Scroll to the bottom when new messages are added
@@ -144,7 +144,7 @@ export const ConversationChatSection = () => {
     //   fetchFun();
     // }
     fetchFun();
-  }, []);
+  }, [setBlockedUsers]);
   // }, [blockedUsers])
   // console.log("data:", data);
   // console.log("blockedUsers:", blockedUsers);

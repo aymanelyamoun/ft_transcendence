@@ -12,6 +12,8 @@ import SearchHeader from '../Header/SearchHeader';
 import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
 import { SearchU } from '../interfaces';
+import { toggleSearchFetch } from '@/features/booleans/booleanActions';
+import { useDispatch } from 'react-redux';
 
 const SearchContainer = styled.div`
   position: relative;
@@ -33,6 +35,7 @@ interface FriendListProps {
 const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
 
   const [searchText, setSearchText] = useState<string>('');
+  const dispatch = useDispatch();
 
 
   const Searchusers = async (username: string) => {
@@ -87,7 +90,8 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
       
     else
     {
-      Searchusers('all');
+      // Searchusers('all');
+      dispatch(toggleSearchFetch());
       fetchChannel('all');
     }
     setSearchText(e.target.value);

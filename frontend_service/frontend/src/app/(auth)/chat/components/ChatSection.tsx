@@ -114,7 +114,7 @@ export const ConversationChatSection = () => {
     // console.log("chat section useEffect");
     const fetchFun = async () => {
       const response = await fetch(
-        "http://localhost:3001/api/channels/blockedUsers",
+        process.env.NEXT_PUBLIC_BACKEND_URL+"channels/blockedUsers",
         {
           method: "GET",
           mode: "cors",

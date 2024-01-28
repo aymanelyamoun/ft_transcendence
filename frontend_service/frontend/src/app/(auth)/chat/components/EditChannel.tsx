@@ -82,7 +82,7 @@ const EditChannel = ({
     const channelId = conversationProps?.channelId;
     // here i should fetch the channelName and channelPic and channelType and else ... from the backend
     // console.log("channelId ??????????: ", channelId);
-    fetch(`http://localhost:3001/api/channels/channelInfos/${channelId}`, {
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL+`channels/channelInfos/${channelId}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -147,7 +147,7 @@ const EditChannel = ({
 
     // console.log("channelData of Edited: ", channelData);
     // const fetchPostFun = async () => {
-    fetch("http://localhost:3001/api/channels/editChannel", {
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/editChannel", {
       method: "POST",
       credentials: "include",
 

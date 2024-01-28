@@ -16,8 +16,8 @@ export type ChangeChannelData = {
     type: string;
     channelId: string;
     // userId: string
-    removeAdmins?: user[];
-    addAdmins?: user[];
+//     removeAdmins?: user[];
+//     addAdmins?: user[];
 }
 
 export type JoinChannel = {

@@ -87,7 +87,6 @@ function App() {
           });
           if (res.ok)
           {
-            console.log("Global rating is okay");
             const data = await res.json();
             setGlobalRating(data);
           }

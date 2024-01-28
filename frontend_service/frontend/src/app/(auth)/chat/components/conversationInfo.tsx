@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image, { StaticImageData } from "next/legacy/image";
 // import avatar from "../../../../../public/garou-kid.jpeg";
 import avatar from "../../../../../public/garou-kid.jpeg";
 import { MdDelete, MdPersonAddAlt1 } from "react-icons/md";
@@ -32,7 +32,7 @@ import { GiAstronautHelmet } from "react-icons/gi";
 import { FaUserAstronaut } from "react-icons/fa";
 import { ChannelInfoProps } from "@/utils/types/chatTypes";
 import { UserContext } from "@/utils/createContext";
- 
+import { Backend_URL } from '@/lib/Constants';
 // export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 // export const isAdmin = false;
 
@@ -125,8 +125,8 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         .then((data) => {
           setMembers(data);
           // setMembers((prev) => { return [...prev, data] })
-          console.log("Members data: 2", data);
-          console.log("hereeeeeeeeeee");
+          // console.log("Members data: 2", data);
+          // console.log("hereeeeeeeeeee");
           // if (data) setIsSet(true);
         });
       };
@@ -143,7 +143,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
     
     // const inviteFriend = () => {
     const inviteFriend = async () => {
-      console.log("invite friend");
+      // console.log("invite friend");
       // useEffect(() => {
         // const fetchFun = async () => {
         const fetchFun = async () => {
@@ -181,7 +181,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
     }
 
     const inviteFriendTochannel = () => {
-      console.log("add friends to channel");
+      // console.log("add friends to channel");
       setShowInviteToChannel(true);
     }
   //   console.log("recieverUserId :", recieverUserId);
@@ -193,15 +193,15 @@ export const ConversationInfo = ({ type }: { type: string }) => {
 
   // console.log("last conversation data :", lastConversation);
   const inviteToPlay = () => {
-    console.log('inviting this man', recieverUserName, 'to play whose id is', recieverUserId)
+    // console.log('inviting this man', recieverUserName, 'to play whose id is', recieverUserId)
     // socket.emit("inviteGame", {id: lastConversation?.id})
     socket.emit("inviteGame", {id: recieverUserId})
   };
 
-  console.log(
-    "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
-    conversationProps?.type
-  );
+  // console.log(
+  //   "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
+  //   conversationProps?.type
+  // );
 
   return (
     <>
@@ -209,7 +209,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         <ConversationInfoWrapper
           name={conversationProps?.name}
           title={conversationProps?.title}
-          imgUrl={avatar}
+          imgUrl={conversationProps.profilePic}
         >
           <ButtonInfo width="10" hight="10">
             <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10 mx-12">
@@ -249,7 +249,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         <ConversationInfoWrapper
           name={conversationProps?.name}
           title=""
-          imgUrl={avatar}
+          imgUrl={conversationProps?.profilePic}
         >
           <MemberList setIsCreator={setIsCreator} />
           {isCreator && (
@@ -341,7 +341,7 @@ const MemberIthem = ({
   isAdmin: boolean;
 }) => {
   const [isOptions, setIsOptions] = useState<boolean>(false);
-  console.log("before isAdmin:", isAdmin);
+  // console.log("before isAdmin:", isAdmin);
   const [asAdmin, setAsAdmin] = useState<boolean>(isAdmin);
   // const [selectedOption, setSelectedOption] = useState("public");
   const [selectedMuteTime, setSelectedMuteTime] = useState<string>("");
@@ -350,9 +350,9 @@ const MemberIthem = ({
   // const userInfo = useContext(UserContext);
 
   // const [isAdmine, setIsAdmine] = useState(isAdmin);
-  console.log("isAdmin:", isAdmin);
-  console.log("asAdmin:", asAdmin);
-  console.log("userId:", userId);
+  // console.log("isAdmin:", isAdmin);
+  // console.log("asAdmin:", asAdmin);
+  // console.log("userId:", userId);
   const options = [
     {
       id: 0,
@@ -380,7 +380,7 @@ const MemberIthem = ({
   const handleSubOptionClick =
     (option: { id: number; label: string; subOptions?: string[] }) =>
     (subOption: string) => {
-      console.log(`You clicked "${subOption}"`);
+      // console.log(`You clicked "${subOption}"`);
 
       if (subOption === "5 min") {
         // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
@@ -390,7 +390,7 @@ const MemberIthem = ({
           muteUntil: addMinutes(new Date(), 1),
         };
         console.log("userData Mute :", userData);
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/muteUser", {
+        fetch("http://localhost:3001/api/channels/muteUser", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -411,10 +411,10 @@ const MemberIthem = ({
 
   const handleOptionClick =
     (option: { id: number; label: string; action?: string }) => () => {
-      console.log("clicked", option);
+      // console.log("clicked", option);
       if (option.action === "makeAsAdmin") {
         setAsAdmin(!asAdmin);
-        console.log("isAdmin:", asAdmin);
+        // console.log("isAdmin:", asAdmin);
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -429,7 +429,7 @@ const MemberIthem = ({
         });
       } else if (option.action === "removeAdmin") {
         setAsAdmin(!asAdmin);
-        console.log("isAdmin:", asAdmin);
+        // console.log("isAdmin:", asAdmin);
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -443,7 +443,7 @@ const MemberIthem = ({
           body: JSON.stringify(userData),
         });
       } else if (option.action === "ban") {
-        console.log("BANNING A USER");
+        // console.log("BANNING A USER");
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -457,7 +457,7 @@ const MemberIthem = ({
           body: JSON.stringify(userData),
         });
       } else if (option.action === "kick") {
-        console.log("KICKING A USER");
+        // console.log("KICKING A USER");
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -473,14 +473,17 @@ const MemberIthem = ({
       }
       // setSelectedOption(option.label);
     };
+  
+    // console.log("imgUrl 2222", imgUrl);
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
-      <div className="flex  justify-between items-center ">
+      <div className="flex gap-2 justify-between items-center ">
         <Image
-          className="avatar-small mr-[10px]"
-          src={avatar}
+          className="avatar-small ml-[10px]"
+          src={imgUrl}
           alt={"avatar"}
           width={40}
+          height={40}
         />
         <h3>{name}</h3>
       </div>
@@ -601,7 +604,7 @@ const MemberList = ({
   //     return res.json();
   //   })
   //   .then((data) => {
-  //     console.log("data admin:", data);
+      // console.log("data admin:", data);
   //   });
 
   useEffect(() => {
@@ -622,8 +625,8 @@ const MemberList = ({
         .then((data) => {
           setMembers(data);
           // setMembers((prev) => { return [...prev, data] })
-          console.log("Members data:", data);
-          console.log("hereeeeeeeeeee");
+          // console.log("Members data:", data);
+          // console.log("hereeeeeeeeeee");
           if (data) setIsSet(true);
         });
     };
@@ -646,7 +649,7 @@ const MemberList = ({
         .then((data) => {
           setMembersInfo(data);
           // setMembers((prev) => { return [...prev, data] })
-          console.log("channels info data:", data);
+          // console.log("channels info data:", data);
           // if (data) setIsSet(true);
         });
     };
@@ -661,17 +664,31 @@ const MemberList = ({
       (member) => member.userId === userInfo.user?.id && member.isAdmin === true
     );
   };
-  const isCreator = (): boolean => {
-    return membersInfo.creator?.id === userInfo.user?.id;
-  };
+  // const isCreator = (): boolean => {
+  //   return membersInfo.creator?.id === userInfo.user?.id;
+  // };
 
-  if (isCreator()) setIsCreator(true);
+  // if (isCreator()) 
+  // {
+  //   setIsCreator(true);
+  // }
 
-  console.log("membersInfo:", membersInfo);
-  console.log("userInfo?.id:", userInfo.user?.id);
-  console.log("userInfo?.name:", userInfo.user?.username);
+  // if (membersInfo.creator?.id === userInfo.user?.id)
+  // { 
+  //   setIsCreator(true);
+  // }
+// reason of doing this is setting state (setIsCreator(true)) inside the render method of the MemberList component. cus modifying state during the rendering phase is not recommended in React and can lead to unpredictable behavior.
+  useEffect(() => {
+    if (membersInfo.creator?.id === userInfo.user?.id) {
+      setIsCreator(true);
+    }
+  }, [membersInfo]);
+
+  // console.log("membersInfo:", membersInfo);
+  // console.log("userInfo?.id:", userInfo.user?.id);
+  // console.log("userInfo?.name:", userInfo.user?.username);
   // console.log("isSet:", isSet);
-  console.log("members:", members);
+  // console.log("members:", members);
   return (
     <>
       <MemberSeparator />
@@ -680,8 +697,8 @@ const MemberList = ({
         members.filter((member => member.user.id !== userInfo.user?.id)).map((member) => {
           return (
             <MemberIthem
+              imgUrl={member.user.profilePic}
               key={member.user.id}
-              imgUrl="some/url"
               name={member.user.username}
               isAdmin={isAdmin()}
               userId={member.user.id}
@@ -722,21 +739,22 @@ const ConversationInfoWrapper = ({
 }: {
   name: string;
   title: string;
-  imgUrl: StaticImageData;
+  imgUrl: string;
   children: React.ReactNode;
 }) => {
   const conversationProps = useContext(LstConversationStateContext);
-  console.log("name ----------------------- :", name);
+  // console.log("name ----------------------- :", name);
+  // console.log("hyyyyyyyyyyyyy:", imgUrl);
   return (
-    <div className="profileInfo basis-1/4 bg-purple-600 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96">
+    <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96">
       {title !== "" ? (
-        <ProfileInfos name={name}>
+        <ProfileInfos name={name} picUrl={imgUrl}>
           {/* {" "} */}
           <p className="titleInfo">{title}</p>
           {/* {" "} */}
         </ProfileInfos>
       ) : (
-        <ProfileInfos name={name}>
+        <ProfileInfos name={name} picUrl={imgUrl}>
           <></>
         </ProfileInfos>
       )}
@@ -755,6 +773,10 @@ interface User {
   isTwoFactorEnabled: Boolean;
   isConfirmed2Fa: Boolean;
 }
+
+export interface BlockedUser{
+  id: string;
+}[]
 
 const Conversation = () => {
   return (
@@ -807,6 +829,10 @@ export const setShowDeleteChannelContext = createContext(
 export const ConversationListContextSet = createContext(
   {} as any
 );
+export const blockedUsersContext = createContext({} as BlockedUser[]);
+export const setBlockedUsersContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<BlockedUser[]>>
+);
 
 export const ChatPage = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
@@ -824,14 +850,15 @@ export const ChatPage = () => {
   const [showInviteFriend, setShowInviteFriend] = useState<boolean>(false);
   const [showInviteFriendToChannel, setShowInviteFriendToChannel] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
   // console.log("conversationId:", conversation?.id);
-  console.log(" refresh : ", refresh);
+
   useEffect(() => {
     const fetchFun = async () => {
       const isAdmin = true; // Replace true with your desired value
 
       await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getUserConversationsIthemList?userId=${userInfo.user?.id}&isAdmin=${isAdmin}`,
+        `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userInfo.user?.id}&isAdmin=${isAdmin}`,
         {
           method: "GET",
           credentials: "include",
@@ -842,25 +869,22 @@ export const ChatPage = () => {
       )
         .then((res) => {
           return res.json();
-      
-          // const data: Conversation[];
         })
         .then((data) => {
-          console.log("channels members data:", data);
+          // console.log("channelsHHHH:", data);
           setConversationList(
             data.sort((a: ConversationIthemProps, b :ConversationIthemProps) => {
               const bDate = new Date(b?.updatedAt as Date);
               const aDate = new Date(a?.updatedAt as Date);
               return bDate.getTime() - aDate.getTime();
             })
+            // data
             );
           });
         };
         fetchFun();
-      }, [refresh]);
+  }, [refresh]);
       
-      // console.log("channels data:", ConversationList);
-      console.log(" refresh 2 : ", refresh);
 
   useEffect(() => {
     // console.log("conversation?.id:", conversation?.id);
@@ -884,7 +908,7 @@ export const ChatPage = () => {
           if (data) setMessages(data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
       // return res;
     };
@@ -921,20 +945,27 @@ export const ChatPage = () => {
                                   <inviteFriendToChannelContext.Provider
                                     value={showInviteFriendToChannel}
                                     >
-                                      <div className="h-full basis-1/4 flex">
-                                        <Conversations 
-                                        setRefresh={setRefresh}
+                                      <setBlockedUsersContext.Provider
+                                        value={setBlockedUsers}
                                         >
-                                          {" "}
-                                          {/* <ConversationList /> */}
-                                        </Conversations>
-                                        {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
-                                      </div>
-                                      <MessagesContext.Provider value={messages}>
-                                        <Conversation />
-                                      </MessagesContext.Provider>
+                                          <blockedUsersContext.Provider
+                                            value={blockedUsers}
+                                            > 
+                                              <div className="h-full basis-1/4 flex">
+                                                <Conversations 
+                                                setRefresh={setRefresh}
+                                                >
+                                                  {" "}
+                                                  {/* <ConversationList /> */}
+                                                </Conversations>
+                                                {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
+                                              </div>
+                                              <MessagesContext.Provider value={messages}>
+                                                <Conversation />
+                                              </MessagesContext.Provider>
+                                          </blockedUsersContext.Provider>
+                                        </setBlockedUsersContext.Provider>
                                     </inviteFriendToChannelContext.Provider>
-
                                   </setInviteFriendToChannelContext.Provider>
                             </alertInviteFriendContext.Provider>
                           </setAlertInviteFriendContext.Provider>
@@ -1015,19 +1046,30 @@ export const ButtonInfo = ({
 
 const ProfileInfos = ({
   name,
+  picUrl,
   children,
 }: {
   name: string | undefined;
+  picUrl: string;
   children: React.ReactNode;
 }) => {
-  console.log("name------------ :", name);
+
+  // console.log("name------------ :", name);
+  // console.log("picUrl------------ :", picUrl);
   return (
-    <div className="flex flex-col items-center ">
-      <Image className="avatar" src={avatar} alt={"avatar"} />
+    <div className="flex flex-col items-center">
+      <div className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" >
+        <Image className="w-full h-full" src={picUrl} width={160} height={160} alt={"avatar"}/>
+      </div>
+      {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
       <h4 className="nameInfo"> {name} </h4>
       {children}
     </div>
   );
 };
 
+
+function componentDidMount() {
+  throw new Error("Function not implemented.");
+}
 // export default conversationInfo;

@@ -1,4 +1,4 @@
-import { ConsoleLogger, ForbiddenException, Injectable, NotFoundException, Req } from "@nestjs/common";
+import { ConsoleLogger, ForbiddenException, Injectable, NotFoundException, Req, Request } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { Conversation,Prisma, User } from "@prisma/client";
 // import { ChangeChannelData, ChannelData, ChannelEdit, JoinChannel } from "chatapp/server_chatapp/chat/types/channel";
@@ -271,8 +271,8 @@ export class PrismaChatService{
 
             if (channel.creator.id !== user.id) throw new ForbiddenException("you are not the creator of this channel");
 
-            const addAdmins = await this.filterAddAdmins(data, req);
-            const removeAdmins = await this.filterToDelete(data);
+            // const addAdmins = await this.filterAddAdmins(data, req);
+            // const removeAdmins = await this.filterToDelete(data);
 
             const transaction = await this.prisma.$transaction([
               this.prisma.channel.update({
@@ -283,14 +283,14 @@ export class PrismaChatService{
                   hash: data.password,
                 },
               }),
-              ...addAdmins.map(admin => this.prisma.userChannel.update({
-                where: { userId_channelId: { userId: admin.userId , channelId: data.channelId } },
-                data: { isAdmin: true },
-              })),
-              ...removeAdmins.map(admin => this.prisma.userChannel.update({
-                where: { userId_channelId: { userId: admin.userId, channelId: data.channelId } },
-                data: { isAdmin: false },
-              })),
+              // ...addAdmins.map(admin => this.prisma.userChannel.update({
+              //   where: { userId_channelId: { userId: admin.userId , channelId: data.channelId } },
+              //   data: { isAdmin: true },
+              // })),
+              // ...removeAdmins.map(admin => this.prisma.userChannel.update({
+              //   where: { userId_channelId: { userId: admin.userId, channelId: data.channelId } },
+              //   data: { isAdmin: false },
+              // })),
             ]);
 
             return transaction;
@@ -645,48 +645,48 @@ export class PrismaChatService{
           }
         }
 
-        async filterAddAdmins(data: ChangeChannelData, @Req() req: Request) {
-          // const user = req['user'] as User;
+        // async filterAddAdmins(data: ChangeChannelData, @Req() req: Request) {
+        //   // const user = req['user'] as User;
 
-          try{
-            const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{banedUsers:true}});
-            if (!data.addAdmins) {
-              return [];
-            }
+        //   try{
+        //     const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{banedUsers:true}});
+        //     if (!data.addAdmins) {
+        //       return [];
+        //     }
 
-            const newAddAdmins = [];
+        //     const newAddAdmins = [];
 
-            for (const admin of data.addAdmins) {
-              // Fetch the user
-              const user = await this.prisma.user.findUnique({
-                where: { id: admin.userId },
-                include: { blockedUsers: true, blockedByUsers: true, channels: true }
-              });
+        //     for (const admin of data.addAdmins) {
+        //       // Fetch the user
+        //       const user = await this.prisma.user.findUnique({
+        //         where: { id: admin.userId },
+        //         include: { blockedUsers: true, blockedByUsers: true, channels: true }
+        //       });
 
-              // If the user does not exist, continue to the next iteration
-              if (!user) {
-                continue;
-              }
+        //       // If the user does not exist, continue to the next iteration
+        //       if (!user) {
+        //         continue;
+        //       }
 
-              // Check if the user is banned, blocked, blocked by someone, or already an admin
-              const isBanned = channel.banedUsers.some((checkedUser)=> checkedUser.id === user.id);
-              const isBlocked = user.blockedUsers.some(blockedUser => blockedUser.id === user.id);
-              const isBlockedBy = user.blockedByUsers.some(blockedByUser => blockedByUser.id === user.id);
-              // async userIsAdmin(userId: string, channelId: string): Promise<boolean> {
-              const isAdmin = await this.userIsAdmin(user.id, data.channelId);
+        //       // Check if the user is banned, blocked, blocked by someone, or already an admin
+        //       const isBanned = channel.banedUsers.some((checkedUser)=> checkedUser.id === user.id);
+        //       const isBlocked = user.blockedUsers.some(blockedUser => blockedUser.id === user.id);
+        //       const isBlockedBy = user.blockedByUsers.some(blockedByUser => blockedByUser.id === user.id);
+        //       // async userIsAdmin(userId: string, channelId: string): Promise<boolean> {
+        //       const isAdmin = await this.userIsAdmin(user.id, data.channelId);
 
-              // If the user is not banned, blocked, blocked by someone, or already an admin, add them to the newAddAdmins array
-              if (!isBanned && !isBlocked && !isBlockedBy && !isAdmin) {
-                newAddAdmins.push(admin);
-              }
-            }
+        //       // If the user is not banned, blocked, blocked by someone, or already an admin, add them to the newAddAdmins array
+        //       if (!isBanned && !isBlocked && !isBlockedBy && !isAdmin) {
+        //         newAddAdmins.push(admin);
+        //       }
+        //     }
 
-            return newAddAdmins;
-          }
-          catch(error){
-            throw error;
-          }
-        }
+        //     return newAddAdmins;
+        //   }
+        //   catch(error){
+        //     throw error;
+        //   }
+        // }
 
         async userIsInConversation(userId:string, conversationId:string){
           try{
@@ -718,32 +718,32 @@ export class PrismaChatService{
           }
         }
 
-        async filterToDelete(data: ChangeChannelData) {
-          try {
-            if (!data.removeAdmins) {
-              return [];
-            }
-            const newRemoveAdmins = [];
-            for (const admin of data.removeAdmins) {
-              const user = await this.prisma.user.findUnique({
-                where: { id: admin.userId },
-                include: { channels: true }
-              });
-              if (!user) {
-                continue;
-              }
-              const isAdmin = await this.userIsAdmin(user.id, data.channelId);
-              if (isAdmin) {
-                newRemoveAdmins.push(admin);
-              }
-            }
+        // async filterToDelete(data: ChangeChannelData) {
+        //   try {
+        //     if (!data.removeAdmins) {
+        //       return [];
+        //     }
+        //     const newRemoveAdmins = [];
+        //     for (const admin of data.removeAdmins) {
+        //       const user = await this.prisma.user.findUnique({
+        //         where: { id: admin.userId },
+        //         include: { channels: true }
+        //       });
+        //       if (!user) {
+        //         continue;
+        //       }
+        //       const isAdmin = await this.userIsAdmin(user.id, data.channelId);
+        //       if (isAdmin) {
+        //         newRemoveAdmins.push(admin);
+        //       }
+        //     }
           
-            return newRemoveAdmins;
-          }
-          catch(error){
-            throw error;
-          }
-        }
+        //     return newRemoveAdmins;
+        //   }
+        //   catch(error){
+        //     throw error;
+        //   }
+        // }
 
         async getMemberIn(userId:string){
           try{
@@ -1004,6 +1004,19 @@ export class PrismaChatService{
             throw error;
           }
         }
+  async getBlockedUsers(@Req() req: Request) { 
+    try {
+      const user = req['user'] as User;
+      const blockedUsers = await this.prisma.user.findUnique({
+        where: { id: user.id },
+        include: { blockedUsers: {select:{id:true}} },
+      });
+      return blockedUsers.blockedUsers;
+    }
+    catch(error){
+      throw error;
+    }
+  }
 
         async isAdminOnChannel(userId:string, channelId:string){
           try{

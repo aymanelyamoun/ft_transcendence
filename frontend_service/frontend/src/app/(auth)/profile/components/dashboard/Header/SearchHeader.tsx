@@ -57,13 +57,13 @@ const SearchHeader = () => {
 
     const fetchAction = () => 
     {
-      dispatch(toggleSearchFetch());
+      // dispatch(toggleSearchFetch());
     }
     
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-              const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/all", {
+              const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "user/all", {
                 method: "GET",
                 mode: "cors",
                 credentials: "include",
@@ -99,7 +99,6 @@ const SearchHeader = () => {
               if (res.ok) {
                 const data = await res.json() as SearchU[];
                 setChannelFriendSearch(data);
-                console.log("data: ", data);
               }
             } catch (error) {
               console.error("Error fetching data: ", error);

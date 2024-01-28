@@ -1,11 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
 import { CONVERSATION_TYPE } from "@prisma/client";
-import { connect } from 'http2';
 
 const data = Array.from({length:3}).map(()=>{
     return {
-        profilePic: "some link",
+        profilePic: "https://i.imgur.com/GJvG1b.png", // Use the correct path to the 'group_pic.jpg' file
         username: faker.helpers.unique(faker.person.firstName),
         title: faker.person.lastName(),
         email: faker.internet.email(),

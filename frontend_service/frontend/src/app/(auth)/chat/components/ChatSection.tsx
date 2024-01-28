@@ -4,6 +4,8 @@ import {
   ConversationListContextSet,
   LstConversationStateContext,
   MessagesContext,
+  blockedUsersContext,
+  setBlockedUsersContext,
 } from "./conversationInfo";
 // import { v4 as uuidv4 } from "uuid";
 import { ConversationIthemProps, MessageProps } from "@/utils/types/chatTypes";
@@ -22,6 +24,10 @@ export const ConversationMessagesContextSet = createContext(
 export const ConversationMessagesContextStat = createContext(
   {} as MessageProps[]
 );
+
+// export interface BlockedUser{
+//   id: string;
+// }[]
 
 function createConversationListIthem(
   Message: MessageProps
@@ -47,6 +53,8 @@ export const ConversationChatSection = () => {
   const userInfo = useContext(UserContext);
   // const chatContainerRef = useRef(null!);
   const chatContainerRef = useRef<HTMLDivElement>(null!);
+  const blockedUsers = useContext(blockedUsersContext);
+  const setBlockedUsers = useContext(setBlockedUsersContext);
 
   let maxId = 0;
   if (messages.length !== 0) {
@@ -64,12 +72,12 @@ export const ConversationChatSection = () => {
     // new
     // set uuid
     // newMessage.id = "5";
-    console.log("chat sockets");
+    // console.log("chat sockets");
     socket.connect();
 
     socket.on("connect", () => {
       // socket.emit("userData", { userId: userInfo?.id, isAdmin: "false" });
-      console.log("connected to server");
+      // console.log("connected to server");
     });
 
     socket.on("rcvMessage", (data) => {
@@ -101,7 +109,46 @@ export const ConversationChatSection = () => {
     }
   }, [messages]);
 
+  // const blockedUsers:BlockedUser[] = [];
+  useEffect(() => {
+    // console.log("chat section useEffect");
+    const fetchFun = async () => {
+      const response = await fetch(
+        "http://localhost:3001/api/channels/blockedUsers",
+        {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log("data:", data);
+          if (data) {
+            // const blockedUsers = data;
+            setBlockedUsers(data);
+          }
+          // else
+          // {
+          //   // const blockedUsers = [];
+          //   setBlockedUsers([]);
+          // }
+        });
+    };
+    // if (userInfo.user?.id)
+    // {
+    //   fetchFun();
+    // }
+    fetchFun();
+  }, []);
+  // }, [blockedUsers])
   // console.log("data:", data);
+  // console.log("blockedUsers:", blockedUsers);
+
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (
@@ -111,6 +158,13 @@ export const ConversationChatSection = () => {
         >
           {messages
             .filter((message) => message.message.trim() !== "")
+            .filter((message) => {
+              // return !blockedUsers.id.includes(message.senderId);
+              if (blockedUsers.length === 0) return true;
+              return !blockedUsers.some(
+                (blockedUser) => blockedUser.id === message.senderId
+              );
+            })
             .map((message) => {
               // if (message.senderId === userId) {
               return <Message key={message.id} message={message} />;
@@ -162,6 +216,7 @@ const MessageChat = ({
   message: MessageProps;
   type: string;
 }) => {
+  const userPic = useContext(UserContext).user?.profilePic;
   return (
     <div className={type}>
       <div className="">
@@ -169,7 +224,7 @@ const MessageChat = ({
           className={`rounded-full ${
             type == "rcvMsg" ? "float-left" : "float-right"
           } mr-[10px] mt-[4px] border-[1.5px] border-[#202345]`}
-          src={avatar}
+          src={`${type == "rcvMsg" ? message.sender.profilePic : userPic}`}
           alt="profile pic"
           width={43}
           height={43}
@@ -238,6 +293,8 @@ const TypeMessage = ({ maxId }: { maxId: number }) => {
         className="sendIcon"
         src={sendIcon}
         alt="sendIcone"
+        width={27}
+        height={27}
       />
     </div>
   );

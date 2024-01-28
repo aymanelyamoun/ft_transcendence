@@ -5,7 +5,6 @@ import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import styles from "./StatisticsChart.module.css";
 import {
-  StatisticsPieInterface,
   StatisticsChartInterface,
 } from "../interfaces";
 
@@ -104,7 +103,6 @@ const StatisticsChart: React.FC<StatisticsChartProps> = (props: {
   return (
     <div className={styles["widgetContainer"]}>
       <ReactEcharts option={option} style={{ height: "100%", width: "100%" }} />
-      {/* Other children, if applicable */}
     </div>
   );
 };

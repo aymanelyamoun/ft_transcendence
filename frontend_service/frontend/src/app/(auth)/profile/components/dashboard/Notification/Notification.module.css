@@ -19,13 +19,3 @@
         margin-right: 1vh;
     }
 }
-
-@media (max-width: 550px)
-{
-    .notification svg
-    {
-        color: aliceblue;
-        width: 2rem;
-        height: 2rem;
-    }
-}

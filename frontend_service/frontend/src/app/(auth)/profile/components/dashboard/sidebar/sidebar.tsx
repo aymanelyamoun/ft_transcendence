@@ -1,10 +1,8 @@
 "use client"
 
 import React, { useEffect } from 'react';
-import styles from './sidebar.module.css'; // Update the import if needed
+import styles from './sidebar.module.css';
 declare module '@iconscout/react-unicons';
-import picture from '../../../imgs/aoumad.jpeg';
-import { UilSetting } from '@iconscout/react-unicons';
 import { FaGoogleWallet } from 'react-icons/fa';
 import Settings from '../Settings/Settings';
 import styled from 'styled-components';
@@ -15,8 +13,7 @@ import { GiSkullShield } from "react-icons/gi";
 import { IoShieldSharp } from "react-icons/io5";
 import { GiRosaShield } from "react-icons/gi";
 import { GiBorderedShield } from "react-icons/gi";
-
-
+import Image from 'next/image';
 
 interface SidebarInfo {
   id: string;
@@ -32,7 +29,6 @@ interface SidebarProps {
   ShowSettings: boolean;
   setShowEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
   setLoggedInUserId: (id: string) => void;
-  // onSidebarItemClick: (id: string) => void;
 }
 
 const SidebarRootUserProfile = styled.div`
@@ -205,7 +201,7 @@ const WalletValue = styled.span`
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
 
-  const { ShowSettings, setLoggedInUserId } = props; // Destructure the props object to get the ShowSettings property
+  const { ShowSettings, setLoggedInUserId } = props;
   const setShowEditProfile = props.setShowEditProfile;
   useEffect(() => {
     if (props.sidebar && props.sidebar.id) {
@@ -216,26 +212,18 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 
   const SidebarRoot = ShowSettings ? SidebarRootStandard : SidebarRootUserProfile;
 
-
-  // useEffect(() => 
-  // {
-  //   console.log("props sideBar: ", props.sidebar);
-  // })
-
   return (
         <SidebarRoot>
         <SidebarContainer>
           <ProfileHeader>
           <ProfileImage>
             {!ShowSettings ? (
-              <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+              <Image src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
             ) : (
             <Link href="/profile/statistics">
-            <img src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+            <Image src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
             </Link>
             )}
-            {/* <OnlineStatus online={props.sidebar.online}>
-            </OnlineStatus> */}
             <Username>{props.sidebar.username}</Username>
             {props.sidebar.title === 'Bronze' ? (
               <IoShieldSharp className='text-5xl text-amber-700' />
@@ -258,7 +246,6 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
             <WalletValue>{props.sidebar.totalXp} XP </WalletValue>
         </Wallet>
         {ShowSettings ? <Settings setShowEditProfile={setShowEditProfile}/> : null}
-        {/* <Settings /> */}
         </SidebarContainer>
     </SidebarRoot>
   );

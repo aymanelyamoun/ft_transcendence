@@ -22,10 +22,6 @@ const StatisticsChart: React.FC<StatisticsChartProps> = (props: {
 }) => {
   const daysOfWeek = props.statistics;
 
-  useEffect(() => {
-    console.log("Chart stati: ", props.statistics);
-  }, []);
-
   const option = {
     color: ["var(--blue 500)"],
 

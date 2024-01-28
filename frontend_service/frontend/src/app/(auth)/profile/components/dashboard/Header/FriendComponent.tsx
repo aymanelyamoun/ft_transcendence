@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import { IoMdPersonAdd } from "react-icons/io";
  
@@ -9,14 +9,6 @@ import { BsFillPersonCheckFill } from "react-icons/bs";
 import Link from 'next/link';
 import { SearchU } from '../interfaces';
 import Image from 'next/image';
-// interface SearchU {
-//     id: string;
-//     username: string;
-//     profilePic: string;
-//     isBlocked: boolean;
-//     group: boolean;
-//     groupMembers?: string[];
-//   }
 
 interface FriendComponentProps {
     id: string;
@@ -81,7 +73,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
 
     const SendRequest = async (props: FriendComponentProps) => {
         try {
-            console.log(props.id);
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/send/${props.id}`, {
                 method: "POST",
                 mode: "cors",
@@ -128,7 +119,7 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         }
     };
     
-    const fetchIcon = async () => {
+    const fetchIcon = useCallback(async () => {
         try
         {
             const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/all", {
@@ -143,20 +134,18 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             if(res.ok){
                 const data = await res.json() as SearchU[];
                 props.setSearchUsers(data);
-                // console.log(props.isBlocked);
-                // console.log(data);
             }
         }
         catch(error)
         {
             console.log(error);
         }
-    };
+    },[props]);
     
     useEffect(() => {
-
+        
         fetchIcon();
-    }, [props.setSearchUsers]);
+    }, [props.setSearchUsers, fetchIcon]);
   return (
     <>
         <Link href={`/profile/FriendProfile?username=${props.username}`}>

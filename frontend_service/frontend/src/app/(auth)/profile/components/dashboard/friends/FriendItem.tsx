@@ -1,12 +1,13 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './friends.module.css';
 import MoreIcon from './more_icon';
 import styled from 'styled-components';
 import { FaGamepad } from "react-icons/fa6";
 import { BsCircleFill } from "react-icons/bs";
 import Friends from './friends';
+import Image from 'next/image';
 
 interface Friend {
   id: string;
@@ -18,7 +19,7 @@ interface Friend {
 
 interface FriendItemProps {
   friend: Friend;
-  onFriendItemClick: any; // Corrected callback function parameter type
+  onFriendItemClick: any;
 }
 
 const MoreIconStyle = styled.div`
@@ -58,50 +59,24 @@ ${({ status }) =>
   `}
   `;
   
-  const IconContainer = styled.div<{ status: string }>`
-  border-radius: 20px;
-  width: 15px;
-  height: 15px;
-  // position: absolute;
-   
-  ${({ status }) =>
-    status === '2' &&
-    `
-      svg {
-        color: green;
-      }
-    `}
-
-  ${({ status }) =>
-    status === '0' &&
-    `
-      svg {
-        color: grey;
-      }
-    `}
-
-  ${({ status }) =>
-    status === '1' &&
-    `
-      svg {
-        color: green;
-      }
-    `}
-`;
 
   const FriendItem: React.FC<FriendItemProps> = ({friend, onFriendItemClick}) => {
-    // console.log('friend ' + friend.username + ' status: ' + friend.status);
-  // const IconContainer = friend.status === "2" ? <FaGamepad color="green" /> : (friend.status === "0" ? <BsCircleFill color="grey"/> : <BsCircleFill color="green"/>);
 
-  // const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);
+  const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);
+
+  // useEffect(() => 
+  // {
+  //   console.log("status: ", friend.status);
+  // }, [friend.status]);
+
   return (
     <div className={styles['friendItem-container']}
     >
       <div className={styles['friend-image']}>
-        <img src={friend.profilePic} alt="Profile" className="rounded-full" />
+        <Image src={friend.profilePic} alt="Profile" className="rounded-full" />
       </div>
       <ContainerStatus status={friend.status}>
-      <IconContainer status={friend.status}></IconContainer>
+      <IconContainer {...friend.status === "2" ? <FaGamepad color="green" /> : (friend.status === "0" ? <BsCircleFill color="grey" /> : <BsCircleFill color="green" />)}></IconContainer>
       </ContainerStatus>
       <div className={styles['friend-name']}>
         <span className={styles['friend-name']}>{friend.username}</span>

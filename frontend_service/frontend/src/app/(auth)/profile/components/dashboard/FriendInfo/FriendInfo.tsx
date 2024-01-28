@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { MdGroupAdd } from "react-icons/md";
@@ -130,26 +130,13 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
   const socket = React.useContext(SocketUseContext);
   // const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
 
-  // useEffect(() => {
-  //   // console.log('showGroups value:', showGroups);
-  //   console.log("FriendInfo Mounted:", props.id, props.username, props.profilePic);
-
-  //   return () => {
-  //     console.log("FriendInfo Unmounted");
-  //   };
-  // }, [props.id, props.username, props.profilePic, showGroups]);
-
-  const handleClickOutside = (event: any) => {
-    console.log('Clicked outside');
+  const handleClickOutside = useCallback((event: any) => {
     if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
-      // Click outside the FriendInfo component, hide it
       onClose();
     }
-  };
+  }, [onClose]);
   
   useEffect(() => {
-    
-
     if (!showGroups) {
       document.addEventListener('mousedown', handleClickOutside);
     }
@@ -157,7 +144,7 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose, showGroups]);
+  }, [showGroups, handleClickOutside]);
 
   const SendDeclineReq = async (id: string) => {
     try {

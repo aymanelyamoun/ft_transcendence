@@ -12,7 +12,6 @@ import Loading from '@/app/components/Loading';
 import InputField from '@/app/components/InputField';
 import Button from '@/app/components/Button';
 import { fetchAPI } from '@/utils/api';
-import MyIcon from '@/app/components/42Icon';
 import { Si42 } from "react-icons/si";
 import { config } from 'dotenv';
 

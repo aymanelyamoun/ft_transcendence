@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './SkinComp.module.css';
 import styled from 'styled-components';
+import Image from 'next/image';
 import { TbLock } from "react-icons/tb";
 import { useUser } from '@/app/(auth)/layout';
  
@@ -73,7 +74,7 @@ const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, setActive
           {if(skinunLock(Name, title)){ SendSkin(Name, Type)}}
           }>
           <SkinImg>
-            <img src={svgImage.src} alt={Name} />
+            <Image src={svgImage.src} alt={Name} />
           </SkinImg>
             <span className={styles['skin-name']}>{Name}</span>
         </div>

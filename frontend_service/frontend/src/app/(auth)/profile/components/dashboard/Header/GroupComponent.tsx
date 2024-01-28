@@ -8,10 +8,11 @@ import { SearchU } from '../interfaces';
 import { GroupComponentProps } from '../interfaces';
  
 import { BsFillPersonCheckFill, BsPersonFillDash } from "react-icons/bs";
-import { AddSearchInterface } from '../interfaces';
 import { connect } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import ProtectedPassword from './ProtectedPassword';
+import Image from 'next/image';
+import { toggleSearchFetch } from '@/features/booleans/booleanActions';
 
 
 const BannedUser = styled.button`
@@ -87,18 +88,15 @@ const GroupPictureItem = styled.div`
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   const ShowGroups = props.ShowGroups;
-  const getBannedUsers = props.banedUsers
+  const getBannedUsers = props.banedUsers;
   const [inputPassword, setInputPassword] = useState<string>("");
   const ChannelType = props.channelType;
-  const setChannelFriendSearch = props.setChannelFriendSearch;
-  const setChannelFriendSearchU = props.setChannelFriendSearchU;
   const [UserUnbanned, setUserUnbanned] = useState<boolean>(false);
   const [UserAdded, setUserAdded] = useState<boolean>(false);
   const [passwordSent, setPasswordSent] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [openPassComp, setOpenPassComp] = useState<boolean>(false);
   const [meAdded, setMeAdded] = useState<boolean>(false);
-  // Use useSelector to directly access selectedUserId from the Redux store
   const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId);
   const loggedInUserId = useSelector((state: RootState) => state.strings.loggedInUserId);
 
@@ -115,16 +113,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   }
 
   const isMember = isUserMember(props.members, loggedInUserId);
-
-  // useEffect(() => {
-  //   // console.log("channelName: ", props.channelName);
-  //   if (props.channelName === "Public")
-  //   {
-  //     // console.log("banned users: ", props.banedUsers);
-  //     // console.log("props id: ", selectedUserId);
-  //     console.log("is banned? : ", isBanned);
-  //   }
-  // })
 
   const SendRequestUser = async (props: GroupComponentProps) => {
     try {
@@ -173,12 +161,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       {
         alert("I the user have been added successfully!");
         setMeAdded(true);
-      }
-      else
-      {
-        const err = await res.json();
-      
-        console.log("error in sending the request to join me: ", err);
+        dispatch(toggleSearchFetch());
       }
     }
     catch (error)
@@ -204,7 +187,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        // fetchIcon();
         alert("the user has been unbanned");
       }else {
         alert("the user has not been unbanned");
@@ -235,19 +217,16 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       {
         alert("I the user have been added successfully!");
         setMeAdded(true);
+        dispatch(toggleSearchFetch());
       }
       else
       {
         const err = await res.json();
         setPasswordSent(false);
-        // setOpenPassComp(true);
-        console.log("error in sending the request to join me: ", err);
-        // {message: 'wrong password please check again', error: 'Forbidden', statusCode: 403}
       }
     }
     catch (error)
     {
-      console.log("error in sending the request to join CATCH me: ", error);
     } finally {
       setPasswordSent(false);
     }
@@ -259,17 +238,15 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       setOpenPassComp(true);
     else
     {
-      console.log("HAHAHahaha dkhlat");
       SendRequestUserProtected(props);
     }
   }
-
 
   return (
     <>
         <>
           <FriendImage>
-            <img src={props.channelPic} alt="Profile" className="rounded-full" />
+            <Image src={props.channelPic} alt="Profile" className="rounded-full" />
           </FriendImage>
           <FriendName>
             <span>{props.channelName}</span>
@@ -277,7 +254,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
           <GroupPictures>
             <GroupPictureItem>
               {props.members?.map((member) => (
-                <img key={member.user.id} src={member.user.profilePic} alt="Profile" className="rounded-full" />
+                <Image key={member.user.id} src={member.user.profilePic} alt="Profile" className="rounded-full" />
               ))}
             </GroupPictureItem>
           </GroupPictures>
@@ -305,17 +282,11 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
               {openPassComp && (
                 <ProtectedPassword inputPassword={inputPassword} setInputPassword={setInputPassword} setPasswordSent={setPasswordSent} setOpenPassComp={setOpenPassComp} />
               )}
-              {/* {passwordSent &&
-                <AddGroupButton onClick={() => SendRequestUserProtected(props)}>
-                  {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
-                </AddGroupButton>
-              } */}
             </>
           )}
         </>
     </>
   );
-
 };
 
   export default connect((state: RootState) => ({

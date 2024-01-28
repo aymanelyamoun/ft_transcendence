@@ -18,7 +18,6 @@ interface Friend {
 }
 
   interface FriendsProps {
-    // onFriendItemClick: Friend | false;
     onFriendItemClick: any;
   }
 
@@ -49,7 +48,6 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   const socket = React.useContext(SocketUseContext);
 
   useEffect(() => {
-    console.log ('fetching friends list');
     const fetchFriendsListData = async () => {
       try {
         const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/friends", {
@@ -88,27 +86,17 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
 
 
     return () => {
-      // document.removeEventListener('keydown', (e) => {console.log(FriendsList)})
       socket.off("friendStatus");
     }
-  }, []);
-
-
-  // useEffect(() => {
-  //   console.log ('listening to friendStatus');
-      
-  //     // document.addEventListener('keydown', (e) => {console.log(FriendsList)})
-
-  // },[]);
+  }, [socket]);
 
 
   return (
     <div className={styles['friends-list']}>
-      {/* <Suspense fallback={<p>Loading friends...</p>}> */}
     {FriendsList.length ? (
     <ul>
         {FriendsList.map((friend) => (
-          <FriendItem 
+          <FriendItem
             key={friend.id}
             friend={friend}
             onFriendItemClick={onFriendItemClick}
@@ -122,9 +110,8 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
           <NoFriendsSpan>No friends yet</NoFriendsSpan>
       </NoFriendContainer>
     )}
-      {/* </Suspense> */}
     </div>
   );
-}
+};
 
 export default FriendList;

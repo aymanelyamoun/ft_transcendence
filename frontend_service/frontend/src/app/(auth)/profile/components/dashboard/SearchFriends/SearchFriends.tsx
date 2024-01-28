@@ -13,6 +13,7 @@ import ResultItem from '../Header/ResultItem';
 import { channel } from 'diagnostics_channel';
 import { SearchU } from '../interfaces';
 import { toggleSearchFetch } from '@/features/booleans/booleanActions';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
 const SearchContainer = styled.div`
@@ -36,7 +37,7 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
 
   const [searchText, setSearchText] = useState<string>('');
   const dispatch = useDispatch();
-
+  const activeFetch = useSelector((state: RootState) => state.booleans.activeFetch);
 
   const Searchusers = async (username: string) => {
     try {
@@ -96,6 +97,32 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
     }
     setSearchText(e.target.value);
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "user/all", {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.ok) {
+          const data = await res.json() as SearchU[];
+          setFriendSearch(data);
+        }else {
+          alert("Error fetching data: ");
+          console.error("Error fetching data: ", res.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+  fetchUsers();
+  }, [activeFetch])
 
 return (
        <SearchContainer>

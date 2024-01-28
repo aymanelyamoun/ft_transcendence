@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './FriendInfo.module.css';
 import styled from 'styled-components';
 import { MdGroupAdd } from "react-icons/md";
@@ -19,6 +19,7 @@ import { toggleShowGroups } from '@/features/booleans/booleanActions';
 import { setLoggedInUserId, setSelectedUserId } from '@/features/strings/stringActions';
 import { Friend } from '@/app/(auth)/chat/page';
 import { SocketUseContext } from "@/utils/socketUseContext";
+import { AlertMessage } from '@/app/components/alertMessage';
 
 interface FriendInfoProps {
   id: string;
@@ -129,6 +130,7 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
   const loggedInUserId = useSelector((state: RootState) => state.strings.loggedInUserId);
   const socket = React.useContext(SocketUseContext);
   // const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const handleClickOutside = useCallback((event: any) => {
     if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
@@ -158,9 +160,9 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
         },
       });
       if(response.ok){
-        alert("the user has been removed");
+        setShowAlert(true);
       }else {
-        alert("the user has not been removed");
+        alert("the user has not been removed"); // gonna remove
       }
     } catch (error) {
       console.log(error);
@@ -228,6 +230,9 @@ return (
         </div>
       </div>
     )}
+    {
+      showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"the user has been removed"}  type="notify"/>)
+    }
   </>
 );
 

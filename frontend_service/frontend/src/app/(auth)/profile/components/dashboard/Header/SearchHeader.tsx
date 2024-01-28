@@ -57,7 +57,7 @@ const SearchHeader = () => {
 
     const fetchAction = () => 
     {
-      // dispatch(toggleSearchFetch());
+      dispatch(toggleSearchFetch());
     }
     
     useEffect(() => {

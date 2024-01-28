@@ -2,6 +2,7 @@
 import { useEffect, useRef} from "react";
 import Matter, {Engine, Bodies, World, Render, Composite, Vector, Collision} from 'matter-js';
 import * as Skins from '../utils/Skins';
+import Image from "next/image";
 
 
 const HEIGHT : number = 800;
@@ -314,11 +315,11 @@ export default function Singleplayer (){
             {/* <Navbar /> */}
             <div id="SingleMatch" className="flex flex-col items-center" />
             <div id="scoreDisplay" className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 rounded-xl">
-                <img id="playerOneImage" className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" src="/pFinger.png" />
+                <Image alt="" id="playerOneImage" className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" src="/pFinger.png" />
                 <div id="scoreOne" className="flex items-center justify-center text-lg font-bold w-[4vw] h-16 text-white text-center">0</div>
                 <div className="splitter"></div>
                 <div id="scoreTwo" className="flex items-center justify-center text-lg font-bold w-[4vw] h-16 text-white text-center">0</div>
-                <img id="playerTwoImage" className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" src='/GameAssets/aiIcon.png'/>
+                <Image alt="" id="playerTwoImage" className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2" src='/GameAssets/aiIcon.png'/>
             </div>
         </div>
     )

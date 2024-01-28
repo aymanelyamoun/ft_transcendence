@@ -15,6 +15,7 @@ import { Socket, io } from "socket.io-client";
 import { useRouter } from "next/navigation";
 import * as Skins from "../utils/Skins";
 import GameDialog from "../components/GameDialog";
+import Image from "next/image";
 
 // TO DO LIST:
 // 1. fix the profile pictures "border-radius" and "image not showing" issue. DONE
@@ -219,7 +220,7 @@ const MatchScene = () => {
         releaseHandle(e, socketRef.current!)
       );
     };
-  }, []);
+  }, [router]);
 
   return (
     <div
@@ -231,7 +232,7 @@ const MatchScene = () => {
         id="scoreDisplay"
         className="flex flex-row space-x-2 gap-[1vw] bg-[#282C4E] h-16 "
       >
-        <img
+        <Image alt="img" src={""}
           id="playerOneImage"
           className="min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2"
         />
@@ -248,7 +249,7 @@ const MatchScene = () => {
         >
           0
         </div>
-        <img
+        <Image alt="img" src={""}
           id="playerTwoImage"
           className=" min-w-[64px] max-w-[64px] w-[4vw] h-16 bg-white mb-2"
         />

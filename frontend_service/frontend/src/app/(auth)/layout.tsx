@@ -61,7 +61,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       }
     };
     checkAuthentication();
-  });
+  }, [pathname]);
   const [prevPath, setPrevPath] = useState("/");
   const [isRouting, setisRouting] = useState(false);
   // useEffect(() => {

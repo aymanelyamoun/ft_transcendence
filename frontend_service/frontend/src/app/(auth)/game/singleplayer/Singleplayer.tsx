@@ -287,7 +287,7 @@ export default function Singleplayer (){
             enabled: true
         });
         Matter.Runner.run(runner, engine.current);
-        const CollisionEvent =  (event: Matter.IEventCollision<Matter.Engine>) => {collisionDetect(engine.current, event)}
+        const CollisionEvent =  (event: Matter.IEventCollision<Matter.Engine>) => {console.log('CEvent');collisionDetect(engine.current, event)}
         const renderLoop = () => {
             checkGoals(engine.current, render);
             botMove(engine.current);
@@ -299,15 +299,18 @@ export default function Singleplayer (){
         Matter.Events.on(runner, "beforeTick", renderLoop);
         window.addEventListener('keydown', pressHandle);
         window.addEventListener('keyup', releaseHandle);
+        const enginePointer = engine.current;
         return () => {
+            // check if the engine is still running
+            console.log('unmounting')
             window.removeEventListener('keydown', pressHandle);
             window.removeEventListener('keyup', releaseHandle);
-            Matter.Events.off(engine.current, 'collisionStart', CollisionEvent);
+            Matter.Events.off(enginePointer, 'collisionStart', CollisionEvent);
             Matter.Events.off(runner, "beforeTick", renderLoop);
             Matter.Runner.stop(runner)
             Render.stop(render)
-            Composite.clear(engine.current.world, false);
-            Engine.clear(engine.current)
+            Composite.clear(enginePointer.world, false);
+            Engine.clear(enginePointer)
             render.canvas.remove()
             render.textures = {}
         }

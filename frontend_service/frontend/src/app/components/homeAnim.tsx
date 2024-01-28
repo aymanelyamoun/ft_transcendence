@@ -165,14 +165,15 @@ export default function AnimationFX(){
             Matter.Events.on(engine.current, 'beforeUpdate', frameUpdate);
             Matter.Events.on(mouseConstraint, "mousemove", (e) => magnetize(e, mouseConstraint, engine.current));
             Matter.Render.run(render);
+            const enginePointer = engine.current;
             return () => {
-                Matter.Events.off(engine.current, 'beforeUpdate', frameUpdate);
-                Matter.Events.off(mouseConstraint, "mousemove", (e) => magnetize(e, mouseConstraint, engine.current));
+                Matter.Events.off(enginePointer, 'beforeUpdate', frameUpdate);
+                Matter.Events.off(mouseConstraint, "mousemove", (e) => magnetize(e, mouseConstraint, enginePointer));
                 window.removeEventListener('resize', handleResize);
                 Matter.Render.stop(render);
                 Matter.Runner.stop(runner);
-                Matter.Composite.clear(engine.current.world, false);
-                Matter.Engine.clear(engine.current);
+                Matter.Composite.clear(enginePointer.world, false);
+                Matter.Engine.clear(enginePointer);
                 render.canvas.remove();
                 render.textures = {};
             };

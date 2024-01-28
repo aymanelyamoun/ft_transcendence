@@ -8,6 +8,7 @@ interface GameMenuProps {
 }
 export default function GameDisplay() {
     const [gameState, setGameState] = useState('menu');
+    
   return (
       <div>
         {gameState === 'menu' && <GameMenu  setGameState={setGameState} gameState={gameState}/>}

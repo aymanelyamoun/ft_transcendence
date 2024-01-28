@@ -193,8 +193,8 @@ export class GameInstance {
 
     async update_achievement(winnerData : User, loserData : User, prisma : PrismaService) : Promise<void> {
         // handle winner title
-        const winnerTitle = this.getTitle(winnerData.totalXp);
-        const loserTitle = this.getTitle(loserData.totalXp);
+        const winnerTitle = this.getTitle(winnerData.totalXp + 25);
+        const loserTitle = this.getTitle(loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0);
         await prisma.user.update({
             where :{
                 id : winnerData.id,
@@ -214,7 +214,6 @@ export class GameInstance {
     }
 
     async endGame (state : EndGameState) : Promise<void> {
-        console.log('gameEnded : ' ,state)
         this.gameOver = true;
         this.gameEnded = true;
         if (state.reason == 'score')

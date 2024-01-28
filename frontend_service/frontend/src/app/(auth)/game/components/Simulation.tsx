@@ -113,6 +113,7 @@ export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF TH
   // AND MODIFY THE PARENT ID TO "ParentSim"
     const engine = useRef(Matter.Engine.create({ enableSleeping: false, gravity: { x: 0, y: 0 }}));
     useEffect(() => {
+        const enginePointer = engine.current;
         const cw = document.getElementById('ParentSim')?.clientWidth as number
         const ch = document.getElementById('ParentSim')?.clientHeight as number
         const element = document.getElementById('Scene') as HTMLElement;
@@ -158,11 +159,11 @@ export default function Simulation() { // DO NOT FORGET TO MAKE THE PARENT OF TH
         Matter.Runner.run(runner, engine.current);
         return () => {
             Matter.Runner.stop(runner)
-            Matter.Events.off(engine.current, "beforeUpdate", renderLoop)
-            Matter.Events.off(engine.current, 'collisionStart', CollisionEvent)
+            Matter.Events.off(enginePointer, "beforeUpdate", renderLoop)
+            Matter.Events.off(enginePointer, 'collisionStart', CollisionEvent)
             Render.stop(render)
-            Composite.clear(engine.current.world, false);
-            Engine.clear(engine.current)
+            Composite.clear(enginePointer.world, false);
+            Engine.clear(enginePointer)
             render.canvas.remove()
             render.textures = {}
         }

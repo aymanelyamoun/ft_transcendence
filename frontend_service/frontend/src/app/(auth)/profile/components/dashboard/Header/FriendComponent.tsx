@@ -2,7 +2,7 @@
 
 import React, {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
-import { StaticImageData } from 'next/image'
+import { StaticImageData } from "next/legacy/image"
 import AddFriend from '@/app/(auth)/chat/components/AddFriend';
 import { IoMdPersonAdd } from "react-icons/io";
 import { Backend_URL } from '@/lib/Constants';

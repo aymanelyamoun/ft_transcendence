@@ -1,17 +1,17 @@
-"use client"
-import React from 'react'
-import Image from 'next/image'
-import { useState, ChangeEvent, useRef, useEffect } from 'react';
-import { Friend, friendsData} from '../../../../chat/page';
+"use client";
+import React from "react";
+import Image from "next/image";
+import { useState, ChangeEvent, useRef, useEffect } from "react";
+import { Friend, friendsData } from "../../../../chat/page";
 import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
 // import { Friend, friendsData} from '../../../../app/(notRoot)/chat/page';
 // import searchBarInAddChannel from "../../../../public/iconSearchInAddChannel.png";
-import styled from 'styled-components';
-import { Backend_URL } from '@/lib/Constants';
-import SearchHeader from '../Header/SearchHeader';
-import ResultItem from '../Header/ResultItem';
-import { channel } from 'diagnostics_channel';
-import { SearchU } from '../interfaces';
+import styled from "styled-components";
+import { Backend_URL } from "@/lib/Constants";
+import SearchHeader from "../Header/SearchHeader";
+import ResultItem from "../Header/ResultItem";
+import { channel } from "diagnostics_channel";
+import { SearchU } from "../interfaces";
 
 // const SearchContainer = styled.div`
 //   position: relative;
@@ -74,19 +74,21 @@ interface FriendListProps {
 //   Members?: string[];
 // }
 
-
-const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSearch , setFriendSearch}: FriendListProps) => {
-
+const SearchFriends = ({
+  addChannelSearch,
+  setAddChannelSearch,
+  setChannelFriendSearch,
+  setFriendSearch,
+}: FriendListProps) => {
   // const SearchBar = useRef<HTMLDivElement>(null);
   const SearchIcon = useRef<HTMLDivElement>(null);
-  const [searchText, setSearchText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>("");
   const [SearchUsers, setSearchUsers] = useState<SearchU[]>([]);
-
 
   const Searchusers = async (username: string) => {
     try {
       console.log("fetching user entered");
-      const res = await fetch( Backend_URL+"user/"+username, {
+      const res = await fetch(Backend_URL + "user/" + username, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -96,7 +98,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
         },
       });
       if (res.ok) {
-        const data = await res.json() as SearchU[];
+        const data = (await res.json()) as SearchU[];
         setFriendSearch(data);
       }
     } catch (error) {
@@ -106,7 +108,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
 
   const fetchChannel = async (channelName: string) => {
     try {
-      const res = await fetch( Backend_URL+"channels/search/"+channelName, {
+      const res = await fetch(Backend_URL + "channels/search/" + channelName, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -116,7 +118,7 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
         },
       });
       if (res.ok) {
-        const data = await res.json() as SearchU[];
+        const data = (await res.json()) as SearchU[];
         setChannelFriendSearch(data);
       }
     } catch (error) {
@@ -124,34 +126,29 @@ const SearchFriends = ({addChannelSearch, setAddChannelSearch,setChannelFriendSe
     }
   };
 
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-   let username : string = e.target.value;
+    let username: string = e.target.value;
     username = username.trim();
-    if (username)
-    {
-      Searchusers('search/'+username);
+    if (username) {
+      Searchusers("search/" + username);
       fetchChannel(username);
-    }
-      
-    else
-    {
-
-      Searchusers('all');
-      fetchChannel('all');
+    } else {
+      Searchusers("all");
+      fetchChannel("all");
     }
     setSearchText(e.target.value);
   };
 
-return ( 
-       <SearchContainer>
-          <input type="text" className="seachBarAddChannel flex " 
-         value={searchText}
-         onChange={handleInputChange}
-         />
-
-        </SearchContainer>
-)
-}
+  return (
+    <SearchContainer>
+      <input
+        type="text"
+        className="seachBarAddChannel flex "
+        value={searchText}
+        onChange={handleInputChange}
+      />
+    </SearchContainer>
+  );
+};
 
 export default SearchFriends;

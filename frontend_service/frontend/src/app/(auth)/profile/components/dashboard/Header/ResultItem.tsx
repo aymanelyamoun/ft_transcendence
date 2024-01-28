@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
-import { StaticImageData } from 'next/image'
+import { StaticImageData } from "next/legacy/image"
 import FriendComponent from './FriendComponent'
 import GroupComponent from './GroupComponent'
 import { AddSearchInterface, SearchU } from '../interfaces'

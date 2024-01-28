@@ -1,6 +1,6 @@
 "use client";
 
-import { StaticImageData } from "next/image";
+import { StaticImageData } from "next/legacy/image";
 import { createContext, useEffect, useRef, useState } from "react";
 import {useRouter} from 'next/navigation'
 import { ChatPage } from "./components/conversationInfo";

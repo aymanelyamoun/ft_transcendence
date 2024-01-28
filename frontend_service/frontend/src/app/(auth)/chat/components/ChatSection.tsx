@@ -110,39 +110,41 @@ export const ConversationChatSection = () => {
   }, [messages]);
 
   // const blockedUsers:BlockedUser[] = [];
-  useEffect (() => {
+  useEffect(() => {
     // console.log("chat section useEffect");
     const fetchFun = async () => {
-      const response = await fetch("http://localhost:3001/api/channels/blockedUsers", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+      const response = await fetch(
+        "http://localhost:3001/api/channels/blockedUsers",
+        {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
           },
-          })
-          .then((res) => res.json())
-          .then((data) => {
-            // console.log("data:", data);
-            if (data)
-            {
-              // const blockedUsers = data;
-              setBlockedUsers(data);
-            }
-            // else
-            // {
-            //   // const blockedUsers = [];
-            //   setBlockedUsers([]);
-            // }
-          });
-    }
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log("data:", data);
+          if (data) {
+            // const blockedUsers = data;
+            setBlockedUsers(data);
+          }
+          // else
+          // {
+          //   // const blockedUsers = [];
+          //   setBlockedUsers([]);
+          // }
+        });
+    };
     // if (userInfo.user?.id)
     // {
     //   fetchFun();
     // }
     fetchFun();
-  },[])
+  }, []);
   // }, [blockedUsers])
   // console.log("data:", data);
   // console.log("blockedUsers:", blockedUsers);
@@ -159,7 +161,9 @@ export const ConversationChatSection = () => {
             .filter((message) => {
               // return !blockedUsers.id.includes(message.senderId);
               if (blockedUsers.length === 0) return true;
-              return !blockedUsers.some((blockedUser) => blockedUser.id === message.senderId);
+              return !blockedUsers.some(
+                (blockedUser) => blockedUser.id === message.senderId
+              );
             })
             .map((message) => {
               // if (message.senderId === userId) {

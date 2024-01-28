@@ -296,7 +296,7 @@ export class UserService {
         try {
             const user = req['user'] as User;
             const userId = user.id;
-            if (!await bcrypt.compare(dto.oldPass, user.hash))
+            if (!(await bcrypt.compare(dto.oldPass, user.hash)))
                 throw new UnauthorizedException('the old password is incorrect');
             if (dto.newPass !== dto.confirmPass)
                 throw new ConflictException('the new password and the confirm password are not the same');

@@ -417,8 +417,8 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`white`} />
       </ChatButton>
 
-      <Image className="" src={splitBar} alt="splitBar" height={5} width={1}       layout="responsive"
-      style={{ width: 'auto', height: 'auto' }}></Image>
+      {/* <Image className="" src={splitBar} alt="splitBar" height={5} width={1}></Image> */}
+      <div className="w-[1px] h-[20px] bg-white"></div>
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight
@@ -433,8 +433,8 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`rgba(154, 155, 211, 0.5)`} />
       </ChatButton>
 
-      <Image className="" src={splitBar} alt="splitBar" width={1} height={5}       layout="responsive"
-      style={{ width: 'auto', height: 'auto' }}></Image>
+      <div className="w-[1px] h-[20px] bg-white"></div>
+      {/* <Image className="" src={splitBar} alt="splitBar" width={1} height={5}></Image> */}
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight size={22} color={`white`} />

@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image, { StaticImageData } from "next/legacy/image";
 // import avatar from "../../../../../public/garou-kid.jpeg";
 import avatar from "../../../../../public/garou-kid.jpeg";
 import { MdDelete, MdPersonAddAlt1 } from "react-icons/md";
@@ -478,9 +478,9 @@ const MemberIthem = ({
     // console.log("imgUrl 2222", imgUrl);
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
-      <div className="flex  justify-between items-center ">
+      <div className="flex gap-2 justify-between items-center ">
         <Image
-          className="avatar-small mr-[10px]"
+          className="avatar-small ml-[10px]"
           src={imgUrl}
           alt={"avatar"}
           width={40}
@@ -690,7 +690,7 @@ const MemberList = ({
     if (membersInfo.creator?.id === userInfo.user?.id) {
       setIsCreator(true);
     }
-  }, []);
+  }, [membersInfo]);
 
   // console.log("membersInfo:", membersInfo);
   // console.log("userInfo?.id:", userInfo.user?.id);

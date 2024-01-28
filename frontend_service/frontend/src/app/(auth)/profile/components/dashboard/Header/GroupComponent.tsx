@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
-import { StaticImageData } from 'next/image'
+import { StaticImageData } from "next/legacy/image"
 import { MdGroupAdd } from "react-icons/md";
 import { SearchU } from '../interfaces';
 import { GroupComponentProps } from '../interfaces';

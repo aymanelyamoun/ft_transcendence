@@ -1,7 +1,7 @@
 import React from 'react'
 import splitBar from '../../../public/splitBar.png'
 // import splitBar from '../../../../public/splitBar.png'
-import Image, { StaticImageData } from 'next/image'
+import Image, { StaticImageData } from "next/legacy/image"
 import { NextPage } from 'next';
 import msg from '../../../../public/msg_icon.png'
 import msgs from '../../../../public/msgs_icons.png'

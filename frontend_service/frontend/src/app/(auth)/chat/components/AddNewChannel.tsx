@@ -15,7 +15,7 @@ import { channel } from "diagnostics_channel";
 
 import avatar from "../../../../../public/garou-kid.jpeg";
 // import channelPic from "../../../../../public/group_pic.jpg";
-import { Friend} from "../page";
+import { Friend } from "../page";
 
 const AddNewChannel = ({
   setShowAddChannel,
@@ -30,19 +30,18 @@ const AddNewChannel = ({
 }) => {
   const activeChat = useRef<"friend" | "channel">("friend");
 
-  const [channelFriends, setChannelFriends] =
-    useState<Friend[]>([]);
-    // const [showAddChannel, setShowAddChannel] = useState(false);
-    const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
-    // const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
-    const cancelAddChannel = useRef<HTMLDivElement>(null);
-    const [ChannelFriendSearch, setChannelFriendSearch] = useState<Friend[]>([]);
-    
-    // to store friends list to reuse it in search bar if it nothisg is written in the search bar
-    // const [rowData, setRowData] = useState<Friend[]>([]);
-    
-    // const goToCreateChannel = useRef<boolean>(false);
-    
+  const [channelFriends, setChannelFriends] = useState<Friend[]>([]);
+  // const [showAddChannel, setShowAddChannel] = useState(false);
+  const [addChannelSearch, setAddChannelSearch] = useState<boolean>(false);
+  // const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
+  const cancelAddChannel = useRef<HTMLDivElement>(null);
+  const [ChannelFriendSearch, setChannelFriendSearch] = useState<Friend[]>([]);
+
+  // to store friends list to reuse it in search bar if it nothisg is written in the search bar
+  // const [rowData, setRowData] = useState<Friend[]>([]);
+
+  // const goToCreateChannel = useRef<boolean>(false);
+
   useEffect(() => {
     const fetchFriendsListData = async () => {
       fetch("http://localhost:3001/api/user/friends", {
@@ -54,17 +53,17 @@ const AddNewChannel = ({
           "Access-Control-Allow-Origin": "*",
         },
       })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setChannelFriends(data);
-        // setRowData(data);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setChannelFriends(data);
+          // setRowData(data);
+        });
     };
     fetchFriendsListData();
   }, []);
-  
+
   // console.log("channelFriends : ", channelFriends);
   const handleSelectFriend = (friend: Friend) => {
     if (selectedFriends.includes(friend)) {

@@ -2,17 +2,11 @@ import React, { useContext } from "react";
 import { ConversationIthemProps } from "@/utils/types/chatTypes";
 import { useState, createContext } from "react";
 import Image from "next/image";
-
-import avatar from "../../../../../public/garou-kid.jpeg";
-import splitBar from "../../../../../public/splitBar.png";
-
 import { HiMiniChatBubbleLeftRight } from "react-icons/hi2";
 import { HiMiniChatBubbleLeft } from "react-icons/hi2";
 
 import {
-  ButtonInfo,
   ConversationListContext,
-  CostumeButton,
   LstConversationSetStateContext,
   LstConversationStateContext,
   alertInviteFriendContext,
@@ -36,7 +30,6 @@ import { Friend } from "../page";
 import EditChannel from "./EditChannel";
 import { AlertMessage } from "./alertMessage";
 import { UserContext } from "@/utils/createContext";
-import ShowGroups from "../../profile/components/dashboard/FriendInfo/ShowGroups";
 
 const ConversationIthem = (props: ConversationIthemProps) => {
   const conversationProps = props;
@@ -56,19 +49,16 @@ const ConversationIthem = (props: ConversationIthemProps) => {
       // key={props.id}
       className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
     >
-      {/* <Image
+      <Image
         className=" w-[49px] h-[49px] rounded-full"
        // src={avatar}
-        src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
-        //  src={conversationProps.profilePic}
+        // src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
+         src={conversationProps.profilePic}
         // alt={conversationProps.name}
         alt={conversationProps.name}
         width={49}
         height={49}
-      /> */}
-      {/* <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : "../../../../../public/garou-kid.jpeg"}`} alt="hh"  /> */}
-      {/* <img className=" w-[49px] h-[49px] rounded-full" src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`} alt="hh"  /> */}
-      <img className=" w-[49px] h-[49px] rounded-full" src={conversationProps.profilePic} alt="hh"  />
+      />
       <div className="flex flex-col mb-[4%}">
         <p className="friendsName">{conversationProps.name}</p>
         <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">

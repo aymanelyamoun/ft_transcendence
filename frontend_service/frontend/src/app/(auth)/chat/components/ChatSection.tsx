@@ -220,15 +220,6 @@ const MessageChat = ({
   return (
     <div className={type}>
       <div className="">
-        {/* <img
-          className={`rounded-full w-[43] h-[43]${
-            type == "rcvMsg" ? "float-left" : "float-right"
-          } mr-[10px] mt-[4px] border-[1.5px] border-[#202345]`}
-          src={`${type == "rcvMsg" ? message.sender.profilePic : userPic}`}
-          alt="profile pic"
-          // width={43}
-          // height={43}
-        /> */}
         <Image
           className={`rounded-full ${
             type == "rcvMsg" ? "float-left" : "float-right"

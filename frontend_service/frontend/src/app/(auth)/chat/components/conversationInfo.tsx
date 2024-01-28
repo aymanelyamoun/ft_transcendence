@@ -485,13 +485,6 @@ const MemberIthem = ({
           width={40}
           height={40}
         />
-        {/* <img
-          className="w-[40px] h-[40px] avatar-small mr-[10px]"
-          src={imgUrl}
-          alt={"avatar"}
-          // width={40}
-          // height={40}
-        /> */}
         <h3>{name}</h3>
       </div>
       {
@@ -1065,8 +1058,10 @@ const ProfileInfos = ({
   // console.log("picUrl------------ :", picUrl);
   return (
     <div className="flex flex-col items-center">
-      {/* <Image className="avatar" src={picUrl} alt={"avatar"}/> */}
-      <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/>
+      <div className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" >
+        <Image className="w-full h-full" src={picUrl} width={160} height={160} alt={"avatar"}/>
+      </div>
+      {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
       <h4 className="nameInfo"> {name} </h4>
       {children}
     </div>

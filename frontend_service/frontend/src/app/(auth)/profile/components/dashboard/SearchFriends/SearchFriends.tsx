@@ -122,7 +122,7 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
       }
     };
   fetchUsers();
-  }, [activeFetch])
+  }, [activeFetch, setFriendSearch])
 
 return (
        <SearchContainer>

@@ -113,7 +113,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
                 setShowAlertUnblock(true);
             }
         } catch (error) {
-            console.log(error);
         }
     };
     
@@ -136,7 +135,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         }
         catch(error)
         {
-            console.log(error);
         }
     },[props]);
     

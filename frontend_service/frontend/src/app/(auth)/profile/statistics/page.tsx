@@ -122,12 +122,7 @@ function App() {
             const data = await res.json();
             setGlobalRating(data);
           }
-          else
-          {
-            console.log("Global rating isn't okay");
-          }
         } catch (error) {
-          console.error("Error fetching data: ", error);
         } finally
         {
           setGlobalRatingDone(true);
@@ -153,7 +148,6 @@ function App() {
               alert("Match History fetching isn't okay"); 
             }
             } catch (err) {
-              console.log(err);
             } finally {
               setIsMatchLoading(true);
             }

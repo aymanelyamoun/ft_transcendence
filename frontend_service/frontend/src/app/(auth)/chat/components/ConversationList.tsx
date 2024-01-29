@@ -52,7 +52,7 @@ const ConversationIthem = (props : ConversationIthemProps) => {
     console.log("conversationProps: WWWWWWW", conversationProps);
     // setRefresh(!refresh);
     setConversationList(conversationProps);
-    conversationProps.setRefresh!((prev) => !prev);
+    // conversationProps.setRefresh!((prev) => !prev);
     // setRefresh((prev) => !prev);
     console.log("refresh in conversationIthem 2: ", refresh);
   };
@@ -137,7 +137,6 @@ export const ConversationList = ({
                         createdAt={conv.createdAt}
                         channelId={conv.channelId}
                         lastMessage={conv.lastMessage}
-                        setRefresh={setRefresh}
                         />
                         );
                       }
@@ -162,7 +161,6 @@ export const ConversationList = ({
               createdAt={conv.createdAt}
               channelId={conv.channelId}
               lastMessage={conv.lastMessage}
-              setRefresh={setRefresh}
               />
             );
           }

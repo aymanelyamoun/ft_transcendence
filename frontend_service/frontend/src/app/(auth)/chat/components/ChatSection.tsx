@@ -46,7 +46,6 @@ function createConversationListIthem(
     updatedAt: new Date(), // replace with actual creation date
     channelId: "someChannelId", // replace with actual channel ID
     title: "someTitle", // replace with actual title
-    setRefresh: cur.setRefresh, // replace with actual title
   };
 }
   return{

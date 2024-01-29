@@ -450,6 +450,19 @@ const MemberIthem = ({
     { id: 1, label: "Mute", subOptions: ["5 min", "30 min", "1 hour"] },
     { id: 2, label: "Kick", action: "kick" },
     { id: 3, label: "Ban", action: "ban" },
+    {
+      id: 4,
+      label: !asAdmin ? "Block" : "Unblock",
+      action: !asAdmin ? "blockUser" : "UnBlockUser",
+    },
+  ];
+
+  const userOptions = [
+    {
+      id: 0,
+      label: !asAdmin ? "Block" : "Unblock",
+      action: !asAdmin ? "blockUser" : "UnBlockUser",
+    },
   ];
 
   // const handleSubOptionClick =
@@ -499,7 +512,8 @@ const MemberIthem = ({
 
   const handleOptionClick =
     (option: { id: number; label: string; action?: string }) => () => {
-      // console.log("clicked", option);
+
+      console.log("clicked", option);
       if (option.action === "makeAsAdmin") {
         setAsAdmin(!asAdmin);
         // console.log("isAdmin:", asAdmin);
@@ -544,11 +558,14 @@ const MemberIthem = ({
           },
           body: JSON.stringify(userData),
         }).then((res) => {
+          console.log("res");
+          console.log("res :", res);
+          console.log("res");
           if (!res.ok)
-            throw new Error("Network response was not ok");
-          else
-            setRefresh((prev) => !prev);
-        }).catch((error) => {
+          throw new Error("Network response was not ok");
+        else
+        setRefresh((prev) => !prev);
+    }).catch((error) => {
           console.error("Error during fetch:", error);
         });
       } else if (option.action === "kick") {
@@ -671,6 +688,46 @@ const MemberIthem = ({
           </Menu>
         )
       }
+      {
+        !isAdmin && (
+          <Menu>
+            <Menu.Button className="cursor-pointer left-[95%] absolute">
+              <SlOptions
+                className=""
+                onClick={() => setIsOptions(!isOptions)}
+              />
+            </Menu.Button>
+            <Transition
+              as={Fragment}
+              enter="transition duration-100 ease-out"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                {userOptions.map((option) => (
+                  <Menu.Item key={option.id}>
+                    {({ active }) => (
+                      <div
+                        className={`${
+                          active
+                            ? "bg-[#9A9BD326] text-white rounded-md flex justify-between"
+                            : "text-white flex justify-between"
+                        } block px-4 py-2 text-sm cursor-pointer`}
+                        onClick={handleOptionClick(option)}
+                      >
+                        {option.label}
+                      </div>
+                    )}
+                  </Menu.Item>
+                ))}
+              </Menu.Items>
+            </Transition>
+          </Menu>
+        )
+      }
     </div>
   );
 };
@@ -767,6 +824,12 @@ const MemberList = ({
       fetchFun2();
     }
   }, [conversation, isSet, conversationProps?.channelId, refresh]);
+
+  // useEffect(() => {
+
+  // }, []);
+  
+  const setBlockedUsers = useContext(setBlockedUsersContext);
 
   const isAdmin = (): boolean => {
     return membersInfo.members?.some(
@@ -1025,16 +1088,22 @@ export const ChatPage = () => {
         })
         .then((data) => {
           // console.log("MESSAGESSSS data:", data);
-          if (data) setMessages(data);
+          if (data) 
+          {
+            // setMessages(data.reverse());
+            setMessages(data);
+            console.log('fetched and reversed')
+          }
         })
         .catch((err) => {
           // console.log(err);
         });
-      // return res;
-    };
-    fetchFun();
-  }, [conversation]);
-
+        // return res;
+      };
+      fetchFun();
+    }, [conversation]);
+    console.log("messages:   TTT", messages);
+    
   return (
     <main className="main flex justify-center items-center h-full w-full ">
       <ConversationListContextSet.Provider value={setConversationList}>

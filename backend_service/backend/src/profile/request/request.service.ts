@@ -22,7 +22,14 @@ export class RequestService {
                     type: typ,
                 },
             });
-            if (!existingNotification)
+            const ChekcNotification = await this.prisma.notification.findFirst({
+                where: {
+                    userId: userId,
+                    senderId:recieverId ,
+                    type: typ,
+                },
+            });
+            if (!existingNotification && !ChekcNotification)
             {
                     const  sender = await this.userService.findById(userId);            
                     const notif =  await this.prisma.notification.create({

@@ -53,7 +53,11 @@ export class AuthGoogleController
       try {
         (req.user as any).isConfirmed2Fa = false;
         const jwtResult = await this.authGoogleService.generateJwt(req.user);
-        res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
+        res.cookie('access_token', jwtResult.backendTokens.accessToken, {
+          httpOnly: false,
+          expires: new Date(Date.now() + 86400000), // 24 hours in milliseconds
+        });
+        
         const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
         if (user.isTwoFactorEnabled)
           return res.redirect(process.env.FRONT_URL+'/confirmauth')
@@ -82,7 +86,7 @@ export class AuthGoogleController
       {
         (req.user as any).isConfirmed2Fa = false;
         const jwtResult = await this.authGoogleService.generateJwt(req.user);
-        res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false });
+        res.cookie('access_token', jwtResult.backendTokens.accessToken, { httpOnly : false, expires: new Date(Date.now() + 86400000), });
         const user = await this.userService.findByEmail(jwtResult.backendTokens.payload.email);
         if (user.isTwoFactorEnabled)
           return res.redirect(process.env.FRONT_URL+'/confirmauth')
@@ -181,10 +185,10 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
         await this.userService.updateUser(user.id, { isTwoFactorEnabled: true });
         (user as any).isConfirmed2Fa = true;
         const accessToken = await this.jwtService.signAsync(user, {
-          expiresIn: '1h',
+          expiresIn: '1d',
           secret: process.env.jwtSecretKey,
         });
-        res.cookie('access_token', accessToken, { httpOnly : false });
+        res.cookie('access_token', accessToken, { httpOnly : false, expires: new Date(Date.now() + 86400000), });
         return res.status(200).json('2FA enabled successfully');
       }
       catch (error)
@@ -204,10 +208,10 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
       await this.userService.updateUser(user.id, { isTwoFactorEnabled: false, TwoFactSecret: null });
       (user as any).isConfirmed2Fa = false;
       const accessToken = await this.jwtService.signAsync(user, {
-        expiresIn: '1h',
+        expiresIn: '1d',
         secret: process.env.jwtSecretKey,
       });
-      res.cookie('access_token', accessToken, { httpOnly: false });
+      res.cookie('access_token', accessToken, { httpOnly: false, expires: new Date(Date.now() + 86400000), });
       return res.status(200).json({message : '2FA disabled successfully'});
     }
     catch (error)
@@ -236,10 +240,10 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
         }
         (user as any).isConfirmed2Fa = true;
         const accessToken = await this.jwtService.signAsync(user, {
-          expiresIn: '1h',
+          expiresIn: '1d',
           secret: process.env.jwtSecretKey,
       });
-      res.cookie('access_token', accessToken, { httpOnly : false });
+      res.cookie('access_token', accessToken, { httpOnly : false, expires: new Date(Date.now() + 86400000), });
        return res.status(200).json('User validate');
     }
     catch(error)
@@ -260,9 +264,7 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
   {
 
       const data = await this.authGoogleService.login(dto);
-      res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false });
-      // if (data.user.isTwoFactorEnabled)
-      //   return res.redirect(process.env.FRONT_URL+'/confirmauth')
+      res.cookie('access_token', data.backendTokens.backendTokens.accessToken, { httpOnly : false, expires: new Date(Date.now() + 86400000), });
       return res.status(200).send(data.user);
   }
         
@@ -273,7 +275,7 @@ async generateTwoFactorAuth(@Req() req: Request, @Res() res: Response) {
     try {
       const jwt_payload = req['jwt_payload'];
       const token = req['Token'];
-      await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat - 60)
+      await this.redisService.addTokenBlackList(`blacklist:${token}`, token, jwt_payload.exp - jwt_payload.iat)
       res.clearCookie('access_token');
       return res.redirect(process.env.FRONT_URL)
     }catch(error)

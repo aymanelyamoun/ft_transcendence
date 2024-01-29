@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import React, { useEffect, useState, ReactNode, useRef} from 'react';
 import styled from 'styled-components'
 import Sidebar from '../components/dashboard/sidebar/sidebar';
@@ -13,8 +14,7 @@ import { Provider } from 'react-redux';
 import store from '@/store';
 import { socket } from '@/socket';
 import { AlertMessage } from '../../chat/components/alertMessage';
-import { connect, useDispatch } from 'react-redux';
-import { setAddUserProfile } from '@/features/strings/stringActions'
+import Notfound from '@/app/not-found';
 interface User {
   id: string;
   email: string;
@@ -25,6 +25,16 @@ interface User {
   isTwoFactorEnabled: Boolean;
 } // use the exported interface instead
 
+// interface Match {
+//   id: string;
+//   username: string;
+//   profilePic: string;
+//   gameRecords: {
+//       xp: number;
+//       scoredGoals: number;
+//       concededGoals: number;
+//   }[]
+// }
 
 var username : any;
 const Root = styled.div`
@@ -90,16 +100,14 @@ function App() {
     
     // Parse the query string to get an object with key-value pairs
     // Access individual query parameters
-    if (typeof window !== 'undefined')
-    {
-      const queryString = window.location.search;
-      const queryParams = new URLSearchParams(queryString);
-      username = queryParams.get('username');
-    }
-    }, []);
+    const queryString = window.location.search;
+    const queryParams = new URLSearchParams(queryString);
+    username = queryParams.get('username');
+  }, []);
   const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
   const [PieDone, setPieDone] = useState<boolean>(false);
   const [ChartDone, setChartDone] = useState<boolean>(false);
+  const [usernameFound, setUsernameFound] = useState<string>('empty');
   const [IsLoading, setIsLoading] = useState(false);
   const [SidebarInfo, setSidebarInfo] = useState({
       id: "",
@@ -121,98 +129,84 @@ function App() {
       });
 
 
-    const fetchSidebar = async () => {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/profil/${username}`, {
-              method: "GET",
-              mode: "cors",
-              credentials: "include",
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-              },
-            });
-            if (res.ok) { 
-              const parseData = await res.json();
-              setSidebarInfo(
-                parseData
-                );
-                setIsLoading(true);
-                
-            } else {
-              alert("error"); 
-            }
-
-            } catch (err) {
-              console.log(err);
-            } finally {
-              setIsLoading(true);
-            }
-    }
-    useEffect(() => {
-       fetchSidebar(); 
-    }, [IsLoading]);
-
-  const [statisticsPieProps, setStatisticsPieProps] = useState<StatisticsPieInterface>({
-    wins: 0,
-    losses: 0,
-    total: 0,
-  });
-  const [statisticsChartProps, setStatisticsChartProps] = useState<StatisticsChartInterface>({
-    daysOfWeek: [],
-  });
-
-  const fetchStatisticsPie = async () => 
-  {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/winsLoses/${username}`, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      const data = await res.json();
-      setStatisticsPieProps(data);
-      setPieDone(false);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally
-    {
-      setPieDone(true);
-    }
-  };
-
-  const fetchStatisticsChart = async () => 
-  {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/games/week/${username}`, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (res.ok)
+      const fetchUsernameFound = async ( ) =>
       {
-        const data = await res.json();
-        setStatisticsChartProps(data);
+        try {
+          const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"user/find/username", {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify({
+              username: username,
+            }),
+        });
+        if (res.ok)
+        {
+          setUsernameFound('true');
+        }
+        else
+        {
+          setUsernameFound('false');
+        }
+        } catch (error)
+        {
+          console.log(error);
+        }
+      };
+  
+      const fetchSidebar = async () => {
+          try {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/profil/${username}`, {
+                method: "GET",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                },
+              });
+              if (res.ok) { 
+                const parseData = await res.json();
+                setSidebarInfo(
+                  parseData
+                  );
+                  setIsLoading(true);
+                  
+              } else {
+                alert("error"); 
+              }
+  
+              } catch (err) {
+                console.log(err);
+              } finally {
+                setIsLoading(true);
+              }
       }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    } finally
+      useEffect(() => {
+        if (username && usernameFound === 'true')
+        {
+          fetchSidebar();
+          // dispatch(setAddUserProfile(username));
+        }
+      }, [IsLoading, usernameFound]);
+  
+    const [statisticsPieProps, setStatisticsPieProps] = useState<StatisticsPieInterface>({
+      wins: 0,
+      losses: 0,
+      total: 0,
+    });
+    const [statisticsChartProps, setStatisticsChartProps] = useState<StatisticsChartInterface>({
+      daysOfWeek: [],
+    });
+  
+    const fetchStatisticsPie = async () => 
     {
-      setChartDone(true);
-    }
-  };
-
-  const fetchMatchHistory = async () => {
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/profil/${username}`, {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/winsLoses/${username}`, {
           method: "GET",
           mode: "cors",
           credentials: "include",
@@ -221,55 +215,130 @@ function App() {
             "Access-Control-Allow-Origin": "*",
           },
         });
-        if (res.ok) { 
-          const parseData = await res.json();
-          setMatchHistory(parseData);
-          setIsMatchLoading(false);
-        } else {
-          alert("Match History fetching isn't okay"); 
-        }
-        } catch (err) {
-          console.log(err);
-        } finally {
-          setIsMatchLoading(true);
-        }
-}
-
-
-  useEffect(() => 
-  {
-    if (username)
+        const data = await res.json();
+        setStatisticsPieProps(data);
+        setPieDone(false);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally
+      {
+        setPieDone(true);
+      }
+    };
+  
+    const fetchStatisticsChart = async () => 
     {
-      fetchMatchHistory();
-      fetchStatisticsPie();
-      fetchStatisticsChart();
-    }
-  }, [PieDone, ChartDone, IsMatchLoading]);
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/games/week/${username}`, {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        if (res.ok)
+        {
+          const data = await res.json();
+          setStatisticsChartProps(data);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally
+      {
+        setChartDone(true);
+      }
+    };
+  
+    const fetchMatchHistory = async () => {
+      try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/profil/${username}`, {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if (res.ok) { 
+            const parseData = await res.json();
+            setMatchHistory(parseData);
+            setIsMatchLoading(false);
+          } else {
+            alert("Match History fetching isn't okay"); 
+          }
+          } catch (err) {
+            console.log(err);
+          } finally {
+            setIsMatchLoading(true);
+          }
+  }
+  
+  
+    useEffect(() => 
+    {
+      fetchUsernameFound();
+      if (username && usernameFound === 'true')
+      {
+        fetchMatchHistory();
+        fetchStatisticsPie();
+        fetchStatisticsChart();
+      }
+    }, [PieDone, ChartDone, IsMatchLoading, usernameFound]);
 
-    return (
-      <>
-      {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)}
-        message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
-        type="wannaPlay" id={`${inviterData.current.id}`}/>)}
-      <Provider store={store}>
-        <Root>
-          <RootGlass>
-          {IsLoading &&
-            <Sidebar dashboard={false} sidebar={SidebarInfo} ShowSettings={false} setShowEditProfile={setShowEditProfile}/>
-          }
-          <MatchesContainer>
-          {IsMatchLoading && 
-                <Match_History matches={matchHistory.gameRecords} UserProfileStyling={true}/>
-          }
-          </MatchesContainer>
-          {PieDone && ChartDone &&
-            <Statistics StatisticsPie={statisticsPieProps} StatisticsChart={statisticsChartProps} UserProfile={true}/>
-            }
-          </RootGlass>
-        </Root>
-      </Provider>
+  return (
+    <>
+      {usernameFound !== 'empty' && (
+        <>
+          {usernameFound === 'true' ? (
+            <>
+              {playPopUp && (
+                <AlertMessage
+                  onClick={() => setplayPopUp(false)}
+                  message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
+                  type="wannaPlay"
+                  id={`${inviterData.current.id}`}
+                />
+              )}
+              <Provider store={store}>
+                <Root>
+                  <RootGlass>
+                    {IsLoading && (
+                      <Sidebar
+                        dashboard={false}
+                        sidebar={SidebarInfo}
+                        ShowSettings={false}
+                        setShowEditProfile={setShowEditProfile}
+                      />
+                    )}
+                    <MatchesContainer>
+                      {IsMatchLoading && (
+                        <Match_History
+                          matches={matchHistory.gameRecords}
+                          UserProfileStyling={true}
+                        />
+                      )}
+                    </MatchesContainer>
+                    {PieDone && ChartDone && (
+                      <Statistics
+                        StatisticsPie={statisticsPieProps}
+                        StatisticsChart={statisticsChartProps}
+                        UserProfile={true}
+                      />
+                    )}
+                  </RootGlass>
+                </Root>
+              </Provider>
+            </>
+          ) : (
+            <Notfound/>
+          )}
+        </>
+      )}
     </>
-  )
+  );  
 }
 
 export default App;

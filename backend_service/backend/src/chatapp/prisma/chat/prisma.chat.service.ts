@@ -183,7 +183,10 @@ export class PrismaChatService{
               throw new ForbiddenException("you are not an admin on this channel");
           }
           catch(error){
-            throw error;
+            if (error instanceof ForbiddenException)
+              throw new ForbiddenException("you are not an admin on this channel");
+            else
+              throw error;
           }
         }
 
@@ -502,6 +505,7 @@ export class PrismaChatService{
         }
 
         async getChannelMembers(conversationInfo:ConversationInfo, @Req() req:Request){
+          console.log("got to conversation member");
           try{
             const user = req['user'] as User;
 
@@ -509,17 +513,22 @@ export class PrismaChatService{
             // add is a member
             if (!conversation)
               throw new NotFoundException("this conversation does not exist");
-
+            
             if (!conversation.members.some((member)=>{return(member.userId === user.id)}))
-              throw new ForbiddenException("you are not a member of this conversation");
-
-            const {members} = conversation;
-            console.log("members: ",members);
-            return members;
-          }
-          catch(error){
-            throw error;
-          }
+            throw new ForbiddenException("you are not a member of this conversation");
+          
+          const {members} = conversation;
+          console.log("members: ",members);
+          return members;
+        }
+        catch(error){
+            // if(error instanceof NotFoundException)
+            //   throw new NotFoundException("this conversation does not exist");
+            // if (error instanceof ForbiddenException)
+            //   throw new ForbiddenException("you are not an admin on this channel");
+            // else
+              throw error;
+            }
         }
 
         async getChannel(channelId: string) {
@@ -709,9 +718,34 @@ export class PrismaChatService{
             if (conversation.type === CONVERSATION_TYPE.DIRECT)
               return false;
 
-            console.log("USER ID: ", userId);
-            console.log("time to end : ", conversation.channel.mutedUsers.some((mutedUser)=>{console.log('user time to end mute: ',mutedUser.timeToEnd); console.log("user muted: ", mutedUser.mutedId);  ;console.log("time to mute has not passed: ", new Date() < mutedUser.timeToEnd );return(mutedUser.mutedId === userId && (new Date() < mutedUser.timeToEnd))}));
             return conversation.channel.mutedUsers.some((mutedUser)=>{return(mutedUser.mutedId === userId && (new Date() < mutedUser.timeToEnd))});
+          }
+          catch(error){
+            throw error;
+          }
+        }
+
+        async getFriendFromConversation(userId:string, conversation:any){
+          
+        }
+
+        async getBlocked(userId:string, conversationId:string){
+          try{
+            const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{channel:{select:{mutedUsers:true}}}});
+
+            if (!conversation) throw new NotFoundException("conversation does not exist");
+
+            if (conversation.type === CONVERSATION_TYPE.DIRECT){
+              const user = await this.prisma.user.findUnique({where:{id:userId}, include:{blockedByUsers:true, blockedUsers:true}})
+
+              if (!user) throw new NotFoundException("this user doesn't exist");
+
+              // check if the other member is blocked by the user
+              
+
+
+            }
+
           }
           catch(error){
             throw error;
@@ -921,6 +955,7 @@ export class PrismaChatService{
         }
 
         async getConversationMessages(conversationId:string, @Req() req:Request){
+          console.log("got to finding conversation messages");
           try{
             const user = req['user'] as User;
 

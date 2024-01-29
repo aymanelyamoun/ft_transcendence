@@ -30,18 +30,14 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             setAuthenticated(false);
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
           setAuthenticated(false);
         }
       };
       checkAuthentication();
     }, [pathname]);
-
-
     const [isRouting, setisRouting] = useState(false);
     const path = usePathname();
     const [prevPath, setPrevPath] = useState("/");
-  
     useEffect(() => {
       if (prevPath !== path) {
         setisRouting(true);
@@ -68,8 +64,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       return <Loading />;
     }
     return <>
-    {isRouting && <Transition />}
-    {children}
+      {isRouting && <Transition />}
+      {children}
     </>;
   }
   

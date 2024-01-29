@@ -182,6 +182,24 @@ export class UserService {
             throw new Error('error')
         }
     }
+    
+    async findusername(@Req() req: Request, @Body() body)
+    {
+        try
+        {
+        const  { username } = body;
+        const data =  await this.prisma.user.findUnique({
+                where: {
+                    username: username,
+                }
+            })
+        if (!data)
+            throw new  NotFoundException();
+        }catch(error)
+        {
+            throw new  NotFoundException();
+        }
+    }
 
     async removeFriend(userId: string, friendId: string) {
         try {

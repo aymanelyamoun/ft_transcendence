@@ -88,13 +88,27 @@ export default function Confirm() {
   const handleConfirm = () => {
       confirm();
   };
+  
+  function getExtension(filename : string) {
+    return filename.split('.').pop();
+  }
 
-
+  
   const handlePicConfirm = async (e: React.ChangeEvent<HTMLInputElement>) =>
   {
     const file = e.target.files?.[0];
     if (file)
     {
+      const fileExtension = getExtension(file.name)?.toLowerCase();
+      const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+  
+      if (!fileExtension || !allowedImageExtensions.includes(fileExtension)) {
+        return;
+      }
+      // if (!file.type.startsWith('image/')) {
+      //   console.error('Selected file is not an image');
+      //   return;
+      // }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'imagesus');

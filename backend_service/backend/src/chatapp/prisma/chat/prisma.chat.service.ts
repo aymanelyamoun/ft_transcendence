@@ -150,6 +150,7 @@ export class PrismaChatService{
             const {creator} = (requestedChannel);
             if (creator.id === user.id)
             {
+
               // const removeBannedUsers = this.prisma.channel.update({where:{id:data.channelId}, data:{banedUsers:{disconnect:{id:{in:data.banedUsers}}}}});
               // const conversation = await this.prisma.conversation.findUnique({where:{channelId:data.channelId}});
               // const conversationUsers = await this.prisma.conversation.findUnique({where:{channelId:data.channelId}, include:{users:true}});

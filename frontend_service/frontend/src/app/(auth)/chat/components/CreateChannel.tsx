@@ -24,6 +24,7 @@ import { AlertMessage } from "./alertMessage";
 import { UserContext } from "@/utils/createContext";
 import ProfilePicUpload from "@/app/components/ProfilePicUpload";
 import { Backend_URL } from "@/lib/Constants";
+import { setGoBackContext } from "./conversationInfo";
 // import { act } from "react-dom/test-utils";
 
 const CreateChannel = ({
@@ -53,6 +54,7 @@ const CreateChannel = ({
   );
   const cancelCreateChannel = useRef<HTMLDivElement>(null);
   const creatorInfo = useContext(UserContext);
+  const setGoBack = useContext(setGoBackContext);
 
   const handleCancelAddChannel = (event: any) => {
     if (
@@ -150,6 +152,7 @@ const CreateChannel = ({
         } else {
           // console.log("refresh in add new channel: ")
           setRefresh((prev) => !prev);
+          // setGoBack(false);
         }
 
         // return res.json();

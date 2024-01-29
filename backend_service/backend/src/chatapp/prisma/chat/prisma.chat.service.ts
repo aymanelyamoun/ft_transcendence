@@ -718,6 +718,45 @@ export class PrismaChatService{
           }
         }
 
+        async getFriendFromConversation(userId:string, conversation:any){
+          
+          try{
+            const friend = conversation.users.find((user)=>{return(user.id !== userId)});
+            return friend;
+          }
+          catch(error){
+            throw error;
+          }
+        }
+
+        async isInBlock(userId:string, conversationId:string){
+          try{
+            const conversation = await this.prisma.conversation.findUnique({where:{id:conversationId}, include:{channel:{select:{mutedUsers:true}}, users:true}});
+
+            if (!conversation) throw new NotFoundException("conversation does not exist");
+
+            if (conversation.type === CONVERSATION_TYPE.DIRECT){
+              const user = await this.prisma.user.findUnique({where:{id:userId}, include:{blockedByUsers:true, blockedUsers:true}})
+
+              if (!user) throw new NotFoundException("this user doesn't exist");
+
+              const freind = await this.getFriendFromConversation(userId, conversation);
+              // check if the other member is blocked by the user
+              
+              const isBlockedBy = user.blockedByUsers.some((blockedByUser)=>{return(blockedByUser.id === freind.id)});
+              const isBlocked = user.blockedUsers.some((blockedUser)=>{return(blockedUser.id === freind.id)});
+
+              if (isBlockedBy || isBlocked)
+                return true;
+
+            }
+            return false;
+
+          }
+          catch(error){
+            throw error;
+          }
+        }
         // async filterToDelete(data: ChangeChannelData) {
         //   try {
         //     if (!data.removeAdmins) {

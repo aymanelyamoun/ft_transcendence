@@ -31,13 +31,14 @@ export const ConversationMessagesContextStat = createContext(
 
 function createConversationListIthem(
   Message: MessageProps,
-  cur: ConversationIthemProps
-): ConversationIthemProps {
+): ConversationIthemProps{
+
+  if (Message.conversation.type === "DIRECT") {
   return {
     id: Message.conversationId,
-    name: cur.name,
-    // profilePic: Message.sender.profilePic,
-    profilePic: cur.profilePic,
+    name: Message.sender.username,
+    profilePic: Message.sender.profilePic,
+    // profilePic: cur.profilePic,
     lastMessage: Message.message,
     type: Message.conversation.type, // replace with actual type
     createdAt: new Date(), // replace with actual creation date
@@ -45,6 +46,19 @@ function createConversationListIthem(
     channelId: "someChannelId", // replace with actual channel ID
     title: "someTitle", // replace with actual title
   };
+}
+  return{
+    id: Message.conversationId,
+    name: Message.conversation.channel.channelName,
+    // profilePic: Message.sender.profilePic,
+    profilePic: Message.conversation.channel.channelPic,
+    lastMessage: Message.message,
+    type: Message.conversation.type, // replace with actual type
+    createdAt: new Date(), // replace with actual creation date
+    updatedAt: new Date(), // replace with actual creation date
+    channelId: "someChannelId", // replace with actual channel ID
+    title: "someTitle", // replace with actual title
+  }
 }
 
 export const ConversationChatSection = ({
@@ -98,8 +112,12 @@ export const ConversationChatSection = ({
 
       // const curConv = useContext(LstConversationStateContext);
 
+      // const newConversation = createConversationListIthem(newMessage, conversation!);
+
+      // if (newConversation === null) return;
+
       setConversationList((prevConversationList: any) => [
-        createConversationListIthem(newMessage, conversation!),
+        createConversationListIthem(newMessage),
         ...prevConversationList.filter((conversation: any) => {
           return conversation.id !== newMessage.conversationId;
         }),
@@ -277,7 +295,13 @@ const TypeMessage = ({
       profilePic: conversation?.profilePic ?? "",
       username: conversation?.name ?? "",
     },
-    conversation: { type: conversation?.type ?? "" },
+    conversation: { 
+      type: conversation?.type ?? "", 
+      channel: {
+        channelName:  "", 
+        channelPic:  ""
+      } 
+    },
   };
 
   const sendMessage = () => {

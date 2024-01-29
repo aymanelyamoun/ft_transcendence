@@ -74,7 +74,7 @@ export class PrismaChatService{
               messages:{connect:{id:newMessage.id}}}});
             // if (!newMessage) throw new NotFoundException("the message you are trying to send does not exist");
 
-            return await this.prisma.message.findUnique({where:{id:newMessage.id}, include:{sender:{select:{profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
+            return await this.prisma.message.findUnique({where:{id:newMessage.id}, include:{sender:{select:{profilePic:true, username:true}}, conversation:{select:{type:true, channel:{select:{channelName:true, channelPic:true}}}}}});
           }
           catch(error){
             throw error;

@@ -544,11 +544,14 @@ const MemberIthem = ({
           },
           body: JSON.stringify(userData),
         }).then((res) => {
+          console.log("res");
+          console.log("res :", res);
+          console.log("res");
           if (!res.ok)
-            throw new Error("Network response was not ok");
-          else
-            setRefresh((prev) => !prev);
-        }).catch((error) => {
+          throw new Error("Network response was not ok");
+        else
+        setRefresh((prev) => !prev);
+    }).catch((error) => {
           console.error("Error during fetch:", error);
         });
       } else if (option.action === "kick") {

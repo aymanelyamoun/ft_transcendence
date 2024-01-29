@@ -54,6 +54,10 @@ export type MessageProps = {
   };
   conversation:{
     type:string;
+    channel: {
+      channelName: string;
+      channelPic: string;
+  };
   }
 } & {
   id: number;

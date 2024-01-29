@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { StaticImageData } from "next/image";
+import React, {useEffect, useState} from 'react'
+import styled from 'styled-components'
+import { StaticImageData } from "next/legacy/image"
 import { MdGroupAdd } from "react-icons/md";
 import { SearchU } from '../interfaces';
 import { GroupComponentProps } from '../interfaces';
@@ -15,12 +15,6 @@ import Image from 'next/image';
 import { toggleSearchFetch } from '@/features/booleans/booleanActions';
 import { AlertMessage } from '@/app/components/alertMessage';
 
-import { BsFillPersonCheckFill, BsPersonFillDash } from "react-icons/bs";
-import { connect } from "react-redux";
-import { useDispatch, useSelector } from "react-redux";
-import ProtectedPassword from "./ProtectedPassword";
-import Image from "next/image";
-import { toggleSearchFetch } from "@/features/booleans/booleanActions";
 
 const BannedUser = styled.button`
   position: relative;
@@ -29,29 +23,29 @@ const BannedUser = styled.button`
   margin-right: 1vw;
   top: 0vh;
   svg {
-    font-size: 1.5rem;
-    color: red;
+      font-size: 1.5rem;
+      color: red;
   }
 `;
 
 const FriendImage = styled.div`
-  width: 3.4rem;
-  height: 3rem;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
-  border-radius: 50%;
+    width: 3.4rem;
+    height: 3rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    border-radius: 50%;
 `;
 
 const FriendName = styled.div`
-  font-family: "Inter", sans-serif;
-  font-weight: 800;
-  font-size: 15px;
-  font-weight: bold;
-  color: aliceblue;
-  align-self: flex-start;
-  margin-left: 16px;
-  margin-top: 4px;
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    font-weight: bold;
+    color: aliceblue;
+    align-self: flex-start;
+    margin-left: 16px;
+    margin-top: 4px;
 `;
 
 const AddGroupButton = styled.button`
@@ -63,25 +57,15 @@ const AddGroupButton = styled.button`
         font-size: 1.5rem;
         color: aliceblue;
     }
-  }
-  position: relative;
-  // left: 13vw;
-  margin-left: auto;
-  margin-right: 1vw;
-  top: 0vh;
-  svg {
-    font-size: 1.5rem;
-    color: aliceblue;
-  }
 `;
 
 const GroupPictures = styled.div`
-  // display: flex;
-  // flex-direction: row;
-  // justify-content: flex-start;
-  position: relative;
-  top: 1vh;
-  left: -4vh;
+    // display: flex;
+    // flex-direction: row;
+    // justify-content: flex-start;
+    position: relative;
+    top: 1vh;
+    left: -4vh;
 `;
 
 const GroupPictureItem = styled.div`
@@ -98,6 +82,7 @@ const GroupPictureItem = styled.div`
 `;
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
+
   const ShowGroups = props.ShowGroups;
   const getBannedUsers = props.banedUsers;
   const [inputPassword, setInputPassword] = useState<string>("");
@@ -117,17 +102,16 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   const [showAlertPassIncorr, setShowAlertPassIncorr] = useState<boolean>(false);
   const [passRes, setPassRes] = useState<string>('');
 
-  function isUserBanned(user: string, bannedUsers: { id: string }[]): boolean {
-    return bannedUsers.some((BannedUser) => BannedUser.id === user);
+  function isUserBanned(user: string, bannedUsers: {id: string}[]) : boolean
+  {
+    return (bannedUsers.some(BannedUser => BannedUser.id === user));
   }
 
-  const isBanned = isUserBanned(selectedUserId, props.banedUsers);
+  const isBanned = isUserBanned(selectedUserId , props.banedUsers);
 
-  function isUserMember(
-    members: { user: { profilePic: string; id: string } }[],
-    userId: string
-  ) {
-    return members.some((member) => member.user.id === userId);
+  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string)
+  {
+    return (members.some(member => member.user.id === userId));
   }
 
   const isMember = isUserMember(props.members, loggedInUserId);
@@ -179,7 +163,9 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
         setMeAdded(true);
         dispatch(toggleSearchFetch());
       }
-    } catch (error) {
+    }
+    catch (error)
+    {
       console.log("error in sending the request to join CATCH me: ", error);
     }
   };
@@ -242,64 +228,49 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
         setPassRes(err.message);
         setPasswordSent(false);
       }
-    } catch (error) {
+    }
+    catch (error)
+    {
       console.log(error);
     } finally {
       setPasswordSent(false);
     }
   };
 
-  const handleOpenPassComp = (event: any) => {
-    if (!passwordSent) setOpenPassComp(true);
-    else {
+  const handleOpenPassComp = (event: any) =>
+  {
+    if (!passwordSent)
+      setOpenPassComp(true);
+    else
+    {
       SendRequestUserProtected(props);
     }
-  };
+  }
 
   return (
     <>
-      <>
-        <FriendImage>
-          <Image
-            src={props.channelPic}
-            alt="Profile"
-            className="rounded-full"
-          />
-        </FriendImage>
-        <FriendName>
-          <span>{props.channelName}</span>
-        </FriendName>
-        <GroupPictures>
-          <GroupPictureItem>
-            {props.members?.map((member) => (
-              <Image
-                key={member.user.id}
-                src={member.user.profilePic}
-                alt="Profile"
-                className="rounded-full"
-              />
-            ))}
-          </GroupPictureItem>
-        </GroupPictures>
-        {ShowGroups ? (
-          isBanned && !UserUnbanned ? (
-            <BannedUser onClick={() => UnbanUser(props)}>
-              <BsPersonFillDash />
-            </BannedUser>
-          ) : (
-            <AddGroupButton onClick={() => SendRequestUser(props)}>
-              {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
-            </AddGroupButton>
-          )
-        ) : (
-          <>
-            {ChannelType === "protected" ? (
-              <AddGroupButton onClick={handleOpenPassComp}>
-                <MdGroupAdd />
-              </AddGroupButton>
+        <>
+          <FriendImage>
+            <Image src={props.channelPic} alt="Profile" className="rounded-full" />
+          </FriendImage>
+          <FriendName>
+            <span>{props.channelName}</span>
+          </FriendName>
+          <GroupPictures>
+            <GroupPictureItem>
+              {props.members?.map((member) => (
+                <Image key={member.user.id} src={member.user.profilePic} alt="Profile" className="rounded-full" />
+              ))}
+            </GroupPictureItem>
+          </GroupPictures>
+          {ShowGroups ? (
+            isBanned && !UserUnbanned ? (
+              <BannedUser onClick={() => UnbanUser(props)}>
+                <BsPersonFillDash />
+              </BannedUser>
             ) : (
-              <AddGroupButton onClick={() => SendRequestMe(props)}>
-                {meAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
+              <AddGroupButton onClick={() => SendRequestUser(props)}>
+                {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
               </AddGroupButton>
             )
           ) : (
@@ -339,7 +310,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   );
 };
 
-export default connect((state: RootState) => ({
-  selectedUserId: state.strings.selectedUserId,
-  loggedInUserId: state.strings.loggedInUserId,
-}))(GroupComponent);
+  export default connect((state: RootState) => ({
+    selectedUserId: state.strings.selectedUserId,
+    loggedInUserId: state.strings.loggedInUserId,
+  }))(GroupComponent);

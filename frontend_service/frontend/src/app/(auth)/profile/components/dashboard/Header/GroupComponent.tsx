@@ -88,7 +88,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   const [inputPassword, setInputPassword] = useState<string>("");
   const ChannelType = props.channelType;
   const [UserUnbanned, setUserUnbanned] = useState<boolean>(false);
-  // const [UserAdded, setUserAdded] = useState<boolean>(false);
+  const [UserAdded, setUserAdded] = useState<boolean>(false);
   const [passwordSent, setPasswordSent] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [openPassComp, setOpenPassComp] = useState<boolean>(false);
@@ -133,6 +133,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
+        setUserAdded(true);
         setShowAlertRequestUser(true);
       }
     } catch (error)
@@ -158,7 +159,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        // alert("I the user have been added successfully!");
         setShowAlertRequestMe(true);
         setMeAdded(true);
         dispatch(toggleSearchFetch());
@@ -187,7 +187,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        // alert("the user has been unbanned");
         setShowAlertUnbanUser(true);
       }
     } catch (error) {
@@ -214,7 +213,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        // alert("I the user have been added successfully!");
         setShowAlertRequestProtected(true);
         setMeAdded(true);
         dispatch(toggleSearchFetch());
@@ -249,11 +247,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     }
   }
 
-  useEffect(() => 
-  {
-    console.log("props: ", props);
-    console.log("Ka3 :",ChannelType)
-  })
   return (
     <>
         <>
@@ -277,7 +270,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
               </BannedUser>
             ) : (
               <AddGroupButton onClick={() => SendRequestUser(props)}>
-                {/* {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />} */}
+                {UserAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
               </AddGroupButton>
             )
           ) : (

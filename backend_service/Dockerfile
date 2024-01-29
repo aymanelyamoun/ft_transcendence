@@ -1,9 +1,11 @@
-FROM node:alpine
+FROM node:20.6.1
 
-RUN apk update
+RUN apt update
 
 
-COPY backend backend
+
+
+COPY backend/script.sh backend/script.sh
 WORKDIR /backend
 # COPY script.sh script.sh
 
@@ -11,6 +13,7 @@ WORKDIR /backend
 
 # RUN npx prisma migrate dev --name init
 
+RUN chmod +x ./script.sh
 # RUN npx prisma db seed
 
 # WORKDIR /

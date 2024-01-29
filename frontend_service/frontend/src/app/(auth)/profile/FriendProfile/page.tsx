@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 import React, { useEffect, useState, ReactNode, useRef} from 'react';
 import styled from 'styled-components'
 import Sidebar from '../components/dashboard/sidebar/sidebar';
@@ -91,10 +90,13 @@ function App() {
     
     // Parse the query string to get an object with key-value pairs
     // Access individual query parameters
-    const queryString = window.location.search;
-    const queryParams = new URLSearchParams(queryString);
-    username = queryParams.get('username');
-  }, []);
+    if (typeof window !== 'undefined')
+    {
+      const queryString = window.location.search;
+      const queryParams = new URLSearchParams(queryString);
+      username = queryParams.get('username');
+    }
+    }, []);
   const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
   const [PieDone, setPieDone] = useState<boolean>(false);
   const [ChartDone, setChartDone] = useState<boolean>(false);

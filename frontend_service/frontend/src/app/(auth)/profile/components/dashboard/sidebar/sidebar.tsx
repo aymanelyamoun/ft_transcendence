@@ -218,10 +218,10 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
           <ProfileHeader isDashboard={isDashboard}>
           <ProfileImage>
             {!ShowSettings ? (
-              <Image src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+              <Image src={props.sidebar.profilePic} alt="Profile" className={"w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48"} />
             ) : (
             <Link href="/profile/statistics">
-            <Image src={props.sidebar.profilePic} alt="Profile" className={styles['profile-image']} />
+            <Image src={props.sidebar.profilePic} alt="Profile" className={"w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" } />
             </Link>
             )}
             <Username isDashboard={isDashboard}>{props.sidebar.username}</Username>

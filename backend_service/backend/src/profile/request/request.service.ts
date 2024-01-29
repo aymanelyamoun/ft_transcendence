@@ -4,6 +4,7 @@ import { NOTIF_TYPE, User } from "@prisma/client";
 import { PrismaService } from "src/chatapp/prisma/prisma.service";
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from "../user/user.service";
+import { CONVERSATION_TYPE } from "@prisma/client";
 
 @Injectable()
 export class RequestService {
@@ -46,21 +47,17 @@ export class RequestService {
     async handleAcceptRequest(@Req() req: Request, notificationid: number)
     {
         try {
-            console.log("the number is" ,notificationid)
             const user = req['user'] as User;
             const userId = user.id;
             const notification = await this.prisma.notification.findUnique({
-                where: { id: +notificationid },
+                where: { id : +notificationid },
             });
             if (!notification)
-            {
-                console.log("ana hna")
                 throw new NotFoundException();
-            }
             const isBlocked = await this.isBlocked(notification.userId, notification.senderId);
             if (isBlocked)
                 throw new Error('Friend is blocked by the user');
-            return await this.prisma.$transaction(async (prisma) => 
+            const result = await this.prisma.$transaction(async (prisma) => 
             {
                 await prisma.user.update({
                     where: { id: notification.userId},
@@ -82,10 +79,47 @@ export class RequestService {
                         ],
                     },
                 })
+
+
             });
+
+            // if (result)
+            //     return;
+
+            console.log ("checking for the conversation");
+            const conversation = await this.prisma.conversation.findFirst({
+                where:{
+                    users:{
+                        every:{
+                            id:{
+                                in:[notification.userId, notification.senderId]
+                            }
+                        }
+                    }
+                }
+            })
+            
+            if (conversation) return;
+            console.log("the conversation doesn't exist creating on ...")
+            const conv = await this.prisma.conversation.create({
+                data:{
+                    type:CONVERSATION_TYPE.DIRECT,
+                    members:{
+                        create:[{userId:notification.userId}, {userId:notification.senderId}]
+                      },
+                    users:{
+                        connect:[
+                            {id:notification.userId},
+                            {id:notification.senderId}
+                        ]
+                    }
+                }
+            })
+
+            if (!conv)
+                console.log("conversation not created")
         } catch (error)
         {
-            console.log(error.message);
             throw new NotFoundException(error);
         }
   }
@@ -126,7 +160,7 @@ export class RequestService {
             const block = this.userService.removeFriend(userId, userIdB);
             if (!block)
                 throw new NotFoundException();
-            return await this.prisma.$transaction(async (prisma) => {
+            await this.prisma.$transaction(async (prisma) => {
                 await prisma.user.update({
                     where: {id : userId},
                     data:{blockedUsers:{connect : {id : userIdB}}}
@@ -134,8 +168,26 @@ export class RequestService {
                 await prisma.user.update({
                     where : {id : userIdB},
                     data:{blockedByUsers:{connect : {id : userId}}}
-                })
+                });
+                // await prisma.conversation.delete({where:{}})
             })
+
+            // const conversation = await this.prisma.conversation.findFirst({
+            //     where:{
+            //         users:{
+            //             every:{
+            //                 id:{
+            //                     in:[userId, userIdB]
+            //                 }
+            //             }
+            //         }
+            //     }
+            // })
+            
+            // if (!conversation) return;
+
+            // await this.prisma.conversation.delete({where:{id:conversation.id}});
+
         }
         catch(error)
         {

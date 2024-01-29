@@ -164,7 +164,6 @@ export class ChatGateway implements OnGatewayConnection {
       this.gameService.GameEvent(this.server, client,matchID);
   }
 
-
   @SubscribeMessage('matchmaking')
   async matchmaking(client: Socket) {
     client["user"] = await this.getUserData(client) as User;

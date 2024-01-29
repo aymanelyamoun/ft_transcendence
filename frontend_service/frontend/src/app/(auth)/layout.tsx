@@ -63,6 +63,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     checkAuthentication();
   }, [pathname, router]);
   const value = { user, setUser };
+
   return (
     <main className="h-screen w-screen bg-[#050A27]">
       <UserContext.Provider value={value}>

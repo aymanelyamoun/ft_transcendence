@@ -46,14 +46,6 @@ export default function Signin() {
           hash: formData.hash,
         },
       });
-
-      // if (res.isTwoFactorEnabled) {
-      //   console.log("im here 1");
-      //   router.push('/confirmauth');
-      // } else {
-      //   console.log("im here 2");
-      //   setIsNotify(true);
-      // if(res.ok)
       if(res?.isTwoFactorEnabled && !res?.isConfirmed2Fa)
         router.push('/confirmauth');
       else
@@ -93,9 +85,9 @@ export default function Signin() {
             <Button onClick={log} text="LOG" />
             <div className="border-2 border-white w-10 inline-block mb-7"></div>
             <div className="flex justify-center mb-7 ">
-              <Link href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/google/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
+              {/* <Link href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/google/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
                 <FaGoogle className="text-sm text-white" /> 
-              </Link>
+              </Link> */}
               <Link  href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/42/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
                 <Si42 className="text-sm text-white" />
                 {/* <MyIcon /> */}

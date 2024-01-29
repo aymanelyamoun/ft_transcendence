@@ -138,7 +138,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       }
     } catch (error)
     {
-      console.log(error);
     }
   };
 
@@ -166,7 +165,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     }
     catch (error)
     {
-      console.log("error in sending the request to join CATCH me: ", error);
     }
   };
 
@@ -190,7 +188,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
         setShowAlertUnbanUser(true);
       }
     } catch (error) {
-      console.log("unban user from group error: ", error);
     } finally {
       setUserUnbanned(true);
     }
@@ -231,7 +228,6 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
     }
     catch (error)
     {
-      console.log(error);
     } finally {
       setPasswordSent(false);
     }

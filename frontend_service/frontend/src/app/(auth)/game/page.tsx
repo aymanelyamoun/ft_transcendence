@@ -49,13 +49,11 @@ export default function GameDisplay() {
     
   return (
       <div>
-        {/* <SocketContext.Provider value={socket}> */}
         {gameState === 'menu' && <GameMenu  setGameState={setGameState} gameState={gameState}/>}
         {gameState === 'playing' && <Matchmaking  setGameState={setGameState} gameState={gameState}/>}
         {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)}
         message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
         type="wannaPlay" id={`${inviterData.current.id}`}/>)}
-        {/* </SocketContext.Provider> */}
       </div>
     );
 }

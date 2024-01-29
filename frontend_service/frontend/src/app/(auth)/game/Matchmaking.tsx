@@ -65,7 +65,7 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
     setGameState("menu");
   };
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen">
+    <div className="flex flex-col items-center justify-center w-screen h-screen gap-2">
       {!inQueue ? (
         <button className="buttonStart " onClick={joinQueue}>
           Join game

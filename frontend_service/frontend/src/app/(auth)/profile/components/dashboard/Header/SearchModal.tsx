@@ -81,7 +81,7 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
                     isBlocked={friend.isBlocked}
                     group={friend.group}
                     members={friend.members}
-                    banedUsers={[]}
+                    banedUsers={friend.banedUsers}
                     setSearchUsers={setSearchUsers}
                     setChannelFriendSearch={setChannelFriendSearch}
                   />

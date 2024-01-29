@@ -110,7 +110,6 @@ const SearchHeader = () => {
         fetchChannel('all');
       }, [activeFetch, ShowModal]);
 
-    
     return (
         <>
         <SearchHeaderContainer onClick={handleSearch}>

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './friends.module.css'
 import { FcOk } from "react-icons/fc";
 import { FcCancel } from "react-icons/fc";
@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { connect } from 'react-redux';
 import { toggleSearchFetch } from '@/features/booleans/booleanActions';
 import {useDispatch } from 'react-redux';
+import { AlertMessage } from '@/app/components/alertMessage';
 
 interface FriendR
 {
@@ -74,10 +75,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
           const data = await res.json();
           props.setfriendRequests(data);
           dispatch(toggleSearchFetch());
-      }else {
-        console.log(res);
-         alert("the accept request has not been sent");
-        }
+      }
   } catch (error) {
       console.log(error);
     }
@@ -97,9 +95,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       });
       if(res.ok){
         const data : FriendR[] = await res.json();
-
         props.setfriendRequests(data);
-          alert("the refuse request has been sent");
       }else {
          alert("the refuse request has not been sent");
         }

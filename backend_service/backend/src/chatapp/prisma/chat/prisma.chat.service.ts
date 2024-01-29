@@ -200,7 +200,7 @@ export class PrismaChatService{
                   id : user.id
                 }
               }
-            }, include:{members:{select:{user:{select:{id : true, profilePic:true}}}}, creator:{select:{id:true, }}}});
+            }, include:{members:{select:{user:{select:{id : true, profilePic:true}}}}, creator:{select:{id:true, }}, banedUsers:{select:{id:true}}}});
             return channels.map((channel)=>{
               return{
                 ...channel,

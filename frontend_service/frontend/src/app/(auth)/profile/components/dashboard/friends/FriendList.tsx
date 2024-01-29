@@ -50,7 +50,6 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   const fetchFriends = useSelector((state: RootState) => state.booleans.fetchFriends);
 
   useEffect(() => {
-    console.log("it changed");
     const fetchFriendsListData = async () => {
       try {
         const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + "user/friends", {

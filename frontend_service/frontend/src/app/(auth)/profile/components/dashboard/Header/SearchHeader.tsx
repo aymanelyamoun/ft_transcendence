@@ -57,7 +57,7 @@ const SearchHeader = () => {
 
     const fetchAction = () => 
     {
-      // dispatch(toggleSearchFetch());
+      dispatch(toggleSearchFetch());
     }
     
     useEffect(() => {
@@ -110,7 +110,6 @@ const SearchHeader = () => {
         fetchChannel('all');
       }, [activeFetch, ShowModal]);
 
-    
     return (
         <>
         <SearchHeaderContainer onClick={handleSearch}>

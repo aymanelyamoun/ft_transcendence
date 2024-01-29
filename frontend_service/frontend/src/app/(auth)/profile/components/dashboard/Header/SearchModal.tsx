@@ -71,44 +71,34 @@ const SearchModal: React.FC<SearchModalProps> = ({
     }
   };
 
-  return (
-    <>
-      <div
-        onClick={handleCancelAddChannel}
-        className="addChannelOverlay flex justify-center items-center"
-      >
-        <div
-          ref={cancelAddChannel}
-          id="AddchannelContainer"
-          className={styles["addChannelModaloumad"]}
-        >
-          <ResultList>
-            <SearchFriends
-              setChannelFriendSearch={setChannelFriendSearch}
-              setFriendSearch={setFriendSearch}
-            />
-            {[...friendSearch, ...ChannelFriendSearch].map((friend) => (
-              <ResultItem
-                key={friend.id}
-                id={friend.id}
-                username={friend.username}
-                profilePic={friend.profilePic}
-                channelName={friend.channelName}
-                channelPic={friend.channelPic}
-                channelType={friend.channelType}
-                isBlocked={friend.isBlocked}
-                group={friend.group}
-                members={friend.members}
-                banedUsers={[]}
-                setSearchUsers={setSearchUsers}
-                setChannelFriendSearch={setChannelFriendSearch}
-              />
-            ))}
-          </ResultList>
-        </div>
-      </div>
-    </>
-  );
+    return (
+        <>
+          <div onClick={handleCancelAddChannel} className="addChannelOverlay flex justify-center items-center">
+            <div ref={cancelAddChannel} id="AddchannelContainer" className={styles['addChannelModaloumad']}>
+              <ResultList>
+                  <SearchFriends setChannelFriendSearch={setChannelFriendSearch} setFriendSearch={setFriendSearch} />
+                {[...friendSearch, ...ChannelFriendSearch].map((friend) => (
+                  <ResultItem
+                    key={friend.id}
+                    id={friend.id}
+                    username={friend.username}
+                    profilePic={friend.profilePic}
+                    channelName={friend.channelName}
+                    channelPic={friend.channelPic}
+                    channelType={friend.channelType}
+                    isBlocked={friend.isBlocked}
+                    group={friend.group}
+                    members={friend.members}
+                    banedUsers={friend.banedUsers}
+                    setSearchUsers={setSearchUsers}
+                    setChannelFriendSearch={setChannelFriendSearch}
+                  />
+                ))}
+              </ResultList>
+            </div>
+          </div>
+        </>
+      );
 };
 
 export default SearchModal;

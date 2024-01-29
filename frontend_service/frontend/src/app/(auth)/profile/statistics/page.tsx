@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';import type { Metadata } from 'next'
+import React, { useRef } from 'react';import type { Metadata } from 'next'
 import { useState, useEffect } from 'react'
 import { Inter } from 'next/font/google'
 import styles from './global.module.css';
@@ -15,7 +15,17 @@ import { StatisticsPieInterface, StatisticsChartInterface } from '../components/
 import { useRouter } from "next/navigation";
 import { useUser } from '../../layout';
 import { Rating } from "./../components/statistics/interfaces";
-
+import { socket } from '@/socket';
+import { AlertMessage } from '../../chat/components/alertMessage';
+interface User {
+  id: string;
+  email: string;
+  username: string;
+  profilePic?: string;
+  hash: string;
+  typeLog: string;
+  isTwoFactorEnabled: Boolean;
+} 
 function App() {
     const [SidebarDone,setSidebarDone] = useState<boolean>(false);
     const [PieDone, setPieDone] = useState<boolean>(false);
@@ -62,6 +72,28 @@ function App() {
     const router = useRouter();
     const [username, setUsername] = useState<string | undefined>();
     const user = useUser();
+
+    const [playPopUp, setplayPopUp] = useState<boolean>(false);
+    const popUpTimeout = useRef<NodeJS.Timeout>(null!);
+    const inviterData = useRef<User>(null!);
+    useEffect(() => {
+      socket.connect()
+      socket.on('redirect', (destination : string) => {
+        router.push(destination)
+      })
+      socket.on('gameInvite', (data : any) => {
+        inviterData.current = data;
+        setplayPopUp(true);
+        popUpTimeout.current = setTimeout(() => {
+          setplayPopUp(false);
+        }, 10000);
+      })
+      return () => {
+          socket.disconnect();
+          socket.off('redirect')
+          socket.off('gameInvite');
+        }
+    }, [router])
     useEffect(() => {
       const checkAuthentication = async () => {
           if (user) {
@@ -216,6 +248,9 @@ function App() {
   
   return (
       <>
+          {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)}
+            message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
+            type="wannaPlay" id={`${inviterData.current.id}`}/>)}
             <div className={styles['statistics']}>
               <div className={styles['left-panel']}>
                 {PieDone && ChartDone &&

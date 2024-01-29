@@ -78,11 +78,10 @@ export default function Home() {
     });
     socket.on("gameInviteAccepted", (data: any) => {
       // console.log("A GAME HAS BEEN ACCEPTED : ", data);
-    });
-    socket.on("redirect", (destination: any) => {
-      router.push(destination);
-      // console.log("redirecting to : ", destination);
-    });
+    })
+    socket.on('redirect', (destination : any) => {
+      router.push(destination)
+    })
     return () => {
       socket.off("redirect");
       socket.off("gameInvite");

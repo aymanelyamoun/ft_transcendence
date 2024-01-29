@@ -51,7 +51,10 @@ export class ChatGateway implements OnGatewayConnection {
         this.gatewayService.joinRooms(connectedSocket);
 
         // console.log("emmiting status userId", socket['user'].id);
-        this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
+        if (this.gameService.inGameCheckByID(socket['user'].id))
+          this.server.emit('friendStatus', {userId: socket['user'].id, status: '2'});
+        else
+          this.server.emit('friendStatus', {userId: socket['user'].id, status: '1'});
 
         await this.emitFriendsStatus(socket['user'].id);
       }
@@ -90,7 +93,7 @@ export class ChatGateway implements OnGatewayConnection {
         this.gameService.clearFinishedGames();
         const inGame = this.gameService.inGameCheckByID(friend.id);
         if (inGame){
-          console.log("emmiting status userId is in game: ", userId);
+          console.log("______emmiting status userId is in game: ", userId);
           this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
             socket.emit('friendStatus', {userId: friend.id, status: '2'});
           });

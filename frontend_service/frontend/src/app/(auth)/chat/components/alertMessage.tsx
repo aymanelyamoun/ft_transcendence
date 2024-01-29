@@ -1,3 +1,4 @@
+'use client'
 import React, { useContext, useRef } from 'react'
 import { CostumeButton, setShowDeleteChannelContext, setShowExitChannelContext } from './conversationInfo'
 import { FaRunning } from 'react-icons/fa'

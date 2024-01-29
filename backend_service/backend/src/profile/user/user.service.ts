@@ -427,6 +427,8 @@ export class UserService {
                     }
                 }
             })
+            if (!profile)
+                throw new UnauthorizedException('error');
             if (profile.gameRecords.length == 0)
                 profile.gameRecords = null;
             return (profile);
@@ -557,6 +559,8 @@ export class UserService {
         try
         {
              const user = await this.findByUsername(username);
+            if (!user)
+                throw new UnauthorizedException('error');
              const userid = user.id;
 
             const today = new Date();

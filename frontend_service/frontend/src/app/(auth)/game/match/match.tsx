@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import React, { useRef, useEffect, useState, use } from "react";
 import "./globals.css";
 import Matter, {
@@ -187,7 +187,7 @@ const MatchScene = () => {
       socketRef.current.emit("joinMatch", matchID);
     }
     socketRef.current.on("redirect", (destination: string, reason: string) => {
-      console.log(reason);
+      console.error(reason);
       router.push(destination);
     });
     socketRef.current.on("startFriendGame", (playersData: any) => {

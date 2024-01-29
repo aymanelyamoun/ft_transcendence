@@ -360,8 +360,6 @@ export class UserService {
             const userId = user.id;
             let  { username } = body;
             username = username.trim();
-            console.log(username);
-            console.log(user.username);
             if(username.length < 4)
              throw new UnauthorizedException('Username must be at least 4 characters long.');
             if (username.length > 20)
@@ -382,7 +380,6 @@ export class UserService {
         {
             if (error instanceof UnauthorizedException) {
                 throw new UnauthorizedException("can't update the username");
-                // throw new UnauthorizedException('New username is the same as the current username');
               } else if (error instanceof ConflictException) {
                   throw new ConflictException('Username is already taken');
               } else {

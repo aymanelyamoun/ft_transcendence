@@ -92,8 +92,6 @@ export class RequestService {
 
             // if (result)
             //     return;
-
-            console.log ("checking for the conversation");
             const conversation = await this.prisma.conversation.findFirst({
                 where:{
                     users:{
@@ -107,7 +105,6 @@ export class RequestService {
             })
             
             if (conversation) return;
-            console.log("the conversation doesn't exist creating on ...")
             const conv = await this.prisma.conversation.create({
                 data:{
                     type:CONVERSATION_TYPE.DIRECT,
@@ -122,9 +119,6 @@ export class RequestService {
                     }
                 }
             })
-
-            if (!conv)
-                console.log("conversation not created")
         } catch (error)
         {
             throw new NotFoundException(error);
@@ -167,6 +161,9 @@ export class RequestService {
             const block = this.userService.removeFriend(userId, userIdB);
             if (!block)
                 throw new NotFoundException();
+            const isCurrBlocked = await this.isBlocked(userIdB, userId);
+            if (isCurrBlocked)
+                return;
             await this.prisma.$transaction(async (prisma) => {
                 await prisma.user.update({
                     where: {id : userId},

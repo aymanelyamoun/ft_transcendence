@@ -5,9 +5,6 @@ import { JwtService } from "@nestjs/jwt";
 import { AuthGoogleService } from "../auth_google.service";
 import { RedisService } from "src/redis/redis.service";
 
-
-
-
 @Injectable()
 export class JwtGuard implements CanActivate{
     constructor (private readonly jwtService: JwtService,
@@ -16,7 +13,6 @@ export class JwtGuard implements CanActivate{
             ){}
     async canActivate(context: ExecutionContext): Promise<boolean>{
         const request =  context.switchToHttp().getRequest();
-        const response = context.switchToHttp().getResponse();
         const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();
         try {

@@ -7,9 +7,6 @@ import { NOTIF_TYPE, User } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
 import { user } from "src/chatapp/chat/types/user";
 
-
-
-
 @Controller('request')
 export class RequestController {
     constructor(private readonly requestService : RequestService) { }

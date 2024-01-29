@@ -95,8 +95,8 @@ services:
     ports:
       - "3001:3001"
       - "5555:5555"
-    env_file:
-      .env
+    # env_file:
+    #   .env
     networks:
       - all_connect
     volumes:

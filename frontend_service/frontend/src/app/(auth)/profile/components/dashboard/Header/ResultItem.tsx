@@ -50,7 +50,7 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
           members={props.members}
           setChannelFriendSearchU={props.setChannelFriendSearch}
           ShowGroups={false}
-          banedUsers={[]}
+          banedUsers={props.banedUsers}
           setChannelFriendSearch={function (value: React.SetStateAction<AddSearchInterface[]>): void {
             throw new Error('Function not implemented.');
           }}
@@ -69,8 +69,6 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
   </ItemContainer>
   );
 };
-
-// export default ResultItem;
 
 export default connect((state: RootState) => ({
   loggedInUserId: state.strings.loggedInUserId,

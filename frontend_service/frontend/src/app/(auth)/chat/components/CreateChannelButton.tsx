@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { use, useContext } from 'react'
 import { IoMdAddCircle } from 'react-icons/io'
+import { setGoBackContext } from './conversationInfo';
 
 const CreateChannelButton = ({
   setShowAddChannel,
@@ -16,9 +17,11 @@ const CreateChannelButton = ({
         bottom: "9%",
         right: "0",
       };
+    // const setGoBack = useContext(setGoBackContext);
 
       const handleAddChannelClick = () => {
         setShowAddChannel(true);
+        // setGoBack(false);
         // console.log("add channel clicked: " + showAddChannel);
       };
 

@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import Image, { StaticImageData } from "next/legacy/image";
+import Image from "next/image";
 // import avatar from "../../../../../public/garou-kid.jpeg";
 import avatar from "../../../../../public/garou-kid.jpeg";
 import { MdDelete, MdPersonAddAlt1 } from "react-icons/md";
@@ -46,7 +46,7 @@ interface Friend {
   title? : string;
   status: string;
 }
-export const ConversationInfo = ({ type }: { type: string }) => {
+export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, setRefresh:React.Dispatch<React.SetStateAction<boolean>>, refresh:boolean}) => {
   const conversationProps = useContext(LstConversationStateContext);
   const ConversationListData = useContext(ConversationListContext); 
   const setEditChannel = useContext(setShowEditChannelContext);
@@ -59,8 +59,9 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   const [isCreator, setIsCreator] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const setShowInviteToChannel = useContext(setInviteFriendToChannelContext);
-// fore invite friend to channel
+  // fore invite friend to channel
   const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
+  // const [goBack, setGoBack] = React.useState<boolean>(false);
 
   const socket = useContext(SocketContext);
 
@@ -102,41 +103,71 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   //       });
   //     };
   //     fetchFun();
-
+  
   // }
   
   
+  const lastConvId = lastConversation?.id;
+  const setConversationList = useContext(LstConversationSetStateContext);
   
-  useEffect(() => {
-    const fetchFun = async () => {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${lastConversation?.id}`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
+  const handleGoBack = () => {
+
+    const channelType = "D";
+      setConversationList(
+        (prevConversation: ConversationIthemProps | undefined) => {
+          if (prevConversation && prevConversation.id === lastConvId) {
+            // setRefresh(true);
+            return {
+              ...prevConversation,
+              type: channelType,
+            };
+          }
+          // setRefresh((prev) => !prev);
+          return prevConversation;
         }
-      )
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          setMembers(data);
-          // setMembers((prev) => { return [...prev, data] })
-          // console.log("Members data: 2", data);
-          // console.log("hereeeeeeeeeee");
-          // if (data) setIsSet(true);
-        });
+        );
       };
-      // console.log("Members data:", data);
       
-      if (lastConversation?.id !== undefined) {
-        fetchFun();
-      }
-    },[lastConversation]);
+      // const goBack = useContext(goBackContext);
+  //     // if (goBack)
+      // {
+      //   handleGoBack();
+      //   return;
+      // }
     
+    useEffect(() => {
+      const fetchFun = async () => {
+      await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${lastConversation?.id}`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+          )
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            setMembers(data);
+            // setMembers((prev) => { return [...prev, data] })
+            // console.log("Members data: 2", data);
+            // console.log("hereeeeeeeeeee");
+            // if (data) setIsSet(true);
+          });
+        };
+        // console.log("Members data:", data);
+        
+        if (lastConversation?.id !== undefined) {
+          // if (lastConversation?.type === "DIRECT" || lastConversation?.type === "CHANNEL_CHAT")
+          // {
+            fetchFun();
+          // }
+        }
+      },[lastConversation]);
+      
     // lastConversation?.
     const recieverUserId = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.id;
     const recieverUserName = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.username;
@@ -202,14 +233,51 @@ export const ConversationInfo = ({ type }: { type: string }) => {
   //   "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
   //   conversationProps?.type
   // );
+  // if (goBack)
+  // {
+  //   setIsCreator(false);
+  // }
+  // const [isSet, setIsSet] = useState(false);
+  // const setGoBack = useContext(setGoBackContext);
+  // if (conversationProps?.type === "CHANNEL_CHAT")
+  // {
+  //   setGoBack(false);
+  // }
+  // const [types, setTypes] = useState<string>("");
+  // const setGoBack = useContext(setGoBackContext);
+  // let typesSelected = "";
+  // if (goBack)
+  // {
+  //   typesSelected = "D";
+  //   // setGoBack(false);
+  // }
+  // else
+  // {
+  //   if (conversationProps?.type === "DIRECT") {
+  //     typesSelected = "DIRECT";
+  //     console.log("direct");
+  //   }
+  //   else if (conversationProps?.type === "CHANNEL_CHAT") {
+  //     typesSelected = "CHANNEL_CHAT";
+  //     console.log("channel");
+  //   }
+  //   else {
+  //     typesSelected = "D";
+  //   }
+  // }
+  // console.log("typesSelected :", typesSelected);
+  console.log("typesSelected :", conversationProps?.type);
+  // else
+  //   typesSelected = conversationProps?.type as string;
 
   return (
     <>
-      {conversationProps?.type === "DIRECT" ? (
+      {/* {typesSelected === "DIRECT" ? ( */}
+      { conversationProps?.type === "DIRECT" ? (
         <ConversationInfoWrapper
-          name={conversationProps?.name}
-          title={conversationProps?.title}
-          imgUrl={conversationProps.profilePic}
+          name={conversationProps?.name as string}
+          title={conversationProps?.title as string}
+          imgUrl={conversationProps?.profilePic as string}
         >
           <ButtonInfo width="10" hight="10">
             <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10 mx-12">
@@ -247,16 +315,16 @@ export const ConversationInfo = ({ type }: { type: string }) => {
         </ConversationInfoWrapper>
       ) : conversationProps?.type === "CHANNEL_CHAT" ? (
         <ConversationInfoWrapper
-          name={conversationProps?.name}
+          name={conversationProps?.name as string}
           title=""
-          imgUrl={conversationProps?.profilePic}
+          imgUrl={conversationProps?.profilePic as string}
         >
-          <MemberList setIsCreator={setIsCreator} />
+          <MemberList setIsCreator={setIsCreator} setRefresh={setRefresh} refresh={refresh}/>
           {isCreator && (
             <ButtonInfo width="10" hight="10">
               <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-12">
                 <CostumeButton
-                  onClick={() => setEditChannel(true)}
+                  onClick={() => {setEditChannel(true);}}
                   bgColor="bg-transparent border-[#FEFFFF]"
                   color="#FC2B5D"
                   width="w-full"
@@ -269,7 +337,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 </CostumeButton>
 
                 <CostumeButton
-                  onClick={() => setExitChannel(true)}
+                  onClick={() => {setExitChannel(true); handleGoBack();}}
                   bgColor="bg-transparent border-[#FC2B5D]"
                   color="wthie"
                   width="w-full"
@@ -282,7 +350,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
                 </CostumeButton>
 
                 <CostumeButton
-                  onClick={() => setDeleteChannel(true)}
+                  onClick={() => {setDeleteChannel(true); handleGoBack();}}
                   bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
                   color="#FC2B5D"
                   width="w-full"
@@ -299,7 +367,7 @@ export const ConversationInfo = ({ type }: { type: string }) => {
           {!isCreator && (
             <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-60">
               <CostumeButton
-                onClick={() => setExitChannel(true)}
+                onClick={() => {setExitChannel(true); handleGoBack();}}
                 bgColor="bg-transparent border-[#FC2B5D]"
                 color="wthie"
                 width="w-full"
@@ -313,7 +381,8 @@ export const ConversationInfo = ({ type }: { type: string }) => {
             </div>
           )}
         </ConversationInfoWrapper>
-      ) : (
+    ) :
+    (
         <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
           <div className="mt-10 flex justify-center items-center gap-10 flex-col">
             {/* <GiAstronautHelmet size={120} /> */}
@@ -324,17 +393,36 @@ export const ConversationInfo = ({ type }: { type: string }) => {
             </h1>
           </div>
         </div>
-      )}
+      )
+    }
     </>
   );
 };
 
+// {
+//   typesSelected === "D" && 
+//   (
+//     <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
+//       <div className="mt-10 flex justify-center items-center gap-10 flex-col">
+//         {/* <GiAstronautHelmet size={120} /> */}
+//         <FaUserAstronaut size={140} color='#FEFFFF' className="opacity-40" />
+//         <h1 className="font-poppins text-lg text-[#FEFFFF]">
+//           {" "}
+//           No Conversation Is Selected{" "}
+//         </h1>
+//       </div>
+//     </div>
+//   )
+
+// } 
 const MemberIthem = ({
+  setRefresh,
   imgUrl,
   name,
   isAdmin,
   userId,
 }: {
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   userId: string;
   imgUrl: string;
   name: string;
@@ -455,6 +543,13 @@ const MemberIthem = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
+        }).then((res) => {
+          if (!res.ok)
+            throw new Error("Network response was not ok");
+          else
+            setRefresh((prev) => !prev);
+        }).catch((error) => {
+          console.error("Error during fetch:", error);
         });
       } else if (option.action === "kick") {
         // console.log("KICKING A USER");
@@ -469,7 +564,15 @@ const MemberIthem = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
-        });
+        })
+        .then((res) => {
+          if (!res.ok)
+            throw new Error("Network response was not ok");
+          else
+            setRefresh((prev) => !prev);
+        }).catch((error) => {
+          console.error("Error during fetch:", error);
+        } );
       }
       // setSelectedOption(option.label);
     };
@@ -573,8 +676,12 @@ const MemberIthem = ({
 };
 
 const MemberList = ({
+  refresh,
+  setRefresh,
   setIsCreator,
 }: {
+  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCreator: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const conversation = useContext(LstConversationStateContext);
@@ -586,6 +693,7 @@ const MemberList = ({
   const userInfo = useContext(UserContext);
 
   const [isSet, setIsSet] = useState(false);
+  // const refresh = use / real time
 
   // const userData = {
   //   channelId: conversation?.id,
@@ -606,7 +714,8 @@ const MemberList = ({
   //   .then((data) => {
       // console.log("data admin:", data);
   //   });
-
+// const refresh = useContext(RefreshContext);
+// const refresh = useContext(refreshContext);
   useEffect(() => {
     const fetchFun = async () => {
       await fetch(
@@ -657,7 +766,7 @@ const MemberList = ({
       fetchFun();
       fetchFun2();
     }
-  }, [conversation, isSet, conversationProps?.channelId]);
+  }, [conversation, isSet, conversationProps?.channelId, refresh]);
 
   const isAdmin = (): boolean => {
     return membersInfo.members?.some(
@@ -697,6 +806,7 @@ const MemberList = ({
         members.filter((member => member.user.id !== userInfo.user?.id)).map((member) => {
           return (
             <MemberIthem
+              setRefresh={setRefresh}
               imgUrl={member.user.profilePic}
               key={member.user.id}
               name={member.user.username}
@@ -778,12 +888,12 @@ export interface BlockedUser{
   id: string;
 }[]
 
-const Conversation = () => {
+const Conversation = ({setRefresh, refresh} : {setRefresh:React.Dispatch<React.SetStateAction<boolean>>, refresh:boolean}) => {
   return (
     <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
-      <ConversationChatSection />
+      <ConversationChatSection setRefresh={setRefresh} refresh={refresh}/>
       {/* <ChatSection /> */}
-      <ConversationInfo type="D"></ConversationInfo>
+      <ConversationInfo type="D" setRefresh={setRefresh} refresh={refresh}></ConversationInfo>
     </div>
   );
 };
@@ -808,6 +918,14 @@ export const setShowEditChannelContext = createContext(
 
 export const showExitChannelContext = createContext({} as boolean);
 export const setShowExitChannelContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
+export const goBackContext = createContext({} as boolean);
+export const setGoBackContext = createContext(
+  {} as React.Dispatch<React.SetStateAction<boolean>>
+);
+export const refreshContext = createContext({} as boolean);
+export const setRefreshContext = createContext(
   {} as React.Dispatch<React.SetStateAction<boolean>>
 );
 
@@ -850,6 +968,7 @@ export const ChatPage = () => {
   const [showInviteFriend, setShowInviteFriend] = useState<boolean>(false);
   const [showInviteFriendToChannel, setShowInviteFriendToChannel] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [goBack, setGoBack] = useState<boolean>(false);
   const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
   // console.log("conversationId:", conversation?.id);
 
@@ -880,6 +999,7 @@ export const ChatPage = () => {
             })
             // data
             );
+            // setGoBack(false);
           });
         };
         fetchFun();
@@ -948,25 +1068,34 @@ export const ChatPage = () => {
                                       <setBlockedUsersContext.Provider
                                         value={setBlockedUsers}
                                         >
+                                          <setGoBackContext.Provider value={setGoBack}>
+                                            <goBackContext.Provider value={goBack}>
+                                              <refreshContext.Provider value={refresh}>
+                                                <setRefreshContext.Provider value={setRefresh}>
                                           <blockedUsersContext.Provider
                                             value={blockedUsers}
                                             > 
                                               <div className="h-full basis-1/4 flex">
                                                 <Conversations 
                                                 setRefresh={setRefresh}
+                                                refresh={refresh}
                                                 >
                                                   {" "}
                                                   {/* <ConversationList /> */}
                                                 </Conversations>
                                                 {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
                                               </div>
-                                              <MessagesContext.Provider value={messages}>
-                                                <Conversation />
-                                              </MessagesContext.Provider>
-                                          </blockedUsersContext.Provider>
+                                                  <MessagesContext.Provider value={messages}>
+                                                    <Conversation setRefresh={setRefresh} refresh={refresh}/>
+                                                  </MessagesContext.Provider>
+                                                </blockedUsersContext.Provider>
+                                                </setRefreshContext.Provider>
+                                              </refreshContext.Provider>
+                                            </goBackContext.Provider>
+                                          </setGoBackContext.Provider>
                                         </setBlockedUsersContext.Provider>
-                                    </inviteFriendToChannelContext.Provider>
-                                  </setInviteFriendToChannelContext.Provider>
+                                  </inviteFriendToChannelContext.Provider>
+                              </setInviteFriendToChannelContext.Provider>
                             </alertInviteFriendContext.Provider>
                           </setAlertInviteFriendContext.Provider>
                         </showDeleteChannelContext.Provider>
@@ -1058,9 +1187,7 @@ const ProfileInfos = ({
   // console.log("picUrl------------ :", picUrl);
   return (
     <div className="flex flex-col items-center">
-      <div className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" >
-        <Image className="w-full h-full" src={picUrl} width={160} height={160} alt={"avatar"}/>
-      </div>
+        <Image className="w-18 h-18 rounded-full mt-[40px] mb-[20px] sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt={"avatar"}/>
       {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
       <h4 className="nameInfo"> {name} </h4>
       {children}

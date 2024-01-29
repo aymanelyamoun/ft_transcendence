@@ -12,6 +12,7 @@ interface RootState
     {
         selectedUserId: any;
         loggedInUserId: any;
+        setAddUserProfile: any;
         type: string;
         payload: string;
     }

@@ -1,8 +1,6 @@
 "use client"
-
-import React, { useRef } from 'react';import type { Metadata } from 'next'
+import React, { useRef } from 'react';
 import { useState, useEffect } from 'react'
-import { Inter } from 'next/font/google'
 import styles from './global.module.css';
 import Statistics from '../components/statistics/Statistics/Statistics'
 import Match_History from '../components/statistics/Match_History/Match_History';
@@ -242,9 +240,9 @@ function App() {
   
   return (
       <>
-          {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)}
-            message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
-            type="wannaPlay" id={`${inviterData.current.id}`}/>)}
+        {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)}
+          message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
+          type="wannaPlay" id={`${inviterData.current.id}`}/>)}
             <div className={styles['statistics']}>
               <div className={styles['left-panel']}>
                 {PieDone && ChartDone &&

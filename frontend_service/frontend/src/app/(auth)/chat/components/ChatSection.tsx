@@ -30,12 +30,14 @@ export const ConversationMessagesContextStat = createContext(
 // }[]
 
 function createConversationListIthem(
-  Message: MessageProps
+  Message: MessageProps,
+  cur: ConversationIthemProps
 ): ConversationIthemProps {
   return {
     id: Message.conversationId,
-    name: Message.sender.username,
-    profilePic: Message.sender.profilePic,
+    name: cur.name,
+    // profilePic: Message.sender.profilePic,
+    profilePic: cur.profilePic,
     lastMessage: Message.message,
     type: Message.conversation.type, // replace with actual type
     createdAt: new Date(), // replace with actual creation date
@@ -45,7 +47,13 @@ function createConversationListIthem(
   };
 }
 
-export const ConversationChatSection = () => {
+export const ConversationChatSection = ({
+  setRefresh,
+  refresh,
+}: {
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: boolean;
+}) => {
   const messagesData = useContext(MessagesContext);
   const setConversationList = useContext(ConversationListContextSet);
   const lastConversation = useContext(LstConversationStateContext);
@@ -66,7 +74,6 @@ export const ConversationChatSection = () => {
   const conversation = useContext(LstConversationStateContext);
   // const [data, setData] = useState<string>("");
 
-  
   useEffect(() => {
     let newMessage: MessageProps;
     // new
@@ -84,11 +91,15 @@ export const ConversationChatSection = () => {
       // setData(data);
       // console.log("data:", data);
       newMessage = data;
+
+      console.log("newMessage:", newMessage);
       if (newMessage.conversationId === conversation?.id)
         setMessages((prevMessages) => [...prevMessages, newMessage]);
 
+      // const curConv = useContext(LstConversationStateContext);
+
       setConversationList((prevConversationList: any) => [
-        createConversationListIthem(newMessage),
+        createConversationListIthem(newMessage, conversation!),
         ...prevConversationList.filter((conversation: any) => {
           return conversation.id !== newMessage.conversationId;
         }),
@@ -99,7 +110,14 @@ export const ConversationChatSection = () => {
       socket.off("rcvMessage");
       socket.disconnect();
     };
-  }, [messagesData, conversation?.id, setConversationList]);
+  }, [
+    messagesData,
+    conversation?.id,
+    setConversationList,
+    refresh,
+    setRefresh,
+    conversation,
+  ]);
 
   useEffect(() => {
     // Scroll to the bottom when new messages are added
@@ -107,14 +125,14 @@ export const ConversationChatSection = () => {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, refresh, setRefresh]);
 
   // const blockedUsers:BlockedUser[] = [];
   useEffect(() => {
     // console.log("chat section useEffect");
     const fetchFun = async () => {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL+"channels/blockedUsers",
+        process.env.NEXT_PUBLIC_BACKEND_URL + "channels/blockedUsers",
         {
           method: "GET",
           mode: "cors",
@@ -149,6 +167,8 @@ export const ConversationChatSection = () => {
   // console.log("data:", data);
   // console.log("blockedUsers:", blockedUsers);
 
+  console.log("Type", conversation?.type);
+  console.log("lastConversation", lastConversation);
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (
@@ -175,9 +195,9 @@ export const ConversationChatSection = () => {
       ) : null}
       <ConversationMessagesContextSet.Provider value={setMessages}>
         <ConversationMessagesContextStat.Provider value={messages}>
-          {lastConversation !== undefined ? (
-            <TypeMessage maxId={maxId} />
-          ) : (
+          {lastConversation !== undefined && conversation?.type !== "D" ? (
+            <TypeMessage maxId={maxId} setRefresh={setRefresh} />
+          ) : conversation?.type === "D" || lastConversation === undefined ? (
             // <div className="mt-[300px] ml-[400px]">
             // <div className="h-full w-full">
             <div className="flex flex-col items-center h-full w-full">
@@ -186,8 +206,8 @@ export const ConversationChatSection = () => {
                 Welcome To The Chat Section
               </h1>
             </div>
-            // </div>
-          )}
+          ) : // </div>
+          null}
           {/* <TypeMsg
             userId={userId}
             conversationId={conversation?.id}
@@ -234,7 +254,13 @@ const MessageChat = ({
     </div>
   );
 };
-const TypeMessage = ({ maxId }: { maxId: number }) => {
+const TypeMessage = ({
+  maxId,
+  setRefresh,
+}: {
+  maxId: number;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [inputValue, setInputValue] = useState<string>("");
   const setMessages = useContext(ConversationMessagesContextSet);
   const messages = useContext(ConversationMessagesContextStat);
@@ -263,6 +289,7 @@ const TypeMessage = ({ maxId }: { maxId: number }) => {
     });
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setInputValue("");
+    setRefresh((prev) => !prev);
   };
 
   const handlePressKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -270,6 +297,7 @@ const TypeMessage = ({ maxId }: { maxId: number }) => {
       console.log("inputValue:", inputValue);
       sendMessage();
       setInputValue("");
+      setRefresh((prev) => !prev);
     }
   };
 

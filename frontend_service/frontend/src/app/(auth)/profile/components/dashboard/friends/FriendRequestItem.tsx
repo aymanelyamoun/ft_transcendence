@@ -73,7 +73,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       if(res.ok){
           const data = await res.json();
           props.setfriendRequests(data);
-          // dispatch(toggleSearchFetch());
+          dispatch(toggleSearchFetch());
       }else {
         console.log(res);
          alert("the accept request has not been sent");

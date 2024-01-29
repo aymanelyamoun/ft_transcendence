@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, ReactNode} from 'react';
+import React, { useEffect, useState, ReactNode, useRef} from 'react';
 import styled from 'styled-components'
 import Sidebar from '../components/dashboard/sidebar/sidebar';
 import Match_History from '../components/statistics/Match_History/Match_History';
@@ -12,6 +12,17 @@ import { useRouter } from "next/navigation";
 import { useUser } from '../../layout';
 import { Provider } from 'react-redux';
 import store from '@/store';
+import { socket } from '@/socket';
+import { AlertMessage } from '../../chat/components/alertMessage';
+interface User {
+  id: string;
+  email: string;
+  username: string;
+  profilePic?: string;
+  hash: string;
+  typeLog: string;
+  isTwoFactorEnabled: Boolean;
+} // use the exported interface instead
 
 // interface Match {
 //   id: string;
@@ -60,15 +71,36 @@ const MatchesContainer = styled.div`
 `;
 
 function App() {
-
+  const router = useRouter();
+  const [playPopUp, setplayPopUp] = useState<boolean>(false);
+  const popUpTimeout = useRef<NodeJS.Timeout>(null!);
+  const inviterData = useRef<User>(null!);
+  useEffect(() => {
+    socket.connect()
+    socket.on('redirect', (destination : string) => {
+      router.push(destination)
+    })
+    socket.on('gameInvite', (data : any) => {
+      inviterData.current = data;
+      setplayPopUp(true);
+      popUpTimeout.current = setTimeout(() => {
+        setplayPopUp(false);
+      }, 10000);
+    })
+    return () => {
+        socket.disconnect();
+        socket.off('redirect')
+        socket.off('gameInvite');
+      }
+  }, [router])
   useEffect(() => {
     // Get the query string from the URL
-    const queryString = window.location.search;
-
-    // Parse the query string to get an object with key-value pairs
-    const queryParams = new URLSearchParams(queryString);
     
+    
+    // Parse the query string to get an object with key-value pairs
     // Access individual query parameters
+    const queryString = window.location.search;
+    const queryParams = new URLSearchParams(queryString);
     username = queryParams.get('username');
   }, []);
   const [ShowEditProfile, setShowEditProfile] = useState<boolean>(false);
@@ -226,10 +258,12 @@ function App() {
       fetchStatisticsChart();
     }
   }, [PieDone, ChartDone, IsMatchLoading]);
-  // }, [PieDone, ChartDone, username, IsMatchLoading]); should check this username if it affects the code 
 
     return (
       <>
+      {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)}
+        message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
+        type="wannaPlay" id={`${inviterData.current.id}`}/>)}
       <Provider store={store}>
         <Root>
           <RootGlass>

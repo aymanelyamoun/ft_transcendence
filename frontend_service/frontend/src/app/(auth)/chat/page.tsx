@@ -80,7 +80,6 @@ export default function Home() {
     })
     socket.on('redirect', (destination : any) => {
       router.push(destination)
-      // console.log("redirecting to : ", destination);
     })
     return () => {
       socket.off('redirect')

@@ -167,7 +167,6 @@ export class ChatGateway implements OnGatewayConnection {
       this.gameService.GameEvent(this.server, client,matchID);
   }
 
-
   @SubscribeMessage('matchmaking')
   async matchmaking(client: Socket) {
     client["user"] = await this.getUserData(client) as User;
@@ -206,9 +205,10 @@ export class ChatGateway implements OnGatewayConnection {
     if (await this.prismaChat.userIsInConversation(client['user'].id, msg.conversationId)){
       if ((await this.prismaChat.userIsMutedFromConversation(client['user'].id , msg.conversationId)) === false)
       {
-        console.log("from inside, uSER IS MUted:", await this.prismaChat.userIsMutedFromConversation(client['user'].id , msg.conversationId))
+        if ((await this.prismaChat.isInBlock(client['user'].id, msg.conversationId)) === false){
           const newMessage = await this.prismaChat.addMessageToDM(msg);
           client.broadcast.to(msg.conversationId).emit("rcvMessage", newMessage);
+        }
       }
     }
   }

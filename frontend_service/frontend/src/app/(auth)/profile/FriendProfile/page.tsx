@@ -13,6 +13,8 @@ import { Provider } from 'react-redux';
 import store from '@/store';
 import { socket } from '@/socket';
 import { AlertMessage } from '../../chat/components/alertMessage';
+import { connect, useDispatch } from 'react-redux';
+import { setAddUserProfile } from '@/features/strings/stringActions'
 interface User {
   id: string;
   email: string;
@@ -23,16 +25,6 @@ interface User {
   isTwoFactorEnabled: Boolean;
 } // use the exported interface instead
 
-// interface Match {
-//   id: string;
-//   username: string;
-//   profilePic: string;
-//   gameRecords: {
-//       xp: number;
-//       scoredGoals: number;
-//       concededGoals: number;
-//   }[]
-// }
 
 var username : any;
 const Root = styled.div`
@@ -144,12 +136,6 @@ function App() {
               const parseData = await res.json();
               setSidebarInfo(
                 parseData
-                // id: parseData.id,
-                // username: parseData.username,
-                // title: parseData.title,
-                // profilePic: parseData.profilePic,
-                // wallet: parseData.wallet,
-                // gameRecords : parseData.gameRecords,
                 );
                 setIsLoading(true);
                 
@@ -215,7 +201,6 @@ function App() {
       {
         const data = await res.json();
         setStatisticsChartProps(data);
-        // setChartDone(true);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -260,7 +245,6 @@ function App() {
       fetchStatisticsChart();
     }
   }, [PieDone, ChartDone, IsMatchLoading]);
-  // }, [PieDone, ChartDone, username, IsMatchLoading]); should check this username if it affects the code 
 
     return (
       <>

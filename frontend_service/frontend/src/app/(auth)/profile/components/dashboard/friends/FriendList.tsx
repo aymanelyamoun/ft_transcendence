@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { FaUserAstronaut } from "react-icons/fa6";
 import styled from 'styled-components';
 import { SocketUseContext } from "@/utils/socketUseContext";
+import { connect, useSelector } from 'react-redux';
 
 interface Friend {
   id: string;
@@ -46,6 +47,7 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   const [FriendsList, setFriendsList] = useState<Friend[]>([]);
   const [FetchedFriendList, setFetchedFriendList] = useState<Friend[]>([]);
   const socket = React.useContext(SocketUseContext);
+  const fetchFriends = useSelector((state: RootState) => state.booleans.fetchFriends);
 
   useEffect(() => {
     const fetchFriendsListData = async () => {
@@ -88,7 +90,7 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
     return () => {
       socket.off("friendStatus");
     }
-  }, [socket]);
+  }, [socket, fetchFriends]);
 
 
   return (
@@ -114,4 +116,11 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
   );
 };
 
-export default FriendList;
+const mapStateToProps = (state: RootState) => 
+{
+  return {
+    fetchFriends: state.booleans.fetchFriends,
+  }
+}
+
+export default connect(mapStateToProps)(FriendList);

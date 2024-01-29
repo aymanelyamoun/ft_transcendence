@@ -11,7 +11,6 @@ const ProtectedPassword = (props : ProtectedPassProps) => {
   const inputPassword = props.inputPassword;
 
   const handleClickOutside = (event: any) => {
-    console.log("Clicked outside");
     if (infoRef.current && !infoRef.current.contains(event.target as Node))
     {
       // setPasswordSent(true);

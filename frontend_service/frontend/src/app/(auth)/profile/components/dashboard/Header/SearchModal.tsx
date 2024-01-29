@@ -1,37 +1,36 @@
-"use client"
+"use client";
 
 import SearchFriends from "../SearchFriends/SearchFriends";
-import React, {useState, useRef, useEffect } from 'react'
-import styled from 'styled-components';
+import React, { useState, useRef, useEffect } from "react";
+import styled from "styled-components";
 // import avatar from '../../../../../../public/garou-kid.jpeg';
 import avatar from "../../../../../../../public/garou-kid.jpeg";
-import jake from '../../../../../../../public/jakeWithHeadPhones.jpg';
-import { StaticImageData } from "next/legacy/image"
-import ResultItem from './ResultItem';
+import jake from "../../../../../../../public/jakeWithHeadPhones.jpg";
+import { StaticImageData } from "next/image";
+import ResultItem from "./ResultItem";
 import { on } from "events";
 import { SearchU } from "../interfaces";
-import styles from './search.module.css';
+import styles from "./search.module.css";
 import { GiAstronautHelmet } from "react-icons/gi";
 // import { SearchU } from "../SearchFriends/SearchFriends";
 
 interface SearchModalProps {
-    searchUsers: SearchU[];
-    setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
-    setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
-    ChannelFriendSearch: SearchU[];
-    onClose: (isOpen: boolean) => void;
+  searchUsers: SearchU[];
+  setSearchUsers: React.Dispatch<React.SetStateAction<SearchU[]>>;
+  setChannelFriendSearch: React.Dispatch<React.SetStateAction<SearchU[]>>;
+  ChannelFriendSearch: SearchU[];
+  onClose: (isOpen: boolean) => void;
 }
 
-
 const ResultList = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border-top-left-radius: 10px;
-    height: 50vh;
-    overflow-y: auto;
-    justify-content: flex-start;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 10px;
+  height: 50vh;
+  overflow-y: auto;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 const NoGroupsContainer = styled.div`
@@ -50,18 +49,27 @@ const NoGroupIcon = styled.div`
 `;
 
 const NoGroupSpan = styled.span`
-font-size: 3vh;
+  font-size: 3vh;
 `;
 
-const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSearchUsers, ChannelFriendSearch, setChannelFriendSearch}) => {
-    const [friendSearch, setFriendSearch] = useState<SearchU[]>(searchUsers);
-    const cancelAddChannel = useRef<HTMLDivElement>(null);
+const SearchModal: React.FC<SearchModalProps> = ({
+  onClose,
+  searchUsers,
+  setSearchUsers,
+  ChannelFriendSearch,
+  setChannelFriendSearch,
+}) => {
+  const [friendSearch, setFriendSearch] = useState<SearchU[]>(searchUsers);
+  const cancelAddChannel = useRef<HTMLDivElement>(null);
 
-    const handleCancelAddChannel = (event: any) => {
-        if (cancelAddChannel.current && !cancelAddChannel.current.contains(event.target)) {
-            onClose(false);
-        }
-    };
+  const handleCancelAddChannel = (event: any) => {
+    if (
+      cancelAddChannel.current &&
+      !cancelAddChannel.current.contains(event.target)
+    ) {
+      onClose(false);
+    }
+  };
 
     return (
         <>
@@ -81,7 +89,7 @@ const SearchModal : React.FC<SearchModalProps> = ({ onClose, searchUsers , setSe
                     isBlocked={friend.isBlocked}
                     group={friend.group}
                     members={friend.members}
-                    banedUsers={[]}
+                    banedUsers={friend.banedUsers}
                     setSearchUsers={setSearchUsers}
                     setChannelFriendSearch={setChannelFriendSearch}
                   />

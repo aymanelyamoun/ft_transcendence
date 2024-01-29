@@ -185,7 +185,7 @@ export class UserService {
 
     async removeFriend(userId: string, friendId: string) {
         try {
-          return  await this.prisma.$transaction(async (prisma) => {
+          await this.prisma.$transaction(async (prisma) => {
                 const user = await prisma.user.findUnique({ where: { id: userId } });
                 const friend = await prisma.user.findUnique({ where: { id: friendId } });
     
@@ -213,6 +213,23 @@ export class UserService {
                     }
                 });
             });
+
+            // const conversation = await this.prisma.conversation.findFirst({
+            //     where:{
+            //         users:{
+            //             every:{
+            //                 id:{
+            //                     in:[userId, friendId]
+            //                 }
+            //             }
+            //         }
+            //     }
+            // })
+            
+            // if (!conversation) return;
+
+            // await this.prisma.conversation.delete({where:{id:conversation.id}});
+
         } catch (error) {
             throw new Error('Internal server error')
         }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { use, useContext, useEffect } from "react";
 import { ConversationIthemProps } from "@/utils/types/chatTypes";
 import { useState, createContext } from "react";
 import Image from "next/image";
@@ -10,8 +10,11 @@ import {
   LstConversationSetStateContext,
   LstConversationStateContext,
   alertInviteFriendContext,
+  goBackContext,
   inviteFriendToChannelContext,
   setAlertInviteFriendContext,
+  setGoBackContext,
+  setRefreshContext,
   setShowDeleteChannelContext,
   setShowEditChannelContext,
   setShowExitChannelContext,
@@ -31,18 +34,26 @@ import EditChannel from "./EditChannel";
 import { AlertMessage } from "./alertMessage";
 import { UserContext } from "@/utils/createContext";
 
-const ConversationIthem = (props: ConversationIthemProps) => {
+// const ConversationIthem = ({props , setRefresh}: {props:ConversationIthemProps, setRefresh:React.Dispatch<React.SetStateAction<boolean>>}) => {
+const ConversationIthem = (props : ConversationIthemProps) => {
   const conversationProps = props;
+  // const { id, name, profilePic, type, title, createdAt, channelId, lastMessage } = props.props;
   // const { id, name, profilePic, type, createdAt, channelId, lastMessage } =
   const setConversationList = useContext(LstConversationSetStateContext);
   props;
 
   const isChannel = useContext(IsChannelContext);
+  const setRefresh = useContext(setRefreshContext);
+  //  console.log("conversationProps.Pic: ", conversationProps.profilePic);
   const handleChatClick = () => {
+    console.log("conversationProps: WWWWWWW", conversationProps);
     setConversationList(conversationProps);
+    setRefresh((prev) => !prev);
   };
-//  console.log("conversationProps.Pic: ", conversationProps.profilePic);
+
 //  const avatar = "frontend_service/frontend/public/garou-kid.jpeg";
+// const conversationProps = useContext(LstConversationStateContext);
+console.log("conversationProps.name HHHHHHHHHHH: ", conversationProps?.name)
   return (
     <li
       onClick={handleChatClick}
@@ -53,18 +64,18 @@ const ConversationIthem = (props: ConversationIthemProps) => {
         className=" w-[49px] h-[49px] rounded-full"
        // src={avatar}
         // src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
-         src={conversationProps.profilePic}
+         src={conversationProps?.profilePic as string}
         // alt={conversationProps.name}
-        alt={conversationProps.name}
+        alt={conversationProps?.name as string}
         width={49}
         height={49}
       />
       <div className="flex flex-col mb-[4%}">
-        <p className="friendsName">{conversationProps.name}</p>
+        <p className="friendsName">{conversationProps?.name}</p>
         <p className="text-xs font-thin w-[208.327px] truncate whitespace-nowrap overflow-hidden text-[#FFFFFF]">
           {
             // "tmp message hi Your welcome message should ur welcome message should generally be succinct, fri ur welcome message should generally be succinct, frigur welcome message should generally be succinct, frienerally be succinct, friendly, and informative. It should clearly confirm and clarify what your subscriber signed up for, as well as provide instructions on how they can opt out."
-            conversationProps.lastMessage
+            conversationProps?.lastMessage
           }
         </p>
       </div>
@@ -74,14 +85,18 @@ const ConversationIthem = (props: ConversationIthemProps) => {
 
 export const ConversationList = ({
   setRefresh,
+  refresh,
   isChannel,
+  setIsChannel,
   setShowAddChannel,
 }: // rowData,
 // conversation,
 // setConversation,
 {
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: boolean;
   isChannel: boolean;
+  setIsChannel: React.Dispatch<React.SetStateAction<boolean>>;
   setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
   // rowData: Conversation[];
   // conversation: ConversationIthemProps[];
@@ -89,9 +104,16 @@ export const ConversationList = ({
   //   React.SetStateAction<ConversationIthemProps[]>
   // >;
 }) => {
+
+  // useEffect(() => {
+  //   setIsChannel((prev) => !prev);
+  //   setIsChannel((prev) => !prev);
+  // }, [refresh]);
   const ConversationListData = useContext(ConversationListContext);
+  const channelType = useContext(IsChannelContext);
+  console.log("ConversationListData", ConversationListData);
   // const lastConv = useContext(LstConversationStateContext);
-  if (!isChannel) {
+  if (!channelType) {
     {
       return (
         <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
@@ -100,15 +122,15 @@ export const ConversationList = ({
               if (conv.type === "DIRECT") {
                 return (
                   <ConversationIthem
-                    key={conv.id}
-                    id={conv.id}
-                    name={conv.name}
-                    profilePic={conv.profilePic}
-                    type={conv.type}
-                    title={conv.title}
-                    createdAt={conv.createdAt}
-                    channelId={conv.channelId}
-                    lastMessage={conv.lastMessage}
+                          key={conv.id}
+                          id={conv.id}
+                          name={conv.name}
+                          profilePic={conv.profilePic}
+                            type={conv.type}
+                            title={conv.title}
+                            createdAt={conv.createdAt}
+                            channelId={conv.channelId}
+                            lastMessage={conv.lastMessage}
                   />
                 );
               }
@@ -149,10 +171,12 @@ export const ConversationList = ({
 
 export const Conversations = ({
   setRefresh,
+  refresh,
   // conversationList,
   // setConversationList,
   children,
 }: {
+  refresh: boolean,
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   // conversationList: ConversationIthemProps[];
   // setConversationList: React.Dispatch<
@@ -221,6 +245,31 @@ export const Conversations = ({
   //   conversationProps?.channelId
   // );
   // console.log("userInfo?.id: ----------", userInfo?.id);
+
+  // const lastConversation = useContext(LstConversationStateContext);
+  // const lastConvId = lastConversation?.id;
+  // const setConversationList = useContext(LstConversationSetStateContext);
+  // console.log("lastConvId: ", lastConvId);
+  // console.log("lastConversation: ", lastConversation);
+
+  // const handleGoBack = () => {
+
+  //   const channelType = "D";
+  //   setConversationList(
+  //     (prevConversation: ConversationIthemProps | undefined) => {
+  //       if (prevConversation && prevConversation.id && lastConvId === lastConvId) {
+  //         // setRefresh(true);
+  //         return {
+  //           ...prevConversation,
+  //           type: channelType,
+  //         };
+  //       }
+  //       setRefresh((prev) => !prev);
+  //       return prevConversation;
+  //     }
+  //   );
+  // }
+const setGoBack = useContext(setGoBackContext);
   const handleExitChannel = () => {
     const channelData = {
       channelId: conversationProps?.channelId,
@@ -243,7 +292,12 @@ export const Conversations = ({
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
-          setExitChannel(false);
+          else{
+            // handleGoBack();
+            setExitChannel(false);
+            setRefresh((prev) => !prev);
+            // setGoBack(true);
+          }
         })
         .catch((error) => {
           console.error("Error during fetch:", error);
@@ -273,7 +327,12 @@ export const Conversations = ({
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
-          setDeleteChannel(false);
+          else{
+            // handleGoBack();
+            setRefresh((prev) => !prev);
+            setDeleteChannel(false);
+            // setGoBack(true);
+          }
         })
         .catch((error) => {
           console.error("Error during fetch:", error);
@@ -303,7 +362,9 @@ export const Conversations = ({
                 /> */}
           <ConversationList
             setRefresh={setRefresh}
+            refresh={refresh}
             isChannel={isChannel}
+            setIsChannel={setIsChannel}
             setShowAddChannel={setShowAddChannel}
             // conversationListData={conversationList}
             // rowData={rowData}

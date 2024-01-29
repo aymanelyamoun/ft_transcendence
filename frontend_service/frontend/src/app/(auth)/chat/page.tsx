@@ -1,11 +1,11 @@
 "use client";
 
-import { StaticImageData } from "next/legacy/image";
+import { StaticImageData } from "next/image";
 import { createContext, useEffect, useRef, useState } from "react";
-import {useRouter} from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { ChatPage } from "./components/conversationInfo";
 // import { ChatPage } from "./components/conversationInfo";
-import './spinoza.css'
+import "./spinoza.css";
 import { socket } from "../../../socket";
 import { AlertMessage } from "./components/alertMessage";
 import { UserContext } from "@/utils/createContext";
@@ -35,8 +35,6 @@ interface User {
   isConfirmed2Fa: Boolean;
 }
 
-
-
 export default function Home() {
   const router = useRouter();
   // const [friendSearch, setFriendSearch] = useState<Friend[]>(friendsData);
@@ -48,7 +46,9 @@ export default function Home() {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "auth/check", {
+        const res = await fetch(
+          process.env.NEXT_PUBLIC_BACKEND_URL + "auth/check",
+          {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -56,7 +56,8 @@ export default function Home() {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
             },
-          });
+          }
+        );
         if (res.ok) {
           const data = await res.json();
           setUser(data);
@@ -67,39 +68,46 @@ export default function Home() {
     };
     checkAuthentication();
     socket.connect();
-    socket.on('gameInvite', (data : any) => {
+    socket.on("gameInvite", (data: any) => {
       inviterData.current = data;
       setplayPopUp(true);
       popUpTimeout.current = setTimeout(() => {
         setplayPopUp(false);
       }, 10000);
       // console.log("A notification of an invtation of a game : ", inviterData.current);
-    })
-    socket.on('gameInviteAccepted', (data : any) => {
+    });
+    socket.on("gameInviteAccepted", (data: any) => {
       // console.log("A GAME HAS BEEN ACCEPTED : ", data);
     })
     socket.on('redirect', (destination : any) => {
       router.push(destination)
     })
     return () => {
-      socket.off('redirect')
-      socket.off('gameInvite');
-      socket.off('gameInviteAccepted');
+      socket.off("redirect");
+      socket.off("gameInvite");
+      socket.off("gameInviteAccepted");
       socket.disconnect();
     };
   }, [router]);
-    // console.log("user data: ",user);
-    if (!user) {
+  // console.log("user data: ",user);
+  if (!user) {
     return <div>not authorized</div>;
   }
-  
+
   return (
     <>
       {/* <UserContext.Provider value={user} */}
       <SocketContext.Provider value={socket}>
-            {playPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
-           <ChatPage />
-           </SocketContext.Provider>
+        {playPopUp && (
+          <AlertMessage
+            onClick={() => setplayPopUp(false)}
+            message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`}
+            type="wannaPlay"
+            id={`${inviterData.current.id}`}
+          />
+        )}
+        <ChatPage />
+      </SocketContext.Provider>
       {/* </UserContext.Provider> */}
     </>
   );

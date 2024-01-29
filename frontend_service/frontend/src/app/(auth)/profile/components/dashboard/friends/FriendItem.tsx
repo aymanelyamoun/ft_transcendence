@@ -64,11 +64,6 @@ ${({ status }) =>
 
   const IconContainer = friend.status === "2" ? FaGamepad : (friend.status === "0" ? BsCircleFill : BsCircleFill);
 
-  // useEffect(() => 
-  // {
-  //   console.log("status: ", friend.status);
-  // }, [friend.status]);
-
   return (
     <div className={styles['friendItem-container']}
     >

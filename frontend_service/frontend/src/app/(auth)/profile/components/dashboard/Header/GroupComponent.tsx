@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProtectedPassword from './ProtectedPassword';
 import Image from 'next/image';
 import { toggleSearchFetch } from '@/features/booleans/booleanActions';
+import { AlertMessage } from '@/app/components/alertMessage';
 
 
 const BannedUser = styled.button`
@@ -48,11 +49,7 @@ const FriendName = styled.div`
 `;
 
 const AddGroupButton = styled.button`
-  onClick={() => {
-
-  }}
     position: relative;
-    // left: 13vw;
     margin-left: auto;
     margin-right: 1vw;
     top: 0vh;
@@ -82,7 +79,6 @@ const GroupPictureItem = styled.div`
   background-position: 50% 50%;
   border-radius: 50%;
     position: relative;
-    // margin-left: 0.5vw;
 `;
 
 const GroupComponent: React.FC<GroupComponentProps> = (props) => {
@@ -99,6 +95,12 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   const [meAdded, setMeAdded] = useState<boolean>(false);
   const selectedUserId = useSelector((state: RootState) => state.strings.selectedUserId);
   const loggedInUserId = useSelector((state: RootState) => state.strings.loggedInUserId);
+  const [showAlertRequestUser, setShowAlertRequestUser] = useState<boolean>(false);
+  const [showAlertRequestMe, setShowAlertRequestMe] = useState<boolean>(false);
+  const [showAlertUnbanUser, setShowAlertUnbanUser] = useState<boolean>(false);
+  const [showAlertRequestProtected, setShowAlertRequestProtected] = useState<boolean>(false);
+  const [showAlertPassIncorr, setShowAlertPassIncorr] = useState<boolean>(false);
+  const [passRes, setPassRes] = useState<string>('');
 
   function isUserBanned(user: string, bannedUsers: {id: string}[]) : boolean
   {
@@ -131,11 +133,9 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        alert("the request has been sent WAYIIIH RAH KHDMAT AJMI");
         setUserAdded(true);
-      } else {
-        alert("the request has not been sent");
-       }
+        setShowAlertRequestUser(true);
+      }
     } catch (error)
     {
       console.log(error);
@@ -159,7 +159,7 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        alert("I the user have been added successfully!");
+        setShowAlertRequestMe(true);
         setMeAdded(true);
         dispatch(toggleSearchFetch());
       }
@@ -187,10 +187,8 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        alert("the user has been unbanned");
-      }else {
-        alert("the user has not been unbanned");
-       }
+        setShowAlertUnbanUser(true);
+      }
     } catch (error) {
       console.log("unban user from group error: ", error);
     } finally {
@@ -215,13 +213,19 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
       });
       if (res.ok)
       {
-        alert("I the user have been added successfully!");
+        setShowAlertRequestProtected(true);
         setMeAdded(true);
         dispatch(toggleSearchFetch());
       }
-      else
-      {
+      else if (res.status === 403) {
         const err = await res.json();
+        setShowAlertPassIncorr(true);
+        setPassRes(err.message);
+        setPasswordSent(false);
+      } else {
+        const err = await res.json();
+        setShowAlertPassIncorr(true);
+        setPassRes(err.message);
         setPasswordSent(false);
       }
     }
@@ -280,11 +284,27 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
                   {meAdded ? <BsFillPersonCheckFill /> : <MdGroupAdd />}
                 </AddGroupButton>
               )}
+              
               {openPassComp && (
                 <ProtectedPassword inputPassword={inputPassword} setInputPassword={setInputPassword} setPasswordSent={setPasswordSent} setOpenPassComp={setOpenPassComp} />
               )}
             </>
           )}
+          {
+            showAlertRequestUser && (<AlertMessage onClick={() => setShowAlertRequestUser(false)} message={"The user has been added to the channel successfully!"} type='notify'/>)
+          }
+          {
+            showAlertRequestMe && (<AlertMessage onClick={() => setShowAlertRequestMe(false)} message={"You are successfully added to this channel!"} type='notify'/>)
+          }
+          {
+            showAlertUnbanUser && (<AlertMessage onClick={() => setShowAlertUnbanUser(false)} message={"The user has been unbanned successfully!"} type='notify'/>)
+          }
+          {
+            showAlertPassIncorr && (<AlertMessage onClick={() => setShowAlertPassIncorr(false)} message={`Forbidden: ${passRes}`} type='error'/>)
+          }
+          {
+            showAlertRequestProtected && (<AlertMessage onClick={() => setShowAlertRequestProtected(false)} message={"You are successfully added to this channel!"} type='notify'/>)
+          }
         </>
     </>
   );

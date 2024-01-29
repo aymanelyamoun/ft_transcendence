@@ -15,11 +15,12 @@ import ShowGroups from './ShowGroups';
 import Image from 'next/image';
 // redux part
 import { connect, useSelector } from 'react-redux';
-import { toggleShowGroups } from '@/features/booleans/booleanActions';
+import { toggleShowGroups, toggleFetchFriends } from '@/features/booleans/booleanActions';
 import { setLoggedInUserId, setSelectedUserId } from '@/features/strings/stringActions';
 import { Friend } from '@/app/(auth)/chat/page';
 import { SocketUseContext } from "@/utils/socketUseContext";
 import { AlertMessage } from '@/app/components/alertMessage';
+import { useDispatch } from 'react-redux';
 
 interface FriendInfoProps {
   id: string;
@@ -130,7 +131,9 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
   const loggedInUserId = useSelector((state: RootState) => state.strings.loggedInUserId);
   const socket = React.useContext(SocketUseContext);
   // const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showAlertDecline, setShowAlertDecline] = useState<boolean>(false);
+  const [showAlertBlock, setShowAlertBlock] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const handleClickOutside = useCallback((event: any) => {
     if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
@@ -160,7 +163,8 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
         },
       });
       if(response.ok){
-        setShowAlert(true);
+        setShowAlertDecline(true);
+        dispatch(toggleFetchFriends());
       }else {
         alert("the user has not been removed"); // gonna remove
       }
@@ -181,7 +185,8 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
         },
       });
       if(response.ok){
-        alert("the user has been blocked");
+        setShowAlertBlock(true);
+        dispatch(toggleFetchFriends());
       }else {
         alert("the user has not been blocked");
       }
@@ -231,7 +236,10 @@ return (
       </div>
     )}
     {
-      showAlert && (<AlertMessage onClick={() => setShowAlert(false)} message={"the user has been removed"}  type="notify"/>)
+      showAlertDecline && (<AlertMessage onClick={() => setShowAlertDecline(false)} message={"The user has been removed"}  type="error"/>)
+    }
+    {
+      showAlertBlock && (<AlertMessage onClick={() => setShowAlertBlock(false)} message={"The user has been blocked"} type="error"/>)
     }
   </>
 );
@@ -248,6 +256,7 @@ const mapStateToProps = (state : RootState) => {
 const mapDispatchToProps = {
   toggleShowGroups,
   setSelectedUserId,
+  toggleFetchFriends,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendInfo);

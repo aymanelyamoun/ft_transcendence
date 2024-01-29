@@ -35,6 +35,7 @@ export interface ConversationIthemProps{
   profilePic: string;
   name:string;
   title:string;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // export interface MessageProps{

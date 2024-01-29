@@ -5,6 +5,7 @@ import {
   LstConversationStateContext,
   MessagesContext,
   blockedUsersContext,
+  refreshContext,
   setBlockedUsersContext,
 } from "./conversationInfo";
 // import { v4 as uuidv4 } from "uuid";
@@ -45,6 +46,7 @@ function createConversationListIthem(
     updatedAt: new Date(), // replace with actual creation date
     channelId: "someChannelId", // replace with actual channel ID
     title: "someTitle", // replace with actual title
+    setRefresh: cur.setRefresh, // replace with actual title
   };
 }
   return{
@@ -88,6 +90,8 @@ export const ConversationChatSection = ({
   const conversation = useContext(LstConversationStateContext);
   // const [data, setData] = useState<string>("");
 
+  // const refreshVar =  useContext(refreshContext);
+
   useEffect(() => {
     let newMessage: MessageProps;
     // new
@@ -124,6 +128,7 @@ export const ConversationChatSection = ({
       ]);
     });
     setMessages(messagesData);
+    // messages.reverse();
     return () => {
       socket.off("rcvMessage");
       socket.disconnect();
@@ -187,6 +192,9 @@ export const ConversationChatSection = ({
 
   console.log("Type", conversation?.type);
   console.log("lastConversation", lastConversation);
+
+  console.log("messages: JJJ", messages );
+  // messages.reverse();
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (
@@ -207,8 +215,8 @@ export const ConversationChatSection = ({
               // if (message.senderId === userId) {
               return <Message key={message.id} message={message} />;
               // }
-            })
-            .reverse()}
+            })}
+            {/* .reverse()} */}
         </div>
       ) : null}
       <ConversationMessagesContextSet.Provider value={setMessages}>

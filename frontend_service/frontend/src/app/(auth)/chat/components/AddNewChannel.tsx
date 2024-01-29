@@ -127,8 +127,8 @@ const AddNewChannel = ({
                     </button>
                     <Image
                       className="rounded-full"
-                      // src={friend.profilePic}
-                      src={avatar}
+                      src={friend.profilePic}
+                      // src={avatar}
                       alt={friend.username}
                       height={45}
                       width={45}
@@ -153,7 +153,8 @@ const AddNewChannel = ({
               >
                 <Image
                   className=" w-[45px] h-[45px] rounded-full"
-                  src={avatar}
+                  // src={avatar}
+                  src={friend.profilePic}
                   alt={friend.username}
                   width={45}
                   height={45}

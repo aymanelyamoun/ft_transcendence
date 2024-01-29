@@ -12,6 +12,7 @@ import {
   alertInviteFriendContext,
   goBackContext,
   inviteFriendToChannelContext,
+  refreshContext,
   setAlertInviteFriendContext,
   setGoBackContext,
   setRefreshContext,
@@ -43,12 +44,17 @@ const ConversationIthem = (props : ConversationIthemProps) => {
   props;
 
   const isChannel = useContext(IsChannelContext);
-  const setRefresh = useContext(setRefreshContext);
+  // const setRefresh = useContext(setRefreshContext);
+  const refresh = useContext(refreshContext);
+  console.log("refresh in conversationIthem: ", refresh);
   //  console.log("conversationProps.Pic: ", conversationProps.profilePic);
   const handleChatClick = () => {
     console.log("conversationProps: WWWWWWW", conversationProps);
+    // setRefresh(!refresh);
     setConversationList(conversationProps);
-    setRefresh((prev) => !prev);
+    conversationProps.setRefresh!((prev) => !prev);
+    // setRefresh((prev) => !prev);
+    console.log("refresh in conversationIthem 2: ", refresh);
   };
 
 //  const avatar = "frontend_service/frontend/public/garou-kid.jpeg";
@@ -122,19 +128,20 @@ export const ConversationList = ({
               if (conv.type === "DIRECT") {
                 return (
                   <ConversationIthem
-                          key={conv.id}
-                          id={conv.id}
-                          name={conv.name}
-                          profilePic={conv.profilePic}
-                            type={conv.type}
-                            title={conv.title}
-                            createdAt={conv.createdAt}
-                            channelId={conv.channelId}
-                            lastMessage={conv.lastMessage}
-                  />
-                );
-              }
-            })}
+                      key={conv.id}
+                      id={conv.id}
+                      name={conv.name}
+                      profilePic={conv.profilePic}
+                        type={conv.type}
+                        title={conv.title}
+                        createdAt={conv.createdAt}
+                        channelId={conv.channelId}
+                        lastMessage={conv.lastMessage}
+                        setRefresh={setRefresh}
+                        />
+                        );
+                      }
+                    })}
         </ul>
       );
     }
@@ -146,15 +153,16 @@ export const ConversationList = ({
           if (conv.type === "CHANNEL_CHAT") {
             return (
               <ConversationIthem
-                key={conv.id}
-                id={conv.id}
-                name={conv.name}
-                profilePic={conv.profilePic}
-                type={conv.type}
-                title={conv.title}
-                createdAt={conv.createdAt}
-                channelId={conv.channelId}
-                lastMessage={conv.lastMessage}
+              key={conv.id}
+              id={conv.id}
+              name={conv.name}
+              profilePic={conv.profilePic}
+              type={conv.type}
+              title={conv.title}
+              createdAt={conv.createdAt}
+              channelId={conv.channelId}
+              lastMessage={conv.lastMessage}
+              setRefresh={setRefresh}
               />
             );
           }

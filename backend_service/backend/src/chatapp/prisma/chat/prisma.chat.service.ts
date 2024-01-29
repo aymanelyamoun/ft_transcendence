@@ -74,7 +74,7 @@ export class PrismaChatService{
               messages:{connect:{id:newMessage.id}}}});
             // if (!newMessage) throw new NotFoundException("the message you are trying to send does not exist");
 
-            return await this.prisma.message.findUnique({where:{id:newMessage.id}, include:{sender:{select:{profilePic:true, username:true}}, conversation:{select:{type:true,}}}});
+            return await this.prisma.message.findUnique({where:{id:newMessage.id}, include:{sender:{select:{profilePic:true, username:true}}, conversation:{select:{type:true, channel:{select:{channelName:true, channelPic:true}}}}}});
           }
           catch(error){
             throw error;
@@ -169,8 +169,15 @@ export class PrismaChatService{
           try{
             const user = req['user'] as User;
 
-            const requestedChannel = await this.prisma.channel.findUnique({ where: { id: data.channelId }, include:{conversation:{select:{id:true}}} });
+            const requestedChannel = await this.prisma.channel.findUnique({ where: { id: data.channelId }, include:{conversation:{select:{id:true}}, creator:{select:{id:true}}, members:true} });
             if (!requestedChannel) throw new ForbiddenException("channel does not exist");
+
+            // check if the user is in the channel
+
+            const isMember = requestedChannel.members.some((member)=>{ return(member.userId === data.userId2)});
+            const isCreator = requestedChannel.creator.id === data.userId2;
+
+            if (!isMember || isCreator) throw new ForbiddenException("you are unable to perform this action");
 
             const userIsAdmin = await this.userIsAdmin(user.id, data.channelId);
             if (userIsAdmin) {
@@ -183,9 +190,9 @@ export class PrismaChatService{
               throw new ForbiddenException("you are not an admin on this channel");
           }
           catch(error){
-            if (error instanceof ForbiddenException)
-              throw new ForbiddenException("you are not an admin on this channel");
-            else
+            // if (error instanceof ForbiddenException)
+            //   throw new ForbiddenException("you are not an admin on this channel");
+            // else
               throw error;
           }
         }
@@ -312,6 +319,8 @@ export class PrismaChatService{
 
             const conversation = await this.getChannelConversation(data.channelId);
 
+            if (!conversation) throw new NotFoundException("conversation does not exist");
+
             await this.prisma.conversation.update({where:{id:conversation.id}, data:{users:{disconnect:{id:user.id}}}});
 
             const memberId = await this.prisma.member.findFirst({where:{AND:[{userId:user.id}, {conversationId:conversation.id}]}});
@@ -436,7 +445,7 @@ export class PrismaChatService{
             const { channelId, userId2 } = data;
             const channel = await this.prisma.channel.findUnique({
               where: { id: channelId },
-              include:{conversation:{select:{id:true}},}
+              include:{conversation:{select:{id:true}}, banedUsers:true, creator:{select:{id:true},}, members:{select:{userId:true, isAdmin:true}}}
             });
 
             if (!channel) {
@@ -447,6 +456,25 @@ export class PrismaChatService{
             if (!isAdmin) {
               throw new ForbiddenException("Only admins can ban users");
             }
+
+            // check if if the user is already banned
+
+            const isBanned = channel.banedUsers.some((user)=>{return(user.id === userId2)});
+
+            // check if the user is the creator of the channel
+
+            const isCreator = channel.creator.id === userId2;
+
+            if (isBanned || isCreator)
+              throw new ForbiddenException("you can not perform this action");
+
+            // check if the user is a member of the channel
+            const isMember = channel.members.some(member => member.userId === userId2);
+
+            if (!isMember) {
+              throw new NotFoundException("The user is not a member of the channel");
+            }
+
             const updatedChannel = await this.prisma.channel.update({
               where: { id: channelId },
               data: {
@@ -458,6 +486,17 @@ export class PrismaChatService{
                 },
               },
             });
+            // const updatedChannel = await this.prisma.channel.update({
+            //   where: { id: channelId },
+            //   data: {
+            //     banedUsers: {
+            //       connect: { id: userId2 },
+            //     },
+            //     members: {
+            //       delete: { userId_channelId:{userId:userId2, channelId:channelId} },
+            //     },
+            //   },
+            // });
             const memberTodlt = await this.prisma.member.findFirst({where:{AND:[{userId:userId2}, {conversationId:channel.conversation.id}]}});
             await this.prisma.conversation.update({where:{channelId:channelId}, data:{users:{disconnect:{id:userId2}}, members:{delete:{ id:memberTodlt.id }}}});
             return updatedChannel;

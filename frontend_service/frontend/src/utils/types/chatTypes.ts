@@ -35,6 +35,7 @@ export interface ConversationIthemProps{
   profilePic: string;
   name:string;
   title:string;
+  // setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // export interface MessageProps{
@@ -54,6 +55,10 @@ export type MessageProps = {
   };
   conversation:{
     type:string;
+    channel: {
+      channelName: string;
+      channelPic: string;
+  };
   }
 } & {
   id: number;

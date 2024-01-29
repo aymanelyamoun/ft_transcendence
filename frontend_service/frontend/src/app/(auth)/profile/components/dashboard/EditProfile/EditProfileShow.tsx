@@ -98,11 +98,22 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
       };
       checkAuthentication();
     }, [user, router]); 
+
+    function getExtension(filename : string) {
+      return filename.split('.').pop();
+    }
+  
   
     const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
       let profilePic : any
       const file = e.target.files?.[0];
       if (file) {
+        const fileExtension = getExtension(file.name)?.toLowerCase();
+        const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    
+        if (!fileExtension || !allowedImageExtensions.includes(fileExtension)) {
+          return;
+        }
         try {
           const formData = new FormData();
           formData.append('file', file);
@@ -132,19 +143,10 @@ const EditProfileShow: React.FC<EditProfileShowProps> = ( props ) => {
                 notify = 'Your new profile picture has been successfully updated';
                 setUserData(data.newupdat);
                 setIsNotify(true);
-              } else {
-                setIsError(true);
               }
-            } else {
-              console.error('Cloudinary response does not contain secure_url:', data);
-              setIsError(true);
-            }
-          } else {
-            console.error('Cloudinary upload failed:', resCLoud);
-            setIsError(true);
-          }
+            } 
+          } 
         } catch (error) {
-          console.error('Error updating image:', error);
         }
       }
     };

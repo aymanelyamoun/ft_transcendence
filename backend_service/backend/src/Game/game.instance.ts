@@ -216,79 +216,81 @@ export class GameInstance {
     async endGame (state : EndGameState) : Promise<void> {
         this.gameOver = true;
         this.gameEnded = true;
-        if (state.reason == 'score')
+        var loserData : User;
+        var winnerData : User;
+        var winner = (this.playerOne.score == this.gameInfo.winScore) 
+        ? '1' : '2';
+        if (state.reason == 'disconnect')
         {
-            const winner = (this.playerOne.score == this.gameInfo.winScore) 
-            ? '1' : '2';
-            var loserData : User;
-            var winnerData : User;
-            if (winner == '1')
-            {
-                winnerData = this.playerOne.playerData;
-                loserData = this.playerTwo.playerData;
-            }
-            else
-            {
-                winnerData = this.playerTwo.playerData;
-                loserData = this.playerOne.playerData;
-            }
-            try {
-                this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
-                    winner: winner,
-                });
-                const prismaService = new PrismaService();
-                await prismaService.gameRecord.create({
-                    data: {
-                        user:{connect:{id: winnerData.id}},
-                        scoredGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
-                        concededGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
-                        xp:  25,
-                        oponent:{connect:{id: loserData.id}},
-                        // oponentId: loserData.id,
-                    },
-                });
-                await prismaService.gameRecord.create({
-                    data: {
-                        user: {connect:{id: loserData.id}},
-                        scoredGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
-                        concededGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
-                        xp: loserData.totalXp - 35 > 0 ? -35 : loserData.totalXp * -1,
-                        oponent:{connect:{id: winnerData.id}},
-                    },
-                });
-                await prismaService.user.update({
-                    where: {
-                        id: winnerData.id,
-                    },
-                    data: {
-                        totalXp: winnerData.totalXp + 25,
-                        wallet: {
-                            increment: 10,
-                        },
-                    },
-                });
-                await prismaService.user.update({
-                    where: {
-                        id: loserData.id,
-                    },
-                    data: {
-                        totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
-                    },
-                });
-                await this.update_achievement(winnerData, loserData, prismaService)
-                // await this.update_skins(winnerData, loserData, prismaService)
+            winner = (state.winner == this.playerOne) ? '1' : '2';
         }
-            catch (error) {
-                console.log("error at updating database in game : ",error.message);
-            }
-        }
-        else if (state.reason == 'disconnect')
+        if (winner == '1')
         {
-            const winner = (state.winner == this.playerOne) ? '1' : '2';
+            winnerData = this.playerOne.playerData;
+            loserData = this.playerTwo.playerData;
+        }
+        else
+        {
+            winnerData = this.playerTwo.playerData;
+            loserData = this.playerOne.playerData;
+        }
+        try {
             this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
                 winner: winner,
             });
+            const prismaService = new PrismaService();
+            await prismaService.gameRecord.create({
+                data: {
+                    user:{connect:{id: winnerData.id}},
+                    scoredGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                    concededGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                    xp:  25,
+                    oponent:{connect:{id: loserData.id}},
+                    // oponentId: loserData.id,
+                },
+            });
+            await prismaService.gameRecord.create({
+                data: {
+                    user: {connect:{id: loserData.id}},
+                    scoredGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                    concededGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                    xp: loserData.totalXp - 35 > 0 ? -35 : loserData.totalXp * -1,
+                    oponent:{connect:{id: winnerData.id}},
+                },
+            });
+            await prismaService.user.update({
+                where: {
+                    id: winnerData.id,
+                },
+                data: {
+                    totalXp: winnerData.totalXp + 25,
+                    wallet: {
+                        increment: 10,
+                    },
+                },
+            });
+            await prismaService.user.update({
+                where: {
+                    id: loserData.id,
+                },
+                data: {
+                    totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
+                },
+            });
+            await this.update_achievement(winnerData, loserData, prismaService)
+            // await this.update_skins(winnerData, loserData, prismaService)
+    }
+        catch (error) {
+            console.log("error at updating database in game : ",error.message);
         }
+        // }
+        // else if (state.reason == 'disconnect')
+        // {
+        //     const winner = (state.winner == this.playerOne) ? '1' : '2';
+        //     this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
+        //         winner: winner,
+        //     });
+        // }
         Events.off(this.engine, 'collisionStart', this.collisionDetect);
         Events.off(this.runner, "beforeTick", this.animationFrame);
         Runner.stop(this.runner);

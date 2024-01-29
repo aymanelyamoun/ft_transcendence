@@ -9,10 +9,6 @@ import { fetchAPI } from "@/utils/api";
 import { AlertMessage } from "@/app/components/alertMessage";
 
  let response : any;
-// interface ConfirmAuthProps {
-//   setTwoFa: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-//  export default function ConfirmAuth ({setTwoFa} : {setTwoFa: React.Dispatch<React.SetStateAction<boolean>>}) {
 export default function ConfirmAuth () {
 
   const [isError, setIsError] = useState<boolean>(false);
@@ -55,14 +51,11 @@ export default function ConfirmAuth () {
         },
       });
       setIsNotify(true);
-     // console.log("heeeeere");
-      // setTwoFa(false);
       router.push("/profile");
       return <Loading />;
     }
     catch (error)
     {
-      // console.log('hhhhhhh:' + error);
       setIsError(true);
       response = "Two-factor authentication code is incorrect!";
     }

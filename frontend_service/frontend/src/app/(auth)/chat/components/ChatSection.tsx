@@ -5,6 +5,7 @@ import {
   LstConversationStateContext,
   MessagesContext,
   blockedUsersContext,
+  refreshContext,
   setBlockedUsersContext,
 } from "./conversationInfo";
 // import { v4 as uuidv4 } from "uuid";
@@ -31,13 +32,14 @@ export const ConversationMessagesContextStat = createContext(
 
 function createConversationListIthem(
   Message: MessageProps,
-  cur: ConversationIthemProps
-): ConversationIthemProps {
+): ConversationIthemProps{
+
+  if (Message.conversation.type === "DIRECT") {
   return {
     id: Message.conversationId,
-    name: cur.name,
-    // profilePic: Message.sender.profilePic,
-    profilePic: cur.profilePic,
+    name: Message.sender.username,
+    profilePic: Message.sender.profilePic,
+    // profilePic: cur.profilePic,
     lastMessage: Message.message,
     type: Message.conversation.type, // replace with actual type
     createdAt: new Date(), // replace with actual creation date
@@ -45,6 +47,19 @@ function createConversationListIthem(
     channelId: "someChannelId", // replace with actual channel ID
     title: "someTitle", // replace with actual title
   };
+}
+  return{
+    id: Message.conversationId,
+    name: Message.conversation.channel.channelName,
+    // profilePic: Message.sender.profilePic,
+    profilePic: Message.conversation.channel.channelPic,
+    lastMessage: Message.message,
+    type: Message.conversation.type, // replace with actual type
+    createdAt: new Date(), // replace with actual creation date
+    updatedAt: new Date(), // replace with actual creation date
+    channelId: "someChannelId", // replace with actual channel ID
+    title: "someTitle", // replace with actual title
+  }
 }
 
 export const ConversationChatSection = ({
@@ -74,6 +89,8 @@ export const ConversationChatSection = ({
   const conversation = useContext(LstConversationStateContext);
   // const [data, setData] = useState<string>("");
 
+  // const refreshVar =  useContext(refreshContext);
+
   useEffect(() => {
     let newMessage: MessageProps;
     // new
@@ -98,14 +115,19 @@ export const ConversationChatSection = ({
 
       // const curConv = useContext(LstConversationStateContext);
 
+      // const newConversation = createConversationListIthem(newMessage, conversation!);
+
+      // if (newConversation === null) return;
+
       setConversationList((prevConversationList: any) => [
-        createConversationListIthem(newMessage, conversation!),
+        createConversationListIthem(newMessage),
         ...prevConversationList.filter((conversation: any) => {
           return conversation.id !== newMessage.conversationId;
         }),
       ]);
     });
     setMessages(messagesData);
+    // messages.reverse();
     return () => {
       socket.off("rcvMessage");
       socket.disconnect();
@@ -169,6 +191,9 @@ export const ConversationChatSection = ({
 
   console.log("Type", conversation?.type);
   console.log("lastConversation", lastConversation);
+
+  console.log("messages: JJJ", messages );
+  // messages.reverse();
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (
@@ -189,8 +214,8 @@ export const ConversationChatSection = ({
               // if (message.senderId === userId) {
               return <Message key={message.id} message={message} />;
               // }
-            })
-            .reverse()}
+            })}
+            {/* .reverse()} */}
         </div>
       ) : null}
       <ConversationMessagesContextSet.Provider value={setMessages}>
@@ -277,7 +302,13 @@ const TypeMessage = ({
       profilePic: conversation?.profilePic ?? "",
       username: conversation?.name ?? "",
     },
-    conversation: { type: conversation?.type ?? "" },
+    conversation: { 
+      type: conversation?.type ?? "", 
+      channel: {
+        channelName:  "", 
+        channelPic:  ""
+      } 
+    },
   };
 
   const sendMessage = () => {

@@ -28,7 +28,6 @@ export class RequestController {
     @UseGuards(JwtGuard)
     async acceptRequest(@Req() req: Request, @Res() res: Response, @Param('notificationId') notificationId: number)
     {
-      console.log("hdfkhdsjkfhdjksfgjksgfjdgsfjs");
       const result = await this.requestService.handleAcceptRequest(req, notificationId);
 
       if (result === undefined)

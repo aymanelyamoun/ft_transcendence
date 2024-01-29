@@ -261,7 +261,7 @@ export class UserService {
         const userloged = user.id;
         username = username.trim();
         if(username.length == 0)
-            return this.allUsers(userloged);
+            return await this.allUsers(userloged);
         try {
             const users = await this.prisma.user.findMany({
                 where: {

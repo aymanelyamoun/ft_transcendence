@@ -35,25 +35,25 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       };
       checkAuthentication();
     }, [pathname]);
-    const [isRouting, setisRouting] = useState(false);
-    const path = usePathname();
-    const [prevPath, setPrevPath] = useState("/");
-    useEffect(() => {
-      if (prevPath !== path) {
-        setisRouting(true);
-      }
-    }, [path, prevPath]);
+    // const [isRouting, setisRouting] = useState(false);
+    // const path = usePathname();
+    // const [prevPath, setPrevPath] = useState("/");
+    // useEffect(() => {
+    //   if (prevPath !== path) {
+    //     setisRouting(true);
+    //   }
+    // }, [path, prevPath]);
   
-    useEffect(() => {
-      if (isRouting) {
-        setPrevPath(path);
-        const timeout = setTimeout(() => {
-          setisRouting(false);
-        }, 1200);
+    // useEffect(() => {
+    //   if (isRouting) {
+    //     setPrevPath(path);
+    //     const timeout = setTimeout(() => {
+    //       setisRouting(false);
+    //     }, 1200);
   
-        return () => clearTimeout(timeout);
-      }
-    }, [isRouting, path]);
+    //     return () => clearTimeout(timeout);
+    //   }
+    // }, [isRouting, path]);
 
   
     if (authenticated === null) {
@@ -64,7 +64,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       return <Loading />;
     }
     return <>
-      {isRouting && <Transition />}
+      {/* {isRouting && <Transition />} */}
       {children}
     </>;
   }

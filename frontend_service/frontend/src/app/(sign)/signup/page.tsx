@@ -90,9 +90,9 @@ export default function Signup() {
           <Button onClick={register} text="Sign up" />
           <div className="border-2 border-white w-10 inline-block mb-7"></div>
           <div className="flex justify-center mb-7 ">
-            <Link href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/google/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
+            {/* <Link href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/google/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3] ">
               <FaGoogle className="text-sm text-white" /> 
-            </Link>
+            </Link> */}
             <Link  href={process.env.NEXT_PUBLIC_BACKEND_URL+"auth/42/login"} className="border-2 rounded-full border-gray-200 p-3 mx-1 hover:bg-[#999BD3]">
             <Si42 className="text-sm text-white" />
             </Link>

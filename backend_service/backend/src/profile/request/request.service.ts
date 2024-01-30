@@ -78,7 +78,17 @@ export class RequestService {
             const isBlocked = await this.isBlocked(notification.userId, notification.senderId);
             const isBlockedb = await this.isBlocked(notification.senderId, notification.userId);
             if (isBlocked || isBlockedb)
+            {
+                await this.prisma.notification.deleteMany({
+                    where: {
+                        OR: [
+                            { senderId: notification.userId, userId: notification.senderId, type: NOTIF_TYPE.friendReq },
+                            { senderId: notification.senderId, userId: notification.userId, type: NOTIF_TYPE.friendReq },
+                        ],
+                    },
+                })
                 return { message:'Friend is blocked by the user' };
+            }
             const result = await this.prisma.$transaction(async (prisma) => 
             {
                 await prisma.user.update({

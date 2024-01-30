@@ -190,7 +190,6 @@ const FriendInfo = (props : FriendInfoProps) => {
 
   function inviteToPlay(id : string, loggedInUserId : string) {
     socket.emit("inviteGame", {id: id})
-    console.log('invited a user to play');
   }
 
   const handleShowGroup = () => {

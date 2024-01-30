@@ -1192,7 +1192,7 @@ export const ChatPage = () => {
       // return res;
     };
     fetchFun();
-  }, [conversation]);
+  }, [conversation, refresh]);
   console.log("messages:   TTT", messages);
 
   return (

@@ -120,27 +120,20 @@ function App() {
   
   useEffect(() => {
     socket.connect();
-    socket.on("connect", () => {
-      console.log("Connected to server");
-    });
     socket.on('gameInvite', (data : any) => {
       inviterData.current = data;
       setplayPopUp(true);
       popUpTimeout.current = setTimeout(() => {
         setplayPopUp(false);
       }, 10000);
-      console.log("A notification of an invtation of a game : ", inviterData.current);
     })
 
     socket.on('gameInviteAccepted', (data : any) => {
-      console.log("A GAME HAS BEEN ACCEPTED : ", data);
     })
     socket.on('redirect', (destination : any) => {
       router.push(destination)
-      console.log("redirecting to : ", destination);
     })
     return () => {
-      console.log("calling disconnect")
       socket.off('redirect')
       socket.off('gameInvite');
       socket.off('gameInviteAccepted');

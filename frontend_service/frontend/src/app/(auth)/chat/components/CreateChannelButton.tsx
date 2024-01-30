@@ -21,8 +21,7 @@ const CreateChannelButton = ({
 
       const handleAddChannelClick = () => {
         setShowAddChannel(true);
-        // setGoBack(false);
-        // console.log("add channel clicked: " + showAddChannel);
+
       };
 
   return (

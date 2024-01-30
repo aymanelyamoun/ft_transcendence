@@ -122,8 +122,7 @@ const GameButton = styled.button`
   }
 `;
 
-const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?
-  // const setSelectedFriend = props.setSelectedFriend;
+const FriendInfo = (props : FriendInfoProps) => {
   const onClose = props.onClose;
   const { showGroups, toggleShowGroups, setSelectedUserId } = props;
   // const setSelectedUserId = mapDispatchToProps;

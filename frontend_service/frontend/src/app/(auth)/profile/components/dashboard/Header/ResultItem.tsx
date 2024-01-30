@@ -29,10 +29,11 @@ border-radius: 15px;
 const ResultItem: React.FC<ResultItemProps> = (props) => {
   
   const loggedInUserId = useSelector((state: RootState) => state.strings.loggedInUserId);
-  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string)
+  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string) : boolean
   {
     if (members)
-    return (members.some(member => member.user.id === userId));
+      return (members.some(member => member.user.id === userId));
+    return (false);
   }
 
   const isMember= isUserMember(props.members, loggedInUserId) as boolean;

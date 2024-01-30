@@ -295,18 +295,18 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
           {
             showAlertRequestUser && (<AlertMessage onClick={() => setShowAlertRequestUser(false)} message={"The user has been added to the channel successfully!"} type='notify'/>)
           }
-          {
+          {/* {
             showAlertRequestMe && (<AlertMessage onClick={() => setShowAlertRequestMe(false)} message={"You are successfully added to this channel!"} type='notify'/>)
-          }
+          } */}
           {
             showAlertUnbanUser && (<AlertMessage onClick={() => setShowAlertUnbanUser(false)} message={"The user has been unbanned successfully!"} type='notify'/>)
           }
           {
             showAlertPassIncorr && (<AlertMessage onClick={() => setShowAlertPassIncorr(false)} message={`Forbidden: ${passRes}`} type='error'/>)
           }
-          {
+          {/* {
             showAlertRequestProtected && (<AlertMessage onClick={() => setShowAlertRequestProtected(false)} message={"You are successfully added to this channel!"} type='notify'/>)
-          }
+          } */}
         </>
     </>
   );

@@ -144,7 +144,7 @@ line-height: normal;
     ? `
     @media (max-width: 1000px) {
       position: relative;
-      bottom: 6vh;
+      top: 0vh;
     }
   `
   : '')}
@@ -162,7 +162,7 @@ const UserId = styled.span<{isDashboard: boolean}>`
     ? `
     @media (max-width: 1000px) {
       position: relative;
-      bottom: 6vh;
+      top: 2vh;
     }
   `
   : '')}

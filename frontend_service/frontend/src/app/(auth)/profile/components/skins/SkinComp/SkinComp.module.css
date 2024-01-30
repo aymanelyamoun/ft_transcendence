@@ -10,7 +10,6 @@
   width: 12vw;
   height: 42vh;
   padding: 0.875vw 0 0.875vw 0;
-  /* position: relative; */
   margin: 5rem 2rem;
 }
 
@@ -21,7 +20,6 @@
   height: 100%;
   width: 100%;
   border-radius: 10px;
-  /* background: rgba(30, 35, 61, 0.7); */
   background: #1b2136;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
@@ -30,18 +28,6 @@
   align-items: center;
   overflow: hidden;
   }
-  
-  /* .SkinComp:hover {
-    width: 13vw;
-    height: 46vh;
-    transform: scaleX(1.1) scaleY(1.1);
-    transition: width 2s heigh 2s ease-in-out cubic-bezier(0, 1.22, 0.66, 1.39),
-    border-radius 2s ease-in-out,
-    background 2s ease-in-out,
-    box-shadow 2s ease-in-out;
-    transition-property: all;
-    border: 1px solid #C2FF86;
-  } */
 
   .rotateanimation
   {
@@ -49,9 +35,6 @@
     height: 100%;
     z-index: auto;
     border-radius: 10px;
-    /* padding: 0.875vw 0 0.875vw 0; */
-    /* position: relative; */
-    /* margin: 5rem 2rem; */
     box-sizing: border-box;
   }
 
@@ -120,15 +103,6 @@
     animation: spin 2.5s linear infinite;
   }
   
-  /* .rotateanimation:hover::after {
-    animation: none;
-    opacity: 0;
-  } */
-
-  /* .rotateanimation:hover:before, .rotateanimation:hover:after {
-    animation: none;
-    opacity: 0;
-  } */
   .SkinComp:hover
   {
     transform: scaleX(1.1) scaleY(1.1);
@@ -171,10 +145,7 @@
   {
     width: 15vw;
     height: 56vh;
-    /* z-index: auto; */
     border-radius: 10px;
-    /* padding: 0.875vw 0 0.875vw 0; */
-    /* position: relative; */
     margin: 0rem 1rem;
     box-sizing: border-box;
   }

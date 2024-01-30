@@ -83,6 +83,8 @@ const AddNewChannel = ({
       !cancelAddChannel.current.contains(event.target)
     ) {
       setShowAddChannel(false);
+      selectedFriends = [];
+      setSelectedFriends([]);
     }
   };
   // const removeFriends = "frontend_service/frontend/public/removeFriends_Icon.png";
@@ -137,12 +139,12 @@ const AddNewChannel = ({
                 ))}
               </div>
             )}
-            <AddChannelSearchBar
+            {/* <AddChannelSearchBar
               addChannelSearch={addChannelSearch}
               setAddChannelSearch={setAddChannelSearch}
               setChannelFriendSearch={setChannelFriendSearch}
               friendsList={channelFriends}
-            />
+            /> */}
           </div>
           <div className="scrollbar rounded-t-[10px] h-[458px] overflow-y-auto ">
             {channelFriends.map((friend) => (

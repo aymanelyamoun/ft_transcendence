@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, Query, Req, Request, UseGuards } from "@nestjs/common";
-import { ChangeChannelDataDto, ChannelEditDto, ConversationInfoDto, CreateChannelDto, JoinChannelDto, MuteUserDto, userDataDto } from "./DTOs/dto";
+import { ChangeChannelDataDto, ChannelEditDto, ChannelEditDto_, ConversationInfoDto, CreateChannelDto, JoinChannelDto, MuteUserDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { ChangeChannelData, JoinChannel } from "./types/channel";
 import { ChatChannelAdminGuard } from "./chat.channel.guard";
@@ -10,11 +10,11 @@ import { JwtGuard } from "src/Auth/auth_google/utils/jwt.guard";
 
 import { plainToClass } from 'class-transformer';
 import { validate } from "class-validator";
-interface joinChannelInterface
-{
-    channelId : string;
-    password: string;
-};
+// interface joinChannelInterface
+// {
+//     channelId : string;
+//     password: string;
+// };
 
 @UseGuards(JwtGuard)
 @Controller('channels')
@@ -28,7 +28,7 @@ export class ChannelController{
 
     // @UseGuards(ChatChannelAdminGuard)
     @Patch('joinChannel')
-    async joinChannel(@Body() joinData:joinChannelInterface, @Req() req:Request){
+    async joinChannel(@Body() joinData:JoinChannelDto, @Req() req:Request){
         console.log("join the channel : ", joinData.channelId);
         await this.prismaChatService.joinChannel(joinData, req);
     }
@@ -39,7 +39,7 @@ export class ChannelController{
     }
 
    @Post('deleteChannel')
-    async deleteChannel(@Body() deleteData:ChannelEditDto, @Req() req:Request){
+    async deleteChannel(@Body() deleteData:ChannelEditDto_, @Req() req:Request){
         await this.prismaChatService.deleteChannel(deleteData, req);
     }
 
@@ -49,15 +49,16 @@ export class ChannelController{
     }
 
     @Patch('leaveChannel')
-    async leaveChannel(@Body() data:ChannelEditDto, @Req() req:Request){
+    async leaveChannel(@Body() data:ChannelEditDto_, @Req() req:Request){
         await this.prismaChatService.leaveChannel(data, req);
     }
 
     @Post('editChannel')
     async editChannel(@Body() data: ChangeChannelDataDto, @Req() req:Request){
+
         // const tmp = plainToClass(ChangeChannelDataDto, data);
-        console.log("getting to edit the channel");
-        console.log("the bknd data is : ", data);
+        // console.log("getting to edit the channel");
+        // console.log("the bknd data is : ", data);
         // const errors = await validate(ChangeChannelDataDto);
         // if (errors.length > 0) {
         //   // If validation fails, throw an exception with the validation errors

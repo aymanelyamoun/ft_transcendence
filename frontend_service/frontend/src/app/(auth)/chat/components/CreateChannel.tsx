@@ -169,15 +169,20 @@ const CreateChannel = ({
     // setRefresh((prev) => !prev);
     // console.log(" refresh : ", refresh);
   };
-  // }
-
-  // console.log("saveChannelName: ", saveChannelName);
-  // console.log("savePassword: ", savePassword);
-  // console.log("notify after: ", showNotify);
+  function getExtension(filename : string) {
+    return filename.split('.').pop();
+  }
+  
   const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let profilePic: any;
     const file = e.target.files?.[0];
     if (file) {
+      const fileExtension = getExtension(file.name)?.toLowerCase();
+      const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+  
+      if (!fileExtension || !allowedImageExtensions.includes(fileExtension)) {
+        return;
+      }
       try {
         const formData = new FormData();
         formData.append("file", file);
@@ -300,7 +305,7 @@ const CreateChannel = ({
             {selectedOption === "protected" &&
               (!password ? (
                 <div className="passWord relative">
-                  <span> password </span>
+                  <span className="ml-[10px]"> password </span>
                   <div
                     onClick={() => setPassword(true)}
                     className="passwordParameter absolute right-[3%] top-[18%]"
@@ -312,7 +317,7 @@ const CreateChannel = ({
                 <div>
                   <div className="fixPasswordBg">
                     <div className="setPassWord relative">
-                      <span> password </span>
+                    <span className="ml-[10px]"> password </span>
                       <div
                         onClick={() => {
                           setPassword(false);
@@ -333,7 +338,7 @@ const CreateChannel = ({
                   >
                     <div className="flex justify-between">
                       <p className="requiredPasswordText items-end">
-                        required password
+                        show password input
                       </p>
                       <div className="mt-[15px] mr-[10px]">
                         <label className="relative inline-flex items-center mb-5 cursor-pointer">

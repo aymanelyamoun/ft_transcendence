@@ -133,7 +133,7 @@ const EditChannel = ({
 
     const channelData = {
       channelName: saveChannelName,
-      // channelPic: "some link",
+      channelPic: useChannelPic,
       password: savePassword,
       type: selectedOption,
       channelId: conversationProps?.channelId,
@@ -195,52 +195,42 @@ const EditChannel = ({
       });
   };
 
+  function getExtension(filename : string) {
+    return filename.split('.').pop();
+  }
+  
   const handlePicUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // let profilePic : any
-    // const file = e.target.files?.[0];
-    // if (file) {
-    //   try {
-    //     const formData = new FormData();
-    //     formData.append('file', file);
-    //     formData.append('upload_preset', 'imagesus');
-    //     const resCLoud = await fetch(`https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`, {
-    //       method: 'POST',
-    //       body: formData,
-    //     } );
-    //     if (resCLoud.ok) {
-    //       const data1 = await resCLoud.json();
-    //       if (data1 && data1.secure_url) {
-    //         profilePic = data1.secure_url;
-    //         const response = await fetch(Backend_URL + 'user/update/image', {
-    //           method: 'PATCH',
-    //           mode: 'cors',
-    //           credentials: 'include',
-    //           body: JSON.stringify({ pic: profilePic }),
-    //           headers: {
-    //             'Content-Type': 'application/json',
-    //             'Access-Control-Allow-Origin': '*',
-    //           },
-    //         });
-    //         data = await response.json();
-    //         if (response.ok) {
-    //           notify = 'Your new profile picture has been successfully updated';
-    //           setUserData(data.newupdat);
-    //           setIsNotify(true);
-    //         } else {
-    //           setIsError(true);
-    //         }
-    //       } else {
-    //         console.error('Cloudinary response does not contain secure_url:', data);
-    //         setIsError(true);
-    //       }
-    //     } else {
-    //       console.error('Cloudinary upload failed:', resCLoud);
-    //       setIsError(true);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error updating image:', error);
-    //   }
-    // }
+    let profilePic: any;
+    const file = e.target.files?.[0];
+    if (file) {
+      const fileExtension = getExtension(file.name)?.toLowerCase();
+      const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+  
+      if (!fileExtension || !allowedImageExtensions.includes(fileExtension)) {
+        return;
+      }
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "imagesus");
+        const resCLoud = await fetch(
+          `https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        if (resCLoud.ok) {
+          const data1 = await resCLoud.json();
+          if (data1 && data1.secure_url) {
+            profilePic = data1.secure_url;
+            setUseChannelPic(profilePic);
+          }
+        }
+      } catch (error) {
+        console.error("Error updating image:", error);
+      }
+    }
   };
 
   const handleCancelAddChannel = (event: any) => {
@@ -307,11 +297,15 @@ const EditChannel = ({
               
             </div> */}
             <div>
-              <Image
+              {/* <Image
                 src={useChannelPic}
                 alt="channelPic"
                 className=" w-[120px] h-[120px] channelImage "
-              />
+              /> */}
+               <ProfilePicUpload
+              profilePic={useChannelPic}
+              handlePicUpdate={handlePicUpdate}
+            />
             </div>
             {/* <ProfilePicUpload profilePic="/goinfre/aadnane/ft_transcendence/frontend_service/frontend/public/group_pic.jpg" handlePicUpdate={handlePicUpdate} /> */}
             <div className="">
@@ -345,7 +339,7 @@ const EditChannel = ({
             {selectedOption === "protected" &&
               (!password ? (
                 <div className="passWord relative">
-                  password
+                   <span className="ml-[10px]"> password </span>
                   <div
                     onClick={() => setPassword(true)}
                     className="passwordParameter absolute right-[3%] top-[18%]"
@@ -357,7 +351,7 @@ const EditChannel = ({
                 <div>
                   <div className="fixPasswordBg">
                     <div className="setPassWord relative">
-                      password
+                    <span className="ml-[10px]"> password </span>
                       <div
                         onClick={() => {
                           setPassword(false);

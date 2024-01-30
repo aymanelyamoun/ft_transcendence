@@ -15,6 +15,7 @@ export type ChangeChannelData = {
     password?: string;
     type: string;
     channelId: string;
+    channelPic: string;
     // userId: string
 //     removeAdmins?: user[];
 //     addAdmins?: user[];

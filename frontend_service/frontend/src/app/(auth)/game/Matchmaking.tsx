@@ -75,7 +75,6 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
           Cancel
         </button>
       )}
-
       <h1 className="text-white">
         {queueTimer >= 0 ? "In Queue... " + queueTimer + " sec" : null}
       </h1>

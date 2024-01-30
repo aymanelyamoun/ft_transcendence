@@ -30,6 +30,14 @@ export class GameInstance {
     private readonly prisma: PrismaService;
 
     constructor(playerOneSocket: Socket, playerTwoSocket: Socket, roomNumber: string, serverIO: Server) {
+        if (playerOneSocket['user'].username == playerTwoSocket['user'].username)
+        {
+            playerOneSocket.emit('redirect', '/game', 'You are not allowed to join this room');
+            playerTwoSocket.emit('redirect', '/game', 'You are not allowed to join this room');
+            playerTwoSocket.disconnect(true);
+            playerOneSocket.disconnect(true);
+            return ;
+        }
         this.engine = Engine.create();
         this.engine.gravity.y = 0;
         this.canvas = {
@@ -88,7 +96,7 @@ export class GameInstance {
             IOserver: serverIO,
             roundStart: false,
             paddleSpeed: 5,
-            winScore: 2,
+            winScore: 5,
         };
         playerOneSocket.join(roomNumber);
         playerTwoSocket.join(roomNumber);
@@ -223,6 +231,7 @@ export class GameInstance {
         ? '1' : '2';
         if (state.reason == 'disconnect')
         {
+            state.winner.score = this.gameInfo.winScore;
             winner = (state.winner == this.playerOne) ? '1' : '2';
         }
         if (winner == '1')
@@ -288,14 +297,6 @@ export class GameInstance {
         catch (error) {
             console.log("Error encoutered from client side while updating database : ", error.message);
         }
-        // }
-        // else if (state.reason == 'disconnect')
-        // {
-        //     const winner = (state.winner == this.playerOne) ? '1' : '2';
-        //     this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
-        //         winner: winner,
-        //     });
-        // }
         Events.off(this.engine, 'collisionStart', this.collisionDetect);
         Events.off(this.runner, "beforeTick", this.animationFrame);
         Runner.stop(this.runner);

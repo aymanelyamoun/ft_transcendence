@@ -98,7 +98,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new Error( 'error')
+            throw new  NotFoundException();
         }
     }
 
@@ -130,7 +130,7 @@ export class UserService {
             }));
             return usersWithBlockedFlag;
         } catch (error) {
-            throw new Error('Internal server error');
+            throw new  NotFoundException();
         }
     }
     
@@ -179,7 +179,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new Error('error')
+            throw new  NotFoundException();
         }
     }
     
@@ -249,7 +249,7 @@ export class UserService {
             // await this.prisma.conversation.delete({where:{id:conversation.id}});
 
         } catch (error) {
-            throw new Error('Internal server error')
+            throw new UnauthorizedException();
         }
     }
     
@@ -290,7 +290,7 @@ export class UserService {
         return(usersWithBlockedFlag);
         } catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -429,7 +429,7 @@ export class UserService {
             });
             return notifications;
         } catch (error) {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -467,7 +467,7 @@ export class UserService {
 
         }catch (error)
         {
-             throw new UnauthorizedException('error');
+             throw new UnauthorizedException();
         }
     }
 
@@ -495,7 +495,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -519,7 +519,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -550,7 +550,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -621,7 +621,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 }

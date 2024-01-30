@@ -8,7 +8,7 @@ import { LOG_TYPE } from '@prisma/client';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
     constructor(
-        @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+         private readonly authGoogleService: AuthGoogleService,
       ){
         super({
             clientID:

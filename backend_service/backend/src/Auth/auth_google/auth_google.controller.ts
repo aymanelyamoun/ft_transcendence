@@ -20,7 +20,7 @@ const speakeasy = require('speakeasy');
 export class AuthGoogleController
 {
     constructor(
-      @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+       private readonly authGoogleService: AuthGoogleService,
       private readonly userService: UserService,
       private readonly jwtService: JwtService,
       private redisService: RedisService

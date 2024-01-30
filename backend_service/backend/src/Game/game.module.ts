@@ -8,10 +8,8 @@ import { UserService } from 'src/profile/user/user.service';
 
 @Module({
   imports: [UserModule],
-  providers: [GameService, JwtService,  // SessionSerializer,
-  {
-      provide: 'AUTH_SERVICE',
-      useClass: AuthGoogleService,
-  }, PrismaService, UserService] ,
+  providers: [GameService, JwtService, 
+    AuthGoogleService,
+   PrismaService, UserService] ,
 })
 export class GameModule {}

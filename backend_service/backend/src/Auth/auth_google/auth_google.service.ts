@@ -16,8 +16,7 @@ export class AuthGoogleService {
     constructor (private readonly prisma: PrismaService,
                 private readonly jwtService: JwtService,
                 private readonly userService: UserService){}
-
-
+                
 async login(dto:LoginDto)
 {
   try {

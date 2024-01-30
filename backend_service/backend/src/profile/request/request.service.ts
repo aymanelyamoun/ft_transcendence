@@ -12,6 +12,14 @@ export class RequestService {
             private readonly userService: UserService) { }
     
 
+    async isFriend(userId: string, FriendId: string){
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            include: { friends: true }
+        });
+        return !!user?.friends.find((friend) => friend.id === FriendId);
+    }
+
     async handleSendRequest(userId: string, recieverId: string, message: string, typ: NOTIF_TYPE) {
         try 
         {
@@ -29,6 +37,9 @@ export class RequestService {
                     type: typ,
                 },
             });
+            const isFriend = await this.isFriend(userId, recieverId);
+                if (isFriend)
+                    return ;
             if (!existingNotification && !ChekcNotification)
             {
                     const  sender = await this.userService.findById(userId);            
@@ -47,7 +58,7 @@ export class RequestService {
             }
         } catch (error)
         {
-            throw new NotFoundException(error);
+            throw new NotFoundException();
         }
     }
 
@@ -121,7 +132,7 @@ export class RequestService {
             })
         } catch (error)
         {
-            throw new NotFoundException(error);
+            throw new NotFoundException();
         }
   }
 
@@ -142,7 +153,7 @@ export class RequestService {
             })
         } catch (error)
         {
-            throw new NotFoundException(error);
+            throw new NotFoundException();
         }
     }
 
@@ -195,7 +206,7 @@ export class RequestService {
         }
         catch(error)
         {
-            throw new NotFoundException(error);
+            throw new NotFoundException();
         }
     }
 
@@ -216,7 +227,7 @@ export class RequestService {
         }
         catch(error)
         {
-            throw new NotFoundException(error);
+            throw new NotFoundException();
         }
     }
 
@@ -235,7 +246,7 @@ export class RequestService {
         }
         catch (error)
         {
-            throw new Error( 'Internal server error')
-        }
+            throw new NotFoundException();
+        }                          
     }
 }

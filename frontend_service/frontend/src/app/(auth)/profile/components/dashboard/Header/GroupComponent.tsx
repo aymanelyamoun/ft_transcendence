@@ -104,14 +104,18 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   function isUserBanned(user: string, bannedUsers: {id: string}[]) : boolean
   {
-    return (bannedUsers.some(BannedUser => BannedUser.id === user));
+    if (bannedUsers)
+      return (bannedUsers.some(BannedUser => BannedUser.id === user));
+    return (false);
   }
 
   const isBanned = isUserBanned(selectedUserId , props.banedUsers);
 
-  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string)
+  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string) : boolean
   {
-    return (members.some(member => member.user.id === userId));
+    if (members)
+      return (members.some(member => member.user.id === userId));
+    return (false);
   }
 
   const isMember = isUserMember(props.members, loggedInUserId);

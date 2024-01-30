@@ -191,7 +191,6 @@ const MatchScene = () => {
       router.push(destination);
     });
     socketRef.current.on("startFriendGame", (playersData: any) => {
-      console.log('GAME STARTING')
       socketRef.current!.on("selfData", setSkins);
       socketRef.current!.on("endGame", (eData: any) => {
         handleEndGame(eData, router, winnerImg);

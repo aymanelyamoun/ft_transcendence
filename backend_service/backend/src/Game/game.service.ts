@@ -21,7 +21,6 @@ export class GameService {
             {
                 if (this.friendRooms[i][1].length == 2)
                 {
-                    console.log('room is full of ' + this.friendRooms[i][1][0]['user'].username + ' and ' + this.friendRooms[i][1][1]['user'].username)
                     playerSocket.emit('redirect', '/game', 'You are not allowed to join this room');
                     playerSocket.disconnect(true);
                     return ;
@@ -30,11 +29,8 @@ export class GameService {
                 isAlreadyFriendRoom = true;
                 if (this.friendRooms[i][1].length == 2)
                 {
-                    console.log('Friendly Game is starting...');
                     var newGame = new GameInstance(this.friendRooms[i][1][0], this.friendRooms[i][1][1],
                         this.friendRooms[i][0], io);
-                    console.log('Game Created between ' + this.friendRooms[i][1][0]['user'].username +
-                     ' and ' + this.friendRooms[i][1][1]['user'].username);
                     newGame.startGame();
                     this.gameList.push(newGame);
                     this.gameRoomList.push(this.friendRooms[i][0]);
@@ -46,7 +42,6 @@ export class GameService {
         {
             var friendRoom : FriendRoom = [froomID, [playerSocket]];
             this.friendRooms.push(friendRoom);
-            console.log('Created friend room');
         }
     }
 
@@ -101,12 +96,8 @@ export class GameService {
     
     // start matchmaking event
     isAlreadyInQueue(playerSocket: Socket): boolean {
-        console.log('Checking if ' + playerSocket['user'].username + ' is already in queue')
-        console.log('Queue length : ' + this.playersInQueue.length)
         for (var i = 0; i < this.playersInQueue.length; i++)
         {
-            console.log('username : ' + this.playersInQueue[i]['user'].username)
-            console.log('username2 : ' + playerSocket['user'].username)
             if (this.playersInQueue[i]['user'].username == playerSocket['user'].username)
                 return true;
         }
@@ -117,21 +108,15 @@ export class GameService {
         this.clearFinishedGames();
         if (this.isAlreadyInQueue(client))
         {
-            console.log('Player ' + client['user'].username + ' is already in queue');
             client.emit('CancelQueue')
             client.disconnect(true);
             return ;
         }
         this.playersInQueue.push(client);
-        console.log('Player ' + client['user'].username + ' added to the queue');
         if (this.playersInQueue.length == 2)
         {
-            console.log('Game is starting...');
-            // redirect the players to the /game/match?id=AUniqueID
             const matchID : string = this.playersInQueue[0]['user'].username + 
             this.playersInQueue[1]['user'].username + Math.random().toString();
-            console.log('Match ID : ' + matchID);
-            // redirect the players to the /game/match?matchID=
             this.playersInQueue[0].emit('redirect', '/game/match?matchID=' + matchID);
             this.playersInQueue[1].emit('redirect', '/game/match?matchID=' + matchID);
             this.playersInQueue = [];
@@ -144,7 +129,6 @@ export class GameService {
             if (this.playersInQueue[i]['user'].username == playerSocket['user'].username)
             {
                 this.playersInQueue.splice(i, 1);
-                console.log(playerSocket['user'].username + ' is removed from queue');
                 break;
             }
         }
@@ -156,7 +140,6 @@ export class GameService {
             if (this.playersInQueue[i].id == playerSocketID)
             {
                 this.playersInQueue.splice(i, 1);
-                console.log('Someone is removed from queue by ID');
                 break;
             }
         }
@@ -180,14 +163,12 @@ export class GameService {
     clearFinishedGames() {
         for (var i = 0; i < this.gameList.length; i++)
         {
-            console.log('Checking Room ' + this.gameList[i].gameInfo.gameRoom + ' '+ this.gameList[i].gameEnded);
             if (this.gameList[i].gameEnded == true)
             {
                 this.clearFriendRoom(this.gameList[i].gameInfo.gameRoom);
                 this.gameList.splice(i, 1);
                 this.gameRoomList.splice(i, 1);
                 i--;
-                console.log('Room Cleared');
             }
         }
     }

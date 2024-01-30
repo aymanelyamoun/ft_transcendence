@@ -166,7 +166,6 @@ const FriendInfo = (props : FriendInfoProps) => {
         dispatch(toggleFetchFriends());
       }
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -186,7 +185,6 @@ const FriendInfo = (props : FriendInfoProps) => {
         dispatch(toggleFetchFriends());
       }
     } catch (error) {
-      console.log(error);
     };
   };
 

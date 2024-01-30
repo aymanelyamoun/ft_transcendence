@@ -104,7 +104,6 @@ const ShowGroups = (props : showGroupProps) => {
         setChannelFriendSearch(data);
       }
     } catch (error) {
-      console.error("Error fetching data: ", error);
     }
   };
   

@@ -23,7 +23,7 @@ import { fa } from '@faker-js/faker';
 export class ChatGateway implements OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService, private readonly jwtService: JwtService,
-    @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService, private userService: UserService,
+     private readonly authGoogleService: AuthGoogleService, private userService: UserService,
     private gameService : GameService) {}
 
   async getUserData (client : Socket) : Promise<User> {
@@ -249,18 +249,19 @@ export class ChatGateway implements OnGatewayConnection {
       console.log('GAME INVITE ACCEPTED BETWEEN ', user.id, ' and ', data.senderId);
       const sender = this.gatewayService.getSocketByUserId(data.senderId);
       if (sender){
-        if (this.gameService.inGameCheckByID(user.id) || this.gameService.inGameCheckByID(sender.id))
+        if (this.gameService.inGameCheckByID(user.id) || this.gameService.inGameCheckByID(sender.id) ||
+          !this.gatewayService.userIsConnected(data.senderId))
           return; 
         const matchID : string = sender['user'].username + 
             receiver['user'].username + Math.random().toString();
        sender.emit('gameInviteAccepted', {id: user.id, username: user.username});
        receiver.emit('gameInviteAccepted', {id: data.senderId, username: sender['user'].username});
+        if (sender['user'] === undefined || sender['user'] === null || sender.connected === false)
+          return ;
        sender.emit('redirect', '/game/match?matchID=' + matchID);
         receiver.emit('redirect', '/game/match?matchID=' + matchID);
       }
     }
-    else
-      console.log('Sir akhoya lay sma7lk');
   }
 
 

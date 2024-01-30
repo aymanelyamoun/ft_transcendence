@@ -11,10 +11,9 @@ import { RedisService } from 'src/redis/redis.service';
 @Module({
     controllers: [AuthGoogleController],
     providers: [GoogleStrategy,
-            {
-                provide: 'AUTH_SERVICE',
-                useClass: AuthGoogleService,
-            } ,PrismaService, 
+
+                 AuthGoogleService,
+            PrismaService, 
             JwtService,
             IntraStrategy,
         UserService, RedisService  ],

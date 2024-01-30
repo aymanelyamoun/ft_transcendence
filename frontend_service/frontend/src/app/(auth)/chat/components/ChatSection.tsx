@@ -18,6 +18,7 @@ import sendIcon from "../../../../../public/sendButton.png";
 // import { isAdmin } from "./ConversationInfo";
 import { SiWechat } from "react-icons/si";
 import { UserContext } from "@/utils/createContext";
+// import { Link } from "react-router-dom";
 
 export const ConversationMessagesContextSet = createContext(
   {} as React.Dispatch<React.SetStateAction<MessageProps[]>>
@@ -25,30 +26,30 @@ export const ConversationMessagesContextSet = createContext(
 export const ConversationMessagesContextStat = createContext(
   {} as MessageProps[]
 );
+import Link from 'next/link';
 
 // export interface BlockedUser{
 //   id: string;
 // }[]
 
 function createConversationListIthem(
-  Message: MessageProps,
-): ConversationIthemProps{
-
+  Message: MessageProps
+): ConversationIthemProps {
   if (Message.conversation.type === "DIRECT") {
+    return {
+      id: Message.conversationId,
+      name: Message.sender.username,
+      profilePic: Message.sender.profilePic,
+      // profilePic: cur.profilePic,
+      lastMessage: Message.message,
+      type: Message.conversation.type, // replace with actual type
+      createdAt: new Date(), // replace with actual creation date
+      updatedAt: new Date(), // replace with actual creation date
+      channelId: "someChannelId", // replace with actual channel ID
+      title: "someTitle", // replace with actual title
+    };
+  }
   return {
-    id: Message.conversationId,
-    name: Message.sender.username,
-    profilePic: Message.sender.profilePic,
-    // profilePic: cur.profilePic,
-    lastMessage: Message.message,
-    type: Message.conversation.type, // replace with actual type
-    createdAt: new Date(), // replace with actual creation date
-    updatedAt: new Date(), // replace with actual creation date
-    channelId: "someChannelId", // replace with actual channel ID
-    title: "someTitle", // replace with actual title
-  };
-}
-  return{
     id: Message.conversationId,
     name: Message.conversation.channel.channelName,
     // profilePic: Message.sender.profilePic,
@@ -57,9 +58,9 @@ function createConversationListIthem(
     type: Message.conversation.type, // replace with actual type
     createdAt: new Date(), // replace with actual creation date
     updatedAt: new Date(), // replace with actual creation date
-    channelId: "someChannelId", // replace with actual channel ID
+    channelId: Message.conversation.channel.id, // replace with actual channel ID
     title: "someTitle", // replace with actual title
-  }
+  };
 }
 
 export const ConversationChatSection = ({
@@ -192,8 +193,10 @@ export const ConversationChatSection = ({
   console.log("Type", conversation?.type);
   console.log("lastConversation", lastConversation);
 
-  console.log("messages: JJJ", messages );
+  console.log("messages: JJJ", messages);
   // messages.reverse();
+  console.log("get Messages and send to print");
+
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (
@@ -215,7 +218,7 @@ export const ConversationChatSection = ({
               return <Message key={message.id} message={message} />;
               // }
             })}
-            {/* .reverse()} */}
+          {/* .reverse()} */}
         </div>
       ) : null}
       <ConversationMessagesContextSet.Provider value={setMessages}>
@@ -248,6 +251,7 @@ export const ConversationChatSection = ({
 
 const Message = ({ message }: { message: MessageProps }) => {
   const userId = useContext(UserContext).user?.id;
+  console.log("Print Messages cmp");
   if (message.senderId === userId) {
     return <MessageChat message={message} type="sendMsg" />;
   }
@@ -261,10 +265,15 @@ const MessageChat = ({
   message: MessageProps;
   type: string;
 }) => {
+
+
+  console.log("MessageChat cmp");
+
   const userPic = useContext(UserContext).user?.profilePic;
   return (
     <div className={type}>
       <div className="">
+        <Link href={`/profile/FriendProfile?username=${message.sender.username}`}>
         <Image
           className={`rounded-full ${
             type == "rcvMsg" ? "float-left" : "float-right"
@@ -274,6 +283,8 @@ const MessageChat = ({
           width={43}
           height={43}
         />
+          </Link>
+
         <p className="ml-2 mt-12 mb-2 text-[#FFFFFF]"> {message.message} </p>
       </div>
     </div>
@@ -302,12 +313,13 @@ const TypeMessage = ({
       profilePic: conversation?.profilePic ?? "",
       username: conversation?.name ?? "",
     },
-    conversation: { 
-      type: conversation?.type ?? "", 
+    conversation: {
+      type: conversation?.type ?? "",
       channel: {
-        channelName:  "", 
-        channelPic:  ""
-      } 
+        id: "",
+        channelName: "",
+        channelPic: "",
+      },
     },
   };
 
@@ -336,6 +348,7 @@ const TypeMessage = ({
     sendMessage();
     setInputValue("");
   };
+  console.log("Type msg");
 
   return (
     <div onKeyDown={handlePressKey} className="TypeMsgcontainer flex">

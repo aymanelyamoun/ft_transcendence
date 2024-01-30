@@ -8,7 +8,7 @@ import { RedisService } from "src/redis/redis.service";
 @Injectable()
 export class JwtGuard implements CanActivate{
     constructor (private readonly jwtService: JwtService,
-        @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+        private readonly authGoogleService: AuthGoogleService,
         private readonly redisService: RedisService
             ){}
     async canActivate(context: ExecutionContext): Promise<boolean>{
@@ -28,11 +28,11 @@ export class JwtGuard implements CanActivate{
             request['Token'] = token;
             request['user'] = user;
             request['isConfirmed2Fa'] = payload.isConfirmed2Fa;
-            const routeName = context.getHandler().name;
-            if (routeName !== 'check_auth' && routeName !== 'validateTwoFactorAuth') {
-                if (!payload.isConfirmed2Fa && payload.isTwoFactorEnabled)
-                 throw new UnauthorizedException('Two-factor authentication not confirmed');
-            }    
+            // const routeName = context.getHandler().name;
+            // if (routeName !== 'check_auth' && routeName !== 'validateTwoFactorAuth') {
+            //     if (!payload.isConfirmed2Fa && user.isTwoFactorEnabled)
+            //      throw new UnauthorizedException('Two-factor authentication not confirmed');
+            // }    
         }
         catch {
             throw new UnauthorizedException();

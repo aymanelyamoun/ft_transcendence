@@ -15,11 +15,11 @@ async function bootstrap() {
   });
   
   app.useGlobalPipes(new ValidationPipe({
-    // whitelist: true,
+     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }))
-  app.useGlobalPipes(new ValidationPipe);
+  // app.useGlobalPipes(new ValidationPipe);
   try{
     // console.log("running on port : ", PORT);
     // await app.listen(process.env.PORT || 3000, '0.0.0.0');

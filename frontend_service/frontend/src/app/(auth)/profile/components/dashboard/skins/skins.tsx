@@ -80,7 +80,7 @@ const Skins: React.FC = () => {
           <SpanContainer>
           <span className={styles['skins-title']}>Skins</span>
           </SpanContainer>
-          <div className={`${styles['Skins-rectangle']} group-hover:animate-[spin_2s_ease-in-out_infinite]`}>
+          <div className={`${styles['Skins-rectangle']}`}>
             <div className={`${styles['Skins-circle']} `}></div>
             <div className={`${styles['Skins-stick']} `}></div>
           </div>

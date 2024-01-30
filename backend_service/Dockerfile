@@ -2,10 +2,12 @@ FROM node:20.6.1
 
 RUN apt update
 
-
-
-
 COPY backend/script.sh backend/script.sh
+
+COPY backend/package*.json .
+
+RUN npm install
+
 WORKDIR /backend
 # COPY script.sh script.sh
 
@@ -19,5 +21,6 @@ RUN chmod +x ./script.sh
 # WORKDIR /
 
 ENTRYPOINT ./script.sh
+# ENTRYPOINT tail -f /dev/null
 
 # CMD npx prisma migrate dev --name init && npx prisma db seed && npm run start:dev

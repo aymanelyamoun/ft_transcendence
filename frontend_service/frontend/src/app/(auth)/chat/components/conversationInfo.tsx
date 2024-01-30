@@ -237,7 +237,7 @@ export const ConversationInfo = ({
                   hight="h-11"
                 >
                   <p className=" text-light-red font-semibold font-poppins text-sm">
-                    Exit Channel
+                    Leave Channel
                   </p>
                   <FaRunning color="#FC2B5D" size={24} />
                 </CostumeButton>

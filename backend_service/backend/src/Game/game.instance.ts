@@ -302,8 +302,10 @@ export class GameInstance {
         Runner.stop(this.runner);
         World.clear(this.engine.world, false);
         Engine.clear(this.engine);
+        console.log('game ended between ', this.playerOne.playerData.username, 'and', this.playerTwo.playerData.username)
     }
     gameLoop = () => {
+        console.log ('still sending frame for the game between ', this.playerOne.playerData.username, 'and', this.playerTwo.playerData.username);
         if (this.gameOver == true)
             return;
         if (this.gameInfo.roundStart == false) {

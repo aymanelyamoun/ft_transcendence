@@ -141,6 +141,7 @@ export class ChatGateway implements OnGatewayConnection {
     this.gameService.clearFinishedGames();
     if (this.gameService.inGameCheckByID(socket['user'].id))
       this.gameService.stopGameEvent(socket);
+    console.log ('stoping game event after disconnect')
   }
 }
 

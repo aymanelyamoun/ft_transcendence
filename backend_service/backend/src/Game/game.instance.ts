@@ -223,6 +223,7 @@ export class GameInstance {
         ? '1' : '2';
         if (state.reason == 'disconnect')
         {
+            state.winner.score = this.gameInfo.winScore;
             winner = (state.winner == this.playerOne) ? '1' : '2';
         }
         if (winner == '1')
@@ -288,14 +289,6 @@ export class GameInstance {
         catch (error) {
             console.log("Error encoutered from client side while updating database : ", error.message);
         }
-        // }
-        // else if (state.reason == 'disconnect')
-        // {
-        //     const winner = (state.winner == this.playerOne) ? '1' : '2';
-        //     this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
-        //         winner: winner,
-        //     });
-        // }
         Events.off(this.engine, 'collisionStart', this.collisionDetect);
         Events.off(this.runner, "beforeTick", this.animationFrame);
         Runner.stop(this.runner);

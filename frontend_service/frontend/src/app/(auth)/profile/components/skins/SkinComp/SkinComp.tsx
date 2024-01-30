@@ -61,7 +61,6 @@ const SkinComp: React.FC<SkinProps> = ({ svgImage, Name, Type, active, setActive
       setActiveSkin(Name);
     }
   } catch (error) {
-    alert(error);
   }
   }
   return (

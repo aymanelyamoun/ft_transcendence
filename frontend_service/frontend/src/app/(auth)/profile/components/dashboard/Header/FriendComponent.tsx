@@ -88,7 +88,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
                 setUserAdded(true);
             }
         } catch (error) {
-            console.log(error);
         };
     };
 

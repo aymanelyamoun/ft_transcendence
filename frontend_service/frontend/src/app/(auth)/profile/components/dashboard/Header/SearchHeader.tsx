@@ -77,7 +77,6 @@ const SearchHeader = () => {
                 setSearchUsers(data);
               }
             } catch (error) {
-              console.error("Error fetching data: ", error);
             } finally {
               setisLoading(false); }
           };
@@ -98,7 +97,6 @@ const SearchHeader = () => {
                 setChannelFriendSearch(data);
               }
             } catch (error) {
-              console.error("Error fetching data: ", error);
             } finally {
               setisLoading(false);
             }

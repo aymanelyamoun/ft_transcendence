@@ -77,7 +77,6 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
           dispatch(toggleSearchFetch());
       }
   } catch (error) {
-      console.log(error);
     }
   };
 
@@ -98,7 +97,6 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
         props.setfriendRequests(data);
       }
   } catch (error) {
-      console.log(error);
     }
   };
   return (

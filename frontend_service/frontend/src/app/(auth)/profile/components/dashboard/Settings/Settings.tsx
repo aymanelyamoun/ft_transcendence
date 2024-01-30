@@ -113,7 +113,6 @@ const Settings: React.FC<SettingsProps> = (props) => {
                 router.push("/");
             }
         } catch (error) {
-            console.log(error);
         };
     }
 

@@ -55,7 +55,6 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
         setFriendSearch(data);
       }
     } catch (error) {
-      console.error("Err1or fetching data: ", error);
     }
   };
 
@@ -75,7 +74,6 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
         setChannelFriendSearch(data);
       }
     } catch (error) {
-      console.error("Error fetching data: ", error);
     }
   };
 
@@ -115,7 +113,6 @@ const SearchFriends = ({setChannelFriendSearch , setFriendSearch}: FriendListPro
           setFriendSearch(data);
         }
       } catch (error) {
-        console.error("Error fetching data: ", error);
       }
     };
   fetchUsers();

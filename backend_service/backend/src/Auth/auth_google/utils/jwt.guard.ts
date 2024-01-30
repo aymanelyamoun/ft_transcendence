@@ -29,10 +29,10 @@ export class JwtGuard implements CanActivate{
             request['user'] = user;
             request['isConfirmed2Fa'] = payload.isConfirmed2Fa;
             const routeName = context.getHandler().name;
-            if (routeName !== 'check_auth' && routeName !== 'validateTwoFactorAuth') {
-                if (!payload.isConfirmed2Fa && payload.isTwoFactorEnabled)
-                 throw new UnauthorizedException('Two-factor authentication not confirmed');
-            }    
+            // if (routeName !== 'check_auth' && routeName !== 'validateTwoFactorAuth') {
+            //     if (!payload.isConfirmed2Fa && payload.isTwoFactorEnabled)
+            //      throw new UnauthorizedException('Two-factor authentication not confirmed');
+            // }    
         }
         catch {
             throw new UnauthorizedException();

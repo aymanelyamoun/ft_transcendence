@@ -262,8 +262,6 @@ export class ChatGateway implements OnGatewayConnection {
         receiver.emit('redirect', '/game/match?matchID=' + matchID);
       }
     }
-    else
-      console.log('Sir akhoya lay sma7lk');
   }
 
 

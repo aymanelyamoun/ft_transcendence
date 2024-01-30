@@ -85,7 +85,6 @@ const StatisticsPie: React.FC<StatisticsPieProps> = (props: {
   return (
     <div className={styles["widgetContainer"]}>
       <ReactEcharts option={option} style={{ height: "100%", width: "100%" }} />
-      {/* Other children, if applicable */}
     </div>
   );
 };

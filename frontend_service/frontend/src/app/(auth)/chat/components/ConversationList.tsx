@@ -119,11 +119,14 @@ export const ConversationList = ({
   const channelType = useContext(IsChannelContext);
   console.log("ConversationListData", ConversationListData);
   // const lastConv = useContext(LstConversationStateContext);
+
+  console.log("Items List");
+  console.log("Items List");
   if (!channelType) {
     {
       return (
         <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-          {Array.isArray(ConversationListData) &&
+          {Array.isArray(ConversationListData) ?
             ConversationListData.map((conv) => {
               if (conv.type === "DIRECT") {
                 return (
@@ -140,14 +143,16 @@ export const ConversationList = ({
                         />
                         );
                       }
-                    })}
+                    })
+                 : <div>here</div> 
+                }
         </ul>
       );
     }
   }
   return (
     <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2">
-      {Array.isArray(ConversationListData) &&
+      {Array.isArray(ConversationListData) ?
         ConversationListData.map((conv) => {
           if (conv.type === "CHANNEL_CHAT") {
             return (
@@ -162,9 +167,12 @@ export const ConversationList = ({
               channelId={conv.channelId}
               lastMessage={conv.lastMessage}
               />
-            );
-          }
-        })}
+              );
+            }
+          })
+          : <div>here</div> 
+        
+        }
       {isChannel && (
         <CreateChannelButton
           setShowAddChannel={setShowAddChannel}

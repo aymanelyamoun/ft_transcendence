@@ -164,8 +164,6 @@ const FriendInfo = (props : FriendInfoProps) => {
       if(response.ok){
         setShowAlertDecline(true);
         dispatch(toggleFetchFriends());
-      }else {
-        alert("the user has not been removed"); // gonna remove
       }
     } catch (error) {
       console.log(error);
@@ -186,8 +184,6 @@ const FriendInfo = (props : FriendInfoProps) => {
       if(response.ok){
         setShowAlertBlock(true);
         dispatch(toggleFetchFriends());
-      }else {
-        alert("the user has not been blocked");
       }
     } catch (error) {
       console.log(error);

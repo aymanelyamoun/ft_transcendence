@@ -17,6 +17,7 @@ const BALLSPEED : number = 16;
 
 @Injectable()
 export class GameInstance {
+    private databaseUpdated : boolean = false;
     private engine: Engine;
     private runner: Runner;
     private canvas: Canvas;
@@ -29,6 +30,14 @@ export class GameInstance {
     private readonly prisma: PrismaService;
 
     constructor(playerOneSocket: Socket, playerTwoSocket: Socket, roomNumber: string, serverIO: Server) {
+        if (playerOneSocket['user'].username == playerTwoSocket['user'].username)
+        {
+            playerOneSocket.emit('redirect', '/game', 'You are not allowed to join this room');
+            playerTwoSocket.emit('redirect', '/game', 'You are not allowed to join this room');
+            playerTwoSocket.disconnect(true);
+            playerOneSocket.disconnect(true);
+            return ;
+        }
         this.engine = Engine.create();
         this.engine.gravity.y = 0;
         this.canvas = {
@@ -87,7 +96,7 @@ export class GameInstance {
             IOserver: serverIO,
             roundStart: false,
             paddleSpeed: 5,
-            winScore: 2,
+            winScore: 5,
         };
         playerOneSocket.join(roomNumber);
         playerTwoSocket.join(roomNumber);
@@ -138,7 +147,7 @@ export class GameInstance {
     }
 
     socketConnect = (socket: Socket) => {
-        console.log('a socket connected to room ' + socket['id']);
+        // console.log('a socket connected to room ' + socket['id']);
         socket.join(this.gameInfo.gameRoom);
         socket.emit('startFriendGame', [this.playerOne.playerData, this.playerTwo.playerData])
         socket.emit('selfData', socket['user']);
@@ -159,7 +168,6 @@ export class GameInstance {
     }
 
     socketDisconnect = (disconnectedSocket: Socket) => {
-        console.log('debug in socket disconnect')
         this.playerOne.playerSocket.forEach((socket) => {
             if (socket.id == disconnectedSocket.id){
                 this.playerOne.playerSocket.splice(this.playerOne.playerSocket.indexOf(socket), 1);
@@ -215,7 +223,6 @@ export class GameInstance {
     }
 
     async endGame (state : EndGameState) : Promise<void> {
-        console.log('endGame called');
         this.gameOver = true;
         this.gameEnded = true;
         var loserData : User;
@@ -224,6 +231,7 @@ export class GameInstance {
         ? '1' : '2';
         if (state.reason == 'disconnect')
         {
+            state.winner.score = this.gameInfo.winScore;
             winner = (state.winner == this.playerOne) ? '1' : '2';
         }
         if (winner == '1')
@@ -240,60 +248,55 @@ export class GameInstance {
             this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
                 winner: winner,
             });
-            const prismaService = new PrismaService();
-            await prismaService.gameRecord.create({
-                data: {
-                    user:{connect:{id: winnerData.id}},
-                    scoredGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
-                    concededGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
-                    xp:  25,
-                    oponent:{connect:{id: loserData.id}},
-                    // oponentId: loserData.id,
-                },
-            });
-            await prismaService.gameRecord.create({
-                data: {
-                    user: {connect:{id: loserData.id}},
-                    scoredGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
-                    concededGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
-                    xp: loserData.totalXp - 35 > 0 ? -35 : loserData.totalXp * -1,
-                    oponent:{connect:{id: winnerData.id}},
-                },
-            });
-            await prismaService.user.update({
-                where: {
-                    id: winnerData.id,
-                },
-                data: {
-                    totalXp: winnerData.totalXp + 25,
-                    wallet: {
-                        increment: 10,
+            if (this.databaseUpdated == false)
+            {
+                this.databaseUpdated = true;
+                const prismaService = new PrismaService();
+                await prismaService.gameRecord.create({
+                    data: {
+                        user:{connect:{id: winnerData.id}},
+                        scoredGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                        concededGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                        xp:  25,
+                        oponent:{connect:{id: loserData.id}},
+                        // oponentId: loserData.id,
                     },
-                },
-            });
-            await prismaService.user.update({
-                where: {
-                    id: loserData.id,
-                },
-                data: {
-                    totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
-                },
-            });
-            console.log('database updated');
-            await this.update_achievement(winnerData, loserData, prismaService)
+                });
+                await prismaService.gameRecord.create({
+                    data: {
+                        user: {connect:{id: loserData.id}},
+                        scoredGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                        concededGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                        xp: loserData.totalXp - 35 > 0 ? -35 : loserData.totalXp * -1,
+                        oponent:{connect:{id: winnerData.id}},
+                    },
+                });
+                await prismaService.user.update({
+                    where: {
+                        id: winnerData.id,
+                    },
+                    data: {
+                        totalXp: winnerData.totalXp + 25,
+                        wallet: {
+                            increment: 10,
+                        },
+                    },
+                });
+                await prismaService.user.update({
+                    where: {
+                        id: loserData.id,
+                    },
+                    data: {
+                        totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
+                    },
+                });
+                await this.update_achievement(winnerData, loserData, prismaService)
+            }
             // await this.update_skins(winnerData, loserData, prismaService)
     }
         catch (error) {
-            console.log("error at updating database in game : ",error.message);
+            console.log("Error encoutered from client side while updating database : ", error.message);
         }
-        // }
-        // else if (state.reason == 'disconnect')
-        // {
-        //     const winner = (state.winner == this.playerOne) ? '1' : '2';
-        //     this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
-        //         winner: winner,
-        //     });
-        // }
         Events.off(this.engine, 'collisionStart', this.collisionDetect);
         Events.off(this.runner, "beforeTick", this.animationFrame);
         Runner.stop(this.runner);
@@ -365,7 +368,6 @@ export class GameInstance {
 
 
     startGame = () => {
-        console.log('Game started between ' + this.playerOne.playerData.username + ' and ' + this.playerTwo.playerData.username)
         this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerOne.playerData.id, status: '2'})
         this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerTwo.playerData.id, status: '2'})
         this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('startFriendGame',

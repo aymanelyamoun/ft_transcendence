@@ -68,7 +68,6 @@ const FriendList: React.FC<FriendsProps> = ({onFriendItemClick}) => {
         }
       }
       catch (error) {
-        console.error("Error fetching data: ", error);
       }
     };
     fetchFriendsListData().then(() => {

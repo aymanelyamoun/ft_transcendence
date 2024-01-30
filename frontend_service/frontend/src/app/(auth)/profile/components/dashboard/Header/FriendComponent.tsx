@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { IoMdPersonAdd } from "react-icons/io";
  
 import { CgUnblock } from "react-icons/cg";
-import { BsFillPersonCheckFill } from "react-icons/bs";
+import { BsFillPersonCheckFill, BsPersonFillSlash } from "react-icons/bs";
 import Link from 'next/link';
 import { SearchU } from '../interfaces';
 import Image from 'next/image';
@@ -44,14 +44,18 @@ const FriendName = styled.div`
 `;
 
 const AddFriendButton = styled.button`
-    position: relative;
-    // left: 13vw;
-    margin-left: auto;
-    margin-right: 1vw;
-    top: 0vh;
+border-bottom: solid rgba(5, 10, 39, 0.55);
     svg {
         font-size: 1.5rem;
         color: aliceblue;
+    }
+`;
+
+const BlockButton = styled.button`
+border-bottom: solid rgba(5, 10, 39, 0.55);
+    svg {
+        font-size: 1.5rem;
+        color: red;
     }
 `;
 
@@ -67,11 +71,22 @@ const UnblockButton = styled.button`
     }
 `;
 
+const ContainerAddBlock = styled.div`
+    position: relative;
+    margin-left: auto;
+    margin-right: 1vw;
+    top: 0vh;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+`;
+
 const FriendComponent: React.FC<FriendComponentProps> = (props) => {
 
     const [UserAdded, setUserAdded] = useState<boolean>(false);
     const [UserUnblocked, setUserUnblocked] = useState<boolean>(false);
     const [showAlertUnblock, setShowAlertUnblock] = useState<boolean>(false);
+    const [showAlertBlock, setShowAlertBlock] = useState<boolean>(false);
 
     const SendRequest = async (props: FriendComponentProps) => {
         try {
@@ -88,7 +103,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
                 setUserAdded(true);
             }
         } catch (error) {
-            console.log(error);
         };
     };
 
@@ -113,7 +127,27 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         } catch (error) {
         }
     };
-    
+
+    const SendBlockUser = async (id: string) => {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}request/block/${id}`, {
+            method: "DELETE",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
+          if(response.ok){
+            setShowAlertBlock(true);
+            setUserUnblocked(false);
+            // dispatch(toggleFetchFriends());
+          }
+        } catch (error) {
+        };
+      };
+
     const fetchIcon = useCallback(async () => {
         try
         {
@@ -154,15 +188,23 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
             <CgUnblock />
         </UnblockButton>
         ) : (
-        <AddFriendButton onClick={() => SendRequest(props)}>
-            {UserAdded ? (
-                <BsFillPersonCheckFill />
-            ) : (
-            <IoMdPersonAdd /> )}
-        </AddFriendButton>
+        <ContainerAddBlock>
+            <AddFriendButton onClick={() => SendRequest(props)}>
+                {UserAdded ? (
+                    <BsFillPersonCheckFill />
+                    ) : (
+                        <IoMdPersonAdd /> )}
+            </AddFriendButton>
+            <BlockButton onClick={() => SendBlockUser(props.id)}>
+              <BsPersonFillSlash />
+            </BlockButton>
+        </ContainerAddBlock>
         )}
         {
             showAlertUnblock && (<AlertMessage onClick={() => setShowAlertUnblock(false)} message={"The user has been Unblocked!"} type='notify'/>)
+        }
+        {
+        showAlertBlock && (<AlertMessage onClick={() => setShowAlertBlock(false)} message={"The user has been blocked"} type="error"/>)
         }
     </>
   )

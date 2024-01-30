@@ -36,7 +36,6 @@ export default function Authorization()
             setAuthenticated(false);
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
         }
       };
 

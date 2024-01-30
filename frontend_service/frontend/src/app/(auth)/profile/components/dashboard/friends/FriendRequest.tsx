@@ -58,7 +58,6 @@ const FriendRequest = () => {
         }
       } catch (error)
       {
-        console.error("Error fetching data: ", error);
       }
     };
     fetchReqData();

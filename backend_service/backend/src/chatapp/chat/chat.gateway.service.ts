@@ -5,11 +5,11 @@ import { Socket } from 'socket.io';
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { member } from "./types/user";
 import { PrismaChatService } from "../prisma/chat/prisma.chat.service";
-import { TmpUserService } from "../prisma/tmpUserAdd.service";
+// import { TmpUserService } from "../prisma/tmpUserAdd.service";
 
 @Injectable()
 export class GatewayService{
-    constructor(private readonly prismaChat:PrismaChatService, private readonly tmpUserAddService:TmpUserService, ){}
+    constructor(private readonly prismaChat:PrismaChatService, ){}
     connectedSocketsMap = new Map<string, Set<Socket> >();
     connectedSockets = new Set<ConnectedSocketInfo>();
     inviteSocketsMap = new Map<Socket, Set<string>>();

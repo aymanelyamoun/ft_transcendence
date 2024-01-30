@@ -285,13 +285,15 @@ export class PrismaChatService{
             // const addAdmins = await this.filterAddAdmins(data, req);
             // const removeAdmins = await this.filterToDelete(data);
 
+            const hash = await bcrypt.hash(data.password, 10);
+
             const transaction = await this.prisma.$transaction([
               this.prisma.channel.update({
                 where: { id: data.channelId },
                 data: {
                   channelName: data.channelName,
                   channelType: data.type,
-                  hash: data.password,
+                  hash: hash,
                 },
               }),
               // ...addAdmins.map(admin => this.prisma.userChannel.update({

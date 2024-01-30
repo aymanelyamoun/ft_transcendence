@@ -109,7 +109,7 @@ const magnetize = (e: any ,mouseConstraint : Matter.MouseConstraint, engine : Ma
     // calculate the angle bin kora o l mouse bach t3ref direction
     const angle = Math.atan2(mouseY - ball.position.y, mouseX - ball.position.x);
     
-    const forceMagnitude = 0.005;
+    const forceMagnitude = 0.05;
     const forceX = forceMagnitude * Math.cos(angle);
     const forceY = forceMagnitude * Math.sin(angle);
     Matter.Body.applyForce(ball, ball.position, { x: forceX, y: forceY });

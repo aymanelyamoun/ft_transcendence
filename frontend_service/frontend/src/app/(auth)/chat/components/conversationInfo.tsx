@@ -35,6 +35,7 @@ import { ChannelInfoProps } from "@/utils/types/chatTypes";
 import { UserContext } from "@/utils/createContext";
 import { Backend_URL } from "@/lib/Constants";
 import router from "next/router";
+import Link from "next/link";
 // export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 // export const isAdmin = false;
 
@@ -244,60 +245,12 @@ export const ConversationInfo = ({
     // console.log("add friends to channel");
     setShowInviteToChannel(true);
   };
-  //   console.log("recieverUserId :", recieverUserId);
 
-  // console.log("***************ConversationListData :", ConversationListData);
-  // console.log("***************userInfo?.username :", userInfo?.username);
-  // console.log("***************userInfo?.id :", userInfo?.id);
-  // console.log("***************members :", members);
 
-  // console.log("last conversation data :", lastConversation);
   const inviteToPlay = () => {
-    // console.log('inviting this man', recieverUserName, 'to play whose id is', recieverUserId)
-    // socket.emit("inviteGame", {id: lastConversation?.id})
     socket.emit("inviteGame", { id: recieverUserId });
   };
 
-  // console.log(
-  //   "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
-  //   conversationProps?.type
-  // );
-  // if (goBack)
-  // {
-  //   setIsCreator(false);
-  // }
-  // const [isSet, setIsSet] = useState(false);
-  // const setGoBack = useContext(setGoBackContext);
-  // if (conversationProps?.type === "CHANNEL_CHAT")
-  // {
-  //   setGoBack(false);
-  // }
-  // const [types, setTypes] = useState<string>("");
-  // const setGoBack = useContext(setGoBackContext);
-  // let typesSelected = "";
-  // if (goBack)
-  // {
-  //   typesSelected = "D";
-  //   // setGoBack(false);
-  // }
-  // else
-  // {
-  //   if (conversationProps?.type === "DIRECT") {
-  //     typesSelected = "DIRECT";
-  //     console.log("direct");
-  //   }
-  //   else if (conversationProps?.type === "CHANNEL_CHAT") {
-  //     typesSelected = "CHANNEL_CHAT";
-  //     console.log("channel");
-  //   }
-  //   else {
-  //     typesSelected = "D";
-  //   }
-  // }
-  // console.log("typesSelected :", typesSelected);
-  console.log("typesSelected :", conversationProps?.type);
-  // else
-  //   typesSelected = conversationProps?.type as string;
 
   return (
     <>
@@ -496,20 +449,8 @@ const MemberIthem = ({
     { id: 1, label: "Mute", subOptions: ["5 min", "30 min", "1 hour"] },
     { id: 2, label: "Kick", action: "kick" },
     { id: 3, label: "Ban", action: "ban" },
-    {
-      id: 4,
-      label: !asAdmin ? "Block" : "Unblock",
-      action: !asAdmin ? "blockUser" : "UnBlockUser",
-    },
   ];
 
-  const userOptions = [
-    {
-      id: 0,
-      label: !asAdmin ? "Block" : "Unblock",
-      action: !asAdmin ? "blockUser" : "UnBlockUser",
-    },
-  ];
 
   // const handleSubOptionClick =
   //   (option: { id: number; label: string; subOptions?: string[] }) => () => {
@@ -546,12 +487,40 @@ const MemberIthem = ({
           body: JSON.stringify(userData),
         });
       }
-      // else if (subOption === "30 min") {
-      //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
-      // }
-      // else if (subOption === "1 hour") {
-      //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
-      // }
+      else if (subOption === "30 min") {
+        // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
+        const userData = {
+          channelId: conversationProps?.channelId,
+          userToMute: userId,
+          muteUntil: addMinutes(new Date(), 30),
+        };
+        console.log("userData Mute :", userData);
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      }
+      else if (subOption === "1 hour") {
+        // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
+        const userData = {
+          channelId: conversationProps?.channelId,
+          userToMute: userId,
+          muteUntil: addMinutes(new Date(), 60),
+        };
+        console.log("userData Mute :", userData);
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      }
 
       // setSelectedMuteTime(subOption);
     };
@@ -738,41 +707,7 @@ const MemberIthem = ({
           </Menu>
         )
       }
-      {!isAdmin && (
-        <Menu>
-          <Menu.Button className="cursor-pointer left-[95%] absolute">
-            <SlOptions className="" onClick={() => setIsOptions(!isOptions)} />
-          </Menu.Button>
-          <Transition
-            as={Fragment}
-            enter="transition duration-100 ease-out"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-              {userOptions.map((option) => (
-                <Menu.Item key={option.id}>
-                  {({ active }) => (
-                    <div
-                      className={`${
-                        active
-                          ? "bg-[#9A9BD326] text-white rounded-md flex justify-between"
-                          : "text-white flex justify-between"
-                      } block px-4 py-2 text-sm cursor-pointer`}
-                      onClick={handleOptionClick(option)}
-                    >
-                      {option.label}
-                    </div>
-                  )}
-                </Menu.Item>
-              ))}
-            </Menu.Items>
-          </Transition>
-        </Menu>
-      )}
+
     </div>
   );
 };
@@ -795,6 +730,7 @@ const MemberList = ({
   const userInfo = useContext(UserContext);
 
   const [isSet, setIsSet] = useState(false);
+
   // const refresh = use / real time
 
   // const userData = {
@@ -823,6 +759,7 @@ const MemberList = ({
 
   const [unauthorized, setUnauthorized] = useState(false);
   useEffect(() => {
+    
     const fetchFun = async () => {
       await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${conversation?.id}`,
@@ -897,6 +834,7 @@ const MemberList = ({
     refresh,
     router,
     unauthorized,
+    // membersInfo,
   ]);
 
   // useEffect(() => {
@@ -904,12 +842,18 @@ const MemberList = ({
   // }, []);
 
   const setBlockedUsers = useContext(setBlockedUsersContext);
-
+  // const [isAdmin, setIsAdmin] = useState(false);
+// useEffect(() => {
   const isAdmin = (): boolean => {
+    console.log("");
     return membersInfo.members?.some(
       (member) => member.userId === userInfo.user?.id && member.isAdmin === true
     );
   };
+  // if (isAdmin()) {
+  //   setIsAdmin(true);
+  // }
+// }, [membersInfo, userInfo.user?.id]);
   // const isCreator = (): boolean => {
   //   return membersInfo.creator?.id === userInfo.user?.id;
   // };
@@ -928,7 +872,17 @@ const MemberList = ({
     if (membersInfo.creator?.id === userInfo.user?.id) {
       setIsCreator(true);
     }
+    else
+    {
+      setIsCreator(false);
+    }
   }, [membersInfo, userInfo.user?.id, setIsCreator]);
+
+  // useEffect(() => {
+  //   if (membersInfo.creator?.id !== userInfo.user?.id) {
+  //     setIsNotCreator(true);
+  //   }
+  // } , [membersInfo, userInfo.user?.id, setIsCreator]);
 
   // console.log("membersInfo:", membersInfo);
   // console.log("userInfo?.id:", userInfo.user?.id);
@@ -999,15 +953,21 @@ const ConversationInfoWrapper = ({
   return (
     <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96">
       {title !== "" ? (
+        <>
+        <Link href={`/profile/FriendProfile?username=${name}`}>
         <ProfileInfos name={name} picUrl={imgUrl}>
           {/* {" "} */}
           <p className="titleInfo">{title}</p>
           {/* {" "} */}
         </ProfileInfos>
+         </Link>
+        
+        </>
       ) : (
-        <ProfileInfos name={name} picUrl={imgUrl}>
-          <></>
-        </ProfileInfos>
+          <ProfileInfos name={name} picUrl={imgUrl}>
+            <></>
+          </ProfileInfos>
+
       )}
       {children}
     </div>
@@ -1192,7 +1152,7 @@ export const ChatPage = () => {
       // return res;
     };
     fetchFun();
-  }, [conversation]);
+  }, [conversation, refresh ]);
   console.log("messages:   TTT", messages);
 
   return (
@@ -1356,15 +1316,19 @@ const ProfileInfos = ({
   // console.log("name------------ :", name);
   // console.log("picUrl------------ :", picUrl);
   return (
-    <div className="flex flex-col items-center">
-      <Image
-        className="w-18 h-18 rounded-full mt-[40px] mb-[20px] sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48"
-        src={picUrl}
-        alt={"avatar"}
-      />
-      {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
-      <h4 className="nameInfo"> {name} </h4>
-      {children}
-    </div>
+    <>
+      <div className="flex flex-col items-center">
+      {/* <Link href={`/profile/FriendProfile?username=${name}`}> */}
+        <Image
+          className="w-18 h-18 rounded-full mt-[40px] mb-[20px] sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48"
+          src={picUrl}
+          alt={"avatar"}
+        />
+        {/* </Link> */}
+        {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
+        <h4 className="nameInfo"> {name} </h4>
+        {children}
+      </div>
+    </>
   );
 };

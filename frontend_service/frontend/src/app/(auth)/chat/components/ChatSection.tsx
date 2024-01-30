@@ -273,7 +273,7 @@ const MessageChat = ({
   return (
     <div className={type}>
       <div className="">
-        <Link href={`/profile/FriendProfile?username=${message.sender.username}`}>
+        {/* <Link href={`/profile/FriendProfile?username=${message.sender.username}`}> */}
         <Image
           className={`rounded-full ${
             type == "rcvMsg" ? "float-left" : "float-right"
@@ -283,7 +283,7 @@ const MessageChat = ({
           width={43}
           height={43}
         />
-          </Link>
+          {/* </Link> */}
 
         <p className="ml-2 mt-12 mb-2 text-[#FFFFFF]"> {message.message} </p>
       </div>
@@ -303,6 +303,8 @@ const TypeMessage = ({
   const conversation = useContext(LstConversationStateContext);
   const userId = useContext(UserContext).user?.id;
 
+
+  console.log("conversation : ",conversation)
   const newMessage: MessageProps = {
     id: maxId + 1,
     message: inputValue,
@@ -343,10 +345,11 @@ const TypeMessage = ({
       setRefresh((prev) => !prev);
     }
   };
-
+  
   const handleClick = () => {
     sendMessage();
     setInputValue("");
+    setRefresh((prev) => !prev);
   };
   console.log("Type msg");
 

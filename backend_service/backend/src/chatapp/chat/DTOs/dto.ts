@@ -76,6 +76,10 @@ export class ChangeChannelDataDto{
     @IsNotEmpty()
     @IsString()
     channelId: string;
+
+    @IsNotEmpty()
+    @IsString()
+    channelPic: string;
     
     // @IsNotEmpty()
     // @IsString()

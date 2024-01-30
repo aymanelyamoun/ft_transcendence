@@ -273,6 +273,7 @@ export class PrismaChatService{
 
         async editChannel(data: ChangeChannelData, @Req() req: Request) {
 
+          console.log("DATA INSIDE: ", data);
           try{
             const user = req['user'] as User;
 
@@ -291,6 +292,7 @@ export class PrismaChatService{
                 data: {
                   channelName: data.channelName,
                   channelType: data.type,
+                  channelPic: data.channelPic,
                   hash: data.password,
                 },
               }),

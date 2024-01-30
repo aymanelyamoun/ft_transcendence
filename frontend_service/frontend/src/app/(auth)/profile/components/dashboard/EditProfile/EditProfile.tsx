@@ -40,16 +40,9 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const setShowEditProfile = props.setShowEditProfile;
 
-  const handleEdit = () => {
-    { setShowEdit(true) }
-  }
-
   const handleShowProfile = () => {
     setShowEditProfile(true);
   }
-  useEffect(() => {
-    console.log(showEdit);
-  }, [showEdit]); 
   return (
     <>
       <EditProfileContainer >

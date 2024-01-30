@@ -32,7 +32,9 @@ interface FriendRequestItemProps {
     profilePic: string;
   // };
   discription: string;
+  refreshRequest: boolean;
   setfriendRequests: any;
+  setRefreshRequest: any;
 }
 
 const ButtonsContainer = styled.div`
@@ -74,6 +76,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       if(res.ok){
           const data = await res.json();
           props.setfriendRequests(data);
+          props.setRefreshRequest(!props.refreshRequest);
           dispatch(toggleSearchFetch());
       }
   } catch (error) {
@@ -94,6 +97,7 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       });
       if(res.ok){
         const data : FriendR[] = await res.json();
+        props.setRefreshRequest(!props.refreshRequest);
         props.setfriendRequests(data);
       }
   } catch (error) {

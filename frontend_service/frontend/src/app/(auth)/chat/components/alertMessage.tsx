@@ -13,7 +13,6 @@ export const AlertMessage = ({onClick , message , type, children, id = ""} : { o
 
   const handlePlay = () => {
     socket.emit('acceptGameInvite', {senderId: id})
-    // console.log('play');
   }
   const cancelAlert = useRef<HTMLDivElement>(null);
 

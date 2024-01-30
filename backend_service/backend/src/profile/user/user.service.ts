@@ -34,7 +34,8 @@ export class UserService {
                 dto.username = await this.generateUsername(tmpUsername);
             const newUser = await this.prisma.user.create({
                 data: {
-                    ...dto,
+                    username: dto.username,
+                    email: dto.email,
                     hash: await bcrypt.hash(dto.hash, 10),
                     profilePic: "https://res.cloudinary.com/dapuvf8uk/image/upload/v1705590105/vrygj22tzhzpku2d14ez.svg",
                     wallet: 10,
@@ -151,7 +152,8 @@ export class UserService {
             const user = await this.prisma.user.update({
                 where: { email: email },
                 data: {
-                    ...dto,
+                    username: dto.username,
+                    profilePic: dto.profilePic,
                     hash: await bcrypt.hash(dto.hash, 10)
                 },
         })

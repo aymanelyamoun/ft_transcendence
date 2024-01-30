@@ -1,8 +1,6 @@
 .StatusBar
 {
   background: rgba(154, 155, 211, 0.1);
-  /* top: 12vh;
-  left: 32vw; */
   height: 3.6rem;
   width: 23rem;
   font-family: var(--font-poppins);
@@ -22,6 +20,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  z-index: 999;
 }
 
 .navli

@@ -94,32 +94,15 @@ export const ConversationChatSection = ({
 
   useEffect(() => {
     let newMessage: MessageProps;
-    // new
-    // set uuid
-    // newMessage.id = "5";
-    // console.log("chat sockets");
     socket.connect();
 
     socket.on("connect", () => {
-      // socket.emit("userData", { userId: userInfo?.id, isAdmin: "false" });
-      // console.log("connected to server");
     });
 
     socket.on("rcvMessage", (data) => {
-      // setData(data);
-      // console.log("data:", data);
       newMessage = data;
-
-      console.log("newMessage:", newMessage);
       if (newMessage.conversationId === conversation?.id)
         setMessages((prevMessages) => [...prevMessages, newMessage]);
-
-      // const curConv = useContext(LstConversationStateContext);
-
-      // const newConversation = createConversationListIthem(newMessage, conversation!);
-
-      // if (newConversation === null) return;
-
       setConversationList((prevConversationList: any) => [
         createConversationListIthem(newMessage),
         ...prevConversationList.filter((conversation: any) => {
@@ -128,7 +111,6 @@ export const ConversationChatSection = ({
       ]);
     });
     setMessages(messagesData);
-    // messages.reverse();
     return () => {
       socket.off("rcvMessage");
       socket.disconnect();
@@ -150,9 +132,7 @@ export const ConversationChatSection = ({
     }
   }, [messages, refresh, setRefresh]);
 
-  // const blockedUsers:BlockedUser[] = [];
   useEffect(() => {
-    // console.log("chat section useEffect");
     const fetchFun = async () => {
       const response = await fetch(
         process.env.NEXT_PUBLIC_BACKEND_URL + "channels/blockedUsers",
@@ -168,35 +148,16 @@ export const ConversationChatSection = ({
       )
         .then((res) => res.json())
         .then((data) => {
-          // console.log("data:", data);
           if (data) {
-            // const blockedUsers = data;
             setBlockedUsers(data);
           }
-          // else
-          // {
-          //   // const blockedUsers = [];
-          //   setBlockedUsers([]);
-          // }
         });
     };
-    // if (userInfo.user?.id)
-    // {
-    //   fetchFun();
-    // }
     fetchFun();
   }, [setBlockedUsers]);
-  // }, [blockedUsers])
-  // console.log("data:", data);
-  // console.log("blockedUsers:", blockedUsers);
 
-  console.log("Type", conversation?.type);
-  console.log("lastConversation", lastConversation);
 
-  console.log("messages: JJJ", messages);
-  // messages.reverse();
-  console.log("get Messages and send to print");
-
+  const convType = conversation?.type;
   return (
     <div className="chatSection flex-grow flex flex-col justify-between">
       {lastConversation !== undefined ? (
@@ -204,21 +165,28 @@ export const ConversationChatSection = ({
           ref={chatContainerRef}
           className="message flex flex-col overflow-y-auto overflow-x-hidden pr-12"
         >
-          {messages
-            .filter((message) => message.message.trim() !== "")
-            .filter((message) => {
-              // return !blockedUsers.id.includes(message.senderId);
-              if (blockedUsers.length === 0) return true;
-              return !blockedUsers.some(
-                (blockedUser) => blockedUser.id === message.senderId
-              );
-            })
-            .map((message) => {
-              // if (message.senderId === userId) {
-              return <Message key={message.id} message={message} />;
-              // }
-            })}
-          {/* .reverse()} */}
+          
+          {
+            convType !== "DIRECT" ? (
+              messages
+                .filter((message) => message.message.trim() !== "")
+                .filter((message) => {
+                  if (blockedUsers.length === 0) return true;
+                  return !blockedUsers.some(
+                    (blockedUser) => blockedUser.id === message.senderId
+                  );
+                })
+                .map((message) => {
+                  return <Message key={message.id} message={message} />;
+                  // }
+                }))
+                : (
+                  messages
+                    .filter((message) => message.message.trim() !== "")
+                    .map((message) => {
+                      return <Message key={message.id} message={message} />;
+                    }))       
+          }
         </div>
       ) : null}
       <ConversationMessagesContextSet.Provider value={setMessages}>
@@ -226,23 +194,15 @@ export const ConversationChatSection = ({
           {lastConversation !== undefined && conversation?.type !== "D" ? (
             <TypeMessage maxId={maxId} setRefresh={setRefresh} />
           ) : conversation?.type === "D" || lastConversation === undefined ? (
-            // <div className="mt-[300px] ml-[400px]">
-            // <div className="h-full w-full">
             <div className="flex flex-col items-center h-full w-full">
               <SiWechat size={360} color="#FEFFFF" className=" opacity-40 " />
               <h1 className="font-poppins text-2xl text-[#FEFFFF] text-center">
                 Welcome To The Chat Section
               </h1>
             </div>
-          ) : // </div>
-          null}
-          {/* <TypeMsg
-            userId={userId}
-            conversationId={conversation?.id}
-            // sendMessage={handleSendMessage}
-            messages={messages}
-            setMessages={setMessages}
-          /> */}
+          ) :
+          null
+          }
         </ConversationMessagesContextStat.Provider>
       </ConversationMessagesContextSet.Provider>
     </div>
@@ -251,7 +211,6 @@ export const ConversationChatSection = ({
 
 const Message = ({ message }: { message: MessageProps }) => {
   const userId = useContext(UserContext).user?.id;
-  console.log("Print Messages cmp");
   if (message.senderId === userId) {
     return <MessageChat message={message} type="sendMsg" />;
   }
@@ -266,14 +225,10 @@ const MessageChat = ({
   type: string;
 }) => {
 
-
-  console.log("MessageChat cmp");
-
   const userPic = useContext(UserContext).user?.profilePic;
   return (
     <div className={type}>
       <div className="">
-        {/* <Link href={`/profile/FriendProfile?username=${message.sender.username}`}> */}
         <Image
           className={`rounded-full ${
             type == "rcvMsg" ? "float-left" : "float-right"
@@ -283,8 +238,6 @@ const MessageChat = ({
           width={43}
           height={43}
         />
-          {/* </Link> */}
-
         <p className="ml-2 mt-12 mb-2 text-[#FFFFFF]"> {message.message} </p>
       </div>
     </div>
@@ -303,8 +256,6 @@ const TypeMessage = ({
   const conversation = useContext(LstConversationStateContext);
   const userId = useContext(UserContext).user?.id;
 
-
-  console.log("conversation : ",conversation)
   const newMessage: MessageProps = {
     id: maxId + 1,
     message: inputValue,
@@ -339,7 +290,6 @@ const TypeMessage = ({
 
   const handlePressKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
-      console.log("inputValue:", inputValue);
       sendMessage();
       setInputValue("");
       setRefresh((prev) => !prev);
@@ -351,7 +301,6 @@ const TypeMessage = ({
     setInputValue("");
     setRefresh((prev) => !prev);
   };
-  console.log("Type msg");
 
   return (
     <div onKeyDown={handlePressKey} className="TypeMsgcontainer flex">

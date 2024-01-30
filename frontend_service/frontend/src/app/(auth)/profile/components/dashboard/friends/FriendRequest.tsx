@@ -39,6 +39,7 @@ const NoRequestSpan = styled.span`
 
 const FriendRequest = () => {
   const [friendRequests, setFriendRequests] = useState<FriendR[]>([]);
+  const [refreshRequest, setRefreshRequest] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchReqData = async () => {
@@ -61,7 +62,7 @@ const FriendRequest = () => {
       }
     };
     fetchReqData();
-  },[]);
+  },[refreshRequest]);
 
   return (
     <div className={styles['friendRequest']}>
@@ -75,6 +76,8 @@ const FriendRequest = () => {
             discription={friendRequest.discription}
             profilePic={friendRequest.sender.profilePic}
             setfriendRequests={setFriendRequests}
+            refreshRequest={refreshRequest}
+            setRefreshRequest={setRefreshRequest}
           />
         ))}
       </ul> ) : (

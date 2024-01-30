@@ -40,6 +40,9 @@ export class RequestService {
             const isFriend = await this.isFriend(userId, recieverId);
                 if (isFriend)
                     return ;
+            const isBlocked = await this.isBlocked(userId, recieverId);
+                if (isBlocked)
+                    return { message:'Friend is blocked by the user' };
             if (!existingNotification && !ChekcNotification)
             {
                     const  sender = await this.userService.findById(userId);            
@@ -71,10 +74,10 @@ export class RequestService {
                 where: { id : +notificationid },
             });
             if (!notification)
-                throw new NotFoundException();
+                return { message: 'notification already Requested' };
             const isBlocked = await this.isBlocked(notification.userId, notification.senderId);
             if (isBlocked)
-                throw new Error('Friend is blocked by the user');
+                return { message:'Friend is blocked by the user' };
             const result = await this.prisma.$transaction(async (prisma) => 
             {
                 await prisma.user.update({
@@ -171,7 +174,7 @@ export class RequestService {
         {
             const block = this.userService.removeFriend(userId, userIdB);
             if (!block)
-                throw new NotFoundException();
+                return { message:'Friend is already blocked by the user' };
             const isCurrBlocked = await this.isBlocked(userIdB, userId);
             if (isCurrBlocked)
                 return;

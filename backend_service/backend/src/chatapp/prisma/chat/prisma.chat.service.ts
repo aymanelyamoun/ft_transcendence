@@ -273,6 +273,7 @@ export class PrismaChatService{
 
         async editChannel(data: ChangeChannelData, @Req() req: Request) {
 
+          console.log("DATA INSIDE: ", data);
           try{
             const user = req['user'] as User;
 
@@ -285,13 +286,16 @@ export class PrismaChatService{
             // const addAdmins = await this.filterAddAdmins(data, req);
             // const removeAdmins = await this.filterToDelete(data);
 
+            const hash = await bcrypt.hash(data.password, 10);
+
             const transaction = await this.prisma.$transaction([
               this.prisma.channel.update({
                 where: { id: data.channelId },
                 data: {
                   channelName: data.channelName,
                   channelType: data.type,
-                  hash: data.password,
+                  hash: hash,
+                  channelPic: data.channelPic,
                 },
               }),
               // ...addAdmins.map(admin => this.prisma.userChannel.update({

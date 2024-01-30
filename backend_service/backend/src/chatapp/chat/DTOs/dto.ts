@@ -76,6 +76,10 @@ export class ChangeChannelDataDto{
     @IsNotEmpty()
     @IsString()
     channelId: string;
+
+    @IsNotEmpty()
+    @IsString()
+    channelPic: string;
     
     // @IsNotEmpty()
     // @IsString()
@@ -91,7 +95,7 @@ export class JoinChannelDto{
     channelId: string;
 
     // @IsNotEmpty()
-    // @IsString()
+    @IsString()
     password: string;
 
     // @IsNotEmpty()
@@ -128,9 +132,18 @@ export class ChannelEditDto{
     @IsString()
     channelId:string;
 
-    @IsOptional()
+    // @IsOptional()
     @IsString()
-    userId2?:string;
+    userId2:string;
+}
+export class ChannelEditDto_{
+    @IsNotEmpty()
+    @IsString()
+    channelId:string;
+
+    // // @IsOptional()
+    // @IsString()
+    // userId2:string;
 }
 
 export class MuteUserDto{

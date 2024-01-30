@@ -88,7 +88,7 @@ export class GameInstance {
             IOserver: serverIO,
             roundStart: false,
             paddleSpeed: 5,
-            winScore: 2,
+            winScore: 5,
         };
         playerOneSocket.join(roomNumber);
         playerTwoSocket.join(roomNumber);

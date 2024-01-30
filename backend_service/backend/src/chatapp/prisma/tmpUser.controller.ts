@@ -13,9 +13,9 @@ export class TmpUserController{
     @Post('addUser')
     async addUser(@Body() data: any){
 
-        console.log(data);
+        // console.log(data);
         const user = await this.tmpUserAddService.createTmpUser(data);
-        console.log(user);
+        // console.log(user);
     }
 
     
@@ -28,7 +28,7 @@ export class TmpUserController{
             const [user1Friends, user2Friends] = await this.tmpUserAddService.makeFriendship(user1, user2);
         }
         catch (e){
-            console.log("error: ", e);
+            // console.log("error: ", e);
             throw new HttpException("user have ths friend", HttpStatus.BAD_REQUEST);
         }
     }
@@ -42,7 +42,7 @@ export class TmpUserController{
             const [user1Friends, user2Friends] = await this.tmpUserAddService.blockUser(user1, user2);
         }
         catch (e){
-            console.log("error: ", e);
+            // console.log("error: ", e);
             throw new HttpException("some block error", HttpStatus.BAD_REQUEST);
         }
     }

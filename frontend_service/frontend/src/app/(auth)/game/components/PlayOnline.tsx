@@ -14,7 +14,6 @@ export default function PlayOnline({setGameState, gameState}: GameMenuProps) {
     // add a matter js simulation in the background of scene
     useEffect(() => {
         socket.connect();
-        console.log('socket connected');
         return () => {
             socket.disconnect();
         }

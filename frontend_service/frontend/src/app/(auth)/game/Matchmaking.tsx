@@ -21,7 +21,6 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
     setQueueTimer(0);
     setInQueue(true);
     if (!socketRef.current) {
-      console.log("socket is null, creating new socket");
       socketRef.current = io(process.env.NEXT_PUBLIC_BACKEND_URL+"chat", {
         withCredentials: true,
       });
@@ -31,7 +30,6 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
       setQueueTimer((queueTimer) => queueTimer + 1);
     }, 1000);
     socketRef.current.on("CancelQueue", () => {
-      console.log("Getting a Cancel Queue event from server");
       clearInterval(INTERVAL.current!);
       socketRef.current?.disconnect();
       socketRef.current?.off("CancelQueue");
@@ -44,7 +42,6 @@ const Matchmaking = ({ setGameState, gameState }: GameMenuProps) => {
       socketRef.current = null;
       router.push(destination);
     });
-    console.log("joined matchmaking");
   };
 
   const cancelQueue = () => {

@@ -139,7 +139,7 @@ export class GameInstance {
     }
 
     socketConnect = (socket: Socket) => {
-        console.log('a socket connected to room ' + socket['id']);
+        // console.log('a socket connected to room ' + socket['id']);
         socket.join(this.gameInfo.gameRoom);
         socket.emit('startFriendGame', [this.playerOne.playerData, this.playerTwo.playerData])
         socket.emit('selfData', socket['user']);
@@ -160,7 +160,6 @@ export class GameInstance {
     }
 
     socketDisconnect = (disconnectedSocket: Socket) => {
-        console.log('debug in socket disconnect')
         this.playerOne.playerSocket.forEach((socket) => {
             if (socket.id == disconnectedSocket.id){
                 this.playerOne.playerSocket.splice(this.playerOne.playerSocket.indexOf(socket), 1);
@@ -216,7 +215,6 @@ export class GameInstance {
     }
 
     async endGame (state : EndGameState) : Promise<void> {
-        console.log('endGame called');
         this.gameOver = true;
         this.gameEnded = true;
         var loserData : User;
@@ -283,13 +281,12 @@ export class GameInstance {
                         totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
                     },
                 });
-                console.log('database updated');
                 await this.update_achievement(winnerData, loserData, prismaService)
             }
             // await this.update_skins(winnerData, loserData, prismaService)
     }
         catch (error) {
-            console.log("error at updating database in game : ",error.message);
+            console.log("Error encoutered from client side while updating database : ", error.message);
         }
         // }
         // else if (state.reason == 'disconnect')
@@ -370,7 +367,6 @@ export class GameInstance {
 
 
     startGame = () => {
-        console.log('Game started between ' + this.playerOne.playerData.username + ' and ' + this.playerTwo.playerData.username)
         this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerOne.playerData.id, status: '2'})
         this.gameInfo.IOserver.emit('friendStatus', {userId: this.playerTwo.playerData.id, status: '2'})
         this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('startFriendGame',

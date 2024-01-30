@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Inject, OnModuleInit } from '@nestjs/common';
 import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { messageDto, userDataDto } from './DTOs/dto';
@@ -26,10 +26,6 @@ export class ChatGateway implements OnGatewayConnection {
     private gameService : GameService) {}
 
   async getUserData (client : Socket) : Promise<User> {
-    if (client.handshake.headers.cookie === typeof undefined){
-      console.log("AN EXEPTION HAS BEEN THROWN");
-      throw new UnauthorizedException("You are not logged in");
-    }
     const cookies =  parse(client.handshake.headers.cookie);
     const payload = await this.jwtService.verifyAsync(cookies['access_token'], {
       secret : process.env.jwtSecretKey,
@@ -40,7 +36,7 @@ export class ChatGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
   async handleConnection(socket: Socket, ...args: any[]) {
-    if (socket.handshake.headers.cookie !== typeof undefined) {
+    if (typeof socket.handshake.headers.cookie !== 'undefined') {
       try {
         socket["user"] = await this.getUserData(socket) as User;
         socket["inGame"] = false;
@@ -66,14 +62,7 @@ export class ChatGateway implements OnGatewayConnection {
         // socket.disconnect(true);
       }
     }
-    else 
-    {
-      // if (socket['user'] !== undefined){
-      //   if (!this.gatewayService.userIsConnected(socket['user'].id))
-      //     this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
-      // }
-      // socket.disconnect(true);
-    }
+
     }
     
 

@@ -24,9 +24,8 @@ export const fetchAPI = async ({ url, method, body }: FetchAPIProps) => {
   
       return response.json();
     } catch (error : any) {
-      console.error('API Error:', error);
       if (error.message)
         throw new Error(error.message);
-      throw new Error('An unexpected error occurred.');
+      throw new Error('error');
     }
   };

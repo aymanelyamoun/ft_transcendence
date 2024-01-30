@@ -159,6 +159,7 @@ export class GameInstance {
     }
 
     socketDisconnect = (disconnectedSocket: Socket) => {
+        console.log('debug in socket disconnect')
         this.playerOne.playerSocket.forEach((socket) => {
             if (socket.id == disconnectedSocket.id){
                 this.playerOne.playerSocket.splice(this.playerOne.playerSocket.indexOf(socket), 1);
@@ -214,6 +215,7 @@ export class GameInstance {
     }
 
     async endGame (state : EndGameState) : Promise<void> {
+        console.log('endGame called');
         this.gameOver = true;
         this.gameEnded = true;
         var loserData : User;
@@ -277,6 +279,7 @@ export class GameInstance {
                     totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
                 },
             });
+            console.log('database updated');
             await this.update_achievement(winnerData, loserData, prismaService)
             // await this.update_skins(winnerData, loserData, prismaService)
     }

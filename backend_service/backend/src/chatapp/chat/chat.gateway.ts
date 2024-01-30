@@ -140,8 +140,10 @@ export class ChatGateway implements OnGatewayConnection {
       this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
     this.gameService.clearFinishedGames();
     if (this.gameService.inGameCheckByID(socket['user'].id))
+    {
       this.gameService.stopGameEvent(socket);
-    console.log ('stoping game event after disconnect')
+      console.log ('stoping game event after disconnect')
+    }
   }
 }
 

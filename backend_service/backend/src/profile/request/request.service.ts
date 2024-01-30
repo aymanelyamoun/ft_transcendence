@@ -157,6 +157,8 @@ export class RequestService {
             const notification = await this.prisma.notification.findUnique({
                 where: { id: +notificationid },
             });
+            if (!notification)
+                return { message: 'notification already Requested' };
             await this.prisma.notification.deleteMany({
                 where: {
                     OR: [

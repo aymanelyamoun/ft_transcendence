@@ -223,6 +223,8 @@ export class GameInstance {
     }
 
     async endGame (state : EndGameState) : Promise<void> {
+        if (this.gameEnded)
+            return ;
         this.gameOver = true;
         this.gameEnded = true;
         var loserData : User;
@@ -297,15 +299,13 @@ export class GameInstance {
         catch (error) {
             console.log("Error encoutered from client side while updating database : ", error.message);
         }
-        Events.off(this.engine, 'collisionStart', this.collisionDetect);
-        Events.off(this.runner, "beforeTick", this.animationFrame);
-        Runner.stop(this.runner);
-        World.clear(this.engine.world, false);
-        Engine.clear(this.engine);
-        console.log('game ended between ', this.playerOne.playerData.username, 'and', this.playerTwo.playerData.username)
+        // Events.off(this.engine, 'collisionStart', this.collisionDetect);
+        // Events.off(this.runner, "beforeTick", this.animationFrame);
+        // Runner.stop(this.runner);
+        // World.clear(this.engine.world, false);
+        // Engine.clear(this.engine);
     }
     gameLoop = () => {
-        console.log ('still sending frame for the game between ', this.playerOne.playerData.username, 'and', this.playerTwo.playerData.username);
         if (this.gameOver == true)
             return;
         if (this.gameInfo.roundStart == false) {

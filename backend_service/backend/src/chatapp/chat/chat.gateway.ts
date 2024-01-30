@@ -27,7 +27,7 @@ export class ChatGateway implements OnGatewayConnection {
 
   async getUserData (client : Socket) : Promise<User> {
     if (client.handshake.headers.cookie === typeof undefined){
-      console.log("AN EXEPTION HAS BEEN THROWN");
+      console.log("----------------------------AN EXEPTION HAS BEEN THROWN");
       throw new UnauthorizedException("You are not logged in");
     }
     const cookies =  parse(client.handshake.headers.cookie);

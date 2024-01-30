@@ -23,7 +23,7 @@ import { fa } from '@faker-js/faker';
 export class ChatGateway implements OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService, private readonly jwtService: JwtService,
-    @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService, private userService: UserService,
+     private readonly authGoogleService: AuthGoogleService, private userService: UserService,
     private gameService : GameService) {}
 
   async getUserData (client : Socket) : Promise<User> {

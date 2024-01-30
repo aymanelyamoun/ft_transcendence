@@ -10,10 +10,7 @@ import { RedisService } from "src/redis/redis.service";
 
 @Module({
     providers: [PrismaService, JwtService, UserService,
-        {
-            provide: 'AUTH_SERVICE',
-            useClass: AuthGoogleService,
-        }, 
+         AuthGoogleService,
         RequestService, RedisService
     ],
     controllers: [RequestController],

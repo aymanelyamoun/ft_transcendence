@@ -11,7 +11,7 @@ import { LOG_TYPE } from '@prisma/client';
 @Injectable()
 export class IntraStrategy extends PassportStrategy(Strategy) {
     constructor(
-        @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+         private readonly authGoogleService: AuthGoogleService,
       ){
         super({
             clientID:

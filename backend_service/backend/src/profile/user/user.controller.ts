@@ -14,7 +14,7 @@ import { SkinDto } from "./dto/skins.dto";
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService,
-        @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+         private readonly authGoogleService: AuthGoogleService,
     ) { }
 
   @Patch('confirm')

@@ -30,6 +30,14 @@ export class GameInstance {
     private readonly prisma: PrismaService;
 
     constructor(playerOneSocket: Socket, playerTwoSocket: Socket, roomNumber: string, serverIO: Server) {
+        if (playerOneSocket['user'].username == playerTwoSocket['user'].username)
+        {
+            playerOneSocket.emit('redirect', '/game', 'You are not allowed to join this room');
+            playerTwoSocket.emit('redirect', '/game', 'You are not allowed to join this room');
+            playerTwoSocket.disconnect(true);
+            playerOneSocket.disconnect(true);
+            return ;
+        }
         this.engine = Engine.create();
         this.engine.gravity.y = 0;
         this.canvas = {

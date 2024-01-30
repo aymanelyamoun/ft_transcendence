@@ -111,11 +111,8 @@ const Settings: React.FC<SettingsProps> = (props) => {
             });
             if(response.ok){
                 router.push("/");
-            }else {
-               alert("the logout has not been sent");
-              }
+            }
         } catch (error) {
-            console.log(error);
         };
     }
 

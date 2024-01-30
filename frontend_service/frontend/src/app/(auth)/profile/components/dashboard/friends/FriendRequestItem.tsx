@@ -77,7 +77,6 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
           dispatch(toggleSearchFetch());
       }
   } catch (error) {
-      console.log(error);
     }
   };
 
@@ -96,11 +95,8 @@ const FriendRequestItem: React.FC<FriendRequestItemProps> = (props) => {
       if(res.ok){
         const data : FriendR[] = await res.json();
         props.setfriendRequests(data);
-      }else {
-         alert("the refuse request has not been sent");
-        }
+      }
   } catch (error) {
-      console.log(error);
     }
   };
   return (

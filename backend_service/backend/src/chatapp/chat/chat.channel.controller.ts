@@ -55,6 +55,7 @@ export class ChannelController{
 
     @Post('editChannel')
     async editChannel(@Body() data: ChangeChannelDataDto, @Req() req:Request){
+
         // const tmp = plainToClass(ChangeChannelDataDto, data);
         // console.log("getting to edit the channel");
         // console.log("the bknd data is : ", data);

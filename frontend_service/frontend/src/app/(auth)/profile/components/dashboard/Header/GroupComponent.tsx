@@ -104,14 +104,20 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
 
   function isUserBanned(user: string, bannedUsers: {id: string}[]) : boolean
   {
-    return (bannedUsers.some(BannedUser => BannedUser.id === user));
+    if (bannedUsers)
+      return (bannedUsers.some(BannedUser => BannedUser.id === user));
+    else
+      return (false);
   }
 
   const isBanned = isUserBanned(selectedUserId , props.banedUsers);
 
-  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string)
+  function isUserMember(members: { user: { profilePic: string; id: string; }}[], userId: string) : boolean
   {
-    return (members.some(member => member.user.id === userId));
+    if (members)
+      return (members.some(member => member.user.id === userId));
+    else
+      return (false);
   }
 
   const isMember = isUserMember(props.members, loggedInUserId);
@@ -289,18 +295,18 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
           {
             showAlertRequestUser && (<AlertMessage onClick={() => setShowAlertRequestUser(false)} message={"The user has been added to the channel successfully!"} type='notify'/>)
           }
-          {
+          {/* {
             showAlertRequestMe && (<AlertMessage onClick={() => setShowAlertRequestMe(false)} message={"You are successfully added to this channel!"} type='notify'/>)
-          }
+          } */}
           {
             showAlertUnbanUser && (<AlertMessage onClick={() => setShowAlertUnbanUser(false)} message={"The user has been unbanned successfully!"} type='notify'/>)
           }
           {
             showAlertPassIncorr && (<AlertMessage onClick={() => setShowAlertPassIncorr(false)} message={`Forbidden: ${passRes}`} type='error'/>)
           }
-          {
+          {/* {
             showAlertRequestProtected && (<AlertMessage onClick={() => setShowAlertRequestProtected(false)} message={"You are successfully added to this channel!"} type='notify'/>)
-          }
+          } */}
         </>
     </>
   );

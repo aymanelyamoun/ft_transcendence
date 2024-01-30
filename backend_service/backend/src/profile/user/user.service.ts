@@ -98,7 +98,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new Error( 'error')
+            throw new  NotFoundException();
         }
     }
 
@@ -130,7 +130,7 @@ export class UserService {
             }));
             return usersWithBlockedFlag;
         } catch (error) {
-            throw new Error('Internal server error');
+            throw new  NotFoundException();
         }
     }
     
@@ -179,7 +179,25 @@ export class UserService {
         }
         catch (error)
         {
-            throw new Error('error')
+            throw new  NotFoundException();
+        }
+    }
+    
+    async findusername(@Req() req: Request, @Body() body)
+    {
+        try
+        {
+        const  { username } = body;
+        const data =  await this.prisma.user.findUnique({
+                where: {
+                    username: username,
+                }
+            })
+        if (!data)
+            throw new  NotFoundException();
+        }catch(error)
+        {
+            throw new  NotFoundException();
         }
     }
 
@@ -231,7 +249,7 @@ export class UserService {
             // await this.prisma.conversation.delete({where:{id:conversation.id}});
 
         } catch (error) {
-            throw new Error('Internal server error')
+            throw new UnauthorizedException();
         }
     }
     
@@ -272,7 +290,7 @@ export class UserService {
         return(usersWithBlockedFlag);
         } catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -342,8 +360,6 @@ export class UserService {
             const userId = user.id;
             let  { username } = body;
             username = username.trim();
-            console.log(username);
-            console.log(user.username);
             if(username.length < 4)
              throw new UnauthorizedException('Username must be at least 4 characters long.');
             if (username.length > 20)
@@ -364,7 +380,6 @@ export class UserService {
         {
             if (error instanceof UnauthorizedException) {
                 throw new UnauthorizedException("can't update the username");
-                // throw new UnauthorizedException('New username is the same as the current username');
               } else if (error instanceof ConflictException) {
                   throw new ConflictException('Username is already taken');
               } else {
@@ -414,7 +429,7 @@ export class UserService {
             });
             return notifications;
         } catch (error) {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -452,7 +467,7 @@ export class UserService {
 
         }catch (error)
         {
-             throw new UnauthorizedException('error');
+             throw new UnauthorizedException();
         }
     }
 
@@ -480,7 +495,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -504,7 +519,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -535,7 +550,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 
@@ -606,7 +621,7 @@ export class UserService {
         }
         catch (error)
         {
-            throw new UnauthorizedException('error');
+            throw new UnauthorizedException();
         }
     }
 }

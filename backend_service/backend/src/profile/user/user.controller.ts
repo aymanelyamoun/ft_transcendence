@@ -14,7 +14,7 @@ import { SkinDto } from "./dto/skins.dto";
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService,
-        @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+         private readonly authGoogleService: AuthGoogleService,
     ) { }
 
   @Patch('confirm')
@@ -89,7 +89,14 @@ export class UserController {
     const data = await this.userService.updateusername(req, body);
     return res.status(200).send(data);
   }
-  
+  @Post('find/username')
+  @UseGuards(JwtGuard)
+  async findUseranme(@Res() res: Response, @Body() body, @Req() req: Request)
+  {
+    const data = await this.userService.findusername(req, body);
+    return res.status(200).send(data);
+  }
+
   @Patch('update/image')
   @UseGuards(JwtGuard)
   async UpdateImage(@Res() res: Response, @Req() req: Request, @Body() body)

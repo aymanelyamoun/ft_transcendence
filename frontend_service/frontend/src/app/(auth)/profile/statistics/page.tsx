@@ -142,8 +142,6 @@ function App() {
               const parseData = await res.json();
               setMatchHistory(parseData);
               setIsMatchLoading(false);
-            } else {
-              alert("Match History fetching isn't okay"); 
             }
             } catch (err) {
             } finally {
@@ -168,7 +166,6 @@ function App() {
           setSidebarDone(true);
         }
       } catch (error) {
-        console.error("Error fetching data: ", error);
       } finally
       {
         setSidebarDone(true);
@@ -199,7 +196,6 @@ function App() {
           setStatisticsPieProps(data);
           setPieDone(false);
         } catch (error) {
-          console.error("Error fetching data: ", error);
         } finally
         {
           setPieDone(true);
@@ -224,7 +220,6 @@ function App() {
             setStatisticsChartProps(data);
           }
         } catch (error) {
-          console.error("Error fetching data: ", error);
         } finally
         {
           setChartDone(true);

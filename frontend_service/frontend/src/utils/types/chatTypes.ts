@@ -50,12 +50,13 @@ export interface ConversationIthemProps{
 
 export type MessageProps = {
   sender: {
-      profilePic: string;
-      username: string;
+    profilePic: string;
+    username: string;
   };
   conversation:{
     type:string;
     channel: {
+      id: string;
       channelName: string;
       channelPic: string;
   };

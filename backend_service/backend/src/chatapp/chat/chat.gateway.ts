@@ -23,7 +23,7 @@ import { fa } from '@faker-js/faker';
 export class ChatGateway implements OnGatewayConnection {
 
   constructor(private readonly prismaChat:PrismaChatService, private readonly gatewayService:GatewayService, private readonly jwtService: JwtService,
-    @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService, private userService: UserService,
+     private readonly authGoogleService: AuthGoogleService, private userService: UserService,
     private gameService : GameService) {}
 
   async getUserData (client : Socket) : Promise<User> {
@@ -44,7 +44,7 @@ export class ChatGateway implements OnGatewayConnection {
         socket["inQueue"] = false;
         socket["inChat"] = false;
         
-        console.log("------- ADDING CONNECTED SOCKET TO MAP --------")
+        // console.log("------- ADDING CONNECTED SOCKET TO MAP --------")
         this.gatewayService.addConnectedSocketToMap({socket:socket, userId:socket['user'].id});
 
         const connectedSocket = this.gatewayService.addConnectedSocket({socket:socket, userId:socket['user'].id});
@@ -93,20 +93,20 @@ export class ChatGateway implements OnGatewayConnection {
         this.gameService.clearFinishedGames();
         const inGame = this.gameService.inGameCheckByID(friend.id);
         if (inGame){
-          console.log("______emmiting status userId is in game: ", userId);
+          // console.log("______emmiting status userId is in game: ", userId);
           this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
             socket.emit('friendStatus', {userId: friend.id, status: '2'});
           });
         }
         else{
-          console.log("emmiting status userId is logged: ", userId);
+          // console.log("emmiting status userId is logged: ", userId);
           this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
             socket.emit('friendStatus', {userId: friend.id, status: '1'});
           });
         }
       }
       else{
-        console.log("emmiting status userId is not logged: ", userId);
+        // console.log("emmiting status userId is not logged: ", userId);
         this.gatewayService.connectedSocketsMap.get(userId).forEach((socket)=>{
           socket.emit('friendStatus', {userId: friend.id, status: '0'});
         });
@@ -119,24 +119,15 @@ export class ChatGateway implements OnGatewayConnection {
   handleDisconnect(socket: Socket) {
     // console.log(socket['user'].id)
   if (socket['user'] === undefined || socket['user'] === null) // user has session but socket['user'] is undefined which means that socket['user'] doesnt exist in handlecdisconnect after innitializing it in handleconnection 
-  {
-    console.log("3ayt l ossama", socket.id);
     return ;
-  }
   else if (socket['user'].username !== null && socket['user'].username !== undefined)
   {
     console.log(socket['user'].username ,' is disconnecting');
     if (socket['inGame'] == true)
-    {
-      console.log("user is still in game: ", socket['user'].username);
       this.gameService.stopGameEvent(socket)
-    }
     else if (socket['inQueue'] == true)
-    {
       this.gameService.removeFromQueueID(socket.id) // remove from queue if in queues
-      console.log("user disconnected: ", (socket['user'] ? socket['user'].username : socket.id));
-    }
-      console.log("------- REMOVING CONNECTED SOCKET TO MAP --------")
+      // console.log("------- REMOVING CONNECTED SOCKET TO MAP --------")
     this.gatewayService.removeConnectedSocketFromMap({socket:socket, userId:socket['user'].id});
     if (this.gatewayService.userIsConnected(socket['user'].id)){
 
@@ -147,6 +138,7 @@ export class ChatGateway implements OnGatewayConnection {
     }
     else
       this.server.emit('friendStatus', {userId: socket['user'].id, status: '0'});
+    this.gameService.clearFinishedGames();
     if (this.gameService.inGameCheckByID(socket['user'].id))
       this.gameService.stopGameEvent(socket);
   }
@@ -172,7 +164,6 @@ export class ChatGateway implements OnGatewayConnection {
     client["user"] = await this.getUserData(client) as User;
     client['inQueue'] = true;
     client.on('CancelQueue', () => {
-      console.log('Got event CancelQueue from client: ', client['user'].username)
       this.gameService.removeFromQueue(client);
       this.gameService.clearFinishedGames();
       client.disconnect(true);
@@ -181,7 +172,6 @@ export class ChatGateway implements OnGatewayConnection {
     this.gameService.clearFinishedGames();
     if (this.gameService.inGameCheck(client))
     {
-        console.log("canceling queue cause user is still in game: ", client['user'].username);
         client.emit('CancelQueue')
         client.disconnect(true);
         return ;
@@ -222,20 +212,12 @@ export class ChatGateway implements OnGatewayConnection {
       || data.id === user.id)
       return ; // if the invited user is not connected or already invited by this socket then dont send invite
     setTimeout(()=>{
-      console.log("removing invite socket from map after 10sec.")
       this.gatewayService.removeInviteSocketFromMap(sender, data.id);
     }, 10000); 
     this.gatewayService.addInviteSocketToMap(sender, data.id);
-    console.log("sending invite to: ", data.id)
-    // loop throught connected socket map and find the socket with id = data.id
-
-    // could be changed to only send on room of the user
     this.gatewayService.connectedSocketsMap.get(data.id).forEach((socket)=>{
       socket.emit('gameInvite', {id: user.id, username: user.username});
     });
-    
-    // protect user is friend and inviting him to game
-    
   }
 
   @SubscribeMessage('acceptGameInvite')
@@ -246,21 +228,21 @@ export class ChatGateway implements OnGatewayConnection {
     if (this.gatewayService.userIsInvitedBy(user.id, data.senderId))
     {
       this.gatewayService.removeInviteSocketFromMap(receiver, data.senderId);
-      console.log('GAME INVITE ACCEPTED BETWEEN ', user.id, ' and ', data.senderId);
       const sender = this.gatewayService.getSocketByUserId(data.senderId);
       if (sender){
-        if (this.gameService.inGameCheckByID(user.id) || this.gameService.inGameCheckByID(sender.id))
+        if (this.gameService.inGameCheckByID(user.id) || this.gameService.inGameCheckByID(sender.id) ||
+          !this.gatewayService.userIsConnected(data.senderId))
           return; 
         const matchID : string = sender['user'].username + 
             receiver['user'].username + Math.random().toString();
        sender.emit('gameInviteAccepted', {id: user.id, username: user.username});
        receiver.emit('gameInviteAccepted', {id: data.senderId, username: sender['user'].username});
+        if (sender['user'] === undefined || sender['user'] === null || sender.connected === false)
+          return ;
        sender.emit('redirect', '/game/match?matchID=' + matchID);
         receiver.emit('redirect', '/game/match?matchID=' + matchID);
       }
     }
-    else
-      console.log('Sir akhoya lay sma7lk');
   }
 
 

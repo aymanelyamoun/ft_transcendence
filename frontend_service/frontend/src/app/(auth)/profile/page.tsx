@@ -120,27 +120,20 @@ function App() {
   
   useEffect(() => {
     socket.connect();
-    socket.on("connect", () => {
-      console.log("Connected to server");
-    });
     socket.on('gameInvite', (data : any) => {
       inviterData.current = data;
       setplayPopUp(true);
       popUpTimeout.current = setTimeout(() => {
         setplayPopUp(false);
       }, 10000);
-      console.log("A notification of an invtation of a game : ", inviterData.current);
     })
 
     socket.on('gameInviteAccepted', (data : any) => {
-      console.log("A GAME HAS BEEN ACCEPTED : ", data);
     })
     socket.on('redirect', (destination : any) => {
       router.push(destination)
-      console.log("redirecting to : ", destination);
     })
     return () => {
-      console.log("calling disconnect")
       socket.off('redirect')
       socket.off('gameInvite');
       socket.off('gameInviteAccepted');
@@ -167,7 +160,6 @@ function App() {
         setStatisticsPieProps(data);
         setPieDone(false);
       } catch (error) {
-        console.error("Error fetching data: ", error);
       } finally
       {
         setPieDone(true);
@@ -192,7 +184,6 @@ function App() {
           setStatisticsChartProps(data);
         }
       } catch (error) {
-        console.error("Error fetching data: ", error);
       } finally
       {
         setChartDone(true);
@@ -215,7 +206,6 @@ function App() {
           setSidebarInfo(data);
         }
       } catch (error) {
-        console.error("Error fetching data: ", error);
       }
     };
 
@@ -229,7 +219,7 @@ function App() {
   
   return (
     <> 
-    <Provider store={store}>
+    {/* <Provider store={store}> */}
       {ShowEditProfile && <EditProfileShow onClose={() => setShowEditProfile(false)} />}
        <div className="App">
         {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
@@ -246,7 +236,7 @@ function App() {
             <Friends/>
           </AppGlass>
       </div>
-      </Provider>
+      {/* </Provider> */}
     </>
   );
 };

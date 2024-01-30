@@ -14,11 +14,9 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
   
-  app.useGlobalPipes(new ValidationPipe({
-    // whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-  }))
+  // app.useGlobalPipes(new ValidationPipe({
+  //   forbidNonWhitelisted: true,
+  // }))
   app.useGlobalPipes(new ValidationPipe);
   try{
     // console.log("running on port : ", PORT);

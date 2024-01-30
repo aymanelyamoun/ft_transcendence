@@ -8,19 +8,12 @@ import { UserService } from '../../profile/user/user.service';
 import { PrismaService } from 'src/chatapp/prisma/prisma.service';
 import { RedisService } from 'src/redis/redis.service';
 
-
-
-
-//Middleware Usage:
-//when a request is made to a route protected by the GoogleStrategy (e.g., AuthGoogleController),
-// Nest.js middleware, provided by Passport.js, intercepts the request.
 @Module({
     controllers: [AuthGoogleController],
     providers: [GoogleStrategy,
-            {
-                provide: 'AUTH_SERVICE',
-                useClass: AuthGoogleService,
-            } ,PrismaService, 
+
+                 AuthGoogleService,
+            PrismaService, 
             JwtService,
             IntraStrategy,
         UserService, RedisService  ],

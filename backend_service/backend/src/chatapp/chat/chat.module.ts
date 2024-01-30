@@ -16,10 +16,9 @@ import { RedisService } from 'src/redis/redis.service';
 @Module({
   imports:[PrismaModule],
   controllers:[ChannelController],
-  providers: [ChatGateway,PrismaService,UserService, PrismaChatService, GatewayService, JwtService, GameService,  {
-    provide: 'AUTH_SERVICE',
-    useClass: AuthGoogleService,
-  }, RedisService]
+  providers: [ChatGateway,PrismaService,UserService, PrismaChatService, GatewayService, JwtService, GameService,  
+  AuthGoogleService,
+   RedisService]
 })
 
 export class ChatModule {}

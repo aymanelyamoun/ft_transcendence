@@ -9,6 +9,7 @@ import React, {
 import Image from "next/image";
 // import avatar from "../../../../../public/garou-kid.jpeg";
 import avatar from "../../../../../public/garou-kid.jpeg";
+import { useRouter } from "next/navigation";
 import { MdDelete, MdPersonAddAlt1 } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { MdGroupAdd } from "react-icons/md";
@@ -32,7 +33,9 @@ import { GiAstronautHelmet } from "react-icons/gi";
 import { FaUserAstronaut } from "react-icons/fa";
 import { ChannelInfoProps } from "@/utils/types/chatTypes";
 import { UserContext } from "@/utils/createContext";
-import { Backend_URL } from '@/lib/Constants';
+import { Backend_URL } from "@/lib/Constants";
+import router from "next/router";
+import Link from "next/link";
 // export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
 // export const isAdmin = false;
 
@@ -43,12 +46,20 @@ interface Friend {
   id: string;
   username: string;
   profilePic: string;
-  title? : string;
+  title?: string;
   status: string;
 }
-export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, setRefresh:React.Dispatch<React.SetStateAction<boolean>>, refresh:boolean}) => {
+export const ConversationInfo = ({
+  type,
+  setRefresh,
+  refresh,
+}: {
+  type: string;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: boolean;
+}) => {
   const conversationProps = useContext(LstConversationStateContext);
-  const ConversationListData = useContext(ConversationListContext); 
+  const ConversationListData = useContext(ConversationListContext);
   const setEditChannel = useContext(setShowEditChannelContext);
   const setExitChannel = useContext(setShowExitChannelContext);
   const setDeleteChannel = useContext(setShowDeleteChannelContext);
@@ -60,11 +71,12 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
   const [requestSent, setRequestSent] = useState(false);
   const setShowInviteToChannel = useContext(setInviteFriendToChannelContext);
   // fore invite friend to channel
-  const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(false);
+  const [selectedFriend, setSelectedFriend] = React.useState<Friend | false>(
+    false
+  );
   // const [goBack, setGoBack] = React.useState<boolean>(false);
 
   const socket = useContext(SocketContext);
-
 
   const [members, setMembers] = useState<MemberProps[]>([]);
   // handle if the conversationProps is undefined
@@ -103,177 +115,147 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
   //       });
   //     };
   //     fetchFun();
-  
+
   // }
-  
-  
+
   const lastConvId = lastConversation?.id;
   const setConversationList = useContext(LstConversationSetStateContext);
-  
+
   const handleGoBack = () => {
-
     const channelType = "D";
-      setConversationList(
-        (prevConversation: ConversationIthemProps | undefined) => {
-          if (prevConversation && prevConversation.id === lastConvId) {
-            // setRefresh(true);
-            return {
-              ...prevConversation,
-              type: channelType,
-            };
-          }
-          // setRefresh((prev) => !prev);
-          return prevConversation;
+    setConversationList(
+      (prevConversation: ConversationIthemProps | undefined) => {
+        if (prevConversation && prevConversation.id === lastConvId) {
+          // setRefresh(true);
+          return {
+            ...prevConversation,
+            type: channelType,
+          };
         }
-        );
-      };
-      
-      // const goBack = useContext(goBackContext);
-  //     // if (goBack)
-      // {
-      //   handleGoBack();
-      //   return;
-      // }
-    
-    useEffect(() => {
-      const fetchFun = async () => {
-      await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${lastConversation?.id}`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-          )
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            setMembers(data);
-            // setMembers((prev) => { return [...prev, data] })
-            // console.log("Members data: 2", data);
-            // console.log("hereeeeeeeeeee");
-            // if (data) setIsSet(true);
-          });
-        };
-        // console.log("Members data:", data);
-        
-        if (lastConversation?.id !== undefined) {
-          // if (lastConversation?.type === "DIRECT" || lastConversation?.type === "CHANNEL_CHAT")
-          // {
-            fetchFun();
-          // }
-        }
-      },[lastConversation]);
-      
-    // lastConversation?.
-    const recieverUserId = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.id;
-    const recieverUserName = members.filter((member) => member.user.id !== userInfo.user?.id)[0]?.user.username;
-    
-    // const inviteFriend = () => {
-    const inviteFriend = async () => {
-      // console.log("invite friend");
-      // useEffect(() => {
-        // const fetchFun = async () => {
-        const fetchFun = async () => {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}request/send/${recieverUserId}`, {
-              method: "POST",
-              mode: "cors",
-              credentials: "include",
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-              },
-          }
-          )
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error("Network response was not ok");
-            }
-            else {
-              // setRequestSent(true);
-              setAlertInviteFriend(true);
-              // alert("the request has been sent");
-            }
-          }
-          )
-          .catch((error) => {
-            console.error("Error during fetch:", error);
-          });
-        }   
-  
-        if (lastConversation?.id !== undefined) {
-          fetchFun();
-        }
-      // }, [lastConversation]);
-    }
-
-    const inviteFriendTochannel = () => {
-      // console.log("add friends to channel");
-      setShowInviteToChannel(true);
-    }
-  //   console.log("recieverUserId :", recieverUserId);
-    
-  // console.log("***************ConversationListData :", ConversationListData);
-  // console.log("***************userInfo?.username :", userInfo?.username);
-  // console.log("***************userInfo?.id :", userInfo?.id);
-  // console.log("***************members :", members);
-
-  // console.log("last conversation data :", lastConversation);
-  const inviteToPlay = () => {
-    // console.log('inviting this man', recieverUserName, 'to play whose id is', recieverUserId)
-    // socket.emit("inviteGame", {id: lastConversation?.id})
-    socket.emit("inviteGame", {id: recieverUserId})
+        // setRefresh((prev) => !prev);
+        return prevConversation;
+      }
+    );
   };
 
-  // console.log(
-  //   "conversationProps?.type ;;;;;;;;;;;;;;;;;;;;:",
-  //   conversationProps?.type
-  // );
-  // if (goBack)
+  // const goBack = useContext(goBackContext);
+  //     // if (goBack)
   // {
-  //   setIsCreator(false);
+  //   handleGoBack();
+  //   return;
   // }
-  // const [isSet, setIsSet] = useState(false);
-  // const setGoBack = useContext(setGoBackContext);
-  // if (conversationProps?.type === "CHANNEL_CHAT")
-  // {
-  //   setGoBack(false);
-  // }
-  // const [types, setTypes] = useState<string>("");
-  // const setGoBack = useContext(setGoBackContext);
-  // let typesSelected = "";
-  // if (goBack)
-  // {
-  //   typesSelected = "D";
-  //   // setGoBack(false);
-  // }
-  // else
-  // {
-  //   if (conversationProps?.type === "DIRECT") {
-  //     typesSelected = "DIRECT";
-  //     console.log("direct");
-  //   }
-  //   else if (conversationProps?.type === "CHANNEL_CHAT") {
-  //     typesSelected = "CHANNEL_CHAT";
-  //     console.log("channel");
-  //   }
-  //   else {
-  //     typesSelected = "D";
-  //   }
-  // }
-  // console.log("typesSelected :", typesSelected);
-  console.log("typesSelected :", conversationProps?.type);
-  // else
-  //   typesSelected = conversationProps?.type as string;
+  const router = useRouter();
+  const [unauthorized, setUnauthorized] = useState(false);
+  useEffect(() => {
+    var fetchFailer: boolean = false;
+    const fetchFun = async () => {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${lastConversation?.id}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`${res.status}`);
+            console.log("Catching res.status === 403");
+            // setUnauthorized(true);
+            // fetchFailer = true;
+            // setRefresh((prev) => !prev);
+            // throw new Error("Unauthorized");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setMembers(data);
+          // setMembers((prev) => { return [...prev, data] })
+          // console.log("Members data: 2", data);
+          // console.log("hereeeeeeeeeee");
+          // if (data) setIsSet(true);
+        })
+        .catch((error) => {
+          if (error.message.includes("403")) router.push("/unauthorized");
+          console.error("Error during fetch:", error);
+        });
+    };
+    // console.log("Members data:", data);
+
+    if (lastConversation?.id !== undefined) {
+      // if (lastConversation?.type === "DIRECT" || lastConversation?.type === "CHANNEL_CHAT")
+      // {
+      fetchFun();
+      if (unauthorized) router.push("/unauthorized");
+      // if (fetchFailer)
+      // router.push("/game");
+      // }
+    }
+  }, [lastConversation, router, unauthorized]);
+
+  // lastConversation?.
+  const recieverUserId = members.filter(
+    (member) => member.user.id !== userInfo.user?.id
+  )[0]?.user.id;
+  const recieverUserName = members.filter(
+    (member) => member.user.id !== userInfo.user?.id
+  )[0]?.user.username;
+
+  // const inviteFriend = () => {
+  const inviteFriend = async () => {
+    // console.log("invite friend");
+    // useEffect(() => {
+    // const fetchFun = async () => {
+    const fetchFun = async () => {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}request/send/${recieverUserId}`,
+        {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Network response was not ok");
+          } else {
+            // setRequestSent(true);
+            setAlertInviteFriend(true);
+            // alert("the request has been sent");
+          }
+        })
+        .catch((error) => {
+          console.error("Error during fetch:", error);
+        });
+    };
+
+    if (lastConversation?.id !== undefined) {
+      fetchFun();
+    }
+    // }, [lastConversation]);
+  };
+
+  const inviteFriendTochannel = () => {
+    // console.log("add friends to channel");
+    setShowInviteToChannel(true);
+  };
+
+
+  const inviteToPlay = () => {
+    socket.emit("inviteGame", { id: recieverUserId });
+  };
+
 
   return (
     <>
       {/* {typesSelected === "DIRECT" ? ( */}
-      { conversationProps?.type === "DIRECT" ? (
+      {conversationProps?.type === "DIRECT" ? (
         <ConversationInfoWrapper
           name={conversationProps?.name as string}
           title={conversationProps?.title as string}
@@ -281,7 +263,7 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
         >
           <ButtonInfo width="10" hight="10">
             <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10 mx-12">
-              <CostumeButton
+              {/* <CostumeButton
                 onClick={() => inviteFriend()}
                 bgColor="bg-white-blue border-[#FEFFFF]"
                 color="white"
@@ -299,7 +281,7 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
                 hight="h-11"
               >
                 <MdGroupAdd color="#1C2041" size={24} />
-              </CostumeButton>
+              </CostumeButton> */}
 
               <CostumeButton
                 onClick={() => inviteToPlay()}
@@ -308,7 +290,7 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
                 width="w-44"
                 hight="h-11"
               >
-                <IoGameController color="#1C2041" size={24}/>
+                <IoGameController color="#1C2041" size={24} />
               </CostumeButton>
             </div>
           </ButtonInfo>
@@ -319,12 +301,18 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
           title=""
           imgUrl={conversationProps?.profilePic as string}
         >
-          <MemberList setIsCreator={setIsCreator} setRefresh={setRefresh} refresh={refresh}/>
+          <MemberList
+            setIsCreator={setIsCreator}
+            setRefresh={setRefresh}
+            refresh={refresh}
+          />
           {isCreator && (
             <ButtonInfo width="10" hight="10">
               <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-12">
                 <CostumeButton
-                  onClick={() => {setEditChannel(true);}}
+                  onClick={() => {
+                    setEditChannel(true);
+                  }}
                   bgColor="bg-transparent border-[#FEFFFF]"
                   color="#FC2B5D"
                   width="w-full"
@@ -337,7 +325,10 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
                 </CostumeButton>
 
                 <CostumeButton
-                  onClick={() => {setExitChannel(true); handleGoBack();}}
+                  onClick={() => {
+                    setExitChannel(true);
+                    handleGoBack();
+                  }}
                   bgColor="bg-transparent border-[#FC2B5D]"
                   color="wthie"
                   width="w-full"
@@ -350,7 +341,10 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
                 </CostumeButton>
 
                 <CostumeButton
-                  onClick={() => {setDeleteChannel(true); handleGoBack();}}
+                  onClick={() => {
+                    setDeleteChannel(true);
+                    handleGoBack();
+                  }}
                   bgColor="bg-[#FC2B5D] border-[#FC2B5D]"
                   color="#FC2B5D"
                   width="w-full"
@@ -367,7 +361,10 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
           {!isCreator && (
             <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-60">
               <CostumeButton
-                onClick={() => {setExitChannel(true); handleGoBack();}}
+                onClick={() => {
+                  setExitChannel(true);
+                  handleGoBack();
+                }}
                 bgColor="bg-transparent border-[#FC2B5D]"
                 color="wthie"
                 width="w-full"
@@ -381,26 +378,28 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
             </div>
           )}
         </ConversationInfoWrapper>
-    ) :
-    (
+      ) : (
         <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
           <div className="mt-10 flex justify-center items-center gap-10 flex-col">
             {/* <GiAstronautHelmet size={120} /> */}
-            <FaUserAstronaut size={140} color='#FEFFFF' className="opacity-40" />
+            <FaUserAstronaut
+              size={140}
+              color="#FEFFFF"
+              className="opacity-40"
+            />
             <h1 className="font-poppins text-lg text-[#FEFFFF]">
               {" "}
               No Conversation Is Selected{" "}
             </h1>
           </div>
         </div>
-      )
-    }
+      )}
     </>
   );
 };
 
 // {
-//   typesSelected === "D" && 
+//   typesSelected === "D" &&
 //   (
 //     <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
 //       <div className="mt-10 flex justify-center items-center gap-10 flex-col">
@@ -414,7 +413,7 @@ export const ConversationInfo = ({ type , setRefresh, refresh}: { type: string, 
 //     </div>
 //   )
 
-// } 
+// }
 const MemberIthem = ({
   setRefresh,
   imgUrl,
@@ -450,20 +449,8 @@ const MemberIthem = ({
     { id: 1, label: "Mute", subOptions: ["5 min", "30 min", "1 hour"] },
     { id: 2, label: "Kick", action: "kick" },
     { id: 3, label: "Ban", action: "ban" },
-    {
-      id: 4,
-      label: !asAdmin ? "Block" : "Unblock",
-      action: !asAdmin ? "blockUser" : "UnBlockUser",
-    },
   ];
 
-  const userOptions = [
-    {
-      id: 0,
-      label: !asAdmin ? "Block" : "Unblock",
-      action: !asAdmin ? "blockUser" : "UnBlockUser",
-    },
-  ];
 
   // const handleSubOptionClick =
   //   (option: { id: number; label: string; subOptions?: string[] }) => () => {
@@ -487,11 +474,11 @@ const MemberIthem = ({
         // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
         const userData = {
           channelId: conversationProps?.channelId,
-          userToMute: userId, 
+          userToMute: userId,
           muteUntil: addMinutes(new Date(), 1),
         };
         console.log("userData Mute :", userData);
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/muteUser", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -500,19 +487,46 @@ const MemberIthem = ({
           body: JSON.stringify(userData),
         });
       }
-      // else if (subOption === "30 min") {
-      //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
-      // }
-      // else if (subOption === "1 hour") {
-      //   // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
-      // }
+      else if (subOption === "30 min") {
+        // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
+        const userData = {
+          channelId: conversationProps?.channelId,
+          userToMute: userId,
+          muteUntil: addMinutes(new Date(), 30),
+        };
+        console.log("userData Mute :", userData);
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      }
+      else if (subOption === "1 hour") {
+        // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
+        const userData = {
+          channelId: conversationProps?.channelId,
+          userToMute: userId,
+          muteUntil: addMinutes(new Date(), 60),
+        };
+        console.log("userData Mute :", userData);
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+      }
 
       // setSelectedMuteTime(subOption);
     };
 
   const handleOptionClick =
     (option: { id: number; label: string; action?: string }) => () => {
-
       console.log("clicked", option);
       if (option.action === "makeAsAdmin") {
         setAsAdmin(!asAdmin);
@@ -521,7 +535,7 @@ const MemberIthem = ({
           channelId: conversationProps?.channelId,
           userId2: userId,
         };
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/addAdmin", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/addAdmin", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -536,7 +550,7 @@ const MemberIthem = ({
           channelId: conversationProps?.channelId,
           userId2: userId,
         };
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/removeAdmin", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/removeAdmin", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -550,31 +564,7 @@ const MemberIthem = ({
           channelId: conversationProps?.channelId,
           userId2: userId,
         };
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/banUser", {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        }).then((res) => {
-          console.log("res");
-          console.log("res :", res);
-          console.log("res");
-          if (!res.ok)
-          throw new Error("Network response was not ok");
-        else
-        setRefresh((prev) => !prev);
-    }).catch((error) => {
-          console.error("Error during fetch:", error);
-        });
-      } else if (option.action === "kick") {
-        // console.log("KICKING A USER");
-        const userData = {
-          channelId: conversationProps?.channelId,
-          userId2: userId,
-        };
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/removeUserFromChannel", {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/banUser", {
           method: "PATCH",
           credentials: "include",
           headers: {
@@ -582,19 +572,48 @@ const MemberIthem = ({
           },
           body: JSON.stringify(userData),
         })
-        .then((res) => {
-          if (!res.ok)
-            throw new Error("Network response was not ok");
-          else
-            setRefresh((prev) => !prev);
-        }).catch((error) => {
-          console.error("Error during fetch:", error);
-        } );
+          .then((res) => {
+            console.log("res");
+            console.log("res :", res);
+            console.log("res");
+            if (!res.ok) throw new Error("Network response was not ok");
+            else setRefresh((prev) => !prev);
+          })
+          .catch((error) => {
+            console.error("Error during fetch:", error);
+          });
+      } else if (option.action === "kick") {
+        // console.log("KICKING A USER");
+        const userData = {
+          channelId: conversationProps?.channelId,
+          userId2: userId,
+        };
+        fetch(
+          process.env.NEXT_PUBLIC_BACKEND_URL +
+            "channels/removeUserFromChannel",
+          {
+            method: "PATCH",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+          }
+        )
+          .then((res) => {
+            if (!res.ok) throw new Error("Network response was not ok");
+            else setRefresh((prev) => !prev);
+          })
+          .catch((error) => {
+            console.error("Error during fetch:", error);
+          });
       }
       // setSelectedOption(option.label);
     };
-  
-    // console.log("imgUrl 2222", imgUrl);
+
+  // console.log("imgUrl 2222", imgUrl);
+  console.log("Members options");
+
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
       <div className="flex gap-2 justify-between items-center ">
@@ -688,46 +707,7 @@ const MemberIthem = ({
           </Menu>
         )
       }
-      {
-        !isAdmin && (
-          <Menu>
-            <Menu.Button className="cursor-pointer left-[95%] absolute">
-              <SlOptions
-                className=""
-                onClick={() => setIsOptions(!isOptions)}
-              />
-            </Menu.Button>
-            <Transition
-              as={Fragment}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition duration-75 ease-out"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Menu.Items className="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg bg-[#202446] ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                {userOptions.map((option) => (
-                  <Menu.Item key={option.id}>
-                    {({ active }) => (
-                      <div
-                        className={`${
-                          active
-                            ? "bg-[#9A9BD326] text-white rounded-md flex justify-between"
-                            : "text-white flex justify-between"
-                        } block px-4 py-2 text-sm cursor-pointer`}
-                        onClick={handleOptionClick(option)}
-                      >
-                        {option.label}
-                      </div>
-                    )}
-                  </Menu.Item>
-                ))}
-              </Menu.Items>
-            </Transition>
-          </Menu>
-        )
-      }
+
     </div>
   );
 };
@@ -750,6 +730,7 @@ const MemberList = ({
   const userInfo = useContext(UserContext);
 
   const [isSet, setIsSet] = useState(false);
+
   // const refresh = use / real time
 
   // const userData = {
@@ -769,11 +750,16 @@ const MemberList = ({
   //     return res.json();
   //   })
   //   .then((data) => {
-      // console.log("data admin:", data);
+  // console.log("data admin:", data);
   //   });
-// const refresh = useContext(RefreshContext);
-// const refresh = useContext(refreshContext);
+  // const refresh = useContext(RefreshContext);
+  // const refresh = useContext(refreshContext);
+  const router = useRouter();
+  // var fetchFailer : boolean = false;
+
+  const [unauthorized, setUnauthorized] = useState(false);
   useEffect(() => {
+    
     const fetchFun = async () => {
       await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}channels/getConversationMembers/${conversation?.id}`,
@@ -786,6 +772,17 @@ const MemberList = ({
         }
       )
         .then((res) => {
+          if (!res.ok) {
+            console.log("Catching res.status === 403 kk");
+            throw new Error(`${res.status}`);
+            // setUnauthorized(true);
+
+            // router.push("/unauthorized");
+
+            // fetchFailer = true;
+            // setRefresh((prev) => !prev);
+            // throw new Error("Unauthorized");
+          }
           return res.json();
         })
         .then((data) => {
@@ -794,6 +791,10 @@ const MemberList = ({
           // console.log("Members data:", data);
           // console.log("hereeeeeeeeeee");
           if (data) setIsSet(true);
+        })
+        .catch((error) => {
+          if (error.message.includes("403")) router.push("/unauthorized");
+          console.error("Error during fetch:", error);
         });
     };
     // console.log("Members data:", data);
@@ -821,63 +822,94 @@ const MemberList = ({
     };
     if (conversation?.id !== undefined) {
       fetchFun();
+      if (unauthorized) router.push("/unauthorized");
+      // if (fetchFailer)
+      //   router.push("/game");
       fetchFun2();
     }
-  }, [conversation, isSet, conversationProps?.channelId, refresh]);
+  }, [
+    conversation,
+    isSet,
+    conversationProps?.channelId,
+    refresh,
+    router,
+    unauthorized,
+    // membersInfo,
+  ]);
 
   // useEffect(() => {
 
   // }, []);
-  
-  const setBlockedUsers = useContext(setBlockedUsersContext);
 
+  const setBlockedUsers = useContext(setBlockedUsersContext);
+  // const [isAdmin, setIsAdmin] = useState(false);
+// useEffect(() => {
   const isAdmin = (): boolean => {
+    console.log("");
     return membersInfo.members?.some(
       (member) => member.userId === userInfo.user?.id && member.isAdmin === true
     );
   };
+  // if (isAdmin()) {
+  //   setIsAdmin(true);
+  // }
+// }, [membersInfo, userInfo.user?.id]);
   // const isCreator = (): boolean => {
   //   return membersInfo.creator?.id === userInfo.user?.id;
   // };
 
-  // if (isCreator()) 
+  // if (isCreator())
   // {
   //   setIsCreator(true);
   // }
 
   // if (membersInfo.creator?.id === userInfo.user?.id)
-  // { 
+  // {
   //   setIsCreator(true);
   // }
-// reason of doing this is setting state (setIsCreator(true)) inside the render method of the MemberList component. cus modifying state during the rendering phase is not recommended in React and can lead to unpredictable behavior.
+  // reason of doing this is setting state (setIsCreator(true)) inside the render method of the MemberList component. cus modifying state during the rendering phase is not recommended in React and can lead to unpredictable behavior.
   useEffect(() => {
     if (membersInfo.creator?.id === userInfo.user?.id) {
       setIsCreator(true);
     }
+    else
+    {
+      setIsCreator(false);
+    }
   }, [membersInfo, userInfo.user?.id, setIsCreator]);
+
+  // useEffect(() => {
+  //   if (membersInfo.creator?.id !== userInfo.user?.id) {
+  //     setIsNotCreator(true);
+  //   }
+  // } , [membersInfo, userInfo.user?.id, setIsCreator]);
 
   // console.log("membersInfo:", membersInfo);
   // console.log("userInfo?.id:", userInfo.user?.id);
   // console.log("userInfo?.name:", userInfo.user?.username);
   // console.log("isSet:", isSet);
   // console.log("members:", members);
+  console.log("MemberList:");
+
   return (
     <>
       <MemberSeparator />
       {isSet &&
         // members.filter((member => member.user.id !== membersInfo.creator?.id)).map((member) => {
-        members.filter((member => member.user.id !== userInfo.user?.id)).map((member) => {
-          return (
-            <MemberIthem
-              setRefresh={setRefresh}
-              imgUrl={member.user.profilePic}
-              key={member.user.id}
-              name={member.user.username}
-              isAdmin={isAdmin()}
-              userId={member.user.id}
-            />
-          );
-        })}
+        members
+          .filter((member) => member.user.id !== userInfo.user?.id)
+          .map((member) => {
+            return (
+              <MemberIthem
+                setRefresh={setRefresh}
+                imgUrl={member.user.profilePic}
+                key={member.user.id}
+                name={member.user.username}
+                isAdmin={isAdmin()}
+                userId={member.user.id}
+              />
+            );
+          })}
       {/* <BanedMemberSeparator /> */}
       {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
     </>
@@ -921,15 +953,21 @@ const ConversationInfoWrapper = ({
   return (
     <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96">
       {title !== "" ? (
+        <>
+        <Link href={`/profile/FriendProfile?username=${name}`}>
         <ProfileInfos name={name} picUrl={imgUrl}>
           {/* {" "} */}
           <p className="titleInfo">{title}</p>
           {/* {" "} */}
         </ProfileInfos>
+         </Link>
+        
+        </>
       ) : (
-        <ProfileInfos name={name} picUrl={imgUrl}>
-          <></>
-        </ProfileInfos>
+          <ProfileInfos name={name} picUrl={imgUrl}>
+            <></>
+          </ProfileInfos>
+
       )}
       {children}
     </div>
@@ -947,16 +985,27 @@ interface User {
   isConfirmed2Fa: Boolean;
 }
 
-export interface BlockedUser{
+export interface BlockedUser {
   id: string;
-}[]
+}
+[];
 
-const Conversation = ({setRefresh, refresh} : {setRefresh:React.Dispatch<React.SetStateAction<boolean>>, refresh:boolean}) => {
+const Conversation = ({
+  setRefresh,
+  refresh,
+}: {
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: boolean;
+}) => {
   return (
     <div className="chatNprofile h-full basis-3/4 flex gap-9 px-12 py-24">
-      <ConversationChatSection setRefresh={setRefresh} refresh={refresh}/>
+      <ConversationChatSection setRefresh={setRefresh} refresh={refresh} />
       {/* <ChatSection /> */}
-      <ConversationInfo type="D" setRefresh={setRefresh} refresh={refresh}></ConversationInfo>
+      <ConversationInfo
+        type="D"
+        setRefresh={setRefresh}
+        refresh={refresh}
+      ></ConversationInfo>
     </div>
   );
 };
@@ -1007,9 +1056,7 @@ export const setShowDeleteChannelContext = createContext(
   {} as React.Dispatch<React.SetStateAction<boolean>>
 );
 
-export const ConversationListContextSet = createContext(
-  {} as any
-);
+export const ConversationListContextSet = createContext({} as any);
 export const blockedUsersContext = createContext({} as BlockedUser[]);
 export const setBlockedUsersContext = createContext(
   {} as React.Dispatch<React.SetStateAction<BlockedUser[]>>
@@ -1029,7 +1076,8 @@ export const ChatPage = () => {
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
   const [showDeleteChannel, setShowDeleteChannel] = useState<boolean>(false);
   const [showInviteFriend, setShowInviteFriend] = useState<boolean>(false);
-  const [showInviteFriendToChannel, setShowInviteFriendToChannel] = useState<boolean>(false);
+  const [showInviteFriendToChannel, setShowInviteFriendToChannel] =
+    useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [goBack, setGoBack] = useState<boolean>(false);
   const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
@@ -1055,19 +1103,20 @@ export const ChatPage = () => {
         .then((data) => {
           // console.log("channelsHHHH:", data);
           setConversationList(
-            data.sort((a: ConversationIthemProps, b :ConversationIthemProps) => {
-              const bDate = new Date(b?.updatedAt as Date);
-              const aDate = new Date(a?.updatedAt as Date);
-              return bDate.getTime() - aDate.getTime();
-            })
+            data.sort(
+              (a: ConversationIthemProps, b: ConversationIthemProps) => {
+                const bDate = new Date(b?.updatedAt as Date);
+                const aDate = new Date(a?.updatedAt as Date);
+                return bDate.getTime() - aDate.getTime();
+              }
+            )
             // data
-            );
-            // setGoBack(false);
-          });
-        };
-        fetchFun();
+          );
+          // setGoBack(false);
+        });
+    };
+    fetchFun();
   }, [refresh, userInfo.user?.id]);
-      
 
   useEffect(() => {
     // console.log("conversation?.id:", conversation?.id);
@@ -1084,26 +1133,28 @@ export const ChatPage = () => {
         }
       )
         .then((res) => {
+          if (!res.ok)
+            throw new Error(`${res.status}`);
           return res.json();
         })
         .then((data) => {
           // console.log("MESSAGESSSS data:", data);
-          if (data) 
-          {
+          if (data) {
             // setMessages(data.reverse());
             setMessages(data);
-            console.log('fetched and reversed')
+            console.log("fetched and reversed");
           }
         })
         .catch((err) => {
+          if (err.message.includes("403")) router.push("/unauthorized");
           // console.log(err);
         });
-        // return res;
-      };
-      fetchFun();
-    }, [conversation]);
-    console.log("messages:   TTT", messages);
-    
+      // return res;
+    };
+    fetchFun();
+  }, [conversation, refresh ]);
+  console.log("messages:   TTT", messages);
+
   return (
     <main className="main flex justify-center items-center h-full w-full ">
       <ConversationListContextSet.Provider value={setConversationList}>
@@ -1124,46 +1175,57 @@ export const ChatPage = () => {
                         >
                           <setAlertInviteFriendContext.Provider
                             value={setShowInviteFriend}
-                            >
+                          >
                             <alertInviteFriendContext.Provider
                               value={showInviteFriend}
+                            >
+                              <setInviteFriendToChannelContext.Provider
+                                value={setShowInviteFriendToChannel}
                               >
-                                <setInviteFriendToChannelContext.Provider
-                                  value={setShowInviteFriendToChannel}
+                                <inviteFriendToChannelContext.Provider
+                                  value={showInviteFriendToChannel}
+                                >
+                                  <setBlockedUsersContext.Provider
+                                    value={setBlockedUsers}
                                   >
-                                  <inviteFriendToChannelContext.Provider
-                                    value={showInviteFriendToChannel}
+                                    <setGoBackContext.Provider
+                                      value={setGoBack}
                                     >
-                                      <setBlockedUsersContext.Provider
-                                        value={setBlockedUsers}
+                                      <goBackContext.Provider value={goBack}>
+                                        <refreshContext.Provider
+                                          value={refresh}
                                         >
-                                          <setGoBackContext.Provider value={setGoBack}>
-                                            <goBackContext.Provider value={goBack}>
-                                              <refreshContext.Provider value={refresh}>
-                                                <setRefreshContext.Provider value={setRefresh}>
-                                          <blockedUsersContext.Provider
-                                            value={blockedUsers}
-                                            > 
+                                          <setRefreshContext.Provider
+                                            value={setRefresh}
+                                          >
+                                            <blockedUsersContext.Provider
+                                              value={blockedUsers}
+                                            >
                                               <div className="h-full basis-1/4 flex">
-                                                <Conversations 
-                                                setRefresh={setRefresh}
-                                                refresh={refresh}
+                                                <Conversations
+                                                  setRefresh={setRefresh}
+                                                  refresh={refresh}
                                                 >
                                                   {" "}
                                                   {/* <ConversationList /> */}
                                                 </Conversations>
                                                 {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
                                               </div>
-                                                  <MessagesContext.Provider value={messages}>
-                                                    <Conversation setRefresh={setRefresh} refresh={refresh}/>
-                                                  </MessagesContext.Provider>
-                                                </blockedUsersContext.Provider>
-                                                </setRefreshContext.Provider>
-                                              </refreshContext.Provider>
-                                            </goBackContext.Provider>
-                                          </setGoBackContext.Provider>
-                                        </setBlockedUsersContext.Provider>
-                                  </inviteFriendToChannelContext.Provider>
+                                              <MessagesContext.Provider
+                                                value={messages}
+                                              >
+                                                <Conversation
+                                                  setRefresh={setRefresh}
+                                                  refresh={refresh}
+                                                />
+                                              </MessagesContext.Provider>
+                                            </blockedUsersContext.Provider>
+                                          </setRefreshContext.Provider>
+                                        </refreshContext.Provider>
+                                      </goBackContext.Provider>
+                                    </setGoBackContext.Provider>
+                                  </setBlockedUsersContext.Provider>
+                                </inviteFriendToChannelContext.Provider>
                               </setInviteFriendToChannelContext.Provider>
                             </alertInviteFriendContext.Provider>
                           </setAlertInviteFriendContext.Provider>
@@ -1251,15 +1313,22 @@ const ProfileInfos = ({
   picUrl: string;
   children: React.ReactNode;
 }) => {
-
   // console.log("name------------ :", name);
   // console.log("picUrl------------ :", picUrl);
   return (
-    <div className="flex flex-col items-center">
-        <Image className="w-18 h-18 rounded-full mt-[40px] mb-[20px] sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt={"avatar"}/>
-      {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
-      <h4 className="nameInfo"> {name} </h4>
-      {children}
-    </div>
+    <>
+      <div className="flex flex-col items-center">
+      {/* <Link href={`/profile/FriendProfile?username=${name}`}> */}
+        <Image
+          className="w-18 h-18 rounded-full mt-[40px] mb-[20px] sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48"
+          src={picUrl}
+          alt={"avatar"}
+        />
+        {/* </Link> */}
+        {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
+        <h4 className="nameInfo"> {name} </h4>
+        {children}
+      </div>
+    </>
   );
 };

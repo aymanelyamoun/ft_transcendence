@@ -38,7 +38,7 @@ const MatchList: React.FC<MatchProps> = (props) => {
     const UserProfileStyling = props.UserProfileStyling;
     return (
       <div className={styles['match-list']}>
-        <ul>
+        <ul className='flex flex-col-reverse'>
           {matches  && matches.length ? (
             matches.map((match, index: number) => (
               <MatchItem

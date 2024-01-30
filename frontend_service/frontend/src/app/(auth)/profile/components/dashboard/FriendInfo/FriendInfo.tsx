@@ -122,8 +122,7 @@ const GameButton = styled.button`
   }
 `;
 
-const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render functions accept exactly two parameters: props and ref. Did you forget to use the ref parameter?
-  // const setSelectedFriend = props.setSelectedFriend;
+const FriendInfo = (props : FriendInfoProps) => {
   const onClose = props.onClose;
   const { showGroups, toggleShowGroups, setSelectedUserId } = props;
   // const setSelectedUserId = mapDispatchToProps;
@@ -165,11 +164,8 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
       if(response.ok){
         setShowAlertDecline(true);
         dispatch(toggleFetchFriends());
-      }else {
-        alert("the user has not been removed"); // gonna remove
       }
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -187,17 +183,13 @@ const FriendInfo = (props : FriendInfoProps) => { // Warning: forwardRef render 
       if(response.ok){
         setShowAlertBlock(true);
         dispatch(toggleFetchFriends());
-      }else {
-        alert("the user has not been blocked");
       }
     } catch (error) {
-      console.log(error);
     };
   };
 
   function inviteToPlay(id : string, loggedInUserId : string) {
     socket.emit("inviteGame", {id: id})
-    console.log('invited a user to play');
   }
 
   const handleShowGroup = () => {

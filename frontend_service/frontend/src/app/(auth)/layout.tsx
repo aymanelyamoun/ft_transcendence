@@ -8,6 +8,8 @@ import Confirm from "./confirm/page";
 import ConfirmAuth from "./confirmauth/page";
 import Navbar from "./game/components/Navbar";
 import { UserContext } from "@/utils/createContext";
+import { Provider } from "react-redux";
+import store from '@/store';
 
 // import './globals.css'
 // import '../../../src/app/'
@@ -66,6 +68,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <main className="h-screen w-screen bg-[#050A27]">
+      <Provider store={store}>
       <UserContext.Provider value={value}>
         <>
           {authenticated ? (
@@ -88,6 +91,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           )}
         </>
       </UserContext.Provider>
+      </Provider>
     </main>
   );
 }

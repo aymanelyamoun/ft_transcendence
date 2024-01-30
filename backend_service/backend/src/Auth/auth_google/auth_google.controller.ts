@@ -1,10 +1,8 @@
 import { Body, Controller, Get, HttpStatus, Inject, Post, Redirect, Req, Res, UnauthorizedException, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Request, Response, NextFunction } from 'express';
-import { GoogleAuthGuard } from "./utils/Guards";
 import { AuthGuard } from '@nestjs/passport';
 import { AuthGoogleService } from "./auth_google.service";
 import { JwtGuard } from "./utils/jwt.guard";
-import { IntraAuthGuard } from "./utils/IntraGuard";
 
 import * as qrcode from 'qrcode';
 import { use } from "passport";
@@ -21,20 +19,8 @@ const speakeasy = require('speakeasy');
 @Controller('auth')
 export class AuthGoogleController
 {
-    // npm i @nestjs/passport passport passport-google-oauth20
-    // @nestjs/passport provides decorators and utilities to simplify the integration of Passport.js with Nest.js and it's a module
-    // This is the core Passport.js library. Passport is a middleware that simplifies the process of implementing authentication in a Node.js application.
-    // It supports various authentication strategies, such as local username/password, OAuth, and others.
-    // passport-google-oauth20: This is a Passport.js strategy for authenticating with Google using the OAuth 2.0 protocol. 
-    // It allows you to enable Google as an authentication provider in your application,
-    // letting users log in with their Google credentials.
-    // npm i -D @types/passport-google-oauth20
-    // it provides TypeScript type definitions for the passport-google-oauth20 package.
-    // TypeScript type definitions are used to provide static type information about the structure of the JavaScript code in a package, 
-    // enabling better development tools support, such as autocompletion and type checking.
-    
     constructor(
-      @Inject('AUTH_SERVICE') private readonly authGoogleService: AuthGoogleService,
+       private readonly authGoogleService: AuthGoogleService,
       private readonly userService: UserService,
       private readonly jwtService: JwtService,
       private redisService: RedisService

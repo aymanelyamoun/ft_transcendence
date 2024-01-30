@@ -75,9 +75,6 @@ const SearchHeader = () => {
               if (res.ok) {
                 const data = await res.json() as SearchU[];
                 setSearchUsers(data);
-              }else {
-                alert("Error fetching data: ");
-                console.error("Error fetching data: ", res.statusText);
               }
             } catch (error) {
               console.error("Error fetching data: ", error);

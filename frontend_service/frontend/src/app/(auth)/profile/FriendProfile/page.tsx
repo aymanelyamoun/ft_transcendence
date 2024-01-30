@@ -176,10 +176,7 @@ function App() {
                   );
                   setIsLoading(true);
                   
-              } else {
-                alert("error"); 
               }
-  
               } catch (err) {
                 console.log(err);
               } finally {
@@ -266,8 +263,6 @@ function App() {
             const parseData = await res.json();
             setMatchHistory(parseData);
             setIsMatchLoading(false);
-          } else {
-            alert("Match History fetching isn't okay"); 
           }
           } catch (err) {
             console.log(err);

@@ -142,8 +142,6 @@ function App() {
               const parseData = await res.json();
               setMatchHistory(parseData);
               setIsMatchLoading(false);
-            } else {
-              alert("Match History fetching isn't okay"); 
             }
             } catch (err) {
             } finally {

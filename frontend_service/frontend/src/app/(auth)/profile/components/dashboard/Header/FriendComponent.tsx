@@ -72,7 +72,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
     const [UserAdded, setUserAdded] = useState<boolean>(false);
     const [UserUnblocked, setUserUnblocked] = useState<boolean>(false);
     const [showAlertUnblock, setShowAlertUnblock] = useState<boolean>(false);
-    const [showRequestSent, setShowRequestSent] = useState<boolean>(false);
 
     const SendRequest = async (props: FriendComponentProps) => {
         try {
@@ -86,7 +85,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
                 },
             });
             if(response.ok){
-                setShowRequestSent(true);
                 setUserAdded(true);
             }
         } catch (error) {
@@ -165,9 +163,6 @@ const FriendComponent: React.FC<FriendComponentProps> = (props) => {
         )}
         {
             showAlertUnblock && (<AlertMessage onClick={() => setShowAlertUnblock(false)} message={"The user has been Unblocked!"} type='notify'/>)
-        }
-        {
-            showRequestSent && (<AlertMessage onClick={() => setShowRequestSent(false)} message={"The request has been sent successfully!"} type='notify'/>)
         }
     </>
   )

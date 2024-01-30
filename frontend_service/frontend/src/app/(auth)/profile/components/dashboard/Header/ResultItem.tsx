@@ -33,7 +33,8 @@ const ResultItem: React.FC<ResultItemProps> = (props) => {
   {
     if (members)
       return (members.some(member => member.user.id === userId));
-    return (false);
+    else
+      return (false);
   }
 
   const isMember= isUserMember(props.members, loggedInUserId) as boolean;

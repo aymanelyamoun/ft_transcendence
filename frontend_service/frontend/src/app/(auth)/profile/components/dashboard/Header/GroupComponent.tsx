@@ -106,7 +106,8 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   {
     if (bannedUsers)
       return (bannedUsers.some(BannedUser => BannedUser.id === user));
-    return (false);
+    else
+      return (false);
   }
 
   const isBanned = isUserBanned(selectedUserId , props.banedUsers);
@@ -115,7 +116,8 @@ const GroupComponent: React.FC<GroupComponentProps> = (props) => {
   {
     if (members)
       return (members.some(member => member.user.id === userId));
-    return (false);
+    else
+      return (false);
   }
 
   const isMember = isUserMember(props.members, loggedInUserId);

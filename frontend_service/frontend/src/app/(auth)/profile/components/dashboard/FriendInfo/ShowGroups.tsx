@@ -102,10 +102,6 @@ const ShowGroups = (props : showGroupProps) => {
       if (res.ok) {
         const data = await res.json();
         setChannelFriendSearch(data);
-      } else
-      {
-        // alert("Error fetching data: ");
-        console.error("Error fetching data: ", res.statusText);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -143,6 +139,8 @@ const ShowGroups = (props : showGroupProps) => {
   {
     if (members)
       return (members.some(member => member.user.id === userId));
+    else
+      return (false);
   };
 
 

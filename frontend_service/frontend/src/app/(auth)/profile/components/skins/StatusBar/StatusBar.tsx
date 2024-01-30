@@ -16,9 +16,6 @@ const StatusBar = (props: StatusBarProps) => {
     const [table, setTable] = useState<boolean>(true);
     const [paddle, setPaddle] = useState<boolean>(false);
     const [ball, setBall] = useState<boolean>(false);
-    // const [ActiveTable, setActiveTable] = React.useState<string>("null");
-    // const [ActivePaddle, setActivePaddle] = React.useState<string>("null");
-    // const [ActiveBall, setActiveBall] = React.useState<string>("null");
 
     return (
         <div className={styles.StatusBar}>
@@ -55,16 +52,3 @@ const StatusBar = (props: StatusBarProps) => {
 };
 
 export default StatusBar;
-
-
-{/* <ul className={styles['sidebar']}>
-<li onClick={() => setTable(true)} className={styles.navli}>
-<a href="#" className={styles['nav-a']}>Table</a>
-</li>
-<li onClick={() => setPaddle(true)} className={styles.navli}>
-<a href="#" className={styles['nav-a']}>Paddle</a>
-</li>
-<li onClick={() => setBall(true)} className={styles.navli}>
-<a href="#" className={styles['nav-a']}>Ball</a>
-</li>
-</ul> */}

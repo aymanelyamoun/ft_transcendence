@@ -229,7 +229,7 @@ function App() {
   
   return (
     <> 
-    <Provider store={store}>
+    {/* <Provider store={store}> */}
       {ShowEditProfile && <EditProfileShow onClose={() => setShowEditProfile(false)} />}
        <div className="App">
         {PlayPopUp && (<AlertMessage onClick={() => setplayPopUp(false)} message={`${inviterData.current.username} Wanna Play With You \n Ps: The Notification Gonna Disappear After 10 Sec`} type="wannaPlay" id={`${inviterData.current.id}`}/>)}
@@ -246,7 +246,7 @@ function App() {
             <Friends/>
           </AppGlass>
       </div>
-      </Provider>
+      {/* </Provider> */}
     </>
   );
 };

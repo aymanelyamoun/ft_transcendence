@@ -10,6 +10,8 @@ import { socket } from "../../../socket";
 import { AlertMessage } from "./components/alertMessage";
 import { UserContext } from "@/utils/createContext";
 import { SocketContext } from "@/utils/socketContext";
+import styled from 'styled-components';
+import SearchHeader from "../profile/components/dashboard/Header/SearchHeader";
 
 export interface Channel {
   id: number;
@@ -34,6 +36,12 @@ interface User {
   isTwoFactorEnabled: Boolean;
   isConfirmed2Fa: Boolean;
 }
+
+const SearchDiv = styled.div`
+  position: absolute;
+  top: 1vh;
+  left: 7vw;
+`;
 
 export default function Home() {
   const router = useRouter();
@@ -106,6 +114,9 @@ export default function Home() {
             id={`${inviterData.current.id}`}
           />
         )}
+          <SearchDiv >
+            <SearchHeader />
+          </SearchDiv>
         <ChatPage />
       </SocketContext.Provider>
       {/* </UserContext.Provider> */}

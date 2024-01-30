@@ -44,6 +44,7 @@ const FriendName = styled.div`
 `;
 
 const AddFriendButton = styled.button`
+border-bottom: solid rgba(5, 10, 39, 0.55);
     svg {
         font-size: 1.5rem;
         color: aliceblue;
@@ -51,6 +52,7 @@ const AddFriendButton = styled.button`
 `;
 
 const BlockButton = styled.button`
+border-bottom: solid rgba(5, 10, 39, 0.55);
     svg {
         font-size: 1.5rem;
         color: red;

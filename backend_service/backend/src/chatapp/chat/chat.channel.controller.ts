@@ -2,8 +2,6 @@ import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post, Q
 import { ChangeChannelDataDto, ChannelEditDto, ChannelEditDto_, ConversationInfoDto, CreateChannelDto, JoinChannelDto, MuteUserDto, userDataDto } from "./DTOs/dto";
 // import { PrismaChatService } from "chatapp/server_chatapp/prisma/chat/prisma.chat.service";
 import { ChangeChannelData, JoinChannel } from "./types/channel";
-import { ChatChannelAdminGuard } from "./chat.channel.guard";
-import { Role, Roles } from "./roles.decorator";
 import { PrismaChatService } from "../prisma/chat/prisma.chat.service";
 import { user } from "./types/user";
 import { JwtGuard } from "src/Auth/auth_google/utils/jwt.guard";
@@ -26,7 +24,6 @@ export class ChannelController{
         await this.prismaChatService.createChannel(createChannelDto, req);
     }
 
-    // @UseGuards(ChatChannelAdminGuard)
     @Patch('joinChannel')
     async joinChannel(@Body() joinData:JoinChannelDto, @Req() req:Request){
         console.log("join the channel : ", joinData.channelId);

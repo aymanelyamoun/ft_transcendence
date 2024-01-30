@@ -8,8 +8,6 @@ import { UserModule } from './profile/user/user.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ChatModule } from './chatapp/chat/chat.module';
 import { PrismaModule } from './chatapp/prisma/prisma.module';
-import { TmpUserController } from './chatapp/prisma/tmpUser.controller';
-import { TmpUserService } from './chatapp/prisma/tmpUserAdd.service';
 import { PrismaService } from './chatapp/prisma/prisma.service';
 import { PrismaChatService } from './chatapp/prisma/chat/prisma.chat.service';
 import { AuthGoogleService } from './Auth/auth_google/auth_google.service';
@@ -22,8 +20,8 @@ import { RedisService } from './redis/redis.service';
 
 @Module({
   imports: [ConfigModule.forRoot(), ChatModule, PrismaModule, AuthGoogleModule, PassportModule.register({session : true}), UserModule, GameModule , RequestModule, RedisModule],
-  controllers: [TmpUserController],
-  providers: [AppService, TmpUserService, PrismaService, PrismaChatService, UserService, JwtService, GameService, RedisService,
+  controllers: [],
+  providers: [AppService, PrismaService, PrismaChatService, UserService, JwtService, GameService, RedisService,
 AuthGoogleService],
 })
 export class AppModule {}

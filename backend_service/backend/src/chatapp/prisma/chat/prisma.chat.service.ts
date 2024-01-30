@@ -313,6 +313,8 @@ export class PrismaChatService{
         async leaveChannel(data:ChannelEdit, @Req() req:Request){
           try{
             const user = req['user'] as User;
+            const channel = await this.prisma.channel.findUnique({where:{id:data.channelId}, include:{members:true, creator:true}})
+
             const userInChannel = await this.prisma.userChannel.findUnique({where:{userId_channelId:{userId: user.id, channelId:data.channelId}}});
             if (!userInChannel) throw new NotFoundException('user does not exist');
 
@@ -327,6 +329,10 @@ export class PrismaChatService{
             await this.prisma.conversation.update({where:{id:conversation.id}, data:{members:{delete :{id:memberId.id}}}});
 
             await this.prisma.userChannel.delete({where:{userId_channelId:{userId: user.id, channelId:data.channelId}}});
+            // if (channel.creator.id === user.id){
+            //   await this.prisma.channel.update({where:{id:data.channelId}, data:{creator:{disconnect:{id:user.id}}}})
+            // }
+              // await this.deleteChannel(data, req);
           }
           catch(error){
             throw error;

@@ -173,7 +173,7 @@ export const ConversationInfo = ({
   const inviteToPlay = () => {
     socket.emit("inviteGame", { id: recieverUserId });
   };
-
+const [isAdmin, setIsAdmin] = useState(false);
 
   return (
     <>
@@ -207,8 +207,9 @@ export const ConversationInfo = ({
             setIsCreator={setIsCreator}
             setRefresh={setRefresh}
             refresh={refresh}
+            setIsAdmin={setIsAdmin}
           />
-          {isCreator && (
+          {(isCreator && isAdmin) && (
             <ButtonInfo width="10" hight="10">
               <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-12">
                 <CostumeButton
@@ -260,7 +261,7 @@ export const ConversationInfo = ({
               </div>
             </ButtonInfo>
           )}
-          {!isCreator && (
+          {(!isCreator)&& (
             <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-60">
               <CostumeButton
                 onClick={() => {
@@ -573,10 +574,12 @@ const MemberList = ({
   refresh,
   setRefresh,
   setIsCreator,
+  setIsAdmin,
 }: {
   refresh: boolean;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCreator: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const conversation = useContext(LstConversationStateContext);
   const [members, setMembers] = useState<MemberProps[]>([]);
@@ -658,9 +661,13 @@ const MemberList = ({
       (member) => member.userId === userInfo.user?.id && member.isAdmin === true
     );
   };
-  // if (isAdmin()) {
-  //   setIsAdmin(true);
-  // }
+  if (isAdmin()) {
+    setIsAdmin(true);
+  }
+  else
+  {
+    setIsAdmin(false);
+  }
 // }, [membersInfo, userInfo.user?.id]);
   // const isCreator = (): boolean => {
   //   return membersInfo.creator?.id === userInfo.user?.id;

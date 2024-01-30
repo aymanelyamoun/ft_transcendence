@@ -76,7 +76,8 @@ export class RequestService {
             if (!notification)
                 return { message: 'notification already Requested' };
             const isBlocked = await this.isBlocked(notification.userId, notification.senderId);
-            if (isBlocked)
+            const isBlockedb = await this.isBlocked(notification.senderId, notification.userId);
+            if (isBlocked || isBlockedb)
                 return { message:'Friend is blocked by the user' };
             const result = await this.prisma.$transaction(async (prisma) => 
             {

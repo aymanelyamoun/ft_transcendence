@@ -261,7 +261,7 @@ const [isAdmin, setIsAdmin] = useState(false);
               </div>
             </ButtonInfo>
           )}
-          {(!isCreator)&& (
+          {(!isCreator || (isCreator && !isAdmin) )&& (
             <div className="flex min-h-3b max-w-button-max w-40 flex-col justify-between items-center mt-60">
               <CostumeButton
                 onClick={() => {

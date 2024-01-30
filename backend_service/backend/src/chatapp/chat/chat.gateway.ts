@@ -1,4 +1,4 @@
-import { Inject, OnModuleInit } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { messageDto, userDataDto } from './DTOs/dto';
@@ -14,7 +14,6 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { GameService } from 'src/Game/game.service';
 import { UserService } from 'src/profile/user/user.service';
-import { fa } from '@faker-js/faker';
 
 // export class ChatGateway implements OnModuleInit{
   // @WebSocketGateway()
@@ -27,6 +26,10 @@ export class ChatGateway implements OnGatewayConnection {
     private gameService : GameService) {}
 
   async getUserData (client : Socket) : Promise<User> {
+    if (client.handshake.headers.cookie === typeof undefined){
+      console.log("AN EXEPTION HAS BEEN THROWN");
+      throw new UnauthorizedException("You are not logged in");
+    }
     const cookies =  parse(client.handshake.headers.cookie);
     const payload = await this.jwtService.verifyAsync(cookies['access_token'], {
       secret : process.env.jwtSecretKey,
@@ -122,7 +125,7 @@ export class ChatGateway implements OnGatewayConnection {
     return ;
   else if (socket['user'].username !== null && socket['user'].username !== undefined)
   {
-    console.log(socket['user'].username ,' is disconnecting');
+    // console.log(socket['user'].username ,' is disconnecting');
     if (socket['inGame'] == true)
       this.gameService.stopGameEvent(socket)
     else if (socket['inQueue'] == true)

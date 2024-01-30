@@ -117,24 +117,7 @@ const CreateChannel = ({
       // here i should add the selected friends
     };
 
-    // console.log("channelData : ", channelData);
 
-    // fetch("http://localhost:3001/api/channels/createChannel", {
-    //   method: "POST",
-    //   mode: "cors",
-    //   credentials: "include",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    //   body: JSON.stringify(channelData),
-    // })
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     console.log("data : ", data);
-    //   });
     fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/createChannel", {
       method: "POST",
       mode: "cors",
@@ -150,24 +133,14 @@ const CreateChannel = ({
           setNotCreated(true);
           throw new Error("Network response was not ok");
         } else {
-          // console.log("refresh in add new channel: ")
           setRefresh((prev) => !prev);
-          // setGoBack(false);
         }
 
-        // return res.json();
       })
-      // .then((data) => {
-      //   console.log("data: ", data);
-      // })
       .catch((error) => {
-        console.error("Error during fetch:", error);
       });
 
     setSelectedFriends([]);
-    // setChannelCreated(false);
-    // setRefresh((prev) => !prev);
-    // console.log(" refresh : ", refresh);
   };
   function getExtension(filename : string) {
     return filename.split('.').pop();
@@ -200,7 +173,6 @@ const CreateChannel = ({
           }
         }
       } catch (error) {
-        console.error("Error updating image:", error);
       }
     }
   };
@@ -258,15 +230,6 @@ const CreateChannel = ({
                 {" "}
               </AlertMessage>
             )}
-            {/* <div>
-              <Image
-                className="channelImage"
-                src={channleImage}
-                alt={"channelImage"}
-                width={120}
-                height={120}
-              />
-            </div> */}
             <ProfilePicUpload
               profilePic={useChannelPic}
               handlePicUpdate={handlePicUpdate}

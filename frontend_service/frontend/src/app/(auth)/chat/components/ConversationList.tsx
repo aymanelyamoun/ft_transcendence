@@ -26,7 +26,7 @@ import {
 
 export const IsChannelContext = createContext(false);
 
-// import { AlertMessage } from "./AlertMessage";
+
 import CreateChannel from "./CreateChannel";
 import CreateChannelButton from "./CreateChannelButton";
 import AddNewChannel from "./AddNewChannel";
@@ -35,41 +35,31 @@ import EditChannel from "./EditChannel";
 import { AlertMessage } from "./alertMessage";
 import { UserContext } from "@/utils/createContext";
 
-// const ConversationIthem = ({props , setRefresh}: {props:ConversationIthemProps, setRefresh:React.Dispatch<React.SetStateAction<boolean>>}) => {
+
 const ConversationIthem = (props : ConversationIthemProps) => {
   const conversationProps = props;
-  // const { id, name, profilePic, type, title, createdAt, channelId, lastMessage } = props.props;
-  // const { id, name, profilePic, type, createdAt, channelId, lastMessage } =
+
   const setConversationList = useContext(LstConversationSetStateContext);
   props;
 
   const isChannel = useContext(IsChannelContext);
-  // const setRefresh = useContext(setRefreshContext);
+
   const refresh = useContext(refreshContext);
-  console.log("refresh in conversationIthem: ", refresh);
-  //  console.log("conversationProps.Pic: ", conversationProps.profilePic);
+
   const handleChatClick = () => {
-    console.log("conversationProps: WWWWWWW", conversationProps);
-    // setRefresh(!refresh);
+  
     setConversationList(conversationProps);
-    // conversationProps.setRefresh!((prev) => !prev);
-    // setRefresh((prev) => !prev);
-    console.log("refresh in conversationIthem 2: ", refresh);
+  
   };
 
-//  const avatar = "frontend_service/frontend/public/garou-kid.jpeg";
-// const conversationProps = useContext(LstConversationStateContext);
-console.log("conversationProps.name HHHHHHHHHHH: ", conversationProps?.name)
   return (
     <li
       onClick={handleChatClick}
-      // key={props.id}
       className="friendsItem sm:w-full w-2/3 flex items-center gap-2 rounded-lg my-2 px-3 py-2 cursor-pointer"
     >
       <Image
         className=" w-[49px] h-[49px] rounded-full"
-       // src={avatar}
-        // src={`${conversationProps.profilePic !== "some link" ? conversationProps.profilePic : avatar}`}
+
          src={conversationProps?.profilePic as string}
         // alt={conversationProps.name}
         alt={conversationProps?.name as string}
@@ -96,32 +86,21 @@ export const ConversationList = ({
   setIsChannel,
   setShowAddChannel,
 }: // rowData,
-// conversation,
-// setConversation,
+
 {
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   refresh: boolean;
   isChannel: boolean;
   setIsChannel: React.Dispatch<React.SetStateAction<boolean>>;
   setShowAddChannel: React.Dispatch<React.SetStateAction<boolean>>;
-  // rowData: Conversation[];
-  // conversation: ConversationIthemProps[];
-  // setConversation: React.Dispatch<
-  //   React.SetStateAction<ConversationIthemProps[]>
-  // >;
+
 }) => {
 
-  // useEffect(() => {
-  //   setIsChannel((prev) => !prev);
-  //   setIsChannel((prev) => !prev);
-  // }, [refresh]);
+
   const ConversationListData = useContext(ConversationListContext);
   const channelType = useContext(IsChannelContext);
-  console.log("ConversationListData", ConversationListData);
   // const lastConv = useContext(LstConversationStateContext);
 
-  console.log("Items List");
-  console.log("Items List");
   if (!channelType) {
     {
       return (
@@ -227,62 +206,9 @@ export const Conversations = ({
   const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
   const [rowData, setRowData] = useState<ConversationIthemProps[]>([]);
 
-  // useEffect(() => {
-  //   const fetchFun = async () => {
-  //     const res = await fetch(
-  //       `http://localhost:3001/api/channels/getUserConversationsIthemList?userId=${userId}&isAdmin=${isAdmin}`,
-  //       {
-  //         method: "GET",
-  //         credentials: "include",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //       .then((res) => {
-  //         return res.json();
-  //         // const data: Conversation[];
-  //       })
-  //       .then((data) => {
-  //         setRowData(data);
-  //         setConversation(data);
-  //       });
-  //   };
-  //   fetchFun();
-  // }, []);
   const [showAddChannel, setShowAddChannel] = useState(false);
   const [goToCreateChannel, setGoToCreateChannel] = useState<boolean>(false);
-  // const [showCreateChannel, setShowCreateChannel] = useState<boolean>(false);
 
-  // console.log(
-  //   "conversationProps.channelId: ----------",
-  //   conversationProps?.channelId
-  // );
-  // console.log("userInfo?.id: ----------", userInfo?.id);
-
-  // const lastConversation = useContext(LstConversationStateContext);
-  // const lastConvId = lastConversation?.id;
-  // const setConversationList = useContext(LstConversationSetStateContext);
-  // console.log("lastConvId: ", lastConvId);
-  // console.log("lastConversation: ", lastConversation);
-
-  // const handleGoBack = () => {
-
-  //   const channelType = "D";
-  //   setConversationList(
-  //     (prevConversation: ConversationIthemProps | undefined) => {
-  //       if (prevConversation && prevConversation.id && lastConvId === lastConvId) {
-  //         // setRefresh(true);
-  //         return {
-  //           ...prevConversation,
-  //           type: channelType,
-  //         };
-  //       }
-  //       setRefresh((prev) => !prev);
-  //       return prevConversation;
-  //     }
-  //   );
-  // }
 const setGoBack = useContext(setGoBackContext);
   const handleExitChannel = () => {
     const channelData = {
@@ -290,7 +216,7 @@ const setGoBack = useContext(setGoBackContext);
       // userId:  userInfo?.id,
       userId2: "some_random_id",
     };
-    // console.log("channelData: ", channelData);
+    
     const fetchFun = async () => {
       await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/leaveChannel", {
         method: "PATCH",
@@ -302,7 +228,7 @@ const setGoBack = useContext(setGoBackContext);
         body: JSON.stringify(channelData),
       })
         .then((res) => {
-          // console.log("res: ", res);
+
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
@@ -314,7 +240,6 @@ const setGoBack = useContext(setGoBackContext);
           }
         })
         .catch((error) => {
-          console.error("Error during fetch:", error);
         });
     };
     fetchFun();
@@ -325,7 +250,7 @@ const setGoBack = useContext(setGoBackContext);
       channelId: conversationProps?.channelId,
       userId2: "some_random_id",
     };
-    // console.log("channelData of Delete: ", channelData);
+   
     const fetchFun = async () => {
       await fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/deleteChannel", {
         method: "POST",
@@ -337,7 +262,7 @@ const setGoBack = useContext(setGoBackContext);
         body: JSON.stringify(channelData),
       })
         .then((res) => {
-          // console.log("res: ", res);
+
           if (!res.ok) {
             throw new Error("Network response was not ok");
           }
@@ -349,43 +274,26 @@ const setGoBack = useContext(setGoBackContext);
           }
         })
         .catch((error) => {
-          console.error("Error during fetch:", error);
+
         });
     };
     fetchFun();
   };
-
-  // console.log("refresh in channels : ", setRefres)
-
-  // console.log("goToCreateChannel", goToCreateChannel);
 
   return (
     <div className="friendList w-full h-full mr-12 relative">
       <IsChannelContext.Provider value={isChannel}>
         <ChatToggel setIsChannel={setIsChannel} />
         <div className="friendsScroll overflow-y-auto overflow-x-hidden ">
-          {/* <ul className=" flex-col items-center w-full cursor-pointe relative h-full grid gap-y-2"> */}
-          {/* <SearchBar
-                  rowData={rowData}
-                  // conversation={conversationList}
-                  // setConversation={setConversationList}
-                  // friendSearch={friendSearch}
-                  // setFriendSearch={setFriendSearch}
-                  // channelSearch={channelSearch}
-                  // setChannelSearch={setChannelSearch}
-                /> */}
+
           <ConversationList
             setRefresh={setRefresh}
             refresh={refresh}
             isChannel={isChannel}
             setIsChannel={setIsChannel}
             setShowAddChannel={setShowAddChannel}
-            // conversationListData={conversationList}
-            // rowData={rowData}
-            // setConversation={setConversationList}
-          />
-          {/* {isChannel && <CreateChannelButton setShowAddChannel={setShowAddChannel}/>} */}
 
+          />
           {showAddChannel && (
             <AddNewChannel
               setShowAddChannel={setShowAddChannel}
@@ -426,16 +334,7 @@ const setGoBack = useContext(setGoBackContext);
               />
             )
           }
-          {/* {
-            showInviteFriendToChannel && (
-              <ShowGroups
-              parentType="AddUser"
-              onClose={() => setInviteFriendToChannel(false)}/>
-            )
-          } */}
 
-          {/* {children} */}
-          {/* </ul> */}
         </div>
       </IsChannelContext.Provider>
     </div>
@@ -453,7 +352,6 @@ const ChatButton = ({
     <>
       <button onClick={onClick}>
         {children}
-        {/* <Image src={imgUrl} alt={imgAlt} width={width} height={hight} /> */}
       </button>
     </>
   );
@@ -482,7 +380,6 @@ export const ChatToggel = ({
         <HiMiniChatBubbleLeft size={22} color={`white`} />
       </ChatButton>
 
-      {/* <Image className="" src={splitBar} alt="splitBar" height={5} width={1}></Image> */}
       <div className="w-[1px] h-[20px] bg-white"></div>
 
       <ChatButton onClick={handleChannelClick}>
@@ -499,7 +396,6 @@ export const ChatToggel = ({
       </ChatButton>
 
       <div className="w-[1px] h-[20px] bg-white"></div>
-      {/* <Image className="" src={splitBar} alt="splitBar" width={1} height={5}></Image> */}
 
       <ChatButton onClick={handleChannelClick}>
         <HiMiniChatBubbleLeftRight size={22} color={`white`} />

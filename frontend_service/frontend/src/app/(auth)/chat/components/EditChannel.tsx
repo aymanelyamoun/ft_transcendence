@@ -12,6 +12,7 @@ import channelPic from "../../../../../public/group_pic.jpg";
 import ProfilePicUpload from "@/app/components/ProfilePicUpload";
 import { Backend_URL } from "@/lib/Constants";
 import { ConversationIthemProps } from "@/utils/types/chatTypes";
+import { useRouter } from "next/router";
 
 interface channelInfos {
   id: number;
@@ -77,11 +78,10 @@ const EditChannel = ({
     setPasswordMatch(event.target.value === passwordInput.value);
     setSavePassword(event.target.value);
   };
-
+  const router = useRouter();
   useEffect(() => {
     const channelId = conversationProps?.channelId;
     // here i should fetch the channelName and channelPic and channelType and else ... from the backend
-    // console.log("channelId ??????????: ", channelId);
     fetch(process.env.NEXT_PUBLIC_BACKEND_URL+`channels/channelInfos/${channelId}`, {
       method: "GET",
       credentials: "include",
@@ -91,43 +91,33 @@ const EditChannel = ({
       },
     })
       .then((res) => {
-        // console.log("res: ", res);
         if (!res.ok) {
-          throw new Error("Network response was not ok");
+
+          throw new Error(`${res.status}`);
         }
         return res.json();
       })
       .then((data) => {
         if (data) {
-          // console.log("data??????????: ", data);
           setSaveChannelName(data.channelName);
           setSelectedOption(data.channelType);
           setUseChannelPic(data.channelPic);
         }
       })
       .catch((error) => {
-        console.error("Error during fetch:", error);
+        if (error.message.includes("403") || error.message.includes("404")) router.push("/unauthorized");
       });
   }, [conversationProps?.channelId]);
 
-  // console.log("conversationInfo ????????????????? : ", conversationInfo);
-  // setSelectedOption(data.type);
-
-  // console.log("saveChannelName ????????????????? : ", saveChannelName);
-  // console.log("selectedOption ????????????????? : ", selectedOption);
-
   const handleEditButton = () => {
-    // console.log("saveChannelName ++++++++++++++++++++++ : ", saveChannelName);
     if (passwordMatch && saveChannelName !== "") {
       setShowNotify(true);
     }
     if (!passwordMatch) {
-      // console.log("!passwordMatch: ", passwordMatch);
       setShowAlert(true);
     }
 
     if (saveChannelName === "") {
-      // console.log("saveChannelName ===  : ", saveChannelName);
       setChannelName(true);
     }
 
@@ -137,16 +127,8 @@ const EditChannel = ({
       password: savePassword,
       type: selectedOption,
       channelId: conversationProps?.channelId,
-      // removeAdmins: [],
-      // addAdmins: [],
-
-      // channelPic: useChannelPic,
-      // creator: creatorInfo?.id,
-      // here i should add the selected friends
     };
 
-    // console.log("channelData of Edited: ", channelData);
-    // const fetchPostFun = async () => {
     fetch(process.env.NEXT_PUBLIC_BACKEND_URL+"channels/editChannel", {
       method: "POST",
       credentials: "include",
@@ -158,28 +140,14 @@ const EditChannel = ({
       body: JSON.stringify(channelData),
     })
       .then((res) => {
-        // console.log("res: ", res);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         } else {
-          // setRefresh(true);
           setRefresh((prev) => !prev);
-          // setEditChannel(false);
-          // const updatedConversation = {
-          //   ...setConversationList,
-          //   name: channelData.channelName,
-          // };
           const newName = channelData.channelName;
-          //   setConversationList((prevConversation: ConversationIthemProps | undefined ) => {
-          //     if (prevConversation?.id === lastConvId) {
-          //       return { ...prevConversation, name: updatedConversation.name };
-          //     }
-          //     return prevConversation;
-          // });
           setConversationList(
             (prevConversation: ConversationIthemProps | undefined) => {
               if (prevConversation && prevConversation.id === lastConvId) {
-                // setRefresh(true);
                 return {
                   ...prevConversation,
                   name: newName,
@@ -191,7 +159,7 @@ const EditChannel = ({
         }
       })
       .catch((error) => {
-        console.error("Error during fetch:", error);
+
       });
   };
 
@@ -227,7 +195,7 @@ const EditChannel = ({
           }
         }
       } catch (error) {
-        console.error("Error updating image:", error);
+
       }
     }
   };
@@ -285,28 +253,12 @@ const EditChannel = ({
             </AlertMessage>
           )}
           <div className="scrollbar flex flex-col items-center rounded-t-[10px] h-[531px] overflow-y-auto ">
-            {/* <div>
-              <Image
-                className="channelImage"
-                src={channleImage}
-                alt={"channelImage"}
-                width={120}
-                height={120}
-              />
-              
-            </div> */}
             <div>
-              {/* <Image
-                src={useChannelPic}
-                alt="channelPic"
-                className=" w-[120px] h-[120px] channelImage "
-              /> */}
                <ProfilePicUpload
               profilePic={useChannelPic}
               handlePicUpdate={handlePicUpdate}
             />
             </div>
-            {/* <ProfilePicUpload profilePic="/goinfre/aadnane/ft_transcendence/frontend_service/frontend/public/group_pic.jpg" handlePicUpdate={handlePicUpdate} /> */}
             <div className="">
               <input
                 className="channelName  placeholder-[#545781]"
@@ -422,15 +374,6 @@ const EditChannel = ({
                   </div>
                 </div>
               ))}
-            {/* <div className="passWord relative mt-[15px]">
-                Administrators
-                <div
-                  onClick={() => setPassword(true)}
-                  className="passwordParameter absolute right-[3%] top-[18%]"
-                  >
-                  <Image src={passwordParameter} alt="password" />
-                </div>
-              </div> */}
           </div>
         </div>
         <button

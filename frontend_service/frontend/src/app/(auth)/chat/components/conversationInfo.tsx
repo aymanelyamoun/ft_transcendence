@@ -34,14 +34,8 @@ import { FaUserAstronaut } from "react-icons/fa";
 import { ChannelInfoProps } from "@/utils/types/chatTypes";
 import { UserContext } from "@/utils/createContext";
 import { Backend_URL } from "@/lib/Constants";
-import router from "next/router";
+// import router from "next/router";
 import Link from "next/link";
-// export const userId = "0ff6efbc-78ff-4054-b36f-e517d19f7103";
-// export const isAdmin = false;
-
-// import { $Enums } from "@prisma/client";
-// import { CONVERSATION_TYPE } from "../../../../../../backend_service/backend/types/chatTypes";
-// import { CONVERSATION_TYP } from "../../../../../../backend_service/backend/types/chatTypes";
 interface Friend {
   id: string;
   username: string;
@@ -79,44 +73,6 @@ export const ConversationInfo = ({
   const socket = useContext(SocketContext);
 
   const [members, setMembers] = useState<MemberProps[]>([]);
-  // handle if the conversationProps is undefined
-  // if (conversationProps?.id === undefined) {
-  //   return;
-  // }
-
-  // const handleExitChannel = () => {
-  //   setExitChannel(true);
-  //   const channelData = {
-  //     channelId: conversationProps.channelId,
-  //     userId:  userInfo?.id,
-  //     // here i should add the selected friends
-  //   };
-  //     const fetchFun = async () => {
-  //       await fetch(
-  //         `http://localhost:3001/api/channels/leaveChannel`,
-  //         {
-  //           method: "PATCH",
-  //           mode: "cors",
-  //           credentials: "include",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             "Access-Control-Allow-Origin": "*",
-  //           },
-  //           body: JSON.stringify(channelData),
-  //         }
-  //       )
-  //       .then((res) => {
-  //         if (!res.ok) {
-  //           throw new Error("Network response was not ok");
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error during fetch:", error);
-  //       });
-  //     };
-  //     fetchFun();
-
-  // }
 
   const lastConvId = lastConversation?.id;
   const setConversationList = useContext(LstConversationSetStateContext);
@@ -132,18 +88,11 @@ export const ConversationInfo = ({
             type: channelType,
           };
         }
-        // setRefresh((prev) => !prev);
         return prevConversation;
       }
     );
   };
 
-  // const goBack = useContext(goBackContext);
-  //     // if (goBack)
-  // {
-  //   handleGoBack();
-  //   return;
-  // }
   const router = useRouter();
   const [unauthorized, setUnauthorized] = useState(false);
   useEffect(() => {
@@ -162,40 +111,23 @@ export const ConversationInfo = ({
         .then((res) => {
           if (!res.ok) {
             throw new Error(`${res.status}`);
-            console.log("Catching res.status === 403");
-            // setUnauthorized(true);
-            // fetchFailer = true;
-            // setRefresh((prev) => !prev);
-            // throw new Error("Unauthorized");
           }
           return res.json();
         })
         .then((data) => {
           setMembers(data);
-          // setMembers((prev) => { return [...prev, data] })
-          // console.log("Members data: 2", data);
-          // console.log("hereeeeeeeeeee");
-          // if (data) setIsSet(true);
         })
         .catch((error) => {
-          if (error.message.includes("403")) router.push("/unauthorized");
-          console.error("Error during fetch:", error);
+          if (error.message.includes("403") || error.message.includes("404")) router.push("/unauthorized");
         });
     };
-    // console.log("Members data:", data);
 
     if (lastConversation?.id !== undefined) {
-      // if (lastConversation?.type === "DIRECT" || lastConversation?.type === "CHANNEL_CHAT")
-      // {
       fetchFun();
       if (unauthorized) router.push("/unauthorized");
-      // if (fetchFailer)
-      // router.push("/game");
-      // }
     }
   }, [lastConversation, router, unauthorized]);
 
-  // lastConversation?.
   const recieverUserId = members.filter(
     (member) => member.user.id !== userInfo.user?.id
   )[0]?.user.id;
@@ -203,11 +135,7 @@ export const ConversationInfo = ({
     (member) => member.user.id !== userInfo.user?.id
   )[0]?.user.username;
 
-  // const inviteFriend = () => {
   const inviteFriend = async () => {
-    // console.log("invite friend");
-    // useEffect(() => {
-    // const fetchFun = async () => {
     const fetchFun = async () => {
       await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}request/send/${recieverUserId}`,
@@ -225,24 +153,19 @@ export const ConversationInfo = ({
           if (!res.ok) {
             throw new Error("Network response was not ok");
           } else {
-            // setRequestSent(true);
             setAlertInviteFriend(true);
-            // alert("the request has been sent");
           }
         })
         .catch((error) => {
-          console.error("Error during fetch:", error);
         });
     };
 
     if (lastConversation?.id !== undefined) {
       fetchFun();
     }
-    // }, [lastConversation]);
   };
 
   const inviteFriendTochannel = () => {
-    // console.log("add friends to channel");
     setShowInviteToChannel(true);
   };
 
@@ -254,7 +177,6 @@ export const ConversationInfo = ({
 
   return (
     <>
-      {/* {typesSelected === "DIRECT" ? ( */}
       {conversationProps?.type === "DIRECT" ? (
         <ConversationInfoWrapper
           name={conversationProps?.name as string}
@@ -263,26 +185,6 @@ export const ConversationInfo = ({
         >
           <ButtonInfo width="10" hight="10">
             <div className="flex gap-3 justify-center flex-wrap pr-10 pl-10 mx-12">
-              {/* <CostumeButton
-                onClick={() => inviteFriend()}
-                bgColor="bg-white-blue border-[#FEFFFF]"
-                color="white"
-                width="w-20"
-                hight="h-11"
-              >
-                <MdPersonAddAlt1 color="#1C2041" size={24} />
-              </CostumeButton>
-
-              <CostumeButton
-                onClick={() => inviteFriendTochannel()}
-                bgColor="bg-white-blue border-[#FEFFFF]"
-                color="white"
-                width="w-20"
-                hight="h-11"
-              >
-                <MdGroupAdd color="#1C2041" size={24} />
-              </CostumeButton> */}
-
               <CostumeButton
                 onClick={() => inviteToPlay()}
                 bgColor="bg-white-blue border-[#FEFFFF]"
@@ -398,22 +300,7 @@ export const ConversationInfo = ({
   );
 };
 
-// {
-//   typesSelected === "D" &&
-//   (
-//     <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96 ">
-//       <div className="mt-10 flex justify-center items-center gap-10 flex-col">
-//         {/* <GiAstronautHelmet size={120} /> */}
-//         <FaUserAstronaut size={140} color='#FEFFFF' className="opacity-40" />
-//         <h1 className="font-poppins text-lg text-[#FEFFFF]">
-//           {" "}
-//           No Conversation Is Selected{" "}
-//         </h1>
-//       </div>
-//     </div>
-//   )
 
-// }
 const MemberIthem = ({
   setRefresh,
   imgUrl,
@@ -428,18 +315,12 @@ const MemberIthem = ({
   isAdmin: boolean;
 }) => {
   const [isOptions, setIsOptions] = useState<boolean>(false);
-  // console.log("before isAdmin:", isAdmin);
   const [asAdmin, setAsAdmin] = useState<boolean>(isAdmin);
   // const [selectedOption, setSelectedOption] = useState("public");
   const [selectedMuteTime, setSelectedMuteTime] = useState<string>("");
 
   const conversationProps = useContext(LstConversationStateContext);
-  // const userInfo = useContext(UserContext);
 
-  // const [isAdmine, setIsAdmine] = useState(isAdmin);
-  // console.log("isAdmin:", isAdmin);
-  // console.log("asAdmin:", asAdmin);
-  // console.log("userId:", userId);
   const options = [
     {
       id: 0,
@@ -451,14 +332,6 @@ const MemberIthem = ({
     { id: 3, label: "Ban", action: "ban" },
   ];
 
-
-  // const handleSubOptionClick =
-  //   (option: { id: number; label: string; subOptions?: string[] }) => () => {
-  //     console.log("clicked :", option);
-  //     // setSelectedMuteTime(option.label);
-  //     // console.log("selectedMuteTime:", selectedMuteTime);
-  //     // setSelectedOption(option.label);
-  //   };
   function addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
 
@@ -468,7 +341,6 @@ const MemberIthem = ({
   const handleSubOptionClick =
     (option: { id: number; label: string; subOptions?: string[] }) =>
     (subOption: string) => {
-      // console.log(`You clicked "${subOption}"`);
 
       if (subOption === "5 min") {
         // fetching the mute time to the backend and set it to the database and then set it to the state of the user in the frontend
@@ -477,7 +349,6 @@ const MemberIthem = ({
           userToMute: userId,
           muteUntil: addMinutes(new Date(), 1),
         };
-        console.log("userData Mute :", userData);
         fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
           method: "PATCH",
           credentials: "include",
@@ -494,7 +365,6 @@ const MemberIthem = ({
           userToMute: userId,
           muteUntil: addMinutes(new Date(), 30),
         };
-        console.log("userData Mute :", userData);
         fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
           method: "PATCH",
           credentials: "include",
@@ -511,7 +381,6 @@ const MemberIthem = ({
           userToMute: userId,
           muteUntil: addMinutes(new Date(), 60),
         };
-        console.log("userData Mute :", userData);
         fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "channels/muteUser", {
           method: "PATCH",
           credentials: "include",
@@ -527,10 +396,8 @@ const MemberIthem = ({
 
   const handleOptionClick =
     (option: { id: number; label: string; action?: string }) => () => {
-      console.log("clicked", option);
       if (option.action === "makeAsAdmin") {
         setAsAdmin(!asAdmin);
-        // console.log("isAdmin:", asAdmin);
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -545,7 +412,6 @@ const MemberIthem = ({
         });
       } else if (option.action === "removeAdmin") {
         setAsAdmin(!asAdmin);
-        // console.log("isAdmin:", asAdmin);
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -559,7 +425,6 @@ const MemberIthem = ({
           body: JSON.stringify(userData),
         });
       } else if (option.action === "ban") {
-        // console.log("BANNING A USER");
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -573,17 +438,12 @@ const MemberIthem = ({
           body: JSON.stringify(userData),
         })
           .then((res) => {
-            console.log("res");
-            console.log("res :", res);
-            console.log("res");
             if (!res.ok) throw new Error("Network response was not ok");
             else setRefresh((prev) => !prev);
           })
           .catch((error) => {
-            console.error("Error during fetch:", error);
           });
       } else if (option.action === "kick") {
-        // console.log("KICKING A USER");
         const userData = {
           channelId: conversationProps?.channelId,
           userId2: userId,
@@ -605,14 +465,11 @@ const MemberIthem = ({
             else setRefresh((prev) => !prev);
           })
           .catch((error) => {
-            console.error("Error during fetch:", error);
+  
           });
       }
-      // setSelectedOption(option.label);
     };
 
-  // console.log("imgUrl 2222", imgUrl);
-  console.log("Members options");
 
   return (
     <div className="flex justify-between w-full  m-2 items-center relative">
@@ -731,31 +588,8 @@ const MemberList = ({
 
   const [isSet, setIsSet] = useState(false);
 
-  // const refresh = use / real time
-
-  // const userData = {
-  //   channelId: conversation?.id,
-  //   userId2: "381512f8-e314-490f-8c5e-a624dc5cee49",
-  // };
-
-  // fetch("http://localhost:3001/api/channels/addAdmin", {
-  //   method: "PATCH",
-  //   credentials: "include",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(userData),
-  // })
-  //   .then((res) => {
-  //     return res.json();
-  //   })
-  //   .then((data) => {
-  // console.log("data admin:", data);
-  //   });
-  // const refresh = useContext(RefreshContext);
-  // const refresh = useContext(refreshContext);
+  
   const router = useRouter();
-  // var fetchFailer : boolean = false;
 
   const [unauthorized, setUnauthorized] = useState(false);
   useEffect(() => {
@@ -773,31 +607,18 @@ const MemberList = ({
       )
         .then((res) => {
           if (!res.ok) {
-            console.log("Catching res.status === 403 kk");
             throw new Error(`${res.status}`);
-            // setUnauthorized(true);
-
-            // router.push("/unauthorized");
-
-            // fetchFailer = true;
-            // setRefresh((prev) => !prev);
-            // throw new Error("Unauthorized");
           }
           return res.json();
         })
         .then((data) => {
           setMembers(data);
-          // setMembers((prev) => { return [...prev, data] })
-          // console.log("Members data:", data);
-          // console.log("hereeeeeeeeeee");
           if (data) setIsSet(true);
         })
         .catch((error) => {
-          if (error.message.includes("403")) router.push("/unauthorized");
-          console.error("Error during fetch:", error);
+          if (error.message.includes("403") || error.message.includes("404")) router.push("/unauthorized");
         });
     };
-    // console.log("Members data:", data);
 
     const fetchFun2 = async () => {
       await fetch(
@@ -815,16 +636,11 @@ const MemberList = ({
         })
         .then((data) => {
           setMembersInfo(data);
-          // setMembers((prev) => { return [...prev, data] })
-          // console.log("channels info data:", data);
-          // if (data) setIsSet(true);
         });
     };
     if (conversation?.id !== undefined) {
       fetchFun();
       if (unauthorized) router.push("/unauthorized");
-      // if (fetchFailer)
-      //   router.push("/game");
       fetchFun2();
     }
   }, [
@@ -834,18 +650,10 @@ const MemberList = ({
     refresh,
     router,
     unauthorized,
-    // membersInfo,
   ]);
 
-  // useEffect(() => {
-
-  // }, []);
-
   const setBlockedUsers = useContext(setBlockedUsersContext);
-  // const [isAdmin, setIsAdmin] = useState(false);
-// useEffect(() => {
   const isAdmin = (): boolean => {
-    console.log("");
     return membersInfo.members?.some(
       (member) => member.userId === userInfo.user?.id && member.isAdmin === true
     );
@@ -878,19 +686,6 @@ const MemberList = ({
     }
   }, [membersInfo, userInfo.user?.id, setIsCreator]);
 
-  // useEffect(() => {
-  //   if (membersInfo.creator?.id !== userInfo.user?.id) {
-  //     setIsNotCreator(true);
-  //   }
-  // } , [membersInfo, userInfo.user?.id, setIsCreator]);
-
-  // console.log("membersInfo:", membersInfo);
-  // console.log("userInfo?.id:", userInfo.user?.id);
-  // console.log("userInfo?.name:", userInfo.user?.username);
-  // console.log("isSet:", isSet);
-  // console.log("members:", members);
-  console.log("MemberList:");
-
   return (
     <>
       <MemberSeparator />
@@ -910,8 +705,6 @@ const MemberList = ({
               />
             );
           })}
-      {/* <BanedMemberSeparator /> */}
-      {/* <MemberIthem imgUrl="some/url" name="name" isAdmin={true} /> */}
     </>
   );
 };
@@ -926,16 +719,6 @@ const MemberSeparator = () => {
   );
 };
 
-// const BanedMemberSeparator = () => {
-//   return (
-//     <div className="flex w-full justify-between mt-8 font-poppins font-light items-center">
-//       <div className="border-b-2 border-light-purple min-w-3 w-1/4 mt-2 mb-2"></div>
-//       <h3 className="text-light-purple">Baned Members</h3>
-//       <div className="border-b-2 border-light-purple min-w-3 w-1/4 mt-2 mb-2"></div>
-//     </div>
-//   );
-// };
-
 const ConversationInfoWrapper = ({
   name,
   title,
@@ -948,17 +731,13 @@ const ConversationInfoWrapper = ({
   children: React.ReactNode;
 }) => {
   const conversationProps = useContext(LstConversationStateContext);
-  // console.log("name ----------------------- :", name);
-  // console.log("hyyyyyyyyyyyyy:", imgUrl);
   return (
     <div className="profileInfo basis-1/4 flex flex-col items-center overflow-y-auto overflow-x-hidden pb-12 min-w-96">
       {title !== "" ? (
         <>
         <Link href={`/profile/FriendProfile?username=${name}`}>
         <ProfileInfos name={name} picUrl={imgUrl}>
-          {/* {" "} */}
           <p className="titleInfo">{title}</p>
-          {/* {" "} */}
         </ProfileInfos>
          </Link>
         
@@ -1069,8 +848,6 @@ export const ChatPage = () => {
   >([]);
   const [conversation, setConversation] = useState<ConversationIthemProps>();
   const userInfo = useContext(UserContext);
-  // const [lastMessageFrom, setLastMessageFrom] = useState<string[]>([]);
-  // const userId = "010a3e90-75db-4df0-9cb1-bb6f8e9a5c60";
 
   const [showEditChannel, setShowEditChannel] = useState<boolean>(false);
   const [showExitChannel, setShowExitChannel] = useState<boolean>(false);
@@ -1081,8 +858,7 @@ export const ChatPage = () => {
   const [refresh, setRefresh] = useState<boolean>(false);
   const [goBack, setGoBack] = useState<boolean>(false);
   const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
-  // console.log("conversationId:", conversation?.id);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchFun = async () => {
       const isAdmin = true; // Replace true with your desired value
@@ -1101,7 +877,6 @@ export const ChatPage = () => {
           return res.json();
         })
         .then((data) => {
-          // console.log("channelsHHHH:", data);
           setConversationList(
             data.sort(
               (a: ConversationIthemProps, b: ConversationIthemProps) => {
@@ -1110,16 +885,13 @@ export const ChatPage = () => {
                 return bDate.getTime() - aDate.getTime();
               }
             )
-            // data
           );
-          // setGoBack(false);
         });
     };
     fetchFun();
   }, [refresh, userInfo.user?.id]);
 
   useEffect(() => {
-    // console.log("conversation?.id:", conversation?.id);
     if (conversation?.id === undefined) return;
     const fetchFun = async () => {
       await fetch(
@@ -1138,23 +910,17 @@ export const ChatPage = () => {
           return res.json();
         })
         .then((data) => {
-          // console.log("MESSAGESSSS data:", data);
           if (data) {
-            // setMessages(data.reverse());
             setMessages(data);
-            console.log("fetched and reversed");
           }
         })
         .catch((err) => {
-          if (err.message.includes("403")) router.push("/unauthorized");
-          // console.log(err);
+          // if (err.message.includes("404")) router.push("/unauthorized");
         });
-      // return res;
     };
     fetchFun();
   }, [conversation, refresh ]);
-  console.log("messages:   TTT", messages);
-
+  
   return (
     <main className="main flex justify-center items-center h-full w-full ">
       <ConversationListContextSet.Provider value={setConversationList}>
@@ -1209,7 +975,6 @@ export const ChatPage = () => {
                                                   {" "}
                                                   {/* <ConversationList /> */}
                                                 </Conversations>
-                                                {/* <Conversations conversationList={ConversationList} setConversationList={setConversationList}> <ConversationList /></Conversations> */}
                                               </div>
                                               <MessagesContext.Provider
                                                 value={messages}
@@ -1313,19 +1078,14 @@ const ProfileInfos = ({
   picUrl: string;
   children: React.ReactNode;
 }) => {
-  // console.log("name------------ :", name);
-  // console.log("picUrl------------ :", picUrl);
   return (
     <>
       <div className="flex flex-col items-center">
-      {/* <Link href={`/profile/FriendProfile?username=${name}`}> */}
         <Image
           className="w-18 h-18 rounded-full mt-[40px] mb-[20px] sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48"
           src={picUrl}
           alt={"avatar"}
         />
-        {/* </Link> */}
-        {/* <img className="avatar w-20 h-20 object-cover rounded-full sm:w-24 sm:h-24 md:w-38 md:h-38 lg:w-40 lg:h-40 xl:w-48 xl:h-48" src={picUrl} alt="avatar"/> */}
         <h4 className="nameInfo"> {name} </h4>
         {children}
       </div>

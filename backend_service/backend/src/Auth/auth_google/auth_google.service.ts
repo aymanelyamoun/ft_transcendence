@@ -135,12 +135,6 @@ async validateUser(details: UserDtetails, typ: LOG_TYPE)
     return secret.base32;
   }
 
-  generateTwoFactorAuthenticationToken(secret : string) {
-    return speakeasy.totp({
-      secret,
-      encoding: 'base32',
-    });
-  }
 
   validateTwoFactorAuthenticationToken(token : string, secret : string) {
     const isValid = speakeasy.totp.verify({

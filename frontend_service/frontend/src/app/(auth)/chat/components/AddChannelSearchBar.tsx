@@ -42,7 +42,7 @@ const AddChannelSearchBar = ({addChannelSearch, setAddChannelSearch,setChannelFr
     const filteredFriends = friendsList.filter((friend) => {
       return friend.username.toLowerCase().startsWith(e.target.value.toLowerCase());
     });
-    // console.log("filteredFriends : ", filteredFriends);
+    // console.log("filteredFriends :
     setSearchText(e.target.value);
     setChannelFriendSearch(filteredFriends);
   };

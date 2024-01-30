@@ -17,6 +17,7 @@ const BALLSPEED : number = 16;
 
 @Injectable()
 export class GameInstance {
+    private databaseUpdated : boolean = false;
     private engine: Engine;
     private runner: Runner;
     private canvas: Canvas;
@@ -240,47 +241,51 @@ export class GameInstance {
             this.gameInfo.IOserver.to(this.gameInfo.gameRoom).emit('endGame', {
                 winner: winner,
             });
-            const prismaService = new PrismaService();
-            await prismaService.gameRecord.create({
-                data: {
-                    user:{connect:{id: winnerData.id}},
-                    scoredGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
-                    concededGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
-                    xp:  25,
-                    oponent:{connect:{id: loserData.id}},
-                    // oponentId: loserData.id,
-                },
-            });
-            await prismaService.gameRecord.create({
-                data: {
-                    user: {connect:{id: loserData.id}},
-                    scoredGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
-                    concededGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
-                    xp: loserData.totalXp - 35 > 0 ? -35 : loserData.totalXp * -1,
-                    oponent:{connect:{id: winnerData.id}},
-                },
-            });
-            await prismaService.user.update({
-                where: {
-                    id: winnerData.id,
-                },
-                data: {
-                    totalXp: winnerData.totalXp + 25,
-                    wallet: {
-                        increment: 10,
+            if (this.databaseUpdated == false)
+            {
+                this.databaseUpdated = true;
+                const prismaService = new PrismaService();
+                await prismaService.gameRecord.create({
+                    data: {
+                        user:{connect:{id: winnerData.id}},
+                        scoredGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                        concededGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                        xp:  25,
+                        oponent:{connect:{id: loserData.id}},
+                        // oponentId: loserData.id,
                     },
-                },
-            });
-            await prismaService.user.update({
-                where: {
-                    id: loserData.id,
-                },
-                data: {
-                    totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
-                },
-            });
-            console.log('database updated');
-            await this.update_achievement(winnerData, loserData, prismaService)
+                });
+                await prismaService.gameRecord.create({
+                    data: {
+                        user: {connect:{id: loserData.id}},
+                        scoredGoals: (winner == '1') ? this.playerTwo.score : this.playerOne.score,
+                        concededGoals: (winner == '1') ? this.playerOne.score : this.playerTwo.score,
+                        xp: loserData.totalXp - 35 > 0 ? -35 : loserData.totalXp * -1,
+                        oponent:{connect:{id: winnerData.id}},
+                    },
+                });
+                await prismaService.user.update({
+                    where: {
+                        id: winnerData.id,
+                    },
+                    data: {
+                        totalXp: winnerData.totalXp + 25,
+                        wallet: {
+                            increment: 10,
+                        },
+                    },
+                });
+                await prismaService.user.update({
+                    where: {
+                        id: loserData.id,
+                    },
+                    data: {
+                        totalXp: loserData.totalXp - 35 > 0 ? loserData.totalXp - 35 : 0,
+                    },
+                });
+                console.log('database updated');
+                await this.update_achievement(winnerData, loserData, prismaService)
+            }
             // await this.update_skins(winnerData, loserData, prismaService)
     }
         catch (error) {

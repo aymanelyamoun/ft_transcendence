@@ -105,14 +105,10 @@ export default function Confirm() {
       if (!fileExtension || !allowedImageExtensions.includes(fileExtension)) {
         return;
       }
-      // if (!file.type.startsWith('image/')) {
-      //   console.error('Selected file is not an image');
-      //   return;
-      // }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'imagesus');
-      const resCLoud = await fetch(`https://api.cloudinary.com/v1_1/dapuvf8uk/image/upload`, {
+      const resCLoud = await fetch(process.env.NEXT_PUBLIC_CLOUD_API as string, {
         method: 'POST',
         body: formData,
       } );
